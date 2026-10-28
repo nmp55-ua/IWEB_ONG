@@ -1,4 +1,7 @@
 // Reglas de negocio de HU-07 (specs/spec-007/plan.md, «Reglas de servicio.js»).
+// Importación circular con voluntariado (spec-005): ./inscripciones.js reexporta su servicio y este
+// importa avisarPlazaConfirmada de aquí. Por eso esas funciones solo se usan dentro de funciones,
+// nunca a nivel de módulo.
 import { transaccion } from '../../db/pool.js';
 import { ErrorApi } from '../../middleware/errores.js';
 import { enviarCorreo } from '../../servicios-comunes/correo.js';
@@ -65,6 +68,18 @@ async function avisar(personas, asunto, texto) {
   }
 }
 
+// Único correo «plaza confirmada» (FR-006). Lo usan editar() al subir plazas y spec-005 al
+// cancelar un voluntario. Si falla, enviarCorreo lo registra y no se lanza nada.
+export async function avisarPlazaConfirmada(inscripcion, actividad) {
+  await avisar(
+    [inscripcion],
+    `Plaza confirmada: «${actividad.titulo}»`,
+    `Se ha liberado una plaza en la actividad «${actividad.titulo}» y ya tienes la tuya confirmada. `
+      + `Es el ${describirHorario(actividad)}, en ${actividad.lugar}. `
+      + 'Si no puedes asistir, cancela tu inscripción para que la plaza pase a la siguiente persona.',
+  );
+}
+
 export async function crear(datos, usuario) {
   return transaccion(async (cliente) => {
     await validarFechasYProyecto(datos, cliente);
@@ -87,7 +102,7 @@ export async function listar(filtros) {
 }
 
 export async function editar(id, cambios) {
-  const { anterior, fila, confirmadas } = await transaccion(async (cliente) => {
+  const { anterior, fila, confirmadas, promovidas } = await transaccion(async (cliente) => {
     const anterior = await repositorio.bloquearPorId(id, cliente);
     if (!anterior) throw noEncontrada();
     if (anterior.estado === 'cancelada' || estaCelebrada(anterior)) {
@@ -111,8 +126,18 @@ export async function editar(id, cambios) {
       );
     }
     const fila = await repositorio.actualizar(id, cambios, cliente);
-    return { anterior, fila, confirmadas };
+
+    // FR-006: al subir las plazas de una publicada, la lista de espera ocupa las nuevas plazas
+    // por orden de llegada, sin plazo de aceptación (PA7.2).
+    let promovidas = [];
+    if (anterior.estado === 'publicada' && fila.plazas > anterior.plazas) {
+      promovidas = await inscripciones.promoverListaEspera(id, cliente);
+      confirmadas += promovidas.length;
+    }
+    return { anterior, fila, confirmadas, promovidas };
   });
+
+  for (const inscripcion of promovidas) await avisarPlazaConfirmada(inscripcion, fila);
 
   // FR-011: si una publicada cambia de fecha, hora o lugar, se avisa a inscritos y lista de espera.
   const cambiaHorario = new Date(fila.inicio).getTime() !== new Date(anterior.inicio).getTime()

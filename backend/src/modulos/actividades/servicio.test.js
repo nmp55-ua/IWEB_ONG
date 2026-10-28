@@ -273,6 +273,50 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
     });
   });
 
+  describe('lista de espera (FR-006, US2)', () => {
+    it('al subir de 10 a 12 plazas promueve a las 2 en espera, en orden, y avisa a cada una', async () => {
+      const agente = await entrar('coordinador@prueba.test');
+      const id = await insertar({ estado: 'publicada', plazas: 10 });
+      inscripciones.contarConfirmadas.mockResolvedValueOnce(10);
+      inscripciones.promoverListaEspera.mockResolvedValueOnce([
+        { inscripcionId: 11, nombre: 'Primera', correo: 'primera@prueba.test' },
+        { inscripcionId: 12, nombre: 'Segunda', correo: 'segunda@prueba.test' },
+      ]);
+      const res = await agente.patch(`/api/actividades/${id}`).send({ plazas: 12 });
+      expect(res.status).toBe(200);
+      expect(res.body.plazasLibres).toBe(0);
+      expect(inscripciones.promoverListaEspera).toHaveBeenCalledTimes(1);
+      expect(correo.enviarCorreo.mock.calls.map(([c]) => c.para)).toEqual(['primera@prueba.test', 'segunda@prueba.test']);
+      expect(correo.enviarCorreo.mock.calls[0][0].asunto).toContain('Plaza confirmada');
+    });
+
+    it('subir plazas en un borrador no promueve a nadie', async () => {
+      const agente = await entrar('coordinador@prueba.test');
+      const id = await insertar({ plazas: 10 });
+      await agente.patch(`/api/actividades/${id}`).send({ plazas: 12 }).expect(200);
+      expect(inscripciones.promoverListaEspera).not.toHaveBeenCalled();
+    });
+
+    it('avisarPlazaConfirmada envía un único correo con título, fecha y lugar', async () => {
+      const { avisarPlazaConfirmada } = await import('./servicio.js');
+      await avisarPlazaConfirmada(
+        { nombre: 'Ana', correo: 'ana@prueba.test' },
+        { titulo: 'Reparto', inicio: '2026-12-01T10:00:00+01:00', fin: '2026-12-01T13:30:00+01:00', lugar: 'Calle Mayor 3' },
+      );
+      expect(correo.enviarCorreo).toHaveBeenCalledTimes(1);
+      const { texto } = correo.enviarCorreo.mock.calls[0][0];
+      expect(texto).toContain('Reparto');
+      expect(texto).toContain('01/12/2026');
+      expect(texto).toContain('10:00');
+      expect(texto).toContain('Calle Mayor 3');
+    });
+
+    // Necesitan la tabla inscripciones y el servicio real de spec-005 (Javi): se activan al integrarlo.
+    it.skip('cancelar un voluntario confirmado promueve a la primera en espera, le avisa y las plazas libres no cambian (SC-002) — requiere spec-005');
+    it.skip('con 3 en espera, si cancela la primera, las otras pasan a las posiciones 1 y 2 (US2 escenario 4) — requiere spec-005');
+    it.skip('peticiones simultáneas de bajar plazas e inscribirse nunca dejan más confirmados que plazas (SC-003) — requiere spec-005');
+  });
+
   describe('consultar (FR-009)', () => {
     it('devuelve inscritos y lista de espera', async () => {
       const agente = await entrar('coordinador@prueba.test');
