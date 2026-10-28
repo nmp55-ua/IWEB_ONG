@@ -6,7 +6,7 @@ const esquemaRegistro = z.object({
   correo: z.string().trim().email('Introduce un correo válido.'),
   contrasena: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres.'),
   roles: z
-    .array(z.enum(['donante', 'voluntario']))
+    .array(z.enum(['donante', 'voluntario'], { message: 'Solo puedes registrarte como donante o voluntario.' }))
     .min(1, 'Elige si quieres colaborar como donante, como voluntario o ambos.'),
 });
 

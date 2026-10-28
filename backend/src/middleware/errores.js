@@ -10,11 +10,12 @@ export class ErrorApi extends Error {
   }
 }
 
-// Convierte un error de zod en un 400 con un mensaje por campo.
+// Convierte un error de zod en un 400 con un mensaje por campo del formulario
+// (el error de roles[0] se asocia al campo «roles»).
 export function errorDeValidacion(errorZod) {
   const campos = {};
   for (const problema of errorZod.issues) {
-    const campo = problema.path.join('.') || '_';
+    const campo = String(problema.path[0] ?? '_');
     campos[campo] ??= problema.message;
   }
   return new ErrorApi(400, 'DATOS_INVALIDOS', 'Revisa los datos marcados.', campos);

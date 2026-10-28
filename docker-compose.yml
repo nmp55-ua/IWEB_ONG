@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: ong
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ong_dev}
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"   # si ya tienes PostgreSQL en 5432, pon otro puerto libre en DB_PORT (.env)
     volumes:
       - datos_ong:/var/lib/postgresql/data
 
