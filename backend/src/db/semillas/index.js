@@ -2,6 +2,7 @@
 // Cada spec añade aquí su fichero de semillas (por ejemplo, donaciones.js) y lo importa al final.
 import bcrypt from 'bcrypt';
 import { pool } from '../pool.js';
+import { sembrarActividades } from './actividades.js';
 
 const contrasena = process.env.CONTRASENA_SEMILLAS;
 if (!contrasena) {
@@ -42,5 +43,7 @@ for (const proyecto of proyectos) {
   );
 }
 console.log(`Semillas comunes: ${usuarios.length} usuarios y ${proyectos.length} proyectos.`);
+
+await sembrarActividades(pool); // spec-007
 
 await pool.end();
