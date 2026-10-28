@@ -71,7 +71,13 @@ Efectos secundarios (tras el `COMMIT`, sin deshacer si falla el correo):
 
 | Función | Usa | Estado |
 |---|---|---|
-| `promoverListaEspera(actividadId, cliente)` → lista de promovidos | subir plazas | plan-comun §7 |
-| `cancelarInscripcionesDeActividad(actividadId, cliente)` → lista de afectados | cancelar | plan-comun §7 |
-| `contarConfirmadas(actividadId, cliente)` → número | FR-007, `plazasLibres` | **a acordar con Javi** |
-| `listarInscripcionesDeActividad(actividadId)` → `{ confirmadas, enEspera }` | FR-009, avisos | **a acordar con Javi** |
+| `promoverListaEspera(actividadId, cliente)` → inscripciones promovidas `[{ inscripcionId, nombre, correo }]` | subir plazas (spec-007) y cancelar un voluntario (spec-005) | plan-comun §7; retorno **acordado con Javi** |
+| `cancelarInscripcionesDeActividad(actividadId, cliente)` → inscripciones canceladas `[{ inscripcionId, nombre, correo, estadoAnterior }]` | cancelar | plan-comun §7; retorno **acordado con Javi** |
+| `contarConfirmadas(actividadId, cliente)` → número | FR-007, `plazasLibres` | **acordado con Javi** |
+| `listarInscripcionesDeActividad(actividadId)` → `{ confirmadas, enEspera }` | FR-009, avisos | **acordado con Javi** |
+
+`actividades` accede a estas funciones solo a través de `modulos/actividades/inscripciones.js`.
+
+En sentido contrario, spec-007 expone `avisarPlazaConfirmada(inscripcion, actividad)` en
+`modulos/actividades/servicio.js`: spec-005 la llama tras el `COMMIT` de una cancelación para
+cada inscripción devuelta por `promoverListaEspera` (**acordado con Javi**).

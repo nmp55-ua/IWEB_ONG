@@ -29,7 +29,7 @@ Aquí solo las propias de HU-07.
   nombre, correo y posición. Las funciones que escriben reciben el `cliente` de la transacción.
 - **Rationale**: plan-comun §1 («un módulo puede llamar al servicio de otro, nunca a su
   repositorio»).
-- **Pendiente de acuerdo**: confirmar con Javi las dos funciones nuevas.
+- **Acordado con Javi**: las dos funciones nuevas.
 - **Alternatives considered**: leer `inscripciones` desde el repositorio de actividades
   (rompe la propiedad de la tabla).
 

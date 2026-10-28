@@ -15,7 +15,7 @@
 ### Session 2026-10-28
 
 - Q: ¿Puede un coordinador gestionar cualquier actividad o solo las de los proyectos que coordina? → A: Cualquier coordinador gestiona cualquier actividad de cualquier proyecto (no hay vínculo coordinador–proyecto).
-- Q: Al liberarse una plaza, ¿se confirma directamente o hay plazo para aceptarla? → A: Confirmación directa con aviso por correo; si no puede asistir, la persona cancela y la plaza pasa a la siguiente.
+- Q: Al liberarse una plaza, ¿se confirma directamente o hay plazo para aceptarla? → A: Confirmación directa con aviso por correo; si no puede asistir, la persona cancela y la plaza pasa a la siguiente. *(Confirmado con Javi, dueño de Inscripción en spec-005.)*
 - Q: ¿Qué se puede editar de una actividad publicada? → A: Todo, respetando FR-003 y FR-007; si cambian fecha, hora o lugar se avisa por correo a inscritos y lista de espera. Una publicada no vuelve a borrador.
 - Q: ¿Se puede cancelar una actividad ya celebrada y cómo se descarta un borrador? → A: Una celebrada no se puede cancelar ni editar; un borrador se descarta cancelándolo (sin avisos); nunca se borra físicamente.
 - Q: ¿Qué se exige del proyecto y la fecha al crear, editar y publicar? → A: Proyecto activo e inicio futuro en las tres operaciones; desactivar un proyecto no afecta a sus actividades ya publicadas.
@@ -91,6 +91,7 @@ Como coordinador, quiero que, cuando la demanda supere el aforo, los interesados
 ## Dependencies
 
 - **spec-005 / spec-006 (C)** consumen Actividad y sus estados; la Inscripción es de C, así que las reglas de lista de espera se acuerdan con C.
+- **Promoción al cancelar un voluntario** *(acordado con Javi)*: la cancelación de una inscripción en spec-005 llama a `promoverListaEspera`, que devuelve las inscripciones promovidas; el correo «plaza confirmada» sale siempre de una única función `avisarPlazaConfirmada` de spec-007, que también usa spec-005.
 - **spec-004 (B)** usa Actividad para contar actividades celebradas.
 
 ## Success Criteria *(mandatory)*

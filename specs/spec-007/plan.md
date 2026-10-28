@@ -72,6 +72,7 @@ backend/src/
     ├── controlador.js              ← esquemas zod de creación y edición
     ├── servicio.js                 ← reglas (abajo)
     ├── repositorio.js              ← SQL de actividades
+    ├── inscripciones.js            ← único punto de acceso al servicio de voluntariado (provisional hasta spec-005)
     └── servicio.test.js
 backend/src/app.js                  ← descomentar api.use(rutasActividades)
 
@@ -81,6 +82,7 @@ frontend/src/
 ├── pages/coordinacion/actividades/[id].astro       ← detalle: editar, publicar, cancelar, inscritos y espera
 ├── components/actividades/ListaActividades.jsx
 ├── components/actividades/FormActividad.jsx        ← alta y edición (mismo componente)
+├── components/actividades/fechasFormulario.js      ← localAIsoMadrid / isoALocalMadrid (datetime-local ↔ ISO de Madrid)
 ├── components/actividades/DetalleActividad.jsx     ← botones de estado + tablas de inscritos y espera
 └── components/comunes/Menu.jsx                     ← descomentar el enlace «Gestionar actividades»
 ```
@@ -96,7 +98,8 @@ frontend/src/
 | `publicar(id)` | Solo desde `borrador`; vuelve a validar inicio futuro y proyecto activo (FR-003). | 409 `TRANSICION_NO_PERMITIDA` · 400 `DATOS_INVALIDOS` |
 | `cancelar(id)` | Desde `borrador` o `publicada` no celebrada. Si era publicada: `cancelarInscripcionesDeActividad(id)` + correo a los afectados (FR-008). Borrador: sin avisos. | 409 `TRANSICION_NO_PERMITIDA` |
 | `obtener(id)` / `listar(filtros)` | Cualquier coordinador, cualquier actividad (PA7.1). Devuelve `plazasLibres` y `celebrada` derivados. | 404 `NO_ENCONTRADO` |
-| `listarInscripciones(id)` | Confirmados y lista de espera con posición (FR-009), vía voluntariado. | 404 |
+| `listarInscripciones(id)` | Confirmados y lista de espera con posición (FR-009), vía `inscripciones.js`. | 404 |
+| `avisarPlazaConfirmada(inscripcion, actividad)` | Único correo «plaza confirmada» (título, fecha dd/mm/aaaa, hora y lugar). Lo usan `editar` al subir plazas y spec-005 al cancelar un voluntario. | — (si falla, se registra) |
 
 Toda operación que cambia plazas o estado se hace en `transaccion()` con
 `SELECT … FROM actividades WHERE id = $1 FOR UPDATE` (plan-comun, decisión de bloqueo), y los
@@ -106,11 +109,16 @@ No hay transición `publicada → borrador`: `PATCH { accion: 'borrador' }` no e
 
 ## Dependencias
 
-- **spec-005 (Javi)**: `promoverListaEspera(actividadId, cliente)`,
-  `cancelarInscripcionesDeActividad(actividadId, cliente)` (plan-comun §7) y, nuevas,
+- **spec-005 (Javi)** *(acordado con Javi)*: `promoverListaEspera(actividadId,
+  cliente)` → inscripciones promovidas y `cancelarInscripcionesDeActividad(actividadId,
+  cliente)` → inscripciones canceladas (plan-comun §7, con valor de retorno), y, nuevas,
   `contarConfirmadas(actividadId, cliente)` y `listarInscripcionesDeActividad(actividadId)`.
-  Mientras no existan, `actividades` las importa de un fichero
-  `modulos/voluntariado/servicio.js` provisional acordado con Javi (R3).
+  `actividades` solo las usa a través de `modulos/actividades/inscripciones.js`, que mientras
+  spec-005 no exista contiene una versión provisional y después solo las reexporta desde
+  `modulos/voluntariado/servicio.js`. No se crea nada dentro del módulo de Javi (R3).
+- **Cancelación de un voluntario (spec-005)**: llama a `promoverListaEspera` y, tras su
+  `COMMIT`, a `avisarPlazaConfirmada` de spec-007 para cada promovida, de modo que el correo
+  «plaza confirmada» sale de una única función.
 - **Migración 005** se sube a `main` en un PR pequeño en cuanto esté (plan-comun §7), porque
   `006_voluntariado.sql` tiene una FK a `actividades`.
 - **spec-004 / spec-008** solo leen `actividades` y el derivado «celebrada».
