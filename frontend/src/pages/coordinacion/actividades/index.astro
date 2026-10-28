@@ -1,0 +1,9 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import ListaActividades from '../../../components/actividades/ListaActividades.jsx';
+// spec-007. El acceso lo decide el servidor (solo coordinadores); la página solo muestra lo que devuelve la API.
+---
+
+<Layout titulo="Gestionar actividades">
+  <ListaActividades client:load />
+</Layout>

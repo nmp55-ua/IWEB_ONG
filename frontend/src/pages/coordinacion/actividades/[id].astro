@@ -1,0 +1,12 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import DetalleActividad from '../../../components/actividades/DetalleActividad.jsx';
+// spec-007. Detalle: editar, publicar, cancelar, inscritos y lista de espera.
+const { id } = Astro.params;
+if (!/^\d+$/.test(id ?? '')) return Astro.redirect('/coordinacion/actividades');
+const recienCreada = Astro.url.searchParams.has('creada');
+---
+
+<Layout titulo="Actividad">
+  <DetalleActividad client:load id={Number(id)} recienCreada={recienCreada} />
+</Layout>
