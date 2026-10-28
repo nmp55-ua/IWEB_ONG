@@ -31,7 +31,10 @@ export default function DetalleActividad({ id, recienCreada = false }) {
 
   async function cargar() {
     try {
-      const [a, i] = await Promise.all([api.get(`/actividades/${id}`), api.get(`/actividades/${id}/inscripciones`)]);
+      const [a, i] = await Promise.all([
+        api.get(`/actividades/${id}`),
+        api.get(`/actividades/${id}/inscripciones`),
+      ]);
       setActividad(a);
       setInscripciones(i);
     } catch (err) {
@@ -39,7 +42,9 @@ export default function DetalleActividad({ id, recienCreada = false }) {
     }
   }
 
-  useEffect(() => { cargar(); }, [id]);
+  useEffect(() => {
+    cargar();
+  }, [id]);
 
   async function cambiarEstado(accion, textoExito) {
     setCargando(true);
@@ -70,7 +75,9 @@ export default function DetalleActividad({ id, recienCreada = false }) {
 
   return (
     <div className="space-y-8">
-      <a href="/coordinacion/actividades" className="text-marca-500 underline">Volver</a>
+      <a href="/coordinacion/actividades" className="text-marca-500 underline">
+        Volver
+      </a>
       {mensaje && <Aviso tipo="exito">{mensaje}</Aviso>}
       {error && <Aviso tipo="error">{error.message}</Aviso>}
 
@@ -78,16 +85,26 @@ export default function DetalleActividad({ id, recienCreada = false }) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="text-xl font-semibold text-marca-700">{actividad.titulo}</h2>
-            <p className="text-gray-700">{actividad.proyecto.nombre} · {textoEstado(actividad)}</p>
-            <p>{formatearFechaHora(actividad.inicio)} – {formatearFechaHora(actividad.fin)} · {actividad.lugar}</p>
-            <p>{actividad.plazasLibres} plazas libres de {actividad.plazas}</p>
+            <p className="text-gray-700">
+              {actividad.proyecto.nombre} · {textoEstado(actividad)}
+            </p>
+            <p>
+              {formatearFechaHora(actividad.inicio)} – {formatearFechaHora(actividad.fin)} · {actividad.lugar}
+            </p>
+            <p>
+              {actividad.plazasLibres} plazas libres de {actividad.plazas}
+            </p>
           </div>
           <div className="flex gap-3">
             {actividad.estado === 'borrador' && (
-              <Boton cargando={cargando} onClick={() => cambiarEstado('publicar', 'Actividad publicada.')}>Publicar</Boton>
+              <Boton cargando={cargando} onClick={() => cambiarEstado('publicar', 'Actividad publicada.')}>
+                Publicar
+              </Boton>
             )}
             {editable && (
-              <Boton variante="peligro" onClick={() => setConfirmarCancelacion(true)}>Cancelar actividad</Boton>
+              <Boton variante="peligro" onClick={() => setConfirmarCancelacion(true)}>
+                Cancelar actividad
+              </Boton>
             )}
           </div>
         </div>
@@ -103,19 +120,33 @@ export default function DetalleActividad({ id, recienCreada = false }) {
 
       <section>
         <h2 className="text-lg font-semibold text-marca-700 mb-3">Inscritos confirmados</h2>
-        <Tabla columnas={COLUMNAS_CONFIRMADAS} filas={inscripciones.confirmadas} claveFila="inscripcionId"
-          mensajeVacio="Todavía no hay inscritos confirmados." />
+        <Tabla
+          columnas={COLUMNAS_CONFIRMADAS}
+          filas={inscripciones.confirmadas}
+          claveFila="inscripcionId"
+          mensajeVacio="Todavía no hay inscritos confirmados."
+        />
       </section>
 
       <section>
         <h2 className="text-lg font-semibold text-marca-700 mb-3">Lista de espera</h2>
-        <Tabla columnas={COLUMNAS_ESPERA} filas={inscripciones.enEspera} claveFila="inscripcionId"
-          mensajeVacio="No hay nadie en la lista de espera." />
+        <Tabla
+          columnas={COLUMNAS_ESPERA}
+          filas={inscripciones.enEspera}
+          claveFila="inscripcionId"
+          mensajeVacio="No hay nadie en la lista de espera."
+        />
       </section>
 
-      <Modal abierto={confirmarCancelacion} titulo="Cancelar actividad" variante="peligro" textoConfirmar="Cancelar actividad"
-        cargando={cargando} onCerrar={() => setConfirmarCancelacion(false)}
-        onConfirmar={() => cambiarEstado('cancelar', 'Actividad cancelada.')}>
+      <Modal
+        abierto={confirmarCancelacion}
+        titulo="Cancelar actividad"
+        variante="peligro"
+        textoConfirmar="Cancelar actividad"
+        cargando={cargando}
+        onCerrar={() => setConfirmarCancelacion(false)}
+        onConfirmar={() => cambiarEstado('cancelar', 'Actividad cancelada.')}
+      >
         {actividad.estado === 'publicada'
           ? 'Se cancelarán todas las inscripciones y se avisará por correo a los inscritos y a la lista de espera. No se puede deshacer.'
           : 'El borrador quedará cancelado. No se puede deshacer.'}

@@ -34,8 +34,16 @@ export function isoALocalMadrid(iso) {
   if (!iso) return '';
   const partes = Object.fromEntries(
     new Intl.DateTimeFormat('en-GB', {
-      timeZone: ZONA, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
-    }).formatToParts(new Date(iso)).map((p) => [p.type, p.value]),
+      timeZone: ZONA,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    })
+      .formatToParts(new Date(iso))
+      .map((p) => [p.type, p.value]),
   );
   return `${partes.year}-${partes.month}-${partes.day}T${partes.hour}:${partes.minute}`;
 }

@@ -22,33 +22,54 @@ export default function ListaActividades() {
 
   useEffect(() => {
     setActividades(null);
-    api.get(`/actividades${estado ? `?estado=${estado}` : ''}`)
+    api
+      .get(`/actividades${estado ? `?estado=${estado}` : ''}`)
       .then(({ datos }) => setActividades(datos))
       .catch(setError);
   }, [estado]);
 
   const columnas = [
-    { clave: 'titulo', titulo: 'Actividad', formato: (v, a) => <a href={`/coordinacion/actividades/${a.id}`} className="text-marca-500 underline">{v}</a> },
+    {
+      clave: 'titulo',
+      titulo: 'Actividad',
+      formato: (v, a) => (
+        <a href={`/coordinacion/actividades/${a.id}`} className="text-marca-500 underline">
+          {v}
+        </a>
+      ),
+    },
     { clave: 'proyecto', titulo: 'Proyecto', formato: (p) => p.nombre },
     { clave: 'inicio', titulo: 'Fecha', formato: (v) => `${formatearFecha(v)} ${formatearHora(v)}` },
     { clave: 'estado', titulo: 'Estado', formato: (_v, a) => textoEstado(a) },
-    { clave: 'plazas', titulo: 'Plazas libres', alinear: 'derecha', formato: (v, a) => `${a.plazasLibres} de ${v}` },
+    {
+      clave: 'plazas',
+      titulo: 'Plazas libres',
+      alinear: 'derecha',
+      formato: (v, a) => `${a.plazasLibres} de ${v}`,
+    },
   ];
 
   return (
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
-        <Campo etiqueta="Estado" tipo="select" value={estado} onChange={(e) => setEstado(e.target.value)}
-          opciones={FILTROS} className="mb-0 w-48" />
+        <Campo
+          etiqueta="Estado"
+          tipo="select"
+          value={estado}
+          onChange={(e) => setEstado(e.target.value)}
+          opciones={FILTROS}
+          className="mb-0 w-48"
+        />
         <Boton href="/coordinacion/actividades/nueva">Nueva actividad</Boton>
       </div>
       {error && <Aviso tipo="error">{error.message}</Aviso>}
       {!error && actividades === null && <p>Cargando…</p>}
-      {actividades && (
-        actividades.length === 0
-          ? <EstadoVacio mensaje="No hay actividades con este filtro." />
-          : <Tabla columnas={columnas} filas={actividades} />
-      )}
+      {actividades &&
+        (actividades.length === 0 ? (
+          <EstadoVacio mensaje="No hay actividades con este filtro." />
+        ) : (
+          <Tabla columnas={columnas} filas={actividades} />
+        ))}
     </div>
   );
 }

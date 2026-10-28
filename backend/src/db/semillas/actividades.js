@@ -15,26 +15,78 @@ function enMadrid(dias, hh, mm = 0) {
 }
 
 export async function sembrarActividades(pool) {
-  const { rows: [coordinador] } = await pool.query("SELECT id FROM usuarios WHERE correo = 'coordinador@ong.test'");
+  const {
+    rows: [coordinador],
+  } = await pool.query("SELECT id FROM usuarios WHERE correo = 'coordinador@ong.test'");
   const { rows: proyectos } = await pool.query('SELECT id, nombre FROM proyectos');
   const proyecto = Object.fromEntries(proyectos.map((p) => [p.nombre, p.id]));
 
   const actividades = [
-    { titulo: 'Limpieza de playa', proyecto: 'Agua potable', inicio: enMadrid(14, 10), fin: enMadrid(14, 13),
-      lugar: 'Playa de San Juan', plazas: 10, estado: 'publicada', requisitos: 'Traer guantes.' },
-    { titulo: 'Reparto de alimentos', proyecto: 'Comedor social', inicio: enMadrid(7, 9), fin: enMadrid(7, 12),
-      lugar: 'Calle Mayor 3', plazas: 2, estado: 'publicada', requisitos: '' },
-    { titulo: 'Taller de reciclaje', proyecto: 'Agua potable', inicio: enMadrid(21, 17), fin: enMadrid(21, 19),
-      lugar: 'Centro cívico', plazas: 15, estado: 'borrador', requisitos: '' },
-    { titulo: 'Mercadillo solidario', proyecto: 'Comedor social', inicio: enMadrid(10, 10), fin: enMadrid(10, 14),
-      lugar: 'Plaza de España', plazas: 8, estado: 'cancelada', requisitos: '' },
-    { titulo: 'Recogida de ropa', proyecto: 'Comedor social', inicio: enMadrid(-3, 10), fin: enMadrid(-3, 13, 30),
-      lugar: 'Parroquia del barrio', plazas: 10, estado: 'publicada', requisitos: '' },
+    {
+      titulo: 'Limpieza de playa',
+      proyecto: 'Agua potable',
+      inicio: enMadrid(14, 10),
+      fin: enMadrid(14, 13),
+      lugar: 'Playa de San Juan',
+      plazas: 10,
+      estado: 'publicada',
+      requisitos: 'Traer guantes.',
+    },
+    {
+      titulo: 'Reparto de alimentos',
+      proyecto: 'Comedor social',
+      inicio: enMadrid(7, 9),
+      fin: enMadrid(7, 12),
+      lugar: 'Calle Mayor 3',
+      plazas: 2,
+      estado: 'publicada',
+      requisitos: '',
+    },
+    {
+      titulo: 'Taller de reciclaje',
+      proyecto: 'Agua potable',
+      inicio: enMadrid(21, 17),
+      fin: enMadrid(21, 19),
+      lugar: 'Centro cívico',
+      plazas: 15,
+      estado: 'borrador',
+      requisitos: '',
+    },
+    {
+      titulo: 'Mercadillo solidario',
+      proyecto: 'Comedor social',
+      inicio: enMadrid(10, 10),
+      fin: enMadrid(10, 14),
+      lugar: 'Plaza de España',
+      plazas: 8,
+      estado: 'cancelada',
+      requisitos: '',
+    },
+    {
+      titulo: 'Recogida de ropa',
+      proyecto: 'Comedor social',
+      inicio: enMadrid(-3, 10),
+      fin: enMadrid(-3, 13, 30),
+      lugar: 'Parroquia del barrio',
+      plazas: 10,
+      estado: 'publicada',
+      requisitos: '',
+    },
   ];
 
   for (const a of actividades) {
-    const valores = [proyecto[a.proyecto], a.titulo, `Actividad de prueba: ${a.titulo.toLowerCase()}.`,
-      a.inicio, a.fin, a.lugar, a.plazas, a.requisitos, a.estado, coordinador.id];
+    const valores = [
+      proyecto[a.proyecto],
+      a.titulo,
+      `Actividad de prueba: ${a.titulo.toLowerCase()}.`,
+      a.inicio,
+      a.fin,
+      a.lugar,
+      a.plazas,
+      a.requisitos,
+      a.estado,
+      coordinador.id,
+    ];
     const { rowCount } = await pool.query(
       `UPDATE actividades SET proyecto_id = $1, descripcion = $3, inicio = $4, fin = $5, lugar = $6,
          plazas = $7, requisitos = $8, estado = $9, creada_por = $10, actualizado_en = now()

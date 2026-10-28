@@ -46,7 +46,13 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
   }
 
   // Inserta directamente una actividad (para estados y fechas que la API no permite crear).
-  async function insertar({ estado = 'borrador', inicio = '2026-12-01T10:00:00+01:00', fin = '2026-12-01T12:00:00+01:00', plazas = 10, proyectoId = proyectoActivo } = {}) {
+  async function insertar({
+    estado = 'borrador',
+    inicio = '2026-12-01T10:00:00+01:00',
+    fin = '2026-12-01T12:00:00+01:00',
+    plazas = 10,
+    proyectoId = proyectoActivo,
+  } = {}) {
     const { rows } = await pool.query(
       `INSERT INTO actividades (proyecto_id, titulo, descripcion, inicio, fin, lugar, plazas, estado, creada_por)
        VALUES ($1, 'Prueba', 'Prueba.', $2, $3, 'Aquí', $4, $5, $6) RETURNING id`,
@@ -67,15 +73,22 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
 
     await pool.query('TRUNCATE actividades RESTART IDENTITY CASCADE');
     const hash = await bcrypt.hash(CONTRASENA, 4);
-    for (const [c, roles] of [['coordinador@prueba.test', ['coordinador']], ['voluntario@prueba.test', ['voluntario']]]) {
+    for (const [c, roles] of [
+      ['coordinador@prueba.test', ['coordinador']],
+      ['voluntario@prueba.test', ['voluntario']],
+    ]) {
       await pool.query(
         `INSERT INTO usuarios (correo, hash_contrasena, nombre, roles) VALUES ($1, $2, 'Prueba', $3)
          ON CONFLICT (correo) DO UPDATE SET hash_contrasena = EXCLUDED.hash_contrasena, roles = EXCLUDED.roles, activo = true`,
         [c, hash, roles],
       );
     }
-    coordinador = (await pool.query("SELECT id FROM usuarios WHERE correo = 'coordinador@prueba.test'")).rows[0].id;
-    for (const [nombre, activo] of [['Prueba activo', true], ['Prueba inactivo', false]]) {
+    coordinador = (await pool.query("SELECT id FROM usuarios WHERE correo = 'coordinador@prueba.test'"))
+      .rows[0].id;
+    for (const [nombre, activo] of [
+      ['Prueba activo', true],
+      ['Prueba inactivo', false],
+    ]) {
       await pool.query(
         `INSERT INTO proyectos (nombre, activo) VALUES ($1, $2) ON CONFLICT (nombre) DO UPDATE SET activo = EXCLUDED.activo`,
         [nombre, activo],
@@ -123,7 +136,13 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
       const agente = await entrar('coordinador@prueba.test');
       const res = await agente.post('/api/actividades').send(valida());
       expect(res.status).toBe(201);
-      expect(res.body).toMatchObject({ estado: 'borrador', plazas: 10, plazasLibres: 10, requisitos: '', celebrada: false });
+      expect(res.body).toMatchObject({
+        estado: 'borrador',
+        plazas: 10,
+        plazasLibres: 10,
+        requisitos: '',
+        celebrada: false,
+      });
       expect(res.body.inicio).toBe('2026-12-01T10:00:00+01:00');
     });
 
@@ -208,7 +227,10 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
 
     it.each([
       ['cancelada', {}],
-      ['celebrada', { estado: 'publicada', inicio: '2026-10-30T10:00:00+01:00', fin: '2026-10-30T12:00:00+01:00' }],
+      [
+        'celebrada',
+        { estado: 'publicada', inicio: '2026-10-30T10:00:00+01:00', fin: '2026-10-30T12:00:00+01:00' },
+      ],
     ])('no edita una actividad %s', async (estado, datos) => {
       const agente = await entrar('coordinador@prueba.test');
       const id = await insertar(estado === 'cancelada' ? { estado } : datos);
@@ -263,7 +285,10 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
 
     it.each([
       ['cancelada', { estado: 'cancelada' }],
-      ['celebrada', { estado: 'publicada', inicio: '2026-10-30T10:00:00+01:00', fin: '2026-10-30T12:00:00+01:00' }],
+      [
+        'celebrada',
+        { estado: 'publicada', inicio: '2026-10-30T10:00:00+01:00', fin: '2026-10-30T12:00:00+01:00' },
+      ],
     ])('no cancela una actividad %s', async (_nombre, datos) => {
       const agente = await entrar('coordinador@prueba.test');
       const id = await insertar(datos);
@@ -286,7 +311,10 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
       expect(res.status).toBe(200);
       expect(res.body.plazasLibres).toBe(0);
       expect(inscripciones.promoverListaEspera).toHaveBeenCalledTimes(1);
-      expect(correo.enviarCorreo.mock.calls.map(([c]) => c.para)).toEqual(['primera@prueba.test', 'segunda@prueba.test']);
+      expect(correo.enviarCorreo.mock.calls.map(([c]) => c.para)).toEqual([
+        'primera@prueba.test',
+        'segunda@prueba.test',
+      ]);
       expect(correo.enviarCorreo.mock.calls[0][0].asunto).toContain('Plaza confirmada');
     });
 
@@ -301,7 +329,12 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
       const { avisarPlazaConfirmada } = await import('./servicio.js');
       await avisarPlazaConfirmada(
         { nombre: 'Ana', correo: 'ana@prueba.test' },
-        { titulo: 'Reparto', inicio: '2026-12-01T10:00:00+01:00', fin: '2026-12-01T13:30:00+01:00', lugar: 'Calle Mayor 3' },
+        {
+          titulo: 'Reparto',
+          inicio: '2026-12-01T10:00:00+01:00',
+          fin: '2026-12-01T13:30:00+01:00',
+          lugar: 'Calle Mayor 3',
+        },
       );
       expect(correo.enviarCorreo).toHaveBeenCalledTimes(1);
       const { texto } = correo.enviarCorreo.mock.calls[0][0];
@@ -312,16 +345,25 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
     });
 
     // Necesitan la tabla inscripciones y el servicio real de spec-005 (Javi): se activan al integrarlo.
-    it.skip('cancelar un voluntario confirmado promueve a la primera en espera, le avisa y las plazas libres no cambian (SC-002) — requiere spec-005');
-    it.skip('con 3 en espera, si cancela la primera, las otras pasan a las posiciones 1 y 2 (US2 escenario 4) — requiere spec-005');
-    it.skip('peticiones simultáneas de bajar plazas e inscribirse nunca dejan más confirmados que plazas (SC-003) — requiere spec-005');
+    it.skip(
+      'cancelar un voluntario confirmado promueve a la primera en espera, le avisa y las plazas libres no cambian (SC-002) — requiere spec-005',
+    );
+    it.skip(
+      'con 3 en espera, si cancela la primera, las otras pasan a las posiciones 1 y 2 (US2 escenario 4) — requiere spec-005',
+    );
+    it.skip(
+      'peticiones simultáneas de bajar plazas e inscribirse nunca dejan más confirmados que plazas (SC-003) — requiere spec-005',
+    );
   });
 
   describe('consultar (FR-009)', () => {
     it('devuelve inscritos y lista de espera', async () => {
       const agente = await entrar('coordinador@prueba.test');
       const id = await insertar({ estado: 'publicada' });
-      const lista = { confirmadas: [{ inscripcionId: 1, nombre: 'Ana' }], enEspera: [{ inscripcionId: 2, posicion: 1 }] };
+      const lista = {
+        confirmadas: [{ inscripcionId: 1, nombre: 'Ana' }],
+        enEspera: [{ inscripcionId: 2, posicion: 1 }],
+      };
       inscripciones.listarInscripcionesDeActividad.mockResolvedValueOnce(lista);
       const res = await agente.get(`/api/actividades/${id}/inscripciones`);
       expect(res.status).toBe(200);

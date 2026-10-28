@@ -14,4 +14,8 @@ rutasActividades.get('/actividades', soloCoordinador, asincrono(controlador.list
 rutasActividades.post('/actividades', soloCoordinador, asincrono(controlador.crear));
 rutasActividades.get('/actividades/:id(\\d+)', soloCoordinador, asincrono(controlador.obtener));
 rutasActividades.patch('/actividades/:id(\\d+)', soloCoordinador, asincrono(controlador.modificar));
-rutasActividades.get('/actividades/:id(\\d+)/inscripciones', soloCoordinador, asincrono(controlador.inscripciones));
+rutasActividades.get(
+  '/actividades/:id(\\d+)/inscripciones',
+  soloCoordinador,
+  asincrono(controlador.inscripciones),
+);

@@ -18,15 +18,26 @@ const EDITABLES = {
   estado: 'estado',
 };
 
-const ejecutar = (cliente, sql, parametros) => (cliente ? cliente.query(sql, parametros) : consulta(sql, parametros));
+const ejecutar = (cliente, sql, parametros) =>
+  cliente ? cliente.query(sql, parametros) : consulta(sql, parametros);
 
 export async function insertar(datos, cliente) {
   const { rows } = await ejecutar(
     cliente,
     `INSERT INTO actividades (proyecto_id, titulo, descripcion, inicio, fin, lugar, plazas, requisitos, estado, creada_por)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
-    [datos.proyectoId, datos.titulo, datos.descripcion, datos.inicio, datos.fin, datos.lugar,
-      datos.plazas, datos.requisitos, datos.estado, datos.creadaPor],
+    [
+      datos.proyectoId,
+      datos.titulo,
+      datos.descripcion,
+      datos.inicio,
+      datos.fin,
+      datos.lugar,
+      datos.plazas,
+      datos.requisitos,
+      datos.estado,
+      datos.creadaPor,
+    ],
   );
   return obtenerPorId(rows[0].id, cliente);
 }

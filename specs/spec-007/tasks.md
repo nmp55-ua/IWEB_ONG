@@ -99,8 +99,8 @@ listado público `/actividades` (spec-005) se comprueba al integrar spec-005 ([q
 
 ## Phase 5: Polish & Cross-Cutting
 
-- [ ] T024 [P] Añadir el correo «cambio de fecha, hora o lugar» (FR-011) a la lista de correos de `specs/plan-comun.md` §6 con aviso al grupo (principio XII, research R5)
-- [ ] T025 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos de `backend/src/modulos/actividades/` y `frontend/src/components/actividades/`
+- [X] T024 [P] Añadir el correo «cambio de fecha, hora o lugar» (FR-011) a la lista de correos de `specs/plan-comun.md` §6 con aviso al grupo (principio XII, research R5)
+- [X] T025 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos de `backend/src/modulos/actividades/` y `frontend/src/components/actividades/`
 - [ ] T026 Recorrer [quickstart.md](quickstart.md) completo a mano, cronometrar SC-001 (< 3 min), y al integrar spec-005 comprobar en `/actividades` que una actividad publicada aparece y una cancelada deja de estar disponible (US1 escenarios 3 y 5, FR-008); actualizar plan/contrato si algo implementado difiere (principio III)
 
 ---

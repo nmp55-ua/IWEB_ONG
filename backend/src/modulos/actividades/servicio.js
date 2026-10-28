@@ -37,7 +37,11 @@ export function aRecurso(fila, confirmadas) {
 // FR-003: fin posterior al inicio, inicio futuro y proyecto activo. Lanza un 400 por campo.
 // Al editar sin cambiar de proyecto no se comprueba el proyecto: desactivarlo no afecta a
 // las actividades que ya tiene (clarify, pregunta 5).
-export async function validarFechasYProyecto({ inicio, fin, proyectoId }, cliente, { comprobarProyecto = true } = {}) {
+export async function validarFechasYProyecto(
+  { inicio, fin, proyectoId },
+  cliente,
+  { comprobarProyecto = true } = {},
+) {
   const campos = {};
   if (new Date(fin) <= new Date(inicio)) campos.fin = 'El fin debe ser posterior al inicio.';
   if (new Date(inicio) <= ahora()) campos.inicio = 'El inicio debe ser posterior al momento actual.';
@@ -54,17 +58,27 @@ export async function validarFechasYProyecto({ inicio, fin, proyectoId }, client
 // «sábado, 15/11/2026, de 10:00 a 13:30»
 function describirHorario(fila) {
   const dia = new Intl.DateTimeFormat('es-ES', {
-    timeZone: ZONA, weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric',
+    timeZone: ZONA,
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   }).format(new Date(fila.inicio));
-  const hora = (f) => new Intl.DateTimeFormat('es-ES', { timeZone: ZONA, hour: '2-digit', minute: '2-digit' })
-    .format(new Date(f));
+  const hora = (f) =>
+    new Intl.DateTimeFormat('es-ES', { timeZone: ZONA, hour: '2-digit', minute: '2-digit' }).format(
+      new Date(f),
+    );
   return `${dia}, de ${hora(fila.inicio)} a ${hora(fila.fin)}`;
 }
 
 // Envía un correo a cada persona; los fallos ya los registra enviarCorreo y no se deshace nada.
 async function avisar(personas, asunto, texto) {
   for (const persona of personas) {
-    await enviarCorreo({ para: persona.correo, asunto, texto: `Hola, ${persona.nombre}:\n\n${texto}\n\nGracias por colaborar.` });
+    await enviarCorreo({
+      para: persona.correo,
+      asunto,
+      texto: `Hola, ${persona.nombre}:\n\n${texto}\n\nGracias por colaborar.`,
+    });
   }
 }
 
@@ -74,9 +88,9 @@ export async function avisarPlazaConfirmada(inscripcion, actividad) {
   await avisar(
     [inscripcion],
     `Plaza confirmada: «${actividad.titulo}»`,
-    `Se ha liberado una plaza en la actividad «${actividad.titulo}» y ya tienes la tuya confirmada. `
-      + `Es el ${describirHorario(actividad)}, en ${actividad.lugar}. `
-      + 'Si no puedes asistir, cancela tu inscripción para que la plaza pase a la siguiente persona.',
+    `Se ha liberado una plaza en la actividad «${actividad.titulo}» y ya tienes la tuya confirmada. ` +
+      `Es el ${describirHorario(actividad)}, en ${actividad.lugar}. ` +
+      'Si no puedes asistir, cancela tu inscripción para que la plaza pase a la siguiente persona.',
   );
 }
 
@@ -106,14 +120,19 @@ export async function editar(id, cambios) {
     const anterior = await repositorio.bloquearPorId(id, cliente);
     if (!anterior) throw noEncontrada();
     if (anterior.estado === 'cancelada' || estaCelebrada(anterior)) {
-      throw new ErrorApi(409, 'ACTIVIDAD_NO_EDITABLE', 'No se puede editar una actividad cancelada o ya celebrada.');
+      throw new ErrorApi(
+        409,
+        'ACTIVIDAD_NO_EDITABLE',
+        'No se puede editar una actividad cancelada o ya celebrada.',
+      );
     }
     const resultado = {
       inicio: cambios.inicio ?? anterior.inicio,
       fin: cambios.fin ?? anterior.fin,
       proyectoId: cambios.proyectoId ?? anterior.proyecto_id,
     };
-    const cambiaProyecto = cambios.proyectoId !== undefined && cambios.proyectoId !== Number(anterior.proyecto_id);
+    const cambiaProyecto =
+      cambios.proyectoId !== undefined && cambios.proyectoId !== Number(anterior.proyecto_id);
     await validarFechasYProyecto(resultado, cliente, { comprobarProyecto: cambiaProyecto });
 
     let confirmadas = await inscripciones.contarConfirmadas(id, cliente);
@@ -140,8 +159,9 @@ export async function editar(id, cambios) {
   for (const inscripcion of promovidas) await avisarPlazaConfirmada(inscripcion, fila);
 
   // FR-011: si una publicada cambia de fecha, hora o lugar, se avisa a inscritos y lista de espera.
-  const cambiaHorario = new Date(fila.inicio).getTime() !== new Date(anterior.inicio).getTime()
-    || new Date(fila.fin).getTime() !== new Date(anterior.fin).getTime();
+  const cambiaHorario =
+    new Date(fila.inicio).getTime() !== new Date(anterior.inicio).getTime() ||
+    new Date(fila.fin).getTime() !== new Date(anterior.fin).getTime();
   if (anterior.estado === 'publicada' && (cambiaHorario || fila.lugar !== anterior.lugar)) {
     const { confirmadas: inscritos, enEspera } = await inscripciones.listarInscripcionesDeActividad(id);
     await avisar(
@@ -160,7 +180,10 @@ export async function publicar(id) {
     if (actual.estado !== 'borrador') {
       throw new ErrorApi(409, 'TRANSICION_NO_PERMITIDA', 'Solo se puede publicar una actividad en borrador.');
     }
-    await validarFechasYProyecto({ inicio: actual.inicio, fin: actual.fin, proyectoId: actual.proyecto_id }, cliente);
+    await validarFechasYProyecto(
+      { inicio: actual.inicio, fin: actual.fin, proyectoId: actual.proyecto_id },
+      cliente,
+    );
     const fila = await repositorio.actualizar(id, { estado: 'publicada' }, cliente);
     return aRecurso(fila, await inscripciones.contarConfirmadas(id, cliente));
   });
@@ -171,11 +194,16 @@ export async function cancelar(id) {
     const anterior = await repositorio.bloquearPorId(id, cliente);
     if (!anterior) throw noEncontrada();
     if (anterior.estado === 'cancelada' || estaCelebrada(anterior)) {
-      throw new ErrorApi(409, 'TRANSICION_NO_PERMITIDA', 'No se puede cancelar una actividad cancelada o ya celebrada.');
+      throw new ErrorApi(
+        409,
+        'TRANSICION_NO_PERMITIDA',
+        'No se puede cancelar una actividad cancelada o ya celebrada.',
+      );
     }
-    const afectadas = anterior.estado === 'publicada'
-      ? await inscripciones.cancelarInscripcionesDeActividad(id, cliente)
-      : [];
+    const afectadas =
+      anterior.estado === 'publicada'
+        ? await inscripciones.cancelarInscripcionesDeActividad(id, cliente)
+        : [];
     const fila = await repositorio.actualizar(id, { estado: 'cancelada' }, cliente);
     return { anterior, fila, afectadas };
   });
@@ -185,8 +213,8 @@ export async function cancelar(id) {
     await avisar(
       afectadas,
       `Actividad cancelada: «${fila.titulo}»`,
-      `Sentimos comunicarte que la actividad «${fila.titulo}» del ${describirHorario(fila)} se ha cancelado. `
-        + 'Tu inscripción ha quedado cancelada.',
+      `Sentimos comunicarte que la actividad «${fila.titulo}» del ${describirHorario(fila)} se ha cancelado. ` +
+        'Tu inscripción ha quedado cancelada.',
     );
   }
   return aRecurso(fila, 0);
