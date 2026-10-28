@@ -1,0 +1,30 @@
+{
+  "name": "ong-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=../.env src/servidor.js",
+    "start": "node --env-file-if-exists=../.env src/servidor.js",
+    "migrar": "node --env-file-if-exists=../.env src/db/migrar.js",
+    "semillas": "node --env-file-if-exists=../.env src/db/semillas/index.js",
+    "test": "vitest run",
+    "certificados": "echo \"Lo implementa spec-003\""
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-pg-simple": "^10.0.0",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "pdfkit": "^0.15.2",
+    "pg": "^8.13.1",
+    "stripe": "^17.5.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.8"
+  }
+}

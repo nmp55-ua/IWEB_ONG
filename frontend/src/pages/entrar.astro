@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FormEntrar from '../components/auth/FormEntrar.jsx';
+
+// Solo se permite volver a una ruta interna, nunca a otra web.
+const volver = Astro.url.searchParams.get('volver');
+const volverA = volver && volver.startsWith('/') && !volver.startsWith('//') ? volver : '/';
+---
+
+<Layout titulo="Entrar">
+  <FormEntrar client:load volverA={volverA} />
+</Layout>
