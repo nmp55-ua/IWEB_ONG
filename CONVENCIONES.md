@@ -6,10 +6,10 @@ Este documento fija cómo trabajamos los cuatro para que las ocho historias form
 
 | Persona | Historias | Carpeta de specs |
 |---|---|---|
-| A | HU-01, HU-02 | `specs/spec-001`, `specs/spec-002` |
-| B | HU-03, HU-04 | `specs/spec-003`, `specs/spec-004` |
-| C | HU-05, HU-06 | `specs/spec-005`, `specs/spec-006` |
-| D | HU-07, HU-08 | `specs/spec-007`, `specs/spec-008` |
+| Nada | HU-01, HU-02 | `specs/spec-001`, `specs/spec-002` |
+| Rubén | HU-03, HU-04 | `specs/spec-003`, `specs/spec-004` |
+| Javi | HU-05, HU-06 | `specs/spec-005`, `specs/spec-006` |
+| Nicole | HU-07, HU-08 | `specs/spec-007`, `specs/spec-008` |
 
 ## 2. Estructura del repositorio
 
@@ -41,10 +41,10 @@ Este documento fija cómo trabajamos los cuatro para que las ocho historias form
 │       │   ├── migraciones/          ← un fichero SQL numerado por cambio
 │       │   └── semillas/             ← datos de prueba comunes
 │       └── modulos/
-│           ├── donaciones/           ← A (HU-01, HU-02)
-│           ├── certificados-informes/← B (HU-03, HU-04)
-│           ├── voluntariado/         ← C (HU-05, HU-06)
-│           └── actividades/          ← D (HU-07, HU-08)
+│           ├── donaciones/           ← Nada (HU-01, HU-02)
+│           ├── certificados-informes/← Rubén (HU-03, HU-04)
+│           ├── voluntariado/         ← Javi (HU-05, HU-06)
+│           └── actividades/          ← Nicole (HU-07, HU-08)
 │               ├── rutas.js
 │               ├── controlador.js
 │               ├── servicio.js       ← reglas de negocio
@@ -61,19 +61,19 @@ Hay **una única definición** de cada entidad. Quien la "posee" la crea en una 
 | Entidad | Dueño | La usan |
 |---|---|---|
 | Usuario (con rol) | Común (se hace al principio entre todos) | Todos |
-| Proyecto | Común | A, B, D |
-| Donante, Aportación, SuscripcionSocio | A | B |
-| CertificadoFiscal | B | — |
-| Voluntario, Inscripción | C | D |
-| Actividad | D | B, C |
-| Asistencia | D | B |
+| Proyecto | Común | Nada, Rubén, Nicole |
+| Donante, Aportación, SuscripcionSocio | Nada | Rubén |
+| CertificadoFiscal | Rubén | — |
+| Voluntario, Inscripción | Javi | Nicole |
+| Actividad | Nicole | Rubén, Javi |
+| Asistencia | Nicole | Rubén |
 
 Reglas para la base de datos:
 - Tablas y columnas en español, en `snake_case` y en plural para tablas: `aportaciones`, `fecha_cobro`.
 - Clave primaria `id`; claves foráneas `<entidad>_id`: `proyecto_id`.
 - Todas las tablas tienen `creado_en` y `actualizado_en`.
 - Importes en `NUMERIC(10,2)`, nunca en coma flotante.
-- Nada se borra: se usa una columna `estado` (principio 9).
+- No se borra ningún registro: se usa una columna `estado` (principio 9).
 - Las migraciones se numeran `001_…sql`, `002_…sql` y nunca se edita una ya subida.
 
 ## 4. Roles y acceso
@@ -132,7 +132,7 @@ Códigos HTTP: 400 datos inválidos, 401 no identificado, 403 sin permiso, 404 n
 ## 10. Orden de trabajo (según la guía del proyecto)
 
 1. **Entre todos, en un solo ordenador (guía, apartado 2):** `/speckit.constitution`, `/speckit.specify` de las 8 specs, `/speckit.plan` común con el modelo de datos compartido, repositorio y ramas. Después, la base de código: constitución, este documento, estructura vacía del repositorio, tabla `usuarios` con roles, inicio de sesión, `Layout.astro`, componentes comunes, formato de errores y tabla `proyectos`.
-2. **En paralelo:** A empieza por HU-01 y D por HU-07, porque otras historias dependen de ellas.
-3. C (HU-05) en cuanto exista `actividades`; B (HU-03, HU-04) en cuanto existan `aportaciones` y `asistencias`. Mientras tanto, B y C pueden trabajar con datos de prueba de `db/semillas/`.
+2. **En paralelo:** Nada empieza por HU-01 y Nicole por HU-07, porque otras historias dependen de ellas.
+3. Javi (HU-05) en cuanto exista `actividades`; Rubén (HU-03, HU-04) en cuanto existan `aportaciones` y `asistencias`. Mientras tanto, Rubén y Javi pueden trabajar con datos de prueba de `db/semillas/`.
 4. **Cada persona, en la rama de cada una de sus specs (guía, apartado 3):** `specify → clarify → plan → tasks → analyze → implement → converge`, repitiendo los pasos que haga falta. El plan de cada spec respeta `plan-comun.md` y `modelo-datos.md`; si hay que cambiarlos, se acuerda con el grupo y se actualizan todas las specs afectadas.
 5. **Antes de dar una spec por resuelta:** cumple sus criterios de aceptación, se ha probado, la documentación coincide con el código y respeta la base común. Se guarda en su rama y se avisa al grupo.

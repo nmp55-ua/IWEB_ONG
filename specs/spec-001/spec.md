@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante A* · **Revisor**: *Integrante B*
+**Responsable**: *Nada* · **Revisor**: *Rubén*
 
 **Input**: Descripción del SI-13: "cualquier persona interesada en colaborar económicamente pueda hacer una donación puntual o convertirse en socio con una aportación periódica, formalizando el pago a través de una pasarela segura y recibiendo confirmación inmediata de que su colaboración se ha registrado."
 

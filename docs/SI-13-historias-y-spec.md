@@ -21,12 +21,12 @@ Las reglas de negocio que la descripción narrativa no fija (porcentajes, plazos
 
 | Integrante | Historias asignadas | Bloque |
 |---|---|---|
-| *Integrante A* | HU-01, HU-02 | Donaciones: entrada y consulta del dinero |
-| *Integrante B* | HU-03, HU-04 | Documentos e informes: certificado fiscal e informes para la junta |
-| *Integrante C* | HU-05, HU-06 | Experiencia del voluntario: inscripción y calendario |
-| *Integrante D* | HU-07, HU-08 | Gestión del coordinador: actividades, lista de espera y asistencia |
+| *Nada* | HU-01, HU-02 | Donaciones: entrada y consulta del dinero |
+| *Rubén* | HU-03, HU-04 | Documentos e informes: certificado fiscal e informes para la junta |
+| *Javi* | HU-05, HU-06 | Experiencia del voluntario: inscripción y calendario |
+| *Nicole* | HU-07, HU-08 | Gestión del coordinador: actividades, lista de espera y asistencia |
 
-Cada integrante tiene dos historias que comparten datos y pantallas, de modo que puede llevar su bloque de principio a fin con pocas dependencias. Dependencias entre bloques: B usa los datos de A (aportaciones) y de D (horas); C usa las actividades de D. Por eso conviene acordar pronto el modelo de *Aportación*, *Actividad* e *Inscripción*.
+Cada integrante tiene dos historias que comparten datos y pantallas, de modo que puede llevar su bloque de principio a fin con pocas dependencias. Dependencias entre bloques: Rubén usa los datos de Nada (aportaciones) y de Nicole (horas); Javi usa las actividades de Nicole. Por eso conviene acordar pronto el modelo de *Aportación*, *Actividad* e *Inscripción*.
 
 La especificación detallada de cada historia está en `specs/spec-00N/spec.md`.
 
@@ -36,7 +36,7 @@ La especificación detallada de cada historia está en `specs/spec-00N/spec.md`.
 
 ### Historia 1 — Donación puntual o alta como socio
 
-**Responsable:** *Integrante A*
+**Responsable:** *Nada*
 
 **Historia de usuario:** Como donante, quiero hacer una donación puntual o hacerme socio con una aportación periódica pagando mediante una pasarela segura, para colaborar económicamente con la ONG y recibir confirmación inmediata de que mi aportación se ha registrado.
 
@@ -69,7 +69,7 @@ Tras un pago correcto, el donante ve en pantalla una confirmación con el import
 
 ### Historia 2 — Historial de aportaciones del donante
 
-**Responsable:** *Integrante A*
+**Responsable:** *Nada*
 
 **Historia de usuario:** Como donante, quiero consultar el historial completo de mis aportaciones agrupado por año y viendo a qué proyecto se destinó cada una, para tener constancia de mi implicación con la causa.
 
@@ -98,7 +98,7 @@ Un donante solo puede ver sus propias aportaciones, nunca las de otra persona.
 
 ### Historia 3 — Certificado fiscal anual de donaciones
 
-**Responsable:** *Integrante B*
+**Responsable:** *Rubén*
 
 **Historia de usuario:** Como donante, quiero descargar al comienzo de cada año un certificado fiscal con el total que aporté el año anterior, para usarlo en mi declaración de impuestos.
 
@@ -128,7 +128,7 @@ Solo se genera certificado para donantes con NIF/NIE registrado y con un total m
 
 ### Historia 4 — Informes de recaudación y voluntariado para la junta
 
-**Responsable:** *Integrante B*
+**Responsable:** *Rubén*
 
 **Historia de usuario:** Como administrador de la ONG, quiero obtener informes del dinero recaudado y del voluntariado generado, agrupados por proyecto y por periodo, y exportarlos, para rendir cuentas ante la junta directiva.
 
@@ -161,7 +161,7 @@ El informe incluye una fila de **totales**. Puede agruparse además por **mes**,
 
 ### Historia 5 — Consulta e inscripción en actividades de voluntariado
 
-**Responsable:** *Integrante C*
+**Responsable:** *Javi*
 
 **Historia de usuario:** Como voluntario, quiero consultar las actividades disponibles y apuntarme a las que me interesen viendo cuántas plazas quedan libres y qué requisitos se piden, para colaborar con mi tiempo en las que encajen conmigo.
 
@@ -193,7 +193,7 @@ Un voluntario no puede inscribirse dos veces en la misma actividad, ni inscribir
 
 ### Historia 6 — Calendario personal del voluntario
 
-**Responsable:** *Integrante C*
+**Responsable:** *Javi*
 
 **Historia de usuario:** Como voluntario, quiero ver en un calendario personal mis próximas actividades, para organizar mi disponibilidad y no olvidar ningún compromiso.
 
@@ -221,7 +221,7 @@ Al seleccionar una actividad, el voluntario ve su detalle (fecha, horario, lugar
 
 ### Historia 7 — Gestión de actividades, plazas y lista de espera
 
-**Responsable:** *Integrante D*
+**Responsable:** *Nicole*
 
 **Historia de usuario:** Como coordinador de proyectos, quiero crear y mantener las actividades definiendo sus plazas y gestionando la lista de espera cuando la demanda supera el aforo, para organizar el voluntariado de cada proyecto.
 
@@ -253,7 +253,7 @@ El coordinador no puede reducir las plazas por debajo del número de inscritos c
 
 ### Historia 8 — Registro de asistencia y acumulación de horas
 
-**Responsable:** *Integrante D*
+**Responsable:** *Nicole*
 
 **Historia de usuario:** Como coordinador de proyectos, quiero registrar quién ha asistido realmente a cada actividad, para que las horas de voluntariado de cada persona se acumulen automáticamente en su perfil como reconocimiento a su compromiso.
 

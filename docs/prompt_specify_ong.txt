@@ -7,10 +7,10 @@ Propón un reparto y genera 8 specs, una por historia, identificadas como spec-0
 spec-002, …, spec-008 (spec-001 = HU-01, spec-002 = HU-02, etc.).
 
 Nuestra propuesta de reparto, que puedes revisar, es por bloques con pocas dependencias:
-- Integrante A: HU-01 (donación / socio) y HU-02 (historial de aportaciones).
-- Integrante B: HU-03 (certificado fiscal) y HU-04 (informes para la junta).
-- Integrante C: HU-05 (consulta e inscripción en actividades) y HU-06 (calendario).
-- Integrante D: HU-07 (gestión de actividades y lista de espera) y HU-08 (asistencia y horas).
+- Nada: HU-01 (donación / socio) y HU-02 (historial de aportaciones).
+- Rubén: HU-03 (certificado fiscal) y HU-04 (informes para la junta).
+- Javi: HU-05 (consulta e inscripción en actividades) y HU-06 (calendario).
+- Nicole: HU-07 (gestión de actividades y lista de espera) y HU-08 (asistencia y horas).
 
 En cada spec:
 - Indica el responsable y un revisor de otra persona.

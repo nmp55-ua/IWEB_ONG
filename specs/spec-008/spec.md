@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante D* · **Revisor**: *Integrante B*
+**Responsable**: *Nicole* · **Revisor**: *Rubén*
 
 **Input**: Descripción del SI-13: "Ese mismo coordinador necesita, además, registrar quién ha asistido realmente a cada actividad, de forma que las horas de voluntariado dedicadas por cada persona se vayan acumulando automáticamente en su perfil, como reconocimiento a su compromiso continuado."
 

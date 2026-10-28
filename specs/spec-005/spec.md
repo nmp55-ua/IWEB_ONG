@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante C* · **Revisor**: *Integrante D*
+**Responsable**: *Javi* · **Revisor**: *Nicole*
 
 **Input**: Descripción del SI-13: "cualquier persona interesada en el voluntariado debe poder consultar las actividades disponibles y apuntarse a las que le interesen, viendo con claridad cuántas plazas quedan libres en cada una y qué requisitos concretos se piden para participar."
 

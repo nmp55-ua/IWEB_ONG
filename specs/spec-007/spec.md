@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante D* · **Revisor**: *Integrante C*
+**Responsable**: *Nicole* · **Revisor**: *Javi*
 
 **Input**: Descripción del SI-13: "Quien coordina los proyectos de la organización, por su parte, es el encargado de crear y mantener las actividades disponibles, definiendo cuántas plazas tiene cada una y gestionando la correspondiente lista de espera cuando la demanda supera al aforo previsto."
 

@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante B* · **Revisor**: *Integrante D*
+**Responsable**: *Rubén* · **Revisor**: *Nicole*
 
 **Input**: Descripción del SI-13: "quien lleva la administración de la ONG necesita poder rendir cuentas ante la junta directiva, para lo cual requiere informes que muestren, agrupado por proyecto y por periodo, tanto el dinero recaudado como el volumen de voluntariado generado, en un formato que se pueda exportar y presentar con facilidad."
 

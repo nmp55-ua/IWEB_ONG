@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante B* · **Revisor**: *Integrante A*
+**Responsable**: *Rubén* · **Revisor**: *Nada*
 
 **Input**: Descripción del SI-13: "Cada comienzo de año trae consigo una necesidad muy concreta para quien ha donado: disponer de un certificado fiscal que recoja el total aportado durante el ejercicio anterior, generado automáticamente y listo para descargar, de forma que pueda utilizarlo en su declaración de impuestos."
 

@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante A* · **Revisor**: *Integrante C*
+**Responsable**: *Nada* · **Revisor**: *Javi*
 
 **Input**: Descripción del SI-13: "Ese mismo donante querrá, con el paso del tiempo, poder consultar el historial completo de sus aportaciones, viendo año a año qué ha donado y, cuando corresponda, a qué proyecto concreto se destinó ese dinero, como constancia tangible de su implicación con la causa."
 

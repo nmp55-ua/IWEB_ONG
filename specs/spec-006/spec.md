@@ -6,7 +6,7 @@
 
 **Status**: Draft
 
-**Responsable**: *Integrante C* · **Revisor**: *Integrante A*
+**Responsable**: *Javi* · **Revisor**: *Nada*
 
 **Input**: Descripción del SI-13: "Una vez inscrito en varias actividades, ese voluntario necesita también una manera sencilla de ver todo lo que tiene por delante: un calendario personal con sus próximas actividades, que le ayude a organizar su disponibilidad y a no olvidar ningún compromiso adquirido."
 
