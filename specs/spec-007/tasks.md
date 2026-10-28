@@ -29,7 +29,7 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 **Purpose**: la tabla `actividades` en `main` lo antes posible (plan-comun §7), porque
 `006_voluntariado.sql` (Javi) tiene una FK a ella.
 
-- [ ] T001 Crear `backend/src/db/migraciones/005_actividades.sql` con la tabla `actividades` exactamente como en [data-model.md](data-model.md) (tipos, FK a `proyectos` y `usuarios`, `CHECK` de texto no vacío, `fin > inicio`, `plazas > 0`, `estado IN ('borrador','publicada','cancelada')` con `DEFAULT 'borrador'`, `requisitos DEFAULT ''`, `creado_en`/`actualizado_en`) e índice `(estado, inicio)`; comentario de cabecera `-- spec-007 (Nicole). Ver specs/modelo-datos.md#actividades-spec-007`
+- [X] T001 Crear `backend/src/db/migraciones/005_actividades.sql` con la tabla `actividades` exactamente como en [data-model.md](data-model.md) (tipos, FK a `proyectos` y `usuarios`, `CHECK` de texto no vacío, `fin > inicio`, `plazas > 0`, `estado IN ('borrador','publicada','cancelada')` con `DEFAULT 'borrador'`, `requisitos DEFAULT ''`, `creado_en`/`actualizado_en`) e índice `(estado, inicio)`; comentario de cabecera `-- spec-007 (Nicole). Ver specs/modelo-datos.md#actividades-spec-007`
 - [ ] T002 Marcar `005_actividades.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md`, aplicar con `npm run migrar` en `backend/` y abrir un PR pequeño a `main` solo con T001–T002 (revisa Javi)
 
 ---
