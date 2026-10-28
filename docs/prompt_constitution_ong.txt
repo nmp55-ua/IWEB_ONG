@@ -1,0 +1,46 @@
+Crea una constitution sencilla para el Sistema de Gestión de Donaciones y Voluntariado
+de una ONG: una aplicación web para que donantes aporten dinero, voluntarios se apunten
+a actividades, coordinadores gestionen esas actividades y la administración rinda
+cuentas ante la junta directiva. La desarrolla un grupo de 4 personas, con 8 historias
+de usuario (HU-01 a HU-08), una spec por historia (spec-001 a spec-008) y 2 specs por
+persona. Organízala en estos tres bloques:
+
+CRITERIOS DE CALIDAD
+1. Simplicidad ante todo: ante dos soluciones, la más simple. Es una versión 1; nada de
+   complejidad anticipada.
+2. Cero alcance fantasma: no implementar nada que no esté escrito en las specs. Si
+   surge una idea nueva, se propone, no se construye.
+3. Verificable: cada criterio de aceptación debe poder comprobarse usando la aplicación,
+   sin leer código. Una historia no está terminada hasta que cumple sus criterios y la
+   documentación coincide con lo implementado.
+4. Español de España: toda la interfaz en español, importes en euros con 2 decimales que
+   cuadren al céntimo, fechas dd/mm/aaaa y hora peninsular.
+5. Seguridad y datos personales: el pago se hace en una pasarela externa y nunca se
+   guardan datos de tarjeta; pedir solo los datos imprescindibles; los informes muestran
+   cifras agregadas; ningún secreto en el código. Cada usuario ve solo sus datos y cada
+   rol (donante, voluntario, coordinador, administrador) solo lo que le corresponde,
+   comprobado siempre en el servidor.
+6. Nada se borra a ciegas: aportaciones, inscripciones y asistencias cambian de estado
+   en lugar de eliminarse, para conservar el historial.
+
+ORGANIZACIÓN DEL CÓDIGO
+7. Pila tecnológica: Astro con islas de React y Tailwind CSS en el front-end, Node.js
+   con Express en el back-end y PostgreSQL como base de datos.
+8. Una sola aplicación: un plan técnico y un modelo de datos compartidos por las 8 specs.
+   Cada entidad (Proyecto, Donante, Aportación, Voluntario, Actividad, Inscripción,
+   Asistencia, Usuario) se define una única vez. Misma estructura de carpetas, mismo
+   inicio de sesión y roles, mismo formato de respuestas y errores de la API, mismos
+   componentes y aspecto visual. Antes de crear algo, reutilizar lo que ya existe.
+9. Las convenciones concretas (carpetas, nombres, API, base de datos, interfaz) están en
+   CONVENCIONES.md y son de obligado cumplimiento.
+
+ACUERDOS DE COLABORACIÓN
+10. Cada spec tiene un responsable y un revisor de otra persona. Cada persona trabaja
+    en la rama de su spec (spec-001 a spec-008) y hace sus propios commits, que
+    empiezan por el identificador de la historia (por ejemplo, «HU-05: ...»).
+11. A main solo se llega con la revisión de otro integrante.
+12. Cambiar una decisión común, el plan compartido o el modelo de datos exige acuerdo
+    del grupo y actualizar de forma coherente todas las specs afectadas. Las
+    dependencias entre historias de distintas personas se documentan en el plan.
+
+Mantén la constitution corta y en lenguaje claro.

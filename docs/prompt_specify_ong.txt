@@ -1,0 +1,28 @@
+Esta es la narrativa del sistema (docs/SI-13-donaciones-ong-descripcion-narrativa.pdf) y estas
+son nuestras 8 historias de usuario, HU-01 a HU-08, con su especificación y criterios de
+aceptación (docs/SI-13-historias-y-spec.md). Trabajamos en un grupo de 4 personas y cada una
+se responsabilizará de 2 historias.
+
+Propón un reparto y genera 8 specs, una por historia, identificadas como spec-001,
+spec-002, …, spec-008 (spec-001 = HU-01, spec-002 = HU-02, etc.).
+
+Nuestra propuesta de reparto, que puedes revisar, es por bloques con pocas dependencias:
+- Integrante A: HU-01 (donación / socio) y HU-02 (historial de aportaciones).
+- Integrante B: HU-03 (certificado fiscal) y HU-04 (informes para la junta).
+- Integrante C: HU-05 (consulta e inscripción en actividades) y HU-06 (calendario).
+- Integrante D: HU-07 (gestión de actividades y lista de espera) y HU-08 (asistencia y horas).
+
+En cada spec:
+- Indica el responsable y un revisor de otra persona.
+- Respeta los criterios de aceptación y las reglas de negocio de docs/SI-13-historias-y-spec.md
+  y conserva sus preguntas abiertas (PAn.m) como pendientes de clarify.
+- Usa las mismas entidades con los mismos nombres en todas las specs (Proyecto, Donante,
+  Aportación, SuscripcionSocio, CertificadoFiscal, Voluntario, Actividad, Inscripción,
+  Asistencia, Usuario con rol) y señala las dependencias con specs de otras personas.
+- No incluyas decisiones técnicas: eso irá en el plan.
+
+Ya tenemos un borrador de cada spec en docs/borradores-specs/spec-00N/spec.md: úsalo
+como punto de partida y mejóralo en lugar de empezar de cero.
+
+Guarda cada spec en specs/spec-00N/spec.md y usa como nombre de rama spec-00N
+(spec-001 a spec-008), sin sufijos descriptivos.

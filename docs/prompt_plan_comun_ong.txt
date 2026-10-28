@@ -1,0 +1,29 @@
+Prepara el plan técnico común del sistema. Trabajamos en grupo (4 personas, 8 specs,
+spec-001 a spec-008), así que el plan y el modelo de datos deben ser COMPARTIDOS por las
+8 specs: una base coherente para todo el sistema, no ocho soluciones distintas.
+
+Pila tecnológica:
+- Front-end: Astro con islas de React y Tailwind CSS.
+- Back-end: Node.js con Express (API REST en /api).
+- Base de datos: PostgreSQL.
+
+El plan común debe incluir:
+1. Arquitectura y estructura de carpetas del repositorio, siguiendo CONVENCIONES.md
+   (un módulo de back-end por bloque: donaciones, certificados-informes, voluntariado,
+   actividades; y partes comunes: autenticación, roles, errores, layout, componentes).
+2. Modelo de datos completo y único para las 8 specs: Usuario (con roles donante,
+   voluntario, coordinador, administrador), Proyecto, Donante, Aportación,
+   SuscripcionSocio, CertificadoFiscal, Voluntario, Actividad, Inscripción y Asistencia,
+   con sus campos, estados, relaciones y qué spec es dueña de cada tabla.
+3. Autenticación y control de acceso por rol, comprobado en el servidor.
+4. Formato común de la API (rutas, JSON, fechas, importes) y de los errores.
+5. Integración con la pasarela de pago externa en modo de pruebas (sin guardar tarjetas).
+6. Generación de PDF (certificado fiscal, informes) y de CSV (informes), y envío de
+   correos (confirmaciones y avisos), como servicios comunes.
+7. Dependencias entre specs y orden de construcción: qué parte común se hace primero en
+   main y qué specs dependen de otras (spec-003 y spec-004 de spec-001 y spec-008;
+   spec-005 y spec-006 de spec-007).
+8. Cómo se prueba cada criterio de aceptación y los datos de prueba comunes.
+
+Guarda el plan común y el modelo de datos en specs/plan-comun.md y specs/modelo-datos.md
+para que el plan de cada spec los referencie en lugar de repetirlos.
