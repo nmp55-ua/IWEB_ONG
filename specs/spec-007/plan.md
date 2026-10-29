@@ -84,6 +84,7 @@ frontend/src/
 ├── components/actividades/FormActividad.jsx        ← alta y edición (mismo componente)
 ├── components/actividades/fechasFormulario.js      ← localAIsoMadrid / isoALocalMadrid (datetime-local ↔ ISO de Madrid)
 ├── components/actividades/DetalleActividad.jsx     ← botones de estado + tablas de inscritos y espera
+├── components/actividades/estados.js               ← textoEstado (incluida «Celebrada») y esEditable, comunes a lista y detalle
 └── components/comunes/Menu.jsx                     ← descomentar el enlace «Gestionar actividades»
 ```
 

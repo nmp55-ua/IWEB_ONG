@@ -79,7 +79,19 @@ export default function DetalleActividad({ id, recienCreada = false }) {
         Volver
       </a>
       {mensaje && <Aviso tipo="exito">{mensaje}</Aviso>}
-      {error && <Aviso tipo="error">{error.message}</Aviso>}
+      {error && (
+        <Aviso tipo="error">
+          {error.message}
+          {/* Publicar no pasa por el formulario: se muestra aquí el motivo de cada campo. */}
+          {Object.keys(error.campos ?? {}).length > 0 && (
+            <ul className="list-disc ml-5 mt-1">
+              {Object.entries(error.campos).map(([campo, motivo]) => (
+                <li key={campo}>{motivo}</li>
+              ))}
+            </ul>
+          )}
+        </Aviso>
+      )}
 
       <section className="bg-white rounded shadow-sm p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">

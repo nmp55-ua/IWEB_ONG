@@ -7,7 +7,14 @@ Arranque según el [README](../../README.md): `docker compose up -d`, `npm run m
 Mailpit (`http://localhost:8025`). Usuarios de prueba: plan-comun §8 (`coordinador@ong.test`,
 `voluntario@ong.test`, `voluntario2@ong.test`, `donante@ong.test`).
 
-Pruebas automáticas: `npm test` en `backend/` (`modulos/actividades/servicio.test.js`).
+Pruebas automáticas (`backend/src/modulos/actividades/servicio.test.js`): solo se ejecutan si
+`TEST_DATABASE_URL` apunta a una base de pruebas con las migraciones aplicadas; sin ella,
+`npm test` las salta. **Nunca** uses la base de desarrollo: las pruebas vacían `actividades`.
+
+1. Crear la base una vez: `docker compose exec db createdb -U ong ong_test`.
+2. Migrarla: en `backend/`, `DATABASE_URL=<url de ong_test> npm run migrar` (la misma URL de
+   `.env` cambiando `/ong` por `/ong_test`).
+3. Ejecutar: en `backend/`, `TEST_DATABASE_URL=<url de ong_test> npm test`.
 
 ## Historia 1 — Crear, publicar, editar y cancelar
 
