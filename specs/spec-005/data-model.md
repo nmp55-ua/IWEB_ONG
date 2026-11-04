@@ -43,7 +43,9 @@ Aquí se concreta la migración `006_voluntariado.sql` y las reglas que aplica e
 
 - `confirmada` y `en_espera` son **activas**. `cancelada` es final; no se borra nada.
 - Al pasar a `confirmada` se rellena `fecha_confirmacion`; al pasar a `cancelada`,
-  `fecha_cancelacion` (con `now()`).
+  `fecha_cancelacion`. Estas tres fechas son de registro (cuándo pasó), así que se guardan con
+  `now()` de la base de datos. Las reglas que dependen del momento actual (inicio futuro, actividad
+  celebrada) usan `ahora()` de `fechas.js`.
 - El voluntario solo cancela antes del `inicio` de la actividad (FR-009).
 
 ## Valores derivados (no se guardan)

@@ -46,7 +46,7 @@ No queda ningún NEEDS CLARIFICATION: PA5.1, PA5.2 y las otras dos preguntas se 
 | V. Seguridad y datos | Inscribirse exige sesión y rol voluntario, comprobado en el servidor; cancelar solo las propias (404 si no es suya); del voluntario solo se piden los datos de contacto. |
 | VI. Nada se borra | Cancelar cambia el estado a `cancelada`; no hay `DELETE`. |
 | VIII. Una sola aplicación | `Layout`, componentes comunes, `lib/api.js`, `ErrorApi`, `transaccion()`; avisos de plaza con `avisarPlazaConfirmada` de spec-007. |
-| XII. Cambios comunes con acuerdo | `bloquearActividad` en el servicio de `actividades` y `vitest.config.js` se acuerdan con Nicole y con el grupo (R2, R7). |
+| XII. Cambios comunes con acuerdo | `bloquearActividad` en el servicio de `actividades` y `vitest.config.js` se proponen a Nicole y al grupo, y solo entran en `main` con su revisión (R2, R7). |
 
 ## Project Structure
 
@@ -102,7 +102,7 @@ salvo las tres líneas de `bloquearActividad` en el servicio de `actividades`.
 | `listarDisponibles({ proyectoId, desde, hasta }, usuario)` | Publicadas con `inicio > ahora()` (FR-001); `desde`/`hasta` son días de Madrid, ambos incluidos; orden por `inicio`. Si el usuario tiene perfil de voluntario, cada actividad lleva `miInscripcion` (su inscripción activa o `null`). | 400 `DATOS_INVALIDOS` |
 | `obtenerPerfil(usuario)` / `guardarPerfil(usuario, datos)` | Solo rol voluntario. `guardar` crea o actualiza el Voluntario del usuario (FR-011). | 403 `SIN_PERMISO` · 404 · 400 |
 | `inscribir(actividadId, { aceptaRequisitos, listaEspera }, usuario)` | Rol voluntario (FR-004, con su mensaje) y perfil hecho. En `transaccion()`: `bloquearActividad`; tiene que ser publicada y no celebrada (FR-008); sin otra inscripción activa (FR-008); si `confirmadas < plazas` → `confirmada` (FR-005); si no, `en_espera` solo con `listaEspera: true` (FR-007) y si no, 409. | 403 · 409 `PERFIL_INCOMPLETO` · 400 · 404 · 409 `ACTIVIDAD_CELEBRADA` · 409 `YA_INSCRITO` · 409 `PLAZAS_AGOTADAS` |
-| `cancelar(inscripcionId, usuario)` | Solo la propia (si no, 404); estado `confirmada` o `en_espera`; antes del inicio. En `transaccion()`: `bloquearActividad`, pasar a `cancelada`; si estaba confirmada, `promoverListaEspera`. Tras el `COMMIT`, `avisarPlazaConfirmada` por cada promovida (FR-009, acuerdo T023). | 404 · 409 `INSCRIPCION_NO_CANCELABLE` |
+| `cancelar(inscripcionId, usuario)` | Solo la propia (si no, 404); estado `confirmada` o `en_espera`; antes del inicio. Se lee la inscripción sin bloqueo solo para el dueño y la actividad; en `transaccion()`: `bloquearActividad`, volver a leer la inscripción con el mismo `cliente` y decidir sobre esa lectura, pasar a `cancelada`; si estaba confirmada, `promoverListaEspera`. Tras el `COMMIT`, `avisarPlazaConfirmada` por cada promovida (FR-009, acuerdo T023). | 404 · 409 `INSCRIPCION_NO_CANCELABLE` |
 | Funciones para `actividades` | Las del [contrato](contracts/api-voluntariado.md#funciones-para-el-módulo-actividades). Las que escriben reciben el `cliente` de la transacción de quien llama. | — |
 
 El aforo se garantiza como dice plan-comun: toda operación que cambia confirmadas o plazas

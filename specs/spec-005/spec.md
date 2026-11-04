@@ -94,7 +94,7 @@ Como voluntario, quiero apuntarme a una actividad confirmando que cumplo sus req
 
 ## Dependencies
 
-- **spec-007 (D)**: define Actividad, sus estados y la lista de espera; la inscripción en lista de espera y el paso automático a confirmada se rigen por sus reglas.
+- **spec-007 (D)**: define Actividad, sus estados y la lista de espera; la inscripción en lista de espera y el paso automático a confirmada se rigen por sus reglas. Su FR-005 («las nuevas solicitudes MUST entrar en una lista de espera») se aplica a quien pide la lista de espera: según la Q3 del clarify, nadie entra en ella sin pedirlo.
 - **Cancelación con lista de espera** *(acordado con Nicole, T023 de spec-007)*: al cancelar una inscripción confirmada, spec-005 llama a `promoverListaEspera` dentro de la misma transacción y, después del `COMMIT`, a `avisarPlazaConfirmada` de spec-007 para cada inscripción promovida. spec-005 no envía un correo propio.
 - **Funciones que spec-005 ofrece a `actividades`**: `contarConfirmadas`, `listarInscripcionesDeActividad`, `promoverListaEspera` y `cancelarInscripcionesDeActividad` (spec-007), y `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario` (spec-008).
 - **spec-006 (C, misma persona)** y **spec-008 (D)** consumen Inscripción.

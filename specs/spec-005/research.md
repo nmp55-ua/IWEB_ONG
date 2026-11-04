@@ -31,7 +31,9 @@ Aquí solo las propias de HU-05.
   - `avisarPlazaConfirmada(inscripcion, actividad)`, que ya existe.
 - **Rationale**: plan-comun §1 (se llama al servicio de otro módulo, nunca a su repositorio) y
   dueño único de cada tabla.
-- **Acuerdo**: `bloquearActividad` se propone a Nicole el 04/11 (pendiente de su visto bueno).
+- **Acuerdo**: `bloquearActividad` se propone a Nicole el 04/11. Se escribe en la rama `spec-005` y
+  solo entra en `main` con su revisión del PR (principio XI); si prefiere añadirla ella en spec-007, se
+  quita de aquí.
 - **Alternatives considered**: leer `actividades` desde el repositorio de voluntariado (rompe la
   propiedad de la tabla); un `listarDisponibles` nuevo en `actividades` (más código en el módulo
   de Nicole para algo que ya da `listar`).
@@ -63,7 +65,9 @@ Aquí solo las propias de HU-05.
   comprueba el rol con su propio mensaje: 403 `SIN_PERMISO`, «Necesitas una cuenta de voluntario
   para inscribirte en actividades.».
 - **Rationale**: `requiereRol('voluntario')` daría el mensaje genérico, y el escenario 10 pide
-  que se explique por qué. No se toca el middleware común.
+  que se explique por qué. No se toca el middleware común. El controlador llama a
+  `exigirVoluntario` antes de validar los datos, así que sin el rol siempre es 403, aunque el cuerpo
+  sea inválido.
 
 ## R6. Cancelar con `PATCH { accion: 'cancelar' }`
 
@@ -85,3 +89,6 @@ Aquí solo las propias de HU-05.
 - **Decision**: `desde` y `hasta` opcionales, con formato `aaaa-mm-dd`, como días completos de
   Madrid (`inicioDia` de `fechas.js`): `desde` ≤ inicio < día siguiente a `hasta`. `desde` mayor
   que `hasta` → 400. Es la forma de plan-comun §4 (`?proyectoId&desde&hasta`).
+- **Límite conocido**: el desplegable de proyectos sale de `GET /api/proyectos`, que solo da los
+  activos. Una actividad publicada de un proyecto que se ha desactivado después sigue en el listado
+  (clarify 5 de spec-007), pero no se puede filtrar por ese proyecto. Se acepta en la v1.
