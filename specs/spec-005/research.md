@@ -31,6 +31,9 @@ Aquí solo las propias de HU-05.
   - `avisarPlazaConfirmada(inscripcion, actividad)`, que ya existe.
 - **Rationale**: plan-comun §1 (se llama al servicio de otro módulo, nunca a su repositorio) y
   dueño único de cada tabla.
+- **Alcance**: la regla es para el código del módulo `backend/src/modulos/voluntariado/`. Las semillas
+  (`db/semillas/voluntariado.js`, que buscan por título las actividades de prueba de spec-007) y las
+  pruebas preparan datos con SQL directo, como hacen las de spec-007.
 - **Acuerdo**: `bloquearActividad` se propone a Nicole el 04/11. Se escribe en la rama `spec-005` y
   solo entra en `main` con su revisión del PR (principio XI); si prefiere añadirla ella en spec-007, se
   quita de aquí.

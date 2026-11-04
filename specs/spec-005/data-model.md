@@ -68,4 +68,4 @@ Aquí se concreta la migración `006_voluntariado.sql` y las reglas que aplica e
 | `correo` | correo válido | «Introduce un correo válido.» |
 | `telefono` | 9 a 15 cifras, con `+` y espacios opcionales | «Introduce un teléfono válido.» |
 | `proyectoId` (filtro) | entero positivo, opcional | «Proyecto no válido.» |
-| `desde`, `hasta` (filtro) | `aaaa-mm-dd`, opcionales; `desde` ≤ `hasta` | «Fecha no válida.» / «La fecha "desde" no puede ser posterior a "hasta".» |
+| `desde`, `hasta` (filtro) | `aaaa-mm-dd`, opcionales; `desde` ≤ `hasta` | «Fecha no válida.» / «La fecha «desde» no puede ser posterior a «hasta».» |

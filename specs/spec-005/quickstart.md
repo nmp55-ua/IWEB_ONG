@@ -39,9 +39,9 @@ Hacer los pasos en este orden (cada uno parte del anterior).
 |---|---|---|
 | 2.9 | Sin sesión, *Inscribirme* en Limpieza de playa | Lleva a *Entrar* y, al entrar, vuelve a `/actividades` |
 | 2.10 | Como `donante@ong.test`, *Inscribirme* | Aviso «Necesitas una cuenta de voluntario para inscribirte en actividades.» |
-| 2.2 | Como `voluntario@ong.test`, *Inscribirme* en Limpieza de playa y *Confirmar* sin marcar la casilla de requisitos | Mensaje junto a la casilla; no se inscribe |
-| 2.1 | Marcar «Cumplo los requisitos» y *Confirmar* | «Estás inscrito»; la tarjeta pasa a «0 plazas libres de 10» |
-| 2.4 | Repetir la petición con `curl` (`POST /api/actividades/<id>/inscripciones` con la cookie de sesión) | 409 «Ya estás inscrito en esta actividad.» |
+| 2.2 | Como `voluntario@ong.test`, *Inscribirme* en Limpieza de playa y *Confirmar inscripción* sin marcar la casilla «Cumplo los requisitos de esta actividad» | «Confirma que cumples los requisitos de la actividad.» junto a la casilla; no se inscribe |
+| 2.1 | Marcar «Cumplo los requisitos de esta actividad» y *Confirmar inscripción* | «Te has inscrito en «Limpieza de playa».», «Estás inscrito» y la tarjeta pasa a «0 plazas libres de 10» |
+| 2.4 | Repetir la petición con `curl` (`POST /api/actividades/<id>/inscripciones` con la cookie de sesión) | 409 «Ya estás inscrito o en la lista de espera de esta actividad.» |
 | 2.5 | *Cancelar inscripción* en Limpieza de playa y confirmar | Vuelve a «1 plaza libre de 10» y a «Inscribirme» |
 | 2.3 | En Reparto de alimentos (completa), *Apuntarme a la lista de espera*, marcar la casilla y confirmar | «En lista de espera · posición 2» |
 | 2.7 | Como `voluntario5@ong.test`, *Salir de la lista de espera* en Reparto de alimentos. Volver como `voluntario@` | `voluntario@` pasa a la posición 1 |
