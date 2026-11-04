@@ -1,0 +1,10 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import FormActividad from '../../../components/actividades/FormActividad.jsx';
+// spec-007. Al guardar se crea en borrador y se pasa a su detalle.
+---
+
+<Layout titulo="Nueva actividad">
+  <p class="mb-4"><a href="/coordinacion/actividades" class="text-marca-500 underline">Volver</a></p>
+  <FormActividad client:load />
+</Layout>

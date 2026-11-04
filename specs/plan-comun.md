@@ -221,7 +221,8 @@ Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas e
 - **Correo** (`correo.js`, con nodemailer por SMTP; Mailpit en desarrollo, en
   `http://localhost:8025`). Correos de texto en español:
   - confirmación de aportación (001);
-  - plaza confirmada desde la lista de espera, y actividad cancelada (007).
+  - plaza confirmada desde la lista de espera, actividad cancelada y cambio de fecha, hora o
+    lugar de una actividad publicada (007).
   Si falla el envío, se registra el error y la operación **no** se deshace.
 - **Certificados (003)**: una tarea `node-cron` cada 1 de enero a las 00:05 (`Europe/Madrid`)
   genera los certificados del ejercicio anterior. El mismo código se lanza a mano con
