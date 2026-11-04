@@ -101,7 +101,7 @@ listado público `/actividades` (spec-005) se comprueba al integrar spec-005 ([q
 
 - [X] T024 [P] Añadir el correo «cambio de fecha, hora o lugar» (FR-011) a la lista de correos de `specs/plan-comun.md` §6 con aviso al grupo (principio XII, research R5)
 - [X] T025 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos de `backend/src/modulos/actividades/` y `frontend/src/components/actividades/`
-- [ ] T026 Recorrer [quickstart.md](quickstart.md) completo a mano, cronometrar SC-001 (< 3 min), y al integrar spec-005 comprobar en `/actividades` que una actividad publicada aparece y una cancelada deja de estar disponible (US1 escenarios 3 y 5, FR-008); actualizar plan/contrato si algo implementado difiere (principio III)
+- [X] T026 Recorrer [quickstart.md](quickstart.md) completo a mano, cronometrar SC-001 (< 3 min), y al integrar spec-005 comprobar en `/actividades` que una actividad publicada aparece y una cancelada deja de estar disponible (US1 escenarios 3 y 5, FR-008); actualizar plan/contrato si algo implementado difiere (principio III) — *Hecho el 04/11/2026 por Nicole: SC-001 en 1 min 30 s (ver [refinamiento/prueba-manual-T026.md](refinamiento/prueba-manual-T026.md)). La comprobación en `/actividades` y la de plazas con inscritos quedan para la integración con spec-005, junto con T023.*
 
 ---
 
