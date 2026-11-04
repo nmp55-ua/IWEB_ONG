@@ -16,7 +16,7 @@ const textoPlazas = ({ plazasLibres, plazas }) =>
   `${plazasLibres} ${plazasLibres === 1 ? 'plaza libre' : 'plazas libres'} de ${plazas}`;
 
 // Una actividad del listado (FR-002) con el botón que toca según la situación del usuario.
-export default function TarjetaActividad({ actividad, usuario, onCambio }) {
+export default function TarjetaActividad({ actividad, usuario, onCambio, onRecargar }) {
   const [ventana, setVentana] = useState(null); // 'inscribir' | 'espera' | 'cancelar'
   const mia = actividad.miInscripcion;
   const completa = actividad.plazasLibres <= 0;
@@ -87,6 +87,7 @@ export default function TarjetaActividad({ actividad, usuario, onCambio }) {
           listaEspera={ventana === 'espera'}
           onCerrar={() => setVentana(null)}
           onHecho={alInscribirse}
+          onDesfase={onRecargar}
         />
       )}
       {mia && (

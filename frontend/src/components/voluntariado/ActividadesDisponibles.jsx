@@ -104,6 +104,7 @@ export default function ActividadesDisponibles() {
                 actividad={actividad}
                 usuario={usuario}
                 onCambio={alCambiar}
+                onRecargar={cargar}
               />
             ))}
           </div>

@@ -6,13 +6,18 @@ const vacioAIndefinido = (valor) => (valor === '' ? undefined : valor);
 const texto = (mensaje) =>
   z.string({ required_error: mensaje, invalid_type_error: mensaje }).trim().min(1, mensaje);
 
-// «aaaa-mm-dd» que exista de verdad (no vale 2026-02-31).
+// «aaaa-mm-dd» que exista de verdad (no valen 2026-02-31 ni 2026-13-01).
+function existeDia(texto) {
+  const fecha = new Date(`${texto}T00:00:00Z`);
+  return !Number.isNaN(fecha.getTime()) && fecha.toISOString().startsWith(texto);
+}
+
 const dia = z.preprocess(
   vacioAIndefinido,
   z
     .string({ invalid_type_error: 'Fecha no válida.' })
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Fecha no válida.')
-    .refine((v) => new Date(`${v}T00:00:00Z`).toISOString().startsWith(v), 'Fecha no válida.')
+    .refine(existeDia, 'Fecha no válida.')
     .optional(),
 );
 

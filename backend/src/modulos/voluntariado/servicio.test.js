@@ -196,9 +196,11 @@ describe.skipIf(!URL_PRUEBAS)('HU-05 · voluntariado', () => {
       const res = await request(app).get('/api/actividades/disponibles?desde=2026-12-05&hasta=2026-12-01');
       expect(res.status).toBe(400);
       expect(res.body.error.campos.hasta).toBeDefined();
-      const mal = await request(app).get('/api/actividades/disponibles?desde=2026-02-31');
-      expect(mal.status).toBe(400);
-      expect(mal.body.error.campos.desde).toBe('Fecha no válida.');
+      for (const fecha of ['2026-02-31', '2026-13-01', '2026-12-32', '2026-00-10', 'mañana']) {
+        const mal = await request(app).get(`/api/actividades/disponibles?desde=${encodeURIComponent(fecha)}`);
+        expect(mal.status).toBe(400);
+        expect(mal.body.error.campos.desde).toBe('Fecha no válida.');
+      }
     });
 
     it('con sesión, cada actividad indica la inscripción activa del voluntario y su posición', async () => {
