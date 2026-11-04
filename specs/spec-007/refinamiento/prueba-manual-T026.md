@@ -10,7 +10,7 @@
 | 2 | Cancelar una actividad publicada | US1 escenario 5, FR-008 | Pide confirmación y queda «Cancelada» | Pide confirmación y queda «Cancelada» | ✅ |
 | 3 | Intentar editar o cancelar «Recogida de ropa» (ya celebrada) | Edge Cases, Clarifications Q4 | No se puede editar ni cancelar | No aparecen las opciones de editar ni cancelar | ✅ |
 | 4 | Bajar las plazas por debajo de los inscritos confirmados | US1 escenario 4, FR-007 | Se rechaza y explica el motivo | No probado: necesita inscripciones, que crea spec-005 (Javi). Cubierto por las pruebas automáticas del servicio | ⏳ Integración |
-| 5 | Motivo concreto al fallar «Publicar» con el proyecto inactivo | T027, FR-003 | Muestra «El proyecto no está activo.» | No probado a mano: desactivar un proyecto no se puede hacer desde la web | ⏳ |
+| 5 | Motivo concreto al fallar «Publicar» con el proyecto inactivo | T027, FR-003 | Muestra «El proyecto no está activo.» | Con «Agua potable» desactivado en la base de datos, al publicar «Taller de reciclaje» aparece «El proyecto no está activo.»; el desplegable lo muestra como «Agua potable (inactivo)». Proyecto reactivado después | ✅ |
 | 6 | Una actividad publicada aparece en `/actividades` y una cancelada desaparece | US1 escenarios 3 y 5 | — | Pendiente: la página `/actividades` es de spec-005 | ⏳ Integración |
 
-**Conclusión:** SC-001 cumplido (1 min 30 s < 3 min). Los puntos 4 y 6 se comprobarán al integrar spec-005, junto con T023.
+**Conclusión:** SC-001 cumplido (1 min 30 s < 3 min). El motivo concreto al fallar «Publicar» (T027) se muestra correctamente. Los puntos 4 y 6 se comprobarán al integrar spec-005, junto con T023.
