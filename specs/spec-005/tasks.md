@@ -98,6 +98,21 @@ tiene una FK a ella (plan-comun §7).
 
 ---
 
+## Phase 6: Convergence
+
+Tareas que salen del primer converge ([refinamiento/converge-1.md](refinamiento/converge-1.md)), T023–T026,
+y de la prueba manual del 04/11 ([refinamiento/prueba-manual.md](refinamiento/prueba-manual.md)), T027–T028.
+Responsable: Javi · Revisora: Nicole.
+
+- [ ] T023 En `backend/src/modulos/voluntariado/controlador.js`, que el `refine` del esquema `dia` compruebe que la fecha es válida antes de llamar a `toISOString()`, para que `desde`/`hasta` con un mes o un día imposibles (`2026-13-01`, `2026-12-32`, `2026-00-10`) den 400 `DATOS_INVALIDOS` con «Fecha no válida.» en vez de 500 `ERROR_INTERNO`; añadir esos casos a la prueba de fechas mal escritas de `servicio.test.js` per FR-003 / contrato `GET /api/actividades/disponibles` (partial)
+- [ ] T024 Actualizar `specs/spec-005/quickstart.md` con los textos implementados: en 2.4, 409 «Ya estás inscrito o en la lista de espera de esta actividad.»; en 2.1, la casilla «Cumplo los requisitos de esta actividad» y el botón *Confirmar inscripción* per quickstart 2.4 / principio III (contradicts)
+- [ ] T025 Igualar el mensaje de «desde» posterior a «hasta» entre `specs/spec-005/data-model.md` y `backend/src/modulos/voluntariado/controlador.js`, con comillas angulares en los dos per data-model, validación de entrada (contradicts)
+- [ ] T026 Precisar en `specs/spec-005/research.md` (R2) que la regla de no consultar `actividades` con SQL propio es para el módulo `backend/src/modulos/voluntariado/`, y que las semillas (que buscan las actividades de prueba de spec-007 por título) y las pruebas quedan fuera per research R2 (contradicts)
+- [ ] T027 En `frontend/src/components/voluntariado/TarjetaActividad.jsx` y `ActividadesDisponibles.jsx`, recargar el listado al cerrar la ventana de inscripción después de un 409 `PLAZAS_AGOTADAS`, para que la tarjeta deje de decir «1 plaza libre» (en la prueba manual de 2.8 seguía diciéndolo hasta recargar la página) per FR-002 / escenario 8 (partial)
+- [ ] T028 En `frontend/src/components/voluntariado/FormInscripcion.jsx`, que el contenido de la ventana se pueda desplazar cuando no cabe (en 375×812, con los datos de contacto, ocupa de 18 a 794 px, y en un móvil más bajo o con mensajes de error se sale de la pantalla), sin tocar el `Modal` común per SC-001 (partial)
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
