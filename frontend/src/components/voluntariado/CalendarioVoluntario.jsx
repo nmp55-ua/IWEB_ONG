@@ -6,13 +6,12 @@ import EstadoVacio from '../comunes/EstadoVacio.jsx';
 import { desplazarMes, mesActual, semanasDelMes } from './fechas.js';
 import ListaCalendario from './ListaCalendario.jsx';
 import MesCalendario from './MesCalendario.jsx';
+import { crearVuelta } from './vuelta.js';
 
 // HU-06: calendario personal del voluntario. La lista se abre primero (clarify Q4); el mes pide al
 // servidor solo sus semanas (research R3). Se actualiza al abrir, tras cancelar y al volver a la
 // pestaña o a la ventana (FR-005, research R5).
 
-// Al volver pueden llegar «focus» y «visibilitychange» seguidos: basta con una petición.
-const MARGEN_AL_VOLVER = 2000;
 export default function CalendarioVoluntario() {
   const [vista, setVista] = useState('lista'); // 'lista' | 'mes'
   const [mes, setMes] = useState(mesActual);
@@ -20,7 +19,6 @@ export default function CalendarioVoluntario() {
   const [error, setError] = useState(null);
   const [mensaje, setMensaje] = useState(null);
   const ultimaPeticion = useRef(0);
-  const ultimaSalida = useRef(0);
 
   let ruta = '/yo/calendario';
   if (vista === 'mes') {
@@ -32,7 +30,6 @@ export default function CalendarioVoluntario() {
   // Si falla, se conserva lo que ya se veía y el error sale encima (research R5).
   const cargar = useCallback(() => {
     const numero = ++ultimaPeticion.current;
-    ultimaSalida.current = Date.now();
     return api
       .get(ruta)
       .then(({ datos }) => {
@@ -53,22 +50,22 @@ export default function CalendarioVoluntario() {
   }, [cargar]);
 
   // Al volver a la pestaña (visibilitychange), a la ventana desde otra (focus) o atrás con el navegador
-  // (pageshow desde su caché): sin vaciar la pantalla.
+  // (pageshow desde su caché): sin vaciar la pantalla. Se recarga una vez por cada salida (vuelta.js).
   useEffect(() => {
-    const alVolver = () => {
-      if (document.visibilityState !== 'visible') return;
-      if (Date.now() - ultimaSalida.current < MARGEN_AL_VOLVER) return;
-      cargar();
-    };
+    const vuelta = crearVuelta(cargar, { fueraAlEmpezar: document.visibilityState !== 'visible' });
+    const alCambiarVisibilidad = () =>
+      document.visibilityState === 'visible' ? vuelta.volver() : vuelta.salir();
     const alRestaurar = (evento) => {
       if (evento.persisted) cargar();
     };
-    document.addEventListener('visibilitychange', alVolver);
-    window.addEventListener('focus', alVolver);
+    document.addEventListener('visibilitychange', alCambiarVisibilidad);
+    window.addEventListener('blur', vuelta.salir);
+    window.addEventListener('focus', vuelta.volver);
     window.addEventListener('pageshow', alRestaurar);
     return () => {
-      document.removeEventListener('visibilitychange', alVolver);
-      window.removeEventListener('focus', alVolver);
+      document.removeEventListener('visibilitychange', alCambiarVisibilidad);
+      window.removeEventListener('blur', vuelta.salir);
+      window.removeEventListener('focus', vuelta.volver);
       window.removeEventListener('pageshow', alRestaurar);
     };
   }, [cargar]);

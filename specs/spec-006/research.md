@@ -85,8 +85,11 @@ HU-06.
   - al volver a la pestaña, que el navegador avisa de dos formas según cómo se vuelva: `visibilitychange`
     (con `document.visibilityState === 'visible'`) al cambiar de pestaña o restaurar la ventana, y `focus`
     en `window` al volver desde otra ventana que seguía a la vista (otra aplicación, el correo, otra
-    ventana del navegador). Como al volver pueden llegar los dos seguidos, no se pide otra vez si la
-    última petición salió hace menos de 2 s;
+    ventana del navegador). Como al volver pueden llegar los dos seguidos, se recarga una vez por cada
+    salida: `vuelta.js` apunta que se ha salido (`visibilitychange` oculta o `blur` de `window`) y solo
+    recarga en la primera vuelta después. Antes no se pedía otra vez si la última petición había salido
+    hacía menos de 2 s, y eso perdía una vuelta rápida justo después de otra carga (revisión del PR #3,
+    T025);
   - cuando el navegador restaura la página desde su caché al ir atrás (`pageshow` con `persisted`);
   - al cerrar la confirmación de cancelar, aunque no se haya podido (un 409 porque la actividad ya ha
     empezado o la ha cancelado el coordinador), para que la tarjeta deje de ofrecerlo (T017).

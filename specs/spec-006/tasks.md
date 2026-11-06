@@ -74,7 +74,7 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 ### Implementation for User Story 2
 
 - [X] T010 [US2] En `ActividadCalendario.jsx`, *Ver detalle* / *Ocultar detalle* (`aria-expanded`) que despliega proyecto, descripción, requisitos («Sin requisitos» si no hay) y *Cancelar inscripción* o *Salir de la lista de espera*, que abre `CancelarInscripcion.jsx` sin cambiarlo; si `enCurso`, «La actividad ya ha empezado: no se puede cancelar.» en vez del botón (FR-004, research R4)
-- [X] T011 [US2] En `CalendarioVoluntario.jsx`, la actualización de [research R5](research.md#r5-actualización-sin-recargar-fr-005-clarify-q2): recargar la vista actual tras cancelar (`onCancelada`), con el aviso «Has cancelado tu inscripción en «…».» o «Has salido de la lista de espera de «…».»; al volver (`visibilitychange` visible y `focus` de `window`, sin repetir si la última petición salió hace menos de 2 s) y al restaurarse desde la caché (`pageshow` con `persisted`), sin vaciar la pantalla mientras llega
+- [X] T011 [US2] En `CalendarioVoluntario.jsx`, la actualización de [research R5](research.md#r5-actualización-sin-recargar-fr-005-clarify-q2): recargar la vista actual tras cancelar (`onCancelada`), con el aviso «Has cancelado tu inscripción en «…».» o «Has salido de la lista de espera de «…».»; al volver (`visibilitychange` visible y `focus` de `window`, sin repetir si la última petición salió hace menos de 2 s; *cambiado en T025*) y al restaurarse desde la caché (`pageshow` con `persisted`), sin vaciar la pantalla mientras llega
 
 **Checkpoint**: 2.1–2.3 y los casos límite del quickstart pasan.
 
@@ -84,7 +84,7 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 
 - [X] T012 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos o tocados de `backend/src/modulos/voluntariado/`, `backend/src/db/semillas/voluntariado.js`, `frontend/src/components/voluntariado/` y `frontend/src/pages/mi-calendario.astro` (no a `app.js` ni a `Menu.jsx`, que ya estaban sin formatear en `main`)
 - [ ] T013 Coordinarse con el grupo: avisar de las 4 actividades de prueba nuevas de Agua potable (Rubén las verá en sus informes) y proponer añadirlas a la lista de semillas de plan-comun §8. Con Nicole: se crean en `semillas/voluntariado.js` (por si prefiere moverlas a `semillas/actividades.js`); su `enMadrid` da una hora de más o de menos el día del cambio de hora; hay dos actividades «completas de 2 plazas», así que sus pasos 1.6 y 2.3 deberían nombrar Reparto de alimentos; que su contrato recoja `listar`, `bloquearActividad` y `obtener` como funciones que usa voluntariado; dónde van las inscripciones de la actividad de 2 h y la de 20 confirmados de spec-008 (pendiente de la T021 de spec-005) y su línea «Mis horas» en `Menu.jsx`, para no chocar al fusionar; y que cambia el paso 1.1 del quickstart de spec-005. Proponer al grupo oscurecer el color común `aviso` de `#B26A00` a `#9A5B00` (de 4,2:1 a 5,4:1 sobre blanco; T018). Pedir la revisión del PR a Nada
-- [X] T014 Recorrer [quickstart.md](quickstart.md) completo en el navegador a 375 y 1440 px (también el caso «En curso» con `AHORA_SIMULADO`), revisar la consola y cronometrar SC-002 (< 10 s); dejar el resultado en `refinamiento/prueba-manual.md` y actualizar plan o contrato si algo implementado difiere (principio III) — *Hecho el 06/11/2026 ([refinamiento/prueba-manual.md](refinamiento/prueba-manual.md)): todos los escenarios y casos límite pasan; salieron P1–P3 (T022–T024). Falta cronometrar SC-002 con una persona y probar el cambio real de pestaña en un navegador normal.*
+- [X] T014 Recorrer [quickstart.md](quickstart.md) completo en el navegador a 375 y 1440 px (también el caso «En curso» con `AHORA_SIMULADO`), revisar la consola y cronometrar SC-002 (< 10 s); dejar el resultado en `refinamiento/prueba-manual.md` y actualizar plan o contrato si algo implementado difiere (principio III) — *Hecho el 06/11/2026 ([refinamiento/prueba-manual.md](refinamiento/prueba-manual.md)): todos los escenarios y casos límite pasan; salieron P1–P3 (T022–T024). Lo que necesita una persona (cronometrar SC-002 y el cambio real de pestaña o ventana) no está hecho: pasa a T026.*
 
 ---
 
@@ -104,6 +104,16 @@ Responsable: Javi · Revisora: Nada.
 - [X] T022 En `frontend/src/components/voluntariado/ActividadCalendario.jsx`, el nivel del título según dónde se pinta, con un prop que le pasan `ListaCalendario.jsx` y `MesCalendario.jsx`: `h2` en la lista (debajo del `h1` de la página, como en `TarjetaActividad.jsx` de HU-05) y `h4` en el mes (debajo del `h3` del día); volver a pasar Lighthouse (`heading-order`) per prueba manual P1 / FR-001 (partial)
 - [X] T023 En `frontend/src/components/voluntariado/CalendarioVoluntario.jsx`, con un 403 mostrar solo el `Aviso` «No tienes permiso para realizar esta acción.», sin las pestañas *Lista* y *Mes*, igual que ya se hace con el 401 per prueba manual P2 / caso límite «sin rol de voluntario» (partial)
 - [X] T024 En `frontend/src/components/voluntariado/MesCalendario.jsx`, que cada etiqueta de la cuadrícula lleve un `title` con la hora, el título completo y, si es el caso, «en lista de espera», para poder leerla entera sin pulsar el día per prueba manual P3 / caso límite «dos el mismo día» (partial)
+
+---
+
+## Phase 7: Revisión del PR #3
+
+Tareas de la revisión de Nada del 06/11/2026 ([refinamiento/revision-pr-3.md](refinamiento/revision-pr-3.md)).
+Responsable: Javi · Revisora: Nada.
+
+- [X] T025 En `frontend/src/components/voluntariado/CalendarioVoluntario.jsx`, sustituir el margen de 2 s por `crearVuelta` de `frontend/src/components/voluntariado/vuelta.js`: se apunta la salida (`visibilitychange` oculta o `blur`) y se recarga una sola vez en la primera vuelta (`visibilitychange` visible o `focus`), por rápida que sea; prueba de regresión en `vuelta.test.js` con el ejecutor de Node (`npm test` en `frontend/`, sin dependencias nuevas) per FR-005 / research R5 (contradicts)
+- [ ] T026 Con una persona y un navegador normal: cronometrar SC-002 (< 10 s desde que se abre *Mi calendario* hasta decir cuál es la siguiente actividad) y hacer los pasos del quickstart que cambian de pestaña o de ventana (2.3 y los casos límite «Actividad cancelada por el coordinador» y «Cambio de fecha o lugar»); apuntar los resultados en `refinamiento/revision-pr-3.md` per SC-002 / FR-005 — *pendiente: en el navegador integrado y en Chrome automatizado, la pestaña de detrás sigue «visible», así que no sirven para esta comprobación*
 
 ---
 
