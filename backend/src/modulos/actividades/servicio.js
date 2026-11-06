@@ -108,6 +108,13 @@ export async function obtener(id) {
   return aRecurso(fila, await inscripciones.contarConfirmadas(fila.id));
 }
 
+// Para spec-005 (research R2 de spec-005): bloquea la fila hasta el final de la transacción de quien
+// llama y devuelve el recurso, con las confirmadas contadas en esa misma transacción.
+export async function bloquearActividad(id, cliente) {
+  const fila = await repositorio.bloquearPorId(id, cliente);
+  return fila ? aRecurso(fila, await inscripciones.contarConfirmadas(id, cliente)) : null;
+}
+
 export async function listar(filtros) {
   const filas = await repositorio.listar(filtros);
   const datos = [];
