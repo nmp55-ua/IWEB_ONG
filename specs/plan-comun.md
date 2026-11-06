@@ -8,6 +8,10 @@ solo añade lo propio de su historia (pantallas, rutas, reglas de su `servicio.j
 que aquí se fija no se repite ni se contradice en los planes individuales. Para cambiarlo hace
 falta el acuerdo del grupo (principio XII).
 
+**Alineación de HU-01 (2026-11-06)**: ajustes preparados por Nada en `spec-001` para
+revisión, a partir de PA1.1–PA1.8 y del diseño P-01–P-04. La documentación queda alineada
+en esta rama; no acredita acuerdo colectivo, revisión de Rubén ni implementación.
+
 ## Resumen
 
 Una única aplicación web: front-end Astro con islas de React y Tailwind CSS; API REST en Node.js
@@ -46,12 +50,14 @@ reales).
 
 ## Constitution Check
 
-*Antes del diseño y revisado tras él: todo cumple.*
+*Comprobación documental de la base común. El diseño de HU-01 queda definido en spec-001;
+la revisión de Rubén y la incorporación compartida siguen pendientes. No acredita pruebas
+ni conformidad del código todavía inexistente de donaciones.*
 
 | Principio | Cómo lo cumple este plan |
 |---|---|
 | I. Simplicidad | SQL directo sin ORM, sesiones en lugar de tokens, sin colas ni microservicios, valores derivados en vez de contadores. |
-| II. Cero alcance fantasma | Solo se planifica lo de las specs; las PAn.m quedan abiertas y no se construye ninguna respuesta por adelantado. |
+| II. Cero alcance fantasma | Solo se planifica lo de las specs; no se construyen respuestas a preguntas pendientes. PA1.1–PA1.8 están resueltas en HU-01. |
 | III. Verificable | Cada criterio de aceptación tiene una forma de comprobarse en la aplicación (apartado 8). |
 | IV. Español de España | Formateo común `es-ES`, € con 2 decimales, dd/mm/aaaa, `Europe/Madrid`. |
 | V. Seguridad y datos | Pasarela externa (Checkout alojado), sin datos de tarjeta; `requiereRol` y comprobación de propiedad en el servidor; informes agregados; secretos en `.env`. |
@@ -148,7 +154,13 @@ relaciones, dueño de cada tabla y migraciones reservadas.
 - **Front-end**: el menú y las páginas se adaptan a `GET /api/auth/yo`, pero eso es solo
   comodidad; la autoridad es el servidor.
 - **Enlace Usuario ↔ Donante / Voluntario**: el Donante se enlaza con el Usuario cuyo correo
-  coincide (PA1.2); el Voluntario se crea al completar el perfil de voluntario la primera vez.
+  coincide solo tras acreditar el acceso a ese buzón mediante un enlace de verificación
+  (PA1.2 y PA1.3). Esta comprobación se limita a la vinculación en donaciones; no cambia
+  el registro ni el inicio de sesión generales. El flujo público de donaciones ofrece
+  /donar/vincular desde formulario y resultado. Sin token se entra con FormEntrar existente
+  y se solicita el enlace; recibir 202 solo muestra un aviso genérico, sin establecer vínculo.
+  El Voluntario se crea al completar el perfil
+  de voluntario la primera vez.
 
 ## 4. Formato común de la API
 
@@ -174,7 +186,7 @@ Se aplica lo de CONVENCIONES.md §5:
 | Módulo | Rutas principales | Rol |
 |---|---|---|
 | proyectos | `GET /api/proyectos` | público |
-| donaciones (001) | `POST /api/aportaciones` → URL de pago · `GET /api/aportaciones/referencia/:ref` (confirmación) · `POST /api/pasarela/webhook` | público / pasarela |
+| donaciones (001) | `POST /api/aportaciones` → URL de pago · `GET /api/aportaciones/referencia/:ref` (confirmación) · `POST /api/pasarela/webhook` | creación sin cuenta / confirmación autorizada por operación / pasarela |
 | donaciones (002) | `GET /api/yo/aportaciones?anio=2025` | donante |
 | certificados-informes (003) | `GET /api/yo/certificados` · `GET /api/yo/certificados/:ejercicio/pdf` | donante |
 | certificados-informes (004) | `GET /api/informes?desde&hasta&proyectoId&agrupacion` · `…/csv` · `…/pdf` | administrador |
@@ -186,28 +198,83 @@ Se aplica lo de CONVENCIONES.md §5:
 Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas en su
 `contracts/`, respetando este formato.
 
-## 5. Pasarela de pago (Stripe en modo de pruebas)
+## 5. Pasarela de pago (HU-01; Stripe en modo de pruebas)
 
-- Se usa **Stripe Checkout** (página de pago alojada por Stripe). El formulario de la ONG solo
-  recoge modalidad, importe, proyecto y datos fiscales; **nunca** hay campos de tarjeta en la
-  aplicación ni pasan datos de tarjeta por el servidor.
-- **Flujo**: `POST /api/aportaciones` valida, crea o reutiliza el Donante, crea la Aportación en
-  `pendiente` (y la SuscripcionSocio en `pendiente` si es socio) y crea una sesión de Checkout:
-  `mode=payment` (puntual) o `mode=subscription` con `price_data.recurring` (mensual = `month`,
-  trimestral = `month` con `interval_count: 3`, anual = `year`). Responde con la URL de Stripe.
-  Al volver, el donante llega a `/donar/resultado?ref=…`.
-- **La confirmación solo llega por webhook** (`POST /api/pasarela/webhook`, firma verificada con
-  el secreto del webhook): `checkout.session.completed` confirma la primera aportación y activa la
-  suscripción; `invoice.paid` crea una nueva Aportación `cuota_socio` confirmada por cada cobro
-  periódico y actualiza `fecha_proximo_cobro`; `checkout.session.expired` y
-  `payment_intent.payment_failed` pasan a `cancelada` o `rechazada` con su motivo.
-- **Idempotencia**: `pasarela_pago_id` es único; una notificación repetida no crea nada nuevo.
-- La página de resultado consulta el estado; mientras sea `pendiente` muestra «Estamos
-  confirmando tu pago» y vuelve a consultar.
-- En desarrollo: claves `sk_test_…` en `.env`, webhooks reenviados con `stripe listen` y tarjetas
-  de prueba publicadas por Stripe (4242… correcta, 4000 0000 0000 0002 rechazada).
-- Todo el acceso a Stripe pasa por `servicios-comunes/pasarela.js`; no se llama a Stripe desde
-  ningún otro sitio.
+- **Alcance v1**: Stripe Checkout alojado, exclusivamente tarjeta, EUR, entre 1,00 € y
+  999.999,99 €, ambos incluidos, máximo dos decimales. Es el límite elegido para esta
+  aplicación, no un máximo universal de Stripe. La ONG recoge modalidad, importe, destino
+  y datos fiscales; nunca tarjeta. No hay descuentos, pruebas gratuitas ni cargos divididos.
+- **Donante antes del pago (PA1.5 y PA1.6)**: ambas modalidades se completan sin cuenta.
+  Si correo y NIF/NIE entran en conflicto, o el mismo NIF/NIE presenta cambios reales en
+  correo, nombre, apellidos o dirección, se detiene antes de Checkout con mensaje genérico,
+  sin exponer datos guardados, sobrescribir, duplicar o mezclar identidades. La comparación
+  normaliza NFC, espacios y mayúsculas según [research de HU-01](spec-001/research.md).
+  La exclusión concurrente se aplica por NIF/NIE y correo; no añade UNIQUE al correo.
+- **Preparación**: POST aportaciones crea/reutiliza Donante y crea aportación, operación
+  y, para socio, suscripción pendiente en transacción. Guarda el permiso en sesión antes de
+  redirigir. Clave UUID, huella normalizada e idempotencia Stripe mantienen una sola operación
+  ante reenvío o respuesta incierta. Se conserva la instantánea de solicitud Checkout para
+  repetir el cuerpo exacto. La creación activa se distingue por bloqueo de sesión PostgreSQL,
+  con límite local no renovable de 23 horas desde creado_en; véase el protocolo de HU-01.
+  Se conserva Checkout abierto para reintentar; no se
+  crea otro pago automáticamente cuando el anterior no tiene un cierre acreditado.
+- **Confirmación**: webhook firmado y recursos canónicos actuales, independientemente del
+  navegador. Puntual se confirma por PaymentIntent; cuotas por Invoice. Checkout solo
+  correlaciona, sin confirmar otra primera cuota. La factura inicial reutiliza la aportación
+  pendiente del alta; cada ciclo posterior se registra una vez. Los estados y claves únicas
+  tienen su única definición en [modelo-datos.md](modelo-datos.md).
+- **Reconciliación**: bloqueos por pago puntual o suscripción, evento único y claves de
+  pago/factura impiden duplicados. Un rechazo recuperable que termina en cobro confirma la
+  misma fila. Las confirmadas no retroceden por un evento antiguo. La primera cuota activa
+  el alta salvo cierre definitivo actual; una cuota tardía no reactiva una suscripción cancelada.
+  El retorno a cancel_url o perder sesión no prueba cancelación ni modifica dinero.
+- **Cuotas posteriores (PA1.8)**: fallo registrado e informado, sin sumar, alterar anteriores
+  ni cancelar por sí solo. La cancelación efectiva posterior de pasarela sí se procesa.
+  No se ordenan cobros adicionales. Próxima fecha solo desde una previsión futura de la
+  pasarela; si falta o vence, «Pendiente de confirmación». El modelo conserva instante y
+  proyección DATE para comprobar el vencimiento incluso dentro del día.
+- **Resultado sin cuenta (PA1.7)**: permiso por referencia en req.session.donaciones,
+  caducidad absoluta de ocho horas y sesión común vigente. No autoriza otras aportaciones,
+  cuotas futuras o historial. Referencia o UUID solos no autorizan. Una cuenta donante
+  vinculada tras enlace puede consultar sus aportaciones propias. No hay recuperación directa
+  invitada al perder la sesión. Los POST propios requieren origen permitido y CSRF; el webhook,
+  firma y cuerpo crudo. No se modifica el inicio de sesión ni el middleware de roles.
+
+### 5.1 Contrato de la envoltura de Stripe
+
+Único importador: `backend/src/servicios-comunes/pasarela.js`. Referencia del lockfile:
+SDK 17.7.0; API explícita 2025-02-24.acacia. La instalación y la cuenta aún no se han verificado.
+La configuración prevista del cliente usa timeout de 3000 ms y maxNetworkRetries 0. Los
+fallos transitorios devuelven ErrorApi 503; no se registran respuestas completas con datos
+personales. El módulo solo recibe proyecciones de los recursos, sin detalles de tarjeta.
+
+| Función | Contrato de diseño |
+|---|---|
+| prepararSesionPago({ centimos, descripcion, correo, referencia, periodicidad, metadatos }) | Función pura de la envoltura: produce los parámetros Checkout completos, con URL actuales y metadatos protegidos, sin red. Se guarda una sola vez como solicitud_checkout. |
+| crearSesionPago({ centimos, descripcion, correo, referencia, periodicidad, metadatos, claveIdempotencia, solicitudCheckout }) | Firma anterior conservada; claveIdempotencia y solicitudCheckout son obligatorias para HU-01. Con instantánea usa exactamente ese cuerpo, sin recalcular URL/descripción; sin ella, conserva el comportamiento compatible de construirlo mediante prepararSesionPago. Devuelve { id, url }. Tarjeta/EUR y una línea de cantidad 1; mensual month/1, trimestral month/3, anual year/1. |
+| Metadatos de creación | Referencia y módulo donaciones en Session y en payment_intent_data.metadata o subscription_data.metadata, según modalidad; no permitir sobrescribir referencia con metadatos arbitrarios. Sin NIF o dirección en metadatos. |
+| verificarEvento(cuerpoCrudo, firma) | Firma y salida de evento verificadas como en la interfaz existente; ErrorApi 400 si no es válida. |
+| obtenerSesionPago(id) | Session: id, status, payment_status, mode, client_reference_id, metadata, payment_intent, subscription, invoice, url, expires_at y livemode. |
+| obtenerSesionDeSuscripcion(id) | Listar Session por subscription, límite 2 y sin paginación automática; exigir única coincidencia de referencia en el servicio. |
+| obtenerPago(id) | PaymentIntent: id, amount, amount_received, currency, status, invoice, metadata y livemode. |
+| obtenerFactura(id) | Invoice: id, subscription, payment_intent expandido a la proyección anterior, billing_reason, paid, status, paid_out_of_band, amount_paid, currency, status_transitions.paid_at, next_payment_attempt y livemode. |
+| obtenerSuscripcion(id) | Subscription: id, metadata, status, latest_invoice, collection_method, current_period_end, cancel_at_period_end, cancel_at, canceled_at y livemode. |
+
+La instantánea es interna de servidor, nunca un campo aceptado del navegador o devuelto por
+la API. El servicio adquiere la exclusión con una conexión propia solo después del commit
+de preparación y del guardado de sesión. Mientras la conserva, las consultas usan ese
+cliente y no solicitan otro al pool; HTTP se realiza fuera de una transacción SQL.
+Tras error se libera en finally; si la liberación no puede acreditarse, se destruye el
+cliente. Al terminar la conexión, PostgreSQL libera el bloqueo; si aún sigue viva, otra
+petición no lo fuerza y devuelve operación en curso. La reanudación conserva UUID, huella,
+cuerpo, referencia y creado_en; al vencer la ventana desconocida solo cabe revisión.
+El detalle está en el [protocolo de HU-01](spec-001/contracts/pasarela-stripe.md#exclusión-y-reanudación-de-la-creación).
+
+Se conservan identificadores como texto, timestamps externos como segundos enteros y null
+cuando proceda. La pertenencia, importe y moneda se comprueban antes de confirmar. Los
+[eventos y reglas de reconciliación](spec-001/contracts/pasarela-stripe.md) son propios de HU-01;
+no se añaden funciones para cobrar, modificar o cancelar desde la aplicación. P-05 es la
+preparación del entorno antes de las pruebas reales, no una decisión abierta de diseño.
 
 ## 6. Servicios comunes: PDF, CSV y correo
 
@@ -224,6 +291,27 @@ Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas e
   - plaza confirmada desde la lista de espera, actividad cancelada y cambio de fecha, hora o
     lugar de una actividad publicada (007).
   Si falla el envío, se registra el error y la operación **no** se deshace.
+  Para la confirmación de aportaciones (HU-01, PA1.4), se conserva el pago confirmado y se
+  muestran el resumen y el aviso de correo pendiente a quien tenga autorización para esa
+  operación. Se permite reintentar únicamente el mismo correo, sin repetir cobros ni crear
+  aportaciones o suscripciones; sin cuenta se aplica el límite de sesión de PA1.7. Un intento
+  fallido o un aviso no cuentan como envío satisfactorio. El estado y resumen inmutable se
+  conservan en correos_aportacion, definido en el modelo común, con unicidad por aportación
+  y tipo. El aviso de fallo de cuota posterior es otro tipo de mensaje; no sobrescribe una
+  confirmación ni concede acceso a cuotas por referencia.
+  La interfaz compatible prevista es enviarCorreo({ para, asunto, texto }, opciones = {})
+  con retorno booleano. HU-01 usa tiempoConexionMs 3000, tiempoSaludoMs 3000 y
+  tiempoInactividadMs 5000, traducidos a connectionTimeout, greetingTimeout y socketTimeout.
+  Sin esas opciones se mantiene el transporte y comportamiento actual de los otros módulos;
+  no se muta su transporte compartido. Una reserva de envío propia de HU-01 dura treinta
+  segundos, se renueva cada diez mientras vive la llamada y se guarda por comparación del
+  número de intento reclamado. Si ya no conserva la reserva, relee el estado y no publica
+  un éxito de ese intento antiguo. SMTP se ejecuta fuera de la transacción financiera. Se
+  conserva el riesgo de duplicar un mensaje si el proceso cae tras aceptación SMTP y antes
+  de persistir éxito; nunca se repite por ello el cobro. SMTP true no prueba recepción final.
+  No hay trabajador o reintento automático programado; sin permiso para reintentar, un correo
+  fallido puede seguir pendiente y SC-002 no se considera cumplido. Las reglas de los demás
+  módulos de correo no cambian.
 - **Certificados (003)**: una tarea `node-cron` cada 1 de enero a las 00:05 (`Europe/Madrid`)
   genera los certificados del ejercicio anterior. El mismo código se lanza a mano con
   `npm run certificados -- --ejercicio 2025`, que es lo que se usa para probarlo. La generación es
@@ -263,7 +351,28 @@ Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas e
   y `cancelarInscripcionesDeActividad(actividadId)`, que usa `actividades` (Javi ↔ Nicole);
   `certificados-informes` solo **lee** tablas de otros módulos.
 
+### Incorporación de donaciones en dos entregas
+
+La primera entrega es `004_donaciones.sql`, reservada a Nada: las tres tablas de dominio,
+claves de pago/factura, previsión de suscripción e índice financiero del modelo común.
+Se revisa con Rubén antes de su incorporación para desbloquear HU-02, HU-03 y HU-04 con un
+contrato estable. No incluye interfaz ni tablas técnicas de operación.
+
+La segunda entrega incorpora las cuatro tablas técnicas de HU-01 en una migración nueva.
+Se asignará el siguiente número libre a partir de 009 al coordinar su incorporación; **009
+no está reservado**. La dependencia es 004, no una migración futura de otro módulo. No se
+reescribe 004 publicada ni se depende de que 006–008 estén implementadas. El migrador
+aplica ficheros pendientes por nombre registrado: admite incorporar 004 a una base que ya
+contiene 005. Se comprobarán ambas secuencias en una base exclusiva de pruebas. Esta rama
+solo documenta la estrategia; todavía no hay SQL nuevo.
+
 ## 8. Pruebas y datos de prueba comunes
+
+Para HU-01, [quickstart.md](spec-001/quickstart.md) concreta PowerShell y una base
+ong_test_hu01 exclusiva. DATABASE_URL y TEST_DATABASE_URL se seleccionan explícitamente
+antes de migrar y probar, preservando .env; no se omite la integración por configuración
+ausente. P-05 se prepara solo antes de las pruebas reales de Stripe.
+
 
 ### Datos de prueba (`backend/src/db/semillas/`, `npm run semillas`)
 
@@ -287,7 +396,7 @@ Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas e
 - **Reglas críticas automatizadas** (Vitest + Supertest contra una base de pruebas que se crea
   con las migraciones y las semillas):
   - permisos: 401, 403 y 404 en toda ruta protegida o personal;
-  - importes: validación (0, negativo, 3 decimales, < 1 €), NIF/NIE y sumas al céntimo;
+  - importes de HU-01: validación (0, negativo, 3 decimales, < 1 € o > 999.999,99 €), NIF/NIE y sumas al céntimo;
   - idempotencia del webhook (la misma notificación dos veces);
   - aforo con peticiones simultáneas y paso FIFO desde la lista de espera;
   - horas: 10:00–13:30 = 3,5; repetir el guardado no duplica; corregir resta.
@@ -312,10 +421,13 @@ Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas e
 
 ## Preguntas abiertas que afectan al plan
 
+PA1.1–PA1.8 están resueltas funcionalmente en `specs/spec-001/spec.md` y reflejadas en los
+ajustes de HU-01 preparados para revisión. Sus mecanismos técnicos están definidos en el
+plan de esa historia y alineados en esta rama con el modelo común. Las preguntas de las demás specs se conservan a continuación.
+
 El plan no las resuelve (principio II); se deciden en `/speckit-clarify` de cada spec y, si
 cambian el modelo, se hace con una migración nueva acordada:
-PA1.1 (baja de socio: estado `cancelada` ya previsto), PA1.2 (donar sin cuenta: `usuario_id`
-opcional ya previsto), PA2.1 y PA3.1 (correcciones de aportaciones), PA3.2 (correo de
+PA2.1 y PA3.1 (correcciones de aportaciones), PA3.2 (correo de
 certificado), PA4.1 (el plan ya asume solo cifras agregadas, por el principio V), PA5.1 (edad),
 PA5.2 (solapes), PA6.1 (.ics), PA7.1 (coordinador por proyecto), PA7.2 (plazo de aceptación),
 PA8.1 (plazo de registro) y PA8.2 (asistencias parciales).
