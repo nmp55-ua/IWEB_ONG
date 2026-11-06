@@ -2,7 +2,22 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T023 completadas y verificadas en su alcance. T006 y T007 siguen pendientes, al igual que las tareas posteriores. La numeración 009 es provisional local.
+**Estado**: T001–T005 y T008–T044 completadas y verificadas en su alcance. T006 y T007 siguen pendientes, al igual que T045 y posteriores. La numeración 009 es provisional local.
+
+## Backend puntual — T024–T044 · 2026-11-06
+
+Confirmaciones recuperables, preparación/reanudación de Checkout, reconciliación puntual,
+resultado privado y vínculo por enlace implementados y comprobados localmente con servicios
+externos simulados. La [validación local](refinamiento/validacion-local-01.md)
+registra 289 pruebas del módulo tras revisión y 16 del adaptador de correo. No acredita Stripe real,
+recepción en buzón, interfaz, aprobación de Rubén ni incorporación compartida.
+
+La reconciliación conserva exclusión por conexión mientras consulta Stripe fuera de una
+transacción; después guarda evento, dinero y notificación en una transacción corta. Este
+ajuste aplica la condición expresa del bloque y difiere del paso 3 del apartado
+«Entregas duplicadas, concurrencia y desorden» del contrato de pasarela, que describía esa consulta dentro de la
+transacción. Se registra para revisión sin modificar el contrato ni documentos comunes.
+T006 y T007 permanecen pendientes; 009 sigue siendo provisional. No cambian dependencias.
 
 ## Entrega temprana de 004 — 2026-11-06
 
@@ -247,19 +262,19 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: FR-011, FR-013, FR-016; PA1.7. **Depende de**: T022.
       **Comprobación**: Caducidad absoluta de ocho horas, POST con origen/CSRF y 404 genérico para recurso no autorizado; no cambia login, cookie común o roles.
 
-- [ ] T024 Escribir los casos de resumen inmutable, envío, fallo, reintento y reserva renovable de correo. Archivos: `backend/src/modulos/donaciones/confirmaciones.test.js`.
+- [x] T024 Escribir los casos de resumen inmutable, envío, fallo, reintento y reserva renovable de correo. Archivos: `backend/src/modulos/donaciones/confirmaciones.test.js`.
       **Origen**: FR-007, FR-012, FR-018; P06–P10. **Depende de**: T019, T018.
       **Comprobación**: Dos solicitudes reclaman un solo intento; la renovación y el guardado usan el número reclamado, y una caída SMTP no altera dinero ni promete entrega única.
 
-- [ ] T025 Añadir persistencia de mensajes y reclamación transaccional por aportación/tipo con número de intento. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T025 Añadir persistencia de mensajes y reclamación transaccional por aportación/tipo con número de intento. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: P-01, P-03; FR-007, FR-012, FR-018. **Depende de**: T024.
       **Comprobación**: Pruebas con PostgreSQL verifican unicidad, reserva de treinta segundos, renovación y rechazo de escrituras de un intento antiguo.
 
-- [ ] T026 Implementar el envío posterior al commit y el reintento del mismo resumen con las opciones SMTP de HU-01. Archivos: `backend/src/modulos/donaciones/confirmaciones.js`.
+- [x] T026 Implementar el envío posterior al commit y el reintento del mismo resumen con las opciones SMTP de HU-01. Archivos: `backend/src/modulos/donaciones/confirmaciones.js`.
       **Origen**: FR-007, FR-012, FR-018; SC-002. **Depende de**: T025, T018.
       **Comprobación**: Se renueva cada diez segundos mientras vive el intento; éxito/fallo se persisten sin llamadas de cobro, enviado no se reenvía y true no se considera prueba de recepción.
 
-- [ ] T027 Preparar la entrada del módulo y registrar rutasDonaciones, manteniendo cuerpo crudo antes de JSON en el webhook. Archivos: `backend/src/modulos/donaciones/rutas.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/servicio.js`, `backend/src/app.js`.
+- [x] T027 Preparar la entrada del módulo y registrar rutasDonaciones, manteniendo cuerpo crudo antes de JSON en el webhook. Archivos: `backend/src/modulos/donaciones/rutas.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/servicio.js`, `backend/src/app.js`, `backend/src/modulos/donaciones/registro.test.js`.
       **Origen**: P-02; FR-005, FR-016, FR-017. **Depende de**: T016, T021, T023, T026, T019.
       **Comprobación**: La aplicación carga con asincrono/ErrorApi comunes; auth/proyectos/actividades mantienen rutas y el webhook no queda sujeto a un requisito de sesión.
 
@@ -269,71 +284,71 @@ automática ni modificación concurrente del mismo archivo.
 
 **Comprobación del incremento**: Tras fundamentos, P01–P21 se comprueban con PostgreSQL y pasarela simulada: una donación de 20 € produce una sola aportación y resumen propio; los accesos ajenos se deniegan. La recepción efectiva en buzón y Checkout real se verifican en la fase final.
 
-- [ ] T028 [US1] Escribir los casos de conflicto/reutilización de Donante y sus carreras concurrentes. Archivos: `backend/src/modulos/donaciones/servicio.test.js`.
+- [x] T028 [US1] Escribir los casos de conflicto/reutilización de Donante y sus carreras concurrentes. Archivos: `backend/src/modulos/donaciones/servicio.test.js`.
       **Origen**: FR-014, FR-015; P13–P17. **Depende de**: T027.
       **Comprobación**: Correo con otro NIF y NIF con datos reales distintos se rechazan sin Stripe o escrituras; formato equivalente reutiliza sin actualizar; dos altas simultáneas no mezclan identidades.
 
-- [ ] T029 [US1] Escribir los contratos de contexto y creación puntual, proyecto activo, validación y clave de solicitud. Archivos: `backend/src/modulos/donaciones/rutas.test.js`.
+- [x] T029 [US1] Escribir los contratos de contexto y creación puntual, proyecto activo, validación y clave de solicitud. Archivos: `backend/src/modulos/donaciones/rutas.test.js`, `backend/src/modulos/donaciones/servicio.test.js`.
       **Origen**: FR-001–FR-005, FR-010, FR-011; P01–P04, P07. **Depende de**: T028.
       **Comprobación**: Validación/CSRF preceden a Stripe; proyecto desactivado exige elección en alta nueva. Concurrencia devuelve 409 en curso; timeout y reinicio conservan UUID, referencia, huella e instantánea. Se prueban DTO corto autorizado, UUID equivalente en mayúsculas/minúsculas con igual lock/clave, cuerpo incompatible, pérdida de conexión, finally/release(true) y límite fijo de 23 horas sin otro POST; ocho horas del invitado no se amplían.
 
-- [ ] T030 [US1] Escribir los casos de confirmación/rechazo puntual, firma, pertenencia y desorden de notificaciones. Archivos: `backend/src/modulos/donaciones/pasarela.test.js`.
+- [x] T030 [US1] Escribir los casos de confirmación/rechazo puntual, firma, pertenencia y desorden de notificaciones. Archivos: `backend/src/modulos/donaciones/pasarela.test.js`, `backend/src/modulos/donaciones/eventos.test.js`.
       **Origen**: FR-006, FR-010, FR-017; P05, P21; SC-004. **Depende de**: T029.
       **Comprobación**: Mismo o distinto event ID, entregas simultáneas, rechazo→éxito del mismo PaymentIntent y fallo antiguo mantienen una fila; versión/importe/moneda incorrectos no confirman y fallo transitorio no deja evento procesado.
 
-- [ ] T031 [US1] Añadir contratos de resultado, reintento de correo y vínculo por enlace, incluidas pruebas de acceso denegado. Archivos: `backend/src/modulos/donaciones/rutas.test.js`.
+- [x] T031 [US1] Añadir contratos de resultado, reintento de correo y vínculo por enlace, incluidas pruebas de acceso denegado. Archivos: `backend/src/modulos/donaciones/rutas.test.js`.
       **Origen**: FR-007, FR-011–FR-013, FR-016; P06–P12, P18–P20. **Depende de**: T030.
       **Comprobación**: Se cubren SMTP, accesos propios/ajenos y tokens. Solicitud autenticada devuelve el mismo 202 genérico con/sin Donante, sin vínculo; GET no envía, abrir token no reemite y la confirmación exige misma cuenta/uso único. P11/P12 se conectan con la prueba visible de T052.
 
-- [ ] T032 [US1] Añadir búsquedas normalizadas y alta/reutilización de Donante con bloqueo ordenado por NIF y correo. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T032 [US1] Añadir búsquedas normalizadas y alta/reutilización de Donante con bloqueo ordenado por NIF y correo. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: FR-014, FR-015; P13–P17. **Depende de**: T028.
       **Comprobación**: PostgreSQL mantiene un solo Donante para datos equivalentes y no sobrescribe filas en conflictos o carreras.
 
-- [ ] T033 [US1] Aplicar la comparación de identidad y el conflicto genérico antes de iniciar cualquier pago. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T033 [US1] Aplicar la comparación de identidad y el conflicto genérico antes de iniciar cualquier pago. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-004, FR-014, FR-015; P13–P17. **Depende de**: T032, T021.
       **Comprobación**: Los casos de identidad pasan también para una cuenta vinculada; no se revelan datos guardados ni se habilita edición de perfil.
 
-- [ ] T034 [US1] Añadir preparación atómica por UUID, validación de Proyecto para alta nueva y persistencia inmutable de entrada/snapshot, junto al control de exclusión por cliente. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T034 [US1] Añadir preparación atómica por UUID, validación de Proyecto para alta nueva y persistencia inmutable de entrada/snapshot, junto al control de exclusión por cliente. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: FR-003, FR-006, FR-010, FR-016; P01, P02, P18. **Depende de**: T033, T029.
       **Comprobación**: La preparación usa pg_try_advisory_xact_lock y libera al commit; creación usa pg_try_advisory_lock en cliente propio, tras guardar sesión. Operación existente no recrea filas o snapshot. Guardado/desbloqueo usan ese cliente; finally libera o destruye y no retorna un cliente con lock pendiente.
 
-- [ ] T035 [US1] Orquestar la creación/reanudación de Checkout con el protocolo de exclusión y la misma instantánea de solicitud. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T035 [US1] Orquestar la creación/reanudación de Checkout con el protocolo de exclusión y la misma instantánea de solicitud. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-002, FR-003, FR-005, FR-010, FR-011; P01–P03, P07. **Depende de**: T034.
       **Comprobación**: No hay transacción durante HTTP ni segunda conexión dentro del tramo. Actividad se acredita por lock, no por incierta. Tras error/reinicio solo readquiere con permiso y antes de creado_en + 23 horas; no renueva fecha ni UUID/cuerpo. Sin ID y vencida exige revisión; con Session conocida solo consulta/reutiliza. Respuesta tardía no reabre cerrada/confirmada.
 
-- [ ] T036 [US1] Implementar contexto, creación puntual y reanudación por DTO corto autorizado con zod y respuestas del contrato. Archivos: `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T036 [US1] Implementar contexto, creación puntual y reanudación por DTO corto autorizado con zod y respuestas del contrato. Archivos: `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-001–FR-005, FR-011; P01–P04, P07. **Depende de**: T035.
       **Comprobación**: Supertest comprueba 201/200/400/403/404/409/503, OPERACION_EN_CURSO y OPERACION_REQUIERE_REVISION. DTO corto no crea sin una operación propia previa; el completo distinto entra en conflicto. No se aceptan IDs de persona o solicitudCheckout del cliente y preparacion devuelve plazo derivado sin renovar permisos.
 
-- [ ] T037 [US1] Añadir bloqueo por pago y registro atómico de evento junto con la transición financiera y la notificación. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T037 [US1] Añadir bloqueo por pago y registro atómico de evento junto con la transición financiera y la notificación. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: FR-006, FR-007, FR-010, FR-017; P21. **Depende de**: T030, T036.
       **Comprobación**: Rollback no deja evento procesado; las claves únicas de evento y pago se verifican por separado y el commit no depende de SMTP.
 
-- [ ] T038 [US1] Implementar reconciliación puntual con PaymentIntent actual y fecha del evento firmado de éxito. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T038 [US1] Implementar reconciliación puntual con PaymentIntent actual y fecha del evento firmado de éxito. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-006, FR-007, FR-010, FR-017; P05, P21; SC-004. **Depende de**: T037.
       **Comprobación**: El mismo rechazo pasa a confirmado sin duplicar referencia; confirmado no retrocede, cancel_url no prueba cancelación y evento ajeno/discrepancia no se registra como cobro.
 
-- [ ] T039 [US1] Implementar POST webhook con firma, cuerpo crudo y respuestas para reentrega/duplicado/incidencia. Archivos: `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T039 [US1] Implementar POST webhook con firma, cuerpo crudo y respuestas para reentrega/duplicado/incidencia. Archivos: `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-005, FR-006, FR-010, FR-017; P21. **Depende de**: T038.
       **Comprobación**: Sin cookie se confirma una vez; firma inválida es 400, fallo transitorio sin commit es 503 y fallo de correo posterior no cambia el cobro ni el 200.
 
-- [ ] T040 [US1] Implementar consulta autorizada de una aportación con proyección mínima y Cache-Control no-store. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T040 [US1] Implementar consulta autorizada de una aportación con proyección mínima y Cache-Control no-store. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-006, FR-007, FR-016; P01, P02, P18–P20. **Depende de**: T039, T031.
       **Comprobación**: Resumen, importe y fecha coinciden con el registro propio; 404 no distingue ajeno/inexistente, no hay datos fiscales y un GET no muta dinero.
 
-- [ ] T041 [US1] Implementar POST de reintento exclusivo de confirmación usando autorización y CSRF. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T041 [US1] Implementar POST de reintento exclusivo de confirmación usando autorización y CSRF. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-007, FR-012, FR-016; P08–P10, P18–P20. **Depende de**: T040.
       **Comprobación**: Fallo sigue pendiente; envío reservado es 409, enviado no se repite y en ningún caso se crean cobros, aportaciones o suscripciones.
 
-- [ ] T042 [US1] Añadir emisión, invalidación y consumo transaccional de la prueba ligada a Usuario y Donante. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T042 [US1] Añadir emisión, invalidación y consumo transaccional de la prueba ligada a Usuario y Donante. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: FR-011, FR-013; P11, P12. **Depende de**: T041.
       **Comprobación**: Solo se guarda hash; expiración/uso/cuenta se comprueban bajo bloqueo y consumo+usuario_id se guardan atómicamente.
 
-- [ ] T043 [US1] Implementar solicitud autenticada de enlace al correo de la cuenta coincidente, con respuesta no enumerativa. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T043 [US1] Implementar solicitud autenticada de enlace al correo de la cuenta coincidente, con respuesta no enumerativa. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-011, FR-013; P11, P12. **Depende de**: T042.
       **Comprobación**: Token de 32 bytes y treinta minutos, destino tomado de la cuenta y no del cliente. Se verifica 401/403, 202 idéntico con/sin Donante elegible y ante fallo SMTP individual, error de infraestructura genérico y ausencia de vínculo por solicitud; no se envía automáticamente al entrar.
 
-- [ ] T044 [US1] Implementar confirmación POST del enlace de uso único para la cuenta solicitante. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T044 [US1] Implementar confirmación POST del enlace de uso único para la cuenta solicitante. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-013; P11, P12. **Depende de**: T043.
       **Comprobación**: Otra cuenta, caducidad, repetición y carrera de consumo no vinculan; abrir la página por GET no consume; registro/login/roles permanecen intactos.
 

@@ -136,3 +136,132 @@ T008–T013 y T019 completadas en el alcance descrito. T006 y T007 no se marcan.
 La incorporación compartida y el número definitivo siguen pendientes.
 No se implementan rutas, reconciliación, confirmaciones de correo o pantallas.
 Bloque detenido para revisión; sin git add, commit, push, merge o cambio de rama.
+
+## Backend de donación puntual — T024–T044 · 2026-11-06
+
+**Responsable**: Nada · **Revisor**: Rubén (revisión pendiente). Estado inicial: `spec-001`
+limpia, HEAD `edc621c`, «HU-01: añade persistencia operativa y soporte de integración».
+El procedimiento local de speckit-implement se aplica directamente al bloque autorizado;
+se omiten los hooks opcionales de commit. La selección temporal
+SPECIFY_FEATURE_DIRECTORY=specs/spec-001 resuelve la funcionalidad sin alterar configuración;
+el script de prerrequisitos devuelve esa ruta y requirements.md conserva sus 16 comprobaciones
+satisfechas. No se repiten fases cerradas.
+
+### Cambios y comprobaciones
+
+- `repositorio.js` y `confirmaciones.js`: resumen lógico único e inmutable, reclamación
+  atómica, reserva de treinta segundos renovada cada diez y resultado condicionado al
+  intento vigente. SMTP se invoca tras el commit; reintentar el correo no toca dinero.
+- `servicio.js`: identidad sin sobrescritura, bloqueo ordenado por NIF y correo,
+  preparación atómica y creación/reanudación bajo exclusión por conexión. Se conservan
+  UUID canónico, referencia, huella, cuerpo y clave. El plazo de 23 horas usa el reloj de
+  PostgreSQL y no se renueva; tampoco el permiso invitado de ocho horas. Se comprueban
+  preparación ocupada, timeout, pérdida de conexión, desbloqueo imposible y recuperación
+  desde otro proceso con el simulador persistente. Solo se termina el cliente propio de
+  la prueba de pérdida de conexión, obtenido al adquirir su exclusión.
+- `repositorio.js` y `servicio.js`: serialización por PaymentIntent, registro atómico de
+  evento/cobro/notificación, rechazo seguido de éxito sobre la misma fila, confirmada
+  inmutable, rollback y eventos simultáneos o antiguos. Checkout solo correlaciona/cierra;
+  no confirma dinero. Una reentrega registrada puede recuperar el correo sin consultar
+  otra vez Stripe. Una respuesta tardía de Checkout no reabre ni oculta una confirmación.
+- `controlador.js` y `rutas.js`: contexto, creación puntual, DTO corto autorizado, resultado
+  privado, reintento de correo y vínculo por enlace. Zod rechaza campos ajenos. Origen/CSRF
+  se exigen al navegador; propiedad se obtiene del servidor. Correo coincidente, UUID y
+  referencia no conceden acceso. Se comprueban errores 400/401/403/404/409/503 y el error
+  común de infraestructura, sin detalles internos.
+- Vínculo: token aleatorio de 32 bytes, solo hash persistido, treinta minutos, cuenta
+  solicitante, invalidación del enlace anterior y consumo/asignación atómicos. Se prueban
+  otra cuenta, vencimiento, repetición, consumo concurrente, conflicto de vínculo y GET sin
+  consumo. El 202 genérico no acredita envío ni vínculo y se conserva ante fallo SMTP.
+- `app.js`: registro del router y webhook POST con raw antes de JSON y sesiones. La prueba
+  de la aplicación real confirma sin consultar el almacén de sesiones, incluso con cookie
+  y almacén simulado no disponible. Comprueba también auth, proyectos y permisos de
+  actividades. Los valores de autenticación/cookies no cambian; el resto del diff es formato.
+
+Las pruebas se escribieron antes del servicio correspondiente. Los primeros comandos de
+confirmaciones, servicio/rutas y eventos fallaron al faltar los módulos, sin omitir pruebas.
+Las comprobaciones adicionales detectaron una URL cerrada todavía ofrecida, un resultado
+antiguo tras confirmación concurrente y una dependencia externa innecesaria al repetir un
+evento; esos casos fallaron antes de sus correcciones y pasan en el resultado final. También
+se corrigieron dos errores de las pruebas: el tipo de error de firma simulado y una consulta
+que no seleccionaba la referencia para compararla tras el reinicio.
+
+### Comandos y resultados reales
+
+Desde `backend`, selección de DATABASE_URL y TEST_DATABASE_URL iguales para **ong_test_hu01**,
+derivadas de la conexión local sin imprimirla ni modificar .env. NODE_ENV=test. El soporte
+comprueba nombre de base y search_path, crea esquemas propios y los elimina al terminar;
+el reinicio recibe la URL del esquema de su prueba. No se vacía public ni otra base.
+Las suites se ejecutan secuencialmente, sin instalaciones, SMTP o Stripe reales.
+
+```powershell
+npm test -- src/modulos/donaciones/confirmaciones.test.js --no-file-parallelism
+npm test -- src/modulos/donaciones/servicio.test.js src/modulos/donaciones/rutas.test.js --no-file-parallelism
+npm test -- src/modulos/donaciones/eventos.test.js --no-file-parallelism
+npm test -- src/modulos/donaciones --no-file-parallelism
+npm test -- src/servicios-comunes/correo.test.js --no-file-parallelism
+```
+
+Resultado final del módulo a las 20:42:18, hora local: **9 archivos y 288 pruebas aprobadas**,
+código 0, duración 22,78 s. La regresión adicional de correo aprueba **16 pruebas**, código 0.
+
+| Archivo de prueba en donaciones | Pruebas aprobadas |
+| ------------------------------- | ----------------: |
+| migraciones.test.js             |                68 |
+| pasarela.test.js                |                36 |
+| normalizacion.test.js           |               102 |
+| autorizacion.test.js            |                35 |
+| confirmaciones.test.js          |                 6 |
+| servicio.test.js                |                17 |
+| rutas.test.js                   |                 9 |
+| eventos.test.js                 |                14 |
+| registro.test.js                |                 1 |
+
+Desde la raíz, Prettier 3.6.2 ya disponible en caché se aplica y comprueba únicamente en
+los once archivos JavaScript del bloque, tasks.md y este informe. Comprobación final:
+código 0. `git diff --check` termina con código 0. Los identificadores y dependencias de
+las tareas se conservan; T029/T030/T027 añaden las rutas de sus pruebas efectivas.
+
+Comandos de formato ejecutados con `$hu01Prettier` apuntando al binario de esa versión
+en caché y `$hu01Archivos` conteniendo esos trece archivos, desde la raíz:
+
+```powershell
+node $hu01Prettier --config .prettierrc.json --write @hu01Archivos
+node $hu01Prettier --config .prettierrc.json --check @hu01Archivos
+git -c core.autocrlf=true diff --check
+```
+
+### Ajuste respecto al contrato y límites
+
+El paso 3 de [Entregas duplicadas, concurrencia y desorden](../contracts/pasarela-stripe.md#entregas-duplicadas-concurrencia-y-desorden)
+describe consultar Stripe dentro de una transacción. La condición expresa de este bloque
+exige hacerlo fuera: se mantiene exclusión consultiva por conexión mientras se consulta y
+después una transacción corta con bloqueo de la aportación guarda evento, dinero y correo.
+Así se mantiene la serialización sin transacciones durante Stripe o SMTP ni tablas nuevas.
+Este ajuste se documenta para revisión; el contrato y los documentos comunes permanecen
+intactos. La alineación de esa redacción queda pendiente de revisión documental.
+
+**T024–T044 completadas** en el alcance local comprobado. T006 y T007 siguen pendientes;
+009 es provisional y no acredita reserva colectiva. No se modifica 004, 009, autenticación,
+roles, configuración, secretos, módulos ajenos o los informes históricos. Se añaden cinco
+archivos de implementación y cinco de pruebas en donaciones; solo cambian además app.js,
+tasks.md y este informe, conservando íntegro su contenido anterior.
+
+Las simulaciones no acreditan idempotencia real de Stripe, recepción en buzón ni Checkout
+real. Las firmas sintéticas del adaptador y los mocks HTTP no equivalen a un endpoint real
+configurado. La integración de rutas se acredita solo para los casos ejecutados. No se
+implementan alta de socio, cuotas, frontend o HU-02. T045 y posteriores quedan sin marcar.
+La revisión de Rubén y la incorporación compartida siguen pendientes. Sin git add, commit,
+push, merge o cambio de rama; entrega detenida para revisión.
+
+### Comprobación adicional antes de registrar la entrega
+
+Se repiten las pruebas: 288 del módulo y 16 de correo aprobadas. La revisión detecta que
+un fallo tardío podía cambiar cancelada a rechazada, transición ajena al modelo. Se añade
+la condición que conserva cancelada salvo cobro acreditado y una prueba que comprueba
+tanto esa conservación como la confirmación posterior de la misma aportación.
+
+La suite completa posterior termina con código 0: 289 pruebas aprobadas en nueve archivos,
+ninguna fallida u omitida; inicio 20:53:14 y duración 26,46 s. Eventos pasa de 14 a 15 casos.
+La regresión de correo conserva sus 16 casos aprobados. Se mantienen las evidencias anteriores,
+las limitaciones de simulación y la alineación contractual pendiente.
