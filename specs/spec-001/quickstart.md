@@ -1,14 +1,17 @@
 # Guía de validación prevista — HU-01
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: Procedimiento preparado para una fase posterior; comandos y pruebas no ejecutados.
+**Estado**: Guía general prevista. La validación parcial de 004 está ejecutada y documentada; el procedimiento completo sigue pendiente.
 
 ## Condiciones previas
 
-El diseño está definido en esta rama y pendiente de revisión de Rubén. La aplicación aún
-no implementa HU-01 y no existe 004. Los comandos siguientes se ejecutarán tras incorporar
-la implementación y las migraciones revisadas; sus comprobaciones fallan si faltan tablas
-o pruebas, sin convertir su ausencia en un resultado satisfactorio.
+El diseño está definido en esta rama y pendiente de revisión de Rubén. HU-01 todavía no
+está implementada por completo. T001–T005 han preparado el entorno y creado y validado 004
+en esquemas aislados; los resultados están en
+[validacion-004-01.md](refinamiento/validacion-004-01.md). La preparación local usa DB_PORT=5440
+porque otro PostgreSQL ocupa 5432. El bloque B completo requiere la implementación y las
+migraciones restantes revisadas; no se ha ejecutado ni corresponde a esta entrega temprana.
+Sus comprobaciones fallan si faltan tablas o pruebas, sin dar su ausencia por satisfactoria.
 
 Node.js 22 y Docker Desktop son requisitos. La cuenta Stripe y P-05 solo se necesitan
 para las pruebas reales de Checkout; la suite local usa pasarela simulada y firma sintética,

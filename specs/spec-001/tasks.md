@@ -2,7 +2,20 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: Desglose preparado para revisión. Las 81 tareas comienzan sin marcar; no se ha ejecutado ninguna.
+**Estado**: Implementación parcial de T001–T005 completada y verificada. T006–T081 permanecen pendientes; la revisión de Rubén no se ha realizado.
+
+## Ejecución parcial — 2026-11-06
+
+T001–T005 preparan la entrega temprana de 004. La
+[ficha de revisión](refinamiento/revision-tecnica-01.md) conserva la revisión de Rubén como
+pendiente. El [informe de validación](refinamiento/validacion-004-01.md) registra el fallo
+inicial por ausencia de 004 y las 50 pruebas aprobadas después de crearla, sobre dos
+esquemas aislados de ong_test_hu01. Node.js y dependencias se han preparado desde los
+lockfiles, sin modificarlos; .env queda ignorado y PostgreSQL de Docker usa el puerto 5440.
+
+Solo se marcan esas cinco tareas. No se ha ejecutado el bloque B completo, P-05, la suite
+general, compilación, Stripe real o tareas posteriores. Se conservan los informes históricos
+y el estado preparado en el índice de Git, sin nuevos commits o cambios de rama.
 
 ## Alcance y fuentes
 
@@ -70,23 +83,23 @@ automática ni modificación concurrente del mismo archivo.
 
 **Comprobación del incremento**: 004 revisada, con pruebas propias sobre ambas secuencias; todavía no se necesita la migración operativa, UI ni Stripe real.
 
-- [ ] T001 Preparar la ficha de revisión de P-01–P-03 y del contrato de consulta de 004, distinguiendo diseño de rama y acuerdos pendientes. Archivos: `specs/spec-001/refinamiento/revision-tecnica-01.md`.
+- [x] T001 Preparar la ficha de revisión de P-01–P-03 y del contrato de consulta de 004, distinguiendo diseño de rama y acuerdos pendientes. Archivos: `specs/spec-001/refinamiento/revision-tecnica-01.md`.
   **Origen**: Constitución X–XII; P-01–P-03; FR-006, FR-010. **Depende de**: ninguna.
   **Comprobación**: La ficha identifica a Nada y Rubén, enlaza modelo/contratos vigentes y no da por realizada una revisión sin evidencia.
 
-- [ ] T002 Preparar Node.js 22, dependencias desde los lockfiles y la base exclusiva ong_test_hu01 siguiendo quickstart A y la selección de conexión de B. Archivos: `specs/spec-001/quickstart.md`, `backend/package-lock.json`, `frontend/package-lock.json`, `.env`.
+- [x] T002 Preparar Node.js 22, dependencias desde los lockfiles y la base exclusiva ong_test_hu01 siguiendo quickstart A y la selección de conexión de B. Archivos: `specs/spec-001/quickstart.md`, `backend/package-lock.json`, `frontend/package-lock.json`, `.env`.
   **Origen**: Plan: contexto y validación; SC-002, SC-004. **Depende de**: T001.
   **Comprobación**: DATABASE_URL y TEST_DATABASE_URL seleccionan la base real de pruebas; se conserva .env y no se muestran secretos. No se exige P-05 para la suite simulada.
 
-- [ ] T003 Escribir las pruebas de 004 con dos esquemas aislados dentro de la base de pruebas: 001–003 → 004 y 001–003/005 → 004. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`.
+- [x] T003 Escribir las pruebas de 004 con dos esquemas aislados dentro de la base de pruebas: 001–003 → 004 y 001–003/005 → 004. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`.
   **Origen**: P-01; FR-002, FR-006, FR-010; SC-004. **Depende de**: T002.
   **Comprobación**: Los casos comprueban tres tablas, FKs, auditoría, nulabilidad, índice financiero y claves únicas de NIF/pago/factura, sin UNIQUE de correo; fallan si falta 004, no por conexión ausente.
 
-- [ ] T004 Crear exclusivamente las tres tablas de dominio de 004 según el modelo común, incluidos límite individual, claves externas y previsión temporal. Archivos: `backend/src/db/migraciones/004_donaciones.sql`.
+- [x] T004 Crear exclusivamente las tres tablas de dominio de 004 según el modelo común, incluidos límite individual, claves externas y previsión temporal. Archivos: `backend/src/db/migraciones/004_donaciones.sql`.
   **Origen**: P-01; FR-002, FR-006, FR-008, FR-010, FR-019. **Depende de**: T003.
   **Comprobación**: El SQL coincide con el modelo vigente, no incluye tablas operativas ni altera 001–003/005 y no limita los totales acumulados.
 
-- [ ] T005 Validar las dos secuencias de 004 y la selección de migraciones pendientes por nombre; conservar la evidencia de la entrega temprana. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`, `backend/src/db/migrar.js`, `specs/spec-001/refinamiento/validacion-004-01.md`.
+- [x] T005 Validar las dos secuencias de 004 y la selección de migraciones pendientes por nombre; conservar la evidencia de la entrega temprana. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`, `backend/src/db/migrar.js`, `specs/spec-001/refinamiento/validacion-004-01.md`.
   **Origen**: P-01; FR-006, FR-010; SC-004. **Depende de**: T004.
   **Comprobación**: La prueba dirigida pasa en ambos esquemas; una segunda ejecución del migrador no reaplica 004 registrada. El bloque B completo no se usa aún y no se modifica el migrador para forzar el resultado.
 
