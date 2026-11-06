@@ -4,7 +4,9 @@ import {
   formatearDestinoCorreo,
   formatearFechaCorreo,
   formatearImporteCorreo,
+  formatearDiaCorreo,
   textoCorreoConfirmacion,
+  textoCorreoFalloCuota,
   textoCorreoVerificacion,
 } from './textoCorreo.js';
 
@@ -140,5 +142,67 @@ describe('textoCorreoVerificacion', () => {
     const texto = textoCorreoVerificacion(enlace);
     expect(texto.match(/#token=([A-Za-z0-9_-]+)/)[1]).toBe('A'.repeat(43));
     expect(texto.split('A'.repeat(43))).toHaveLength(2);
+  });
+});
+
+describe('HU-01 · US2 · textos de cuota de socio', () => {
+  const cuota = Object.freeze({
+    referencia: 'DON-cuota-0001',
+    importe: '10.00',
+    modalidad: 'cuota_socio',
+    destino: 'fondo general',
+    fechaCobro: '2026-11-01T10:00:00+01:00',
+    periodicidad: 'trimestral',
+    fechaProximoCobro: '2027-02-01',
+  });
+
+  it('formatea una fecha DATE aaaa-mm-dd como dd/mm/aaaa sin cambiar de zona', () => {
+    expect(formatearDiaCorreo('2027-02-01')).toBe('01/02/2027');
+    expect(formatearDiaCorreo('2026-03-29')).toBe('29/03/2026');
+    expect(formatearDiaCorreo(null)).toBe('');
+    expect(formatearDiaCorreo('01/02/2027')).toBe('');
+  });
+
+  it('la confirmación de una cuota añade periodicidad y próximo cobro comunicado', () => {
+    const texto = textoCorreoConfirmacion(cuota);
+    expect(texto).toContain('Modalidad: Cuota de socio');
+    expect(texto).toContain('Periodicidad: Trimestral');
+    expect(texto).toContain('Próximo cobro: 01/02/2027');
+    expect(texto).not.toContain('2027-02-01');
+  });
+
+  it('sin próxima fecha comunicada indica «Pendiente de confirmación»', () => {
+    expect(textoCorreoConfirmacion({ ...cuota, fechaProximoCobro: null })).toContain(
+      'Próximo cobro: Pendiente de confirmación',
+    );
+  });
+
+  it('una donación puntual conserva exactamente el texto anterior', () => {
+    const puntual = { ...cuota, modalidad: 'puntual' };
+    delete puntual.periodicidad;
+    delete puntual.fechaProximoCobro;
+    const texto = textoCorreoConfirmacion(puntual);
+    expect(texto).not.toContain('Periodicidad');
+    expect(texto).not.toContain('Próximo cobro');
+  });
+
+  it('el aviso de fallo de cuota no afirma cobro, no ordena pagos y muestra solo la fecha comunicada', () => {
+    const aviso = {
+      referencia: 'DON-cuota-0002',
+      importe: '1234.5',
+      motivo: 'La cuota no se ha podido cobrar.',
+      fechaProximoCobro: '2026-11-20',
+    };
+    const texto = textoCorreoFalloCuota(aviso);
+    expect(texto).toContain('Referencia: DON-cuota-0002');
+    expect(texto).toContain('Importe: 1.234,50 €');
+    expect(texto).toContain('La cuota no se ha podido cobrar.');
+    expect(texto).toContain('Próximo intento de cobro: 20/11/2026');
+    expect(texto).toContain('Este es un correo automático.');
+    expect(texto).not.toMatch(/confirmad|cobrad[oa] correctamente|paga ahora|haz clic/i);
+    expect(textoCorreoFalloCuota({ ...aviso, fechaProximoCobro: null })).toContain(
+      'Próximo intento de cobro: Pendiente de confirmación',
+    );
+    expect(textoCorreoFalloCuota(aviso)).toBe(textoCorreoFalloCuota(structuredClone(aviso)));
   });
 });

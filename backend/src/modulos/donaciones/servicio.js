@@ -1,14 +1,14 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { config } from '../../config.js';
 import { ErrorApi } from '../../middleware/errores.js';
-import { aIsoMadrid } from '../../servicios-comunes/fechas.js';
+import { aIsoMadrid, ahora, ZONA } from '../../servicios-comunes/fechas.js';
 import { normalizarDonante, normalizarImporte } from './normalizacion.js';
 import {
   autorizarAportacion,
   prepararContextoDonaciones,
   registrarPermisoOperacion,
 } from './autorizacion.js';
-import { crearRepositorio } from './repositorio.js';
+import { crearRepositorio, CIERRES } from './repositorio.js';
 import { crearConfirmaciones } from './confirmaciones.js';
 import { textoCorreoVerificacion } from './textoCorreo.js';
 
@@ -16,6 +16,36 @@ const hash = (texto) => createHash('sha256').update(texto).digest('hex');
 const revision = () =>
   new ErrorApi(409, 'OPERACION_REQUIERE_REVISION', 'La preparación del pago requiere revisión.');
 const pagoNoDisponible = () => new ErrorApi(503, 'PAGO_NO_DISPONIBLE', 'El pago no está disponible.');
+const PERIODICIDADES = ['mensual', 'trimestral', 'anual'];
+const TIPOS_FACTURA = ['invoice.paid', 'invoice.payment_failed', 'invoice.updated'];
+const TIPOS_SUSCRIPCION = ['customer.subscription.updated', 'customer.subscription.deleted'];
+const diaMadrid = (fecha) =>
+  new Intl.DateTimeFormat('en-CA', { timeZone: ZONA, year: 'numeric', month: '2-digit', day: '2-digit' }).format(
+    fecha,
+  );
+
+// Próximo cobro solo desde recursos actuales (pasarela-stripe.md, «Próxima fecha y cancelación»):
+// tras fallo de la última factura, next_payment_attempt; si no, current_period_end con cobro
+// automático y sin cancelación programada. Nulo, pasado, cerrado o en/después de la
+// cancelación programada → null. No se calcula ninguna fecha localmente.
+export function calcularPrevision(sus, ultima, instante = ahora()) {
+  if (!sus || CIERRES.includes(sus.status)) return null;
+  const fallo =
+    ultima &&
+    ultima.subscription === sus.id &&
+    ultima.status === 'open' &&
+    ultima.paid !== true &&
+    ultima.payment_intent?.status === 'requires_payment_method';
+  let segundos = null;
+  if (fallo) segundos = ultima.next_payment_attempt;
+  else if (sus.collection_method === 'charge_automatically' && !sus.cancel_at_period_end && !sus.cancel_at)
+    segundos = sus.current_period_end;
+  if (!Number.isSafeInteger(segundos) || segundos * 1000 <= instante.getTime()) return null;
+  const limite = sus.cancel_at_period_end ? sus.current_period_end : sus.cancel_at;
+  if (Number.isSafeInteger(limite) && segundos >= limite) return null;
+  const en = new Date(segundos * 1000);
+  return { en, dia: diaMadrid(en) };
+}
 export const avisoVinculacion =
   'Si hay aportaciones que puedan vincularse al correo de tu cuenta, recibirás un enlace de verificación.';
 
@@ -32,13 +62,73 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
       );
     if (!op.sesion_checkout_id && op.vencida && op.estado !== 'cerrada') throw revision();
   }
-  async function intentarCorreo(id) {
-    if (!id) return;
-    try {
-      await confirmaciones.enviar(id);
-    } catch {
-      /* El evento y el pago ya están confirmados. */
+  async function intentarCorreos(lista) {
+    for (const { id, tipo } of lista) {
+      try {
+        await confirmaciones.enviar(id, tipo);
+      } catch {
+        /* El evento y el dinero ya están registrados; el correo queda recuperable. */
+      }
     }
+  }
+  // Factura inicial del alta para reconciliarla antes de un ciclo notificado primero: por
+  // Session.invoice de la operación o por listado de Session (límite 2, coincidencia única).
+  async function facturaInicial(alta, externa, conexionViva) {
+    let id = null;
+    if (alta.sesion_checkout_id) {
+      const sesion = await pasarela.obtenerSesionPago(alta.sesion_checkout_id);
+      conexionViva();
+      if (
+        sesion?.id === alta.sesion_checkout_id &&
+        sesion.subscription === externa &&
+        sesion.client_reference_id === alta.referencia
+      )
+        id = sesion.invoice;
+    } else {
+      const lista = await pasarela.obtenerSesionDeSuscripcion(externa);
+      conexionViva();
+      const coincidencias = (lista?.data ?? []).filter(
+        (x) =>
+          x.subscription === externa &&
+          x.client_reference_id === alta.referencia &&
+          x.metadata?.referencia === alta.referencia,
+      );
+      if (coincidencias.length === 1 && !lista.has_more) id = coincidencias[0].invoice;
+    }
+    if (!id) return null;
+    const factura = await pasarela.obtenerFactura(id);
+    conexionViva();
+    return { factura };
+  }
+  // Todas las consultas a la pasarela se hacen aquí, con la exclusión de la conexión y FUERA
+  // de transacción SQL; después el repositorio aplica el resultado en una transacción corta.
+  async function reconciliar(c, conexionViva, e, externa) {
+    const factura = TIPOS_FACTURA.includes(e.type) ? e.data.object.id : null;
+    if (await repo.eventoRegistrado(c, e.id)) return factura ? repo.correosDeFactura(c, factura) : [];
+    const actual = factura ? await pasarela.obtenerFactura(factura) : null;
+    conexionViva();
+    const sus = await pasarela.obtenerSuscripcion(externa);
+    conexionViva();
+    let ultima = null;
+    if (sus?.latest_invoice) {
+      ultima = sus.latest_invoice === actual?.id ? actual : await pasarela.obtenerFactura(sus.latest_invoice);
+      conexionViva();
+    }
+    let inicial = null;
+    if (e.type === 'invoice.paid' && actual?.billing_reason === 'subscription_cycle') {
+      const alta = await repo.altaPorSuscripcion(
+        c,
+        externa,
+        sus?.metadata?.modulo === 'donaciones' ? sus.metadata.referencia : null,
+      );
+      if (alta && alta.estado !== 'confirmada') inicial = await facturaInicial(alta, externa, conexionViva);
+    }
+    return repo.reconciliarSuscripcion(c, e, {
+      suscripcion: sus,
+      factura: actual,
+      inicial,
+      prevision: calcularPrevision(sus, ultima),
+    });
   }
   return {
     repo,
@@ -55,16 +145,24 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
       let datos = { claveSolicitud },
         huella = null;
       if (entrada.donante) {
+        const socio = entrada.modalidad === 'socio';
+        if (socio && !PERIODICIDADES.includes(entrada.periodicidad))
+          throw new ErrorApi(400, 'DATOS_INVALIDOS', 'Revisa los datos marcados.', {
+            periodicidad: 'Elige una periodicidad mensual, trimestral o anual.',
+          });
         datos = {
           claveSolicitud,
-          modalidad: 'puntual',
+          modalidad: socio ? 'socio' : 'puntual',
+          ...(socio && { periodicidad: entrada.periodicidad }),
           ...normalizarImporte(entrada.importe),
           proyectoId: entrada.proyectoId ?? null,
           donante: normalizarDonante(entrada.donante),
         };
+        // La huella puntual conserva exactamente su forma anterior; la de socio añade periodicidad.
         huella = hash(
           JSON.stringify({
-            modalidad: 'puntual',
+            modalidad: datos.modalidad,
+            ...(socio && { periodicidad: datos.periodicidad }),
             importe: datos.importe,
             proyectoId: datos.proyectoId,
             donante: Object.fromEntries(
@@ -136,6 +234,19 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
       autorizarAportacion(req, referencia, a);
       const c = await repo.correo(a.id);
       const op = await repo.operacionDeAportacion(a.id);
+      // Previsión actual separada del resumen histórico: un instante vencido se devuelve null.
+      let suscripcion = null;
+      if (a.modalidad === 'cuota_socio' && a.suscripcion_socio_id) {
+        const s = await repo.suscripcionDeAportacion(a.suscripcion_socio_id);
+        suscripcion = {
+          estado: s.estado,
+          periodicidad: s.periodicidad,
+          fechaProximoCobro:
+            s.estado === 'activa' && s.pasarela_proximo_cobro_en && s.pasarela_proximo_cobro_en > ahora()
+              ? s.proximo
+              : null,
+        };
+      }
       let urlPago = null;
       if (op?.sesion_checkout_id && op.estado !== 'cerrada' && a.estado !== 'confirmada') {
         try {
@@ -162,7 +273,7 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
             c.estado !== 'enviado' &&
             (c.estado !== 'enviando' || c.reservado_hasta <= new Date()),
         },
-        suscripcion: null,
+        suscripcion,
         urlPago,
         preparacion: op
           ? {
@@ -201,13 +312,13 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
         config.stripe.claveSecreta.startsWith('rk_live_');
       if (e.livemode !== real) throw new ErrorApi(400, 'EVENTO_NO_VALIDO', 'La notificación no es válida.');
       try {
-        let idCorreo;
+        let correos = [];
         if (
           ['payment_intent.succeeded', 'payment_intent.payment_failed', 'payment_intent.canceled'].includes(
             e.type,
           )
         ) {
-          idCorreo = await repo.conExclusion(
+          const idCorreo = await repo.conExclusion(
             'pi:' + e.data.object.id,
             async (c, conexionViva) => {
               if (await repo.eventoRegistrado(c, e.id))
@@ -218,6 +329,7 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
             },
             true,
           );
+          if (idCorreo) correos = [{ id: idCorreo, tipo: 'confirmacion' }];
         } else if (['checkout.session.completed', 'checkout.session.expired'].includes(e.type)) {
           await repo.conExclusion(
             'checkout:' + e.data.object.id,
@@ -229,10 +341,20 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
             },
             true,
           );
+        } else if (TIPOS_FACTURA.includes(e.type) || TIPOS_SUSCRIPCION.includes(e.type)) {
+          // Identificación preliminar por el evento firmado; el recurso actual decide después.
+          const externa = TIPOS_FACTURA.includes(e.type) ? e.data.object.subscription : e.data.object.id;
+          if (typeof externa !== 'string' || !externa) await repo.registrarEvento(pool, e, 'ignorado');
+          else
+            correos = await repo.conExclusion(
+              'sub:' + externa,
+              (c, conexionViva) => reconciliar(c, conexionViva, e, externa),
+              true,
+            );
         } else {
           await repo.registrarEvento(pool, e, 'ignorado');
         }
-        await intentarCorreo(idCorreo);
+        await intentarCorreos(correos);
         return { recibido: true };
       } catch (error) {
         if (error instanceof ErrorApi) throw error;

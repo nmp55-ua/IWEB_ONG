@@ -445,3 +445,171 @@ it('un vínculo incompatible no consume el token ni modifica el Donante solicita
     await entorno.pool.query('UPDATE donantes SET usuario_id=NULL WHERE id=$1', [fixtures.invitado.id]);
   }
 });
+
+// HU-01 · US2 (T054): alta de socio con el mismo protocolo de creación que la donación puntual.
+const RECURRENCIA_ESPERADA = {
+  mensual: { interval: 'month', interval_count: 1 },
+  trimestral: { interval: 'month', interval_count: 3 },
+  anual: { interval: 'year', interval_count: 1 },
+};
+const altaSocio = (datos = {}) => solicitud({ modalidad: 'socio', periodicidad: 'mensual', ...datos });
+async function filasAlta(referencia) {
+  const a = (await entorno.pool.query('SELECT * FROM aportaciones WHERE referencia=$1', [referencia])).rows[0];
+  const s = a?.suscripcion_socio_id
+    ? (await entorno.pool.query('SELECT * FROM suscripciones_socio WHERE id=$1', [a.suscripcion_socio_id]))
+        .rows[0]
+    : null;
+  const o = a
+    ? (await entorno.pool.query('SELECT * FROM operaciones_pago WHERE aportacion_id=$1', [a.id])).rows[0]
+    : null;
+  return { a, s, o };
+}
+const contar = async (tabla) => Number((await entorno.pool.query(`SELECT count(*) FROM ${tabla}`)).rows[0].count);
+
+it.each([
+  ['mensual', '1.00', '1.00', 100],
+  ['trimestral', '10,5', '10.50', 1050],
+  ['anual', '999999.99', '999999.99', 99999999],
+])(
+  'alta de socio %s con importe %s sin cuenta: suscripción pendiente, cuota inicial y recurrencia congelada',
+  async (periodicidad, importe, normalizado, centimos) => {
+    const { prepararSesionPago } = await import('../../servicios-comunes/pasarela.js');
+    const crearSesionPago = vi.fn(async ({ claveIdempotencia }) => ({
+      id: 'cs_' + createHash('sha256').update(claveIdempotencia).digest('hex'),
+      url: 'https://checkout.stripe.test/alta',
+    }));
+    const propio = crearServicio({
+      pool: entorno.pool,
+      pasarela: { ...pasarela, prepararSesionPago, crearSesionPago },
+      enviarCorreo: enviar,
+    });
+    const dto = altaSocio({
+      periodicidad,
+      importe,
+      donante: { ...donante, nifNie: '61111111L', correo: 'socio-alta@example.test' },
+    });
+    const r = req();
+    const creada = await propio.crear(r, dto);
+    expect(creada).toMatchObject({ nueva: true, estado: 'pendiente', urlPago: 'https://checkout.stripe.test/alta' });
+    const { a, s, o } = await filasAlta(creada.referencia);
+    expect(a).toMatchObject({ modalidad: 'cuota_socio', estado: 'pendiente', fecha_cobro: null, importe: normalizado });
+    expect(a.pasarela_factura_id).toBeNull();
+    expect(a.pasarela_pago_id).toBeNull();
+    expect(s).toMatchObject({
+      estado: 'pendiente',
+      periodicidad,
+      importe: normalizado,
+      fecha_alta: null,
+      fecha_proximo_cobro: null,
+      pasarela_proximo_cobro_en: null,
+      pasarela_suscripcion_id: null,
+      donante_id: a.donante_id,
+      proyecto_id: null,
+    });
+    const cuerpo = o.solicitud_checkout;
+    expect(cuerpo.mode).toBe('subscription');
+    expect(cuerpo.payment_method_types).toEqual(['card']);
+    expect(cuerpo.line_items).toHaveLength(1);
+    expect(cuerpo.line_items[0].price_data).toMatchObject({
+      currency: 'eur',
+      unit_amount: centimos,
+      recurring: RECURRENCIA_ESPERADA[periodicidad],
+    });
+    expect(cuerpo.subscription_data.metadata).toEqual({ referencia: a.referencia, modulo: 'donaciones' });
+    expect(cuerpo.payment_intent_data).toBeUndefined();
+    expect(crearSesionPago).toHaveBeenCalledTimes(1);
+    expect(crearSesionPago.mock.calls[0][0]).toMatchObject({
+      solicitudCheckout: cuerpo,
+      claveIdempotencia: 'hu01:' + dto.claveSolicitud,
+    });
+    expect(r.session.donaciones.permisos).toHaveProperty(a.referencia);
+  },
+);
+
+it('repetir el alta con el mismo UUID no crea otra suscripción y cambiar periodicidad o modalidad es incompatible', async () => {
+  const r = req(),
+    dto = altaSocio({ donante: { ...donante, nifNie: '62222222T', correo: 'socio-repite@example.test' } });
+  const primera = await servicio.crear(r, dto);
+  const suscripciones = await contar('suscripciones_socio'),
+    aportaciones = await contar('aportaciones'),
+    preparaciones = pasarela.prepararSesionPago.mock.calls.length;
+  expect(await servicio.crear(r, dto)).toMatchObject({ nueva: false, referencia: primera.referencia });
+  expect(await servicio.crear(r, { claveSolicitud: dto.claveSolicitud })).toMatchObject({
+    nueva: false,
+    referencia: primera.referencia,
+  });
+  expect(pasarela.prepararSesionPago).toHaveBeenCalledTimes(preparaciones);
+  const { periodicidad, ...comoPuntual } = dto;
+  for (const cambio of [{ ...dto, periodicidad: 'anual' }, { ...comoPuntual, modalidad: 'puntual' }]) {
+    await expect(servicio.crear(r, cambio)).rejects.toMatchObject({ codigo: 'SOLICITUD_INCOMPATIBLE' });
+  }
+  expect(periodicidad).toBe('mensual');
+  expect(await contar('suscripciones_socio')).toBe(suscripciones);
+  expect(await contar('aportaciones')).toBe(aportaciones);
+});
+
+it('el alta pasa la periodicidad al preparador y conserva el destino elegido en alta y suscripción', async () => {
+  // Proyecto activo propio: fixtures.proyecto puede haber quedado inactivo por otra prueba.
+  const proyecto = (
+    await entorno.pool.query('INSERT INTO proyectos (nombre) VALUES ($1) RETURNING *', [
+      'Proyecto socio ' + randomUUID(),
+    ])
+  ).rows[0];
+  expect(proyecto.activo).toBe(true);
+  const dto = altaSocio({
+    periodicidad: 'trimestral',
+    proyectoId: proyecto.id,
+    donante: { ...donante, nifNie: '63333333G', correo: 'socio-proyecto@example.test' },
+  });
+  const creada = await servicio.crear(req(), dto);
+  expect(pasarela.prepararSesionPago.mock.calls.at(-1)[0]).toMatchObject({
+    periodicidad: 'trimestral',
+    referencia: creada.referencia,
+    centimos: 2000,
+  });
+  const { a, s } = await filasAlta(creada.referencia);
+  expect(a.proyecto_id).toBe(proyecto.id);
+  expect(s.proyecto_id).toBe(proyecto.id);
+});
+
+it('S07/S08: un conflicto de identidad en el alta se detiene antes de Stripe sin crear suscripción ni modificar el Donante', async () => {
+  const base = { ...donante, nifNie: '64444444P', correo: 'socio-identidad@example.test' };
+  await servicio.crear(req(), solicitud({ donante: base }));
+  const antes = (await entorno.pool.query('SELECT * FROM donantes WHERE nif_nie=$1', [base.nifNie])).rows[0];
+  const suscripciones = await contar('suscripciones_socio'),
+    aportaciones = await contar('aportaciones'),
+    llamadas = pasarela.crearSesionPago.mock.calls.length,
+    preparaciones = pasarela.prepararSesionPago.mock.calls.length;
+  for (const cambio of [
+    { nifNie: '65555555N' },
+    { correo: 'otro-socio@example.test' },
+    { nombre: 'Otra' },
+    { apellidos: 'Distintos' },
+    { direccion: 'Otra calle 9' },
+  ]) {
+    await expect(servicio.crear(req(), altaSocio({ donante: { ...base, ...cambio } }))).rejects.toMatchObject({
+      codigo: 'DATOS_DONANTE_INCOMPATIBLES',
+    });
+  }
+  expect(await contar('suscripciones_socio')).toBe(suscripciones);
+  expect(await contar('aportaciones')).toBe(aportaciones);
+  expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(llamadas);
+  expect(pasarela.prepararSesionPago).toHaveBeenCalledTimes(preparaciones);
+  expect((await entorno.pool.query('SELECT * FROM donantes WHERE id=$1', [antes.id])).rows[0]).toEqual(antes);
+  expect(
+    (await entorno.pool.query('SELECT count(*) FROM donantes WHERE nif_nie=$1', ['65555555N'])).rows[0].count,
+  ).toBe('0');
+});
+
+it('un alta con datos equivalentes reutiliza el Donante sin sobrescribirlo ni vincular la cuenta por el correo', async () => {
+  const base = { ...donante, nifNie: '66666666Q', correo: 'socio-reutiliza@example.test' };
+  await servicio.crear(req(), solicitud({ donante: base }));
+  const antes = (await entorno.pool.query('SELECT * FROM donantes WHERE nif_nie=$1', [base.nifNie])).rows[0];
+  const creada = await servicio.crear(
+    { ...req(), usuario: { id: String(fixtures.usuarios[0].id), roles: ['donante'] } },
+    altaSocio({ donante: { ...base, nombre: ' ANA ', correo: ' Socio-Reutiliza@example.test ' } }),
+  );
+  const { a } = await filasAlta(creada.referencia);
+  expect(a.donante_id).toBe(antes.id);
+  expect((await entorno.pool.query('SELECT * FROM donantes WHERE id=$1', [antes.id])).rows[0]).toEqual(antes);
+});

@@ -354,3 +354,246 @@ it('un fallo de infraestructura al solicitar el vínculo devuelve solo el error 
     registro.mockRestore();
   }
 });
+
+// HU-01 · US2 (T057): correo de cuota y permisos distintos entre el alta invitada y las cuotas.
+const canon = { facturas: new Map(), suscripciones: new Map() };
+const segundos = () => Math.floor(Date.now() / 1000);
+const fechaMadrid = (s) =>
+  new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(s * 1000));
+const altaDto = (cambios = {}) => ({
+  ...dto(),
+  modalidad: 'socio',
+  periodicidad: 'mensual',
+  importe: '10.00',
+  ...cambios,
+});
+const webhook = (e) =>
+  request(app).post('/api/pasarela/webhook').set('stripe-signature', 'sintetica').send(e).expect(200);
+
+// Recursos canónicos sintéticos con la forma del adaptador común; nunca llaman a Stripe.
+function socio(referencia) {
+  pasarela.obtenerFactura = vi.fn(async (id) => structuredClone(canon.facturas.get(id)));
+  pasarela.obtenerSuscripcion = vi.fn(async (id) => structuredClone(canon.suscripciones.get(id)));
+  pasarela.obtenerSesionDeSuscripcion = vi.fn(async () => ({ data: [], has_more: false }));
+  const subId = 'sub_' + randomUUID(),
+    periodo = segundos() + 30 * 86400;
+  canon.suscripciones.set(subId, {
+    id: subId,
+    metadata: { referencia, modulo: 'donaciones' },
+    status: 'active',
+    latest_invoice: null,
+    collection_method: 'charge_automatically',
+    current_period_end: periodo,
+    cancel_at_period_end: false,
+    cancel_at: null,
+    canceled_at: null,
+    livemode: false,
+  });
+  async function facturar(motivo, pagada = true) {
+    const id = 'in_' + randomUUID();
+    canon.facturas.set(id, {
+      id,
+      subscription: subId,
+      payment_intent: {
+        id: 'pi_' + randomUUID(),
+        amount: 1000,
+        amount_received: pagada ? 1000 : 0,
+        currency: 'eur',
+        status: pagada ? 'succeeded' : 'requires_payment_method',
+        invoice: id,
+        metadata: {},
+        livemode: false,
+      },
+      billing_reason: motivo,
+      paid: pagada,
+      status: pagada ? 'paid' : 'open',
+      paid_out_of_band: false,
+      amount_paid: pagada ? 1000 : 0,
+      currency: 'eur',
+      status_transitions: { paid_at: pagada ? segundos() - 60 : null },
+      next_payment_attempt: pagada ? null : segundos() + 2 * 86400,
+      livemode: false,
+    });
+    canon.suscripciones.get(subId).latest_invoice = id;
+    await webhook({
+      id: 'evt_' + randomUUID(),
+      type: pagada ? 'invoice.paid' : 'invoice.payment_failed',
+      api_version: '2025-02-24.acacia',
+      created: segundos(),
+      livemode: false,
+      data: { object: { id, subscription: subId } },
+    });
+    return (await entorno.pool.query('SELECT * FROM aportaciones WHERE pasarela_factura_id=$1', [id])).rows[0];
+  }
+  return { subId, periodo, facturar };
+}
+const contarFilas = async (sql, valores = []) => Number((await entorno.pool.query(sql, valores)).rows[0].count);
+
+it('S04/S05: alta de socio sin cuenta; SMTP fallido conserva el alta activa con periodicidad y próxima fecha y el reintento solo reenvía', async () => {
+  const a = request.agent(app),
+    tokenCsrf = await contexto(a);
+  const n = pasarela.crearSesionPago.mock.calls.length;
+  for (const cuerpo of [
+    altaDto({ periodicidad: undefined }),
+    altaDto({ periodicidad: 'semanal' }),
+    { ...dto(), periodicidad: 'mensual' },
+    altaDto({ modalidad: 'cuota_socio' }),
+  ]) {
+    await a
+      .post('/api/aportaciones')
+      .set('origin', origen)
+      .send({ ...cuerpo, tokenCsrf })
+      .expect(400);
+  }
+  expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(n);
+  const r = await a
+    .post('/api/aportaciones')
+    .set('origin', origen)
+    .send({ ...altaDto(), tokenCsrf })
+    .expect(201);
+  expect(pasarela.prepararSesionPago.mock.calls.at(-1)[0]).toMatchObject({ periodicidad: 'mensual' });
+  const ruta = '/api/aportaciones/referencia/' + r.body.referencia;
+  expect((await a.get(ruta).expect(200)).body).toMatchObject({
+    modalidad: 'cuota_socio',
+    estado: 'pendiente',
+    fechaCobro: null,
+    suscripcion: { estado: 'pendiente', periodicidad: 'mensual', fechaProximoCobro: null },
+    correo: { estado: 'noPrevisto', puedeReintentar: false },
+  });
+  const s = socio(r.body.referencia);
+  enviar.mockResolvedValueOnce(false);
+  const inicial = await s.facturar('subscription_create');
+  const activa = (await a.get(ruta).expect(200)).body;
+  expect(activa).toMatchObject({
+    estado: 'confirmada',
+    importe: '10.00',
+    suscripcion: { estado: 'activa', periodicidad: 'mensual', fechaProximoCobro: fechaMadrid(s.periodo) },
+    correo: { estado: 'fallido', puedeReintentar: true },
+    urlPago: null,
+  });
+  expect(activa.resumenConfirmacion).toMatchObject({
+    referencia: r.body.referencia,
+    modalidad: 'cuota_socio',
+    periodicidad: 'mensual',
+    fechaProximoCobro: fechaMadrid(s.periodo),
+  });
+  const suscripciones = await contarFilas('SELECT count(*) FROM suscripciones_socio'),
+    aportaciones = await contarFilas('SELECT count(*) FROM aportaciones');
+  expect(
+    (await a.post(ruta + '/correo').set('origin', origen).send({ tokenCsrf }).expect(200)).body.estadoCorreo,
+  ).toBe('enviado');
+  expect(await contarFilas('SELECT count(*) FROM suscripciones_socio')).toBe(suscripciones);
+  expect(await contarFilas('SELECT count(*) FROM aportaciones')).toBe(aportaciones);
+  expect(
+    await contarFilas('SELECT count(*) FROM aportaciones WHERE suscripcion_socio_id=$1', [
+      inicial.suscripcion_socio_id,
+    ]),
+  ).toBe(1);
+  expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(n + 1);
+  expect((await a.get(ruta).expect(200)).body).toMatchObject({
+    estado: 'confirmada',
+    suscripcion: { estado: 'activa' },
+    correo: { estado: 'enviado', puedeReintentar: false },
+  });
+});
+
+it('S06: la sesión del alta no autoriza cuotas posteriores; la cuenta vinculada propietaria sí, sin cargos ni filas nuevas', async () => {
+  const a = request.agent(app),
+    tokenCsrf = await contexto(a);
+  const r = await a
+    .post('/api/aportaciones')
+    .set('origin', origen)
+    .send({ ...altaDto(), tokenCsrf })
+    .expect(201);
+  const s = socio(r.body.referencia);
+  await s.facturar('subscription_create');
+  const ciclo = await s.facturar('subscription_cycle');
+  const rutaCiclo = '/api/aportaciones/referencia/' + ciclo.referencia;
+  const envios = enviar.mock.calls.length;
+  await a.get(rutaCiclo).expect(404);
+  await a.post(rutaCiclo + '/correo').set('origin', origen).send({ tokenCsrf }).expect(404);
+  expect(enviar).toHaveBeenCalledTimes(envios);
+  await a.get('/api/aportaciones/referencia/' + r.body.referencia).expect(200);
+
+  const u = fixtures.usuarios[1],
+    d = fixtures.donantes[1];
+  await entorno.pool.query('UPDATE donantes SET usuario_id=NULL WHERE usuario_id=$1 AND id<>$2', [u.id, d.id]);
+  await entorno.pool.query('UPDATE donantes SET usuario_id=$1 WHERE id=$2', [u.id, d.id]);
+  const b = request.agent(app),
+    t = await contexto(b, u);
+  const rb = await b
+    .post('/api/aportaciones')
+    .set('x-cuenta-prueba', u.id)
+    .set('origin', origen)
+    .send({
+      ...altaDto({
+        donante: {
+          nombre: d.nombre,
+          apellidos: d.apellidos,
+          nifNie: d.nif_nie,
+          correo: d.correo,
+          direccion: d.direccion,
+        },
+      }),
+      tokenCsrf: t,
+    })
+    .expect(201);
+  const sb = socio(rb.body.referencia);
+  await sb.facturar('subscription_create');
+  enviar.mockResolvedValueOnce(false);
+  const cuota = await sb.facturar('subscription_cycle');
+  const rutaCuota = '/api/aportaciones/referencia/' + cuota.referencia;
+  await request.agent(app).get(rutaCuota).expect(404);
+  await request.agent(app).get(rutaCuota).set('x-cuenta-prueba', fixtures.usuarios[0].id).expect(404);
+  const vista = (await b.get(rutaCuota).set('x-cuenta-prueba', u.id).expect(200)).body;
+  expect(vista).toMatchObject({
+    referencia: cuota.referencia,
+    modalidad: 'cuota_socio',
+    estado: 'confirmada',
+    preparacion: null,
+    urlPago: null,
+    correo: { estado: 'fallido', puedeReintentar: true },
+    suscripcion: { estado: 'activa', periodicidad: 'mensual' },
+  });
+  const n = pasarela.crearSesionPago.mock.calls.length,
+    suscripciones = await contarFilas('SELECT count(*) FROM suscripciones_socio'),
+    aportaciones = await contarFilas('SELECT count(*) FROM aportaciones');
+  expect(
+    (
+      await b
+        .post(rutaCuota + '/correo')
+        .set('x-cuenta-prueba', u.id)
+        .set('origin', origen)
+        .send({ tokenCsrf: t })
+        .expect(200)
+    ).body.estadoCorreo,
+  ).toBe('enviado');
+  expect(enviar.mock.calls.at(-1)[0].texto).toContain(cuota.referencia);
+  expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(n);
+  expect(await contarFilas('SELECT count(*) FROM suscripciones_socio')).toBe(suscripciones);
+  expect(await contarFilas('SELECT count(*) FROM aportaciones')).toBe(aportaciones);
+
+  // Una cuota rechazada no ofrece reintento de confirmación ni se presenta como pagada.
+  const fallida = await sb.facturar('subscription_cycle', false);
+  const rechazo = (
+    await b
+      .get('/api/aportaciones/referencia/' + fallida.referencia)
+      .set('x-cuenta-prueba', u.id)
+      .expect(200)
+  ).body;
+  expect(rechazo).toMatchObject({ estado: 'rechazada', fechaCobro: null, correo: { estado: 'noPrevisto' } });
+  expect(rechazo.motivo).toBeTruthy();
+  const reintento = await b
+    .post('/api/aportaciones/referencia/' + fallida.referencia + '/correo')
+    .set('x-cuenta-prueba', u.id)
+    .set('origin', origen)
+    .send({ tokenCsrf: t })
+    .expect(409);
+  expect(reintento.body.error.codigo).toBe('COBRO_NO_CONFIRMADO');
+  expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(n);
+});

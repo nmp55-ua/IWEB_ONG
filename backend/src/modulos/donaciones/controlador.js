@@ -17,15 +17,17 @@ const donante = z
     direccion: z.string(),
   })
   .strict();
-const completa = z
-  .object({
-    tokenCsrf: csrf,
-    claveSolicitud: clave,
-    modalidad: z.literal('puntual'),
-    importe: z.string(),
-    proyectoId: id.nullable().optional(),
-    donante,
-  })
+const comunes = {
+  tokenCsrf: csrf,
+  claveSolicitud: clave,
+  importe: z.string(),
+  proyectoId: id.nullable().optional(),
+  donante,
+};
+// Puntual no admite periodicidad; socio la exige (mensual, trimestral o anual).
+const puntual = z.object({ ...comunes, modalidad: z.literal('puntual') }).strict();
+const socio = z
+  .object({ ...comunes, modalidad: z.literal('socio'), periodicidad: z.enum(['mensual', 'trimestral', 'anual']) })
   .strict();
 const corta = z.object({ tokenCsrf: csrf, claveSolicitud: clave }).strict();
 const soloCsrf = z.object({ tokenCsrf: csrf }).strict();
@@ -40,7 +42,7 @@ export function crearControlador(servicio) {
       res.set('Cache-Control', 'no-store').json(await servicio.contexto(req));
     },
     crear: async (req, res) => {
-      const datos = navegador(req, z.union([completa, corta]));
+      const datos = navegador(req, z.union([puntual, socio, corta]));
       const { nueva, ...resultado } = await servicio.crear(req, datos);
       res.status(nueva ? 201 : 200).json(resultado);
     },

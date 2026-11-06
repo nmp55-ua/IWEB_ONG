@@ -1,13 +1,22 @@
 import { ErrorApi } from '../../middleware/errores.js';
-import { textoCorreoConfirmacion } from './textoCorreo.js';
+import { textoCorreoConfirmacion, textoCorreoFalloCuota } from './textoCorreo.js';
+
+// Cada tipo de mensaje es independiente (UNIQUE aportacion_id, tipo): el aviso de fallo de
+// cuota no sustituye ni reutiliza la confirmación.
+const MENSAJES = {
+  confirmacion: { asunto: 'Confirmación de aportación', texto: textoCorreoConfirmacion },
+  fallo_cuota: { asunto: 'Aviso de cuota de socio no cobrada', texto: textoCorreoFalloCuota },
+};
 
 export function crearConfirmaciones(repo, enviarCorreo) {
   return {
-    async enviar(aportacionId) {
-      const actual = await repo.correo(aportacionId);
+    async enviar(aportacionId, tipo = 'confirmacion') {
+      const mensaje = MENSAJES[tipo];
+      if (!mensaje) return 'noPrevisto';
+      const actual = await repo.correo(aportacionId, tipo);
       if (!actual) return 'noPrevisto';
       if (actual.estado === 'enviado') return 'enviado';
-      const intento = await repo.reclamarCorreo(aportacionId);
+      const intento = await repo.reclamarCorreo(aportacionId, tipo);
       if (!intento) throw new ErrorApi(409, 'CORREO_EN_ENVIO', 'El correo se está enviando.');
       let vigente = true;
       let renovacion = Promise.resolve();
@@ -26,8 +35,8 @@ export function crearConfirmaciones(repo, enviarCorreo) {
         aceptado = await enviarCorreo(
           {
             para: actual.correo,
-            asunto: 'Confirmación de aportación',
-            texto: textoCorreoConfirmacion(intento.resumen),
+            asunto: mensaje.asunto,
+            texto: mensaje.texto(intento.resumen),
           },
           { tiempoConexionMs: 3000, tiempoSaludoMs: 3000, tiempoInactividadMs: 5000 },
         );
@@ -38,7 +47,7 @@ export function crearConfirmaciones(repo, enviarCorreo) {
         await renovacion;
       }
       if (vigente) await repo.terminarCorreo(intento, aceptado === true);
-      const estado = (await repo.correo(aportacionId)).estado;
+      const estado = (await repo.correo(aportacionId, tipo)).estado;
       if (estado === 'enviando') throw new ErrorApi(409, 'CORREO_EN_ENVIO', 'El correo se está enviando.');
       return estado;
     },

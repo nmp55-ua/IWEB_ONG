@@ -34,19 +34,56 @@ export function formatearDestinoCorreo(destino) {
   return String(destino).trim().toLowerCase() === 'fondo general' ? 'Fondo general' : String(destino);
 }
 
+// DATE «aaaa-mm-dd» (ya proyectada a Madrid) → «dd/mm/aaaa», sin conversión de zona.
+export function formatearDiaCorreo(dia) {
+  const partes = typeof dia === 'string' ? dia.match(/^(\d{4})-(\d{2})-(\d{2})$/) : null;
+  return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : '';
+}
+
+const PERIODICIDADES = { mensual: 'Mensual', trimestral: 'Trimestral', anual: 'Anual' };
+const SIN_FECHA = 'Pendiente de confirmación';
+
+// Solo se añaden las líneas de socio si el resumen las contiene; el texto puntual no cambia.
+function proximoCobro(r) {
+  return formatearDiaCorreo(r.fechaProximoCobro) || SIN_FECHA;
+}
+
 export function textoCorreoConfirmacion(resumen) {
   const r = resumen ?? {};
   const filas = [
     ['Importe', formatearImporteCorreo(r.importe)],
     ['Fecha de cobro', formatearFechaCorreo(r.fechaCobro)],
     ['Modalidad', MODALIDADES[r.modalidad] ?? r.modalidad ?? ''],
+    ['Periodicidad', r.periodicidad ? (PERIODICIDADES[r.periodicidad] ?? r.periodicidad) : ''],
     ['Destino', formatearDestinoCorreo(r.destino)],
     ['Referencia', r.referencia ?? ''],
+    ['Próximo cobro', Object.hasOwn(r, 'fechaProximoCobro') ? proximoCobro(r) : ''],
   ].filter(([, valor]) => valor !== '');
   return [
     'Hola:',
     '',
     'Gracias por tu aportación. Estos son los datos de tu donación:',
+    '',
+    ...filas.map(([etiqueta, valor]) => `${etiqueta}: ${valor}`),
+    '',
+    'Este es un correo automático.',
+  ].join('\n');
+}
+
+// Aviso de una cuota posterior no cobrada (PA1.8). Solo presenta el resumen guardado:
+// no afirma cobros, no indica otro pago y muestra únicamente la fecha comunicada.
+export function textoCorreoFalloCuota(resumen) {
+  const r = resumen ?? {};
+  const filas = [
+    ['Referencia', r.referencia ?? ''],
+    ['Importe', formatearImporteCorreo(r.importe)],
+    ['Motivo', r.motivo ?? ''],
+    ['Próximo intento de cobro', proximoCobro(r)],
+  ].filter(([, valor]) => valor !== '');
+  return [
+    'Hola:',
+    '',
+    'No se ha podido cobrar una cuota de tu suscripción de socio. Esa cuota no se ha contabilizado como pagada.',
     '',
     ...filas.map(([etiqueta, valor]) => `${etiqueta}: ${valor}`),
     '',
