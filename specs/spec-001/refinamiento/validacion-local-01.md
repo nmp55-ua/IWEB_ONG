@@ -352,3 +352,137 @@ Recorridos en el navegador:
 - La base de desarrollo contiene además una aportación pendiente de prueba y una cuenta local
   de prueba.
 - T006 y T007 siguen pendientes.
+
+## Alta y cuotas de socio — T054–T072 · 2026-11-06
+
+Entorno: Windows y Node 22.20.0. Backend en el puerto 3000 y frontend en 4321;
+STRIPE_SECRET_KEY vacía y sin Checkout real.
+
+### Cambios
+
+- **Pruebas (T054–T057):**
+  - alta en `servicio.test.js`;
+  - reconciliación de facturas y suscripciones en el nuevo `cuotas.test.js`;
+  - permisos y correo de cuota en `rutas.test.js`;
+  - textos de cuota en `textoCorreo.test.js`.
+
+  Los casos de T055 y T056 están en `cuotas.test.js`, no en `pasarela.test.js` ni en
+  `servicio.test.js`, porque necesitan PostgreSQL real.
+- **Backend (T058–T068):**
+  - el alta reutiliza el protocolo de creación de US1 y crea la suscripción pendiente con su
+    cuota inicial;
+  - los eventos invoice.* y customer.subscription.* se reconcilian bajo el bloqueo sub:<id>,
+    con la consulta a la pasarela fuera de la transacción;
+  - las cuotas solo se confirman por invoice.paid con pago verificado;
+  - el aviso fallo_cuota se guarda en correos_aportacion, deduplicado y separado de la
+    confirmación;
+  - la previsión se toma de los recursos actuales;
+  - el resultado incluye la suscripción.
+
+  No se han modificado 004, 009, el adaptador común de pasarela ni el de correo.
+- **Frontend y semillas (T069–T071):**
+  - el formulario exige elegir la modalidad y, para socio, la periodicidad;
+  - el resultado muestra periodicidad, estado de la suscripción, próxima fecha y rechazo de
+    cuota;
+  - las semillas añaden cuatro casos sintéticos de socio del Donante vinculado a
+    donante2@ong.test.
+- **Corrección de aislamiento:** la prueba del destino de socio y la S02 de `cuotas.test.js`
+  crean su propio proyecto activo, en lugar de reutilizar fixtures.proyecto, que otra prueba
+  deja inactivo. El código de producción no cambió.
+
+### Decisiones no fijadas en la spec
+
+**Backend, T054–T068:**
+
+- **Descripción del Checkout de socio:** «Cuota de socio (periodicidad): destino».
+- **Referencia de las cuotas de ciclo:** `DON-<uuid>`, el mismo formato que la puntual.
+- **Checkout del alta caducado sin Subscription:** cancela la suscripción pendiente.
+- **Alta nunca cobrada:** su aportación pasa a cancelada al cerrarse definitivamente la
+  suscripción (canceled o incomplete_expired).
+- **Previsión solo con alta activa:** con la suscripción pendiente o cancelada, la próxima
+  fecha es null.
+- **Sin aviso fallo_cuota** con la suscripción cancelada ni en el primer cobro; la cuota se
+  registra igualmente como rechazada.
+- **Criterio de «fallo de la última factura»:** factura open, no pagada, con PaymentIntent en
+  requires_payment_method.
+- **Ambigüedad al recuperar la factura inicial:** se registra una incidencia y se responde
+  200, por lo que ese ciclo requiere revisión manual.
+- **Bloqueos:**
+  - la Session del alta se correlaciona bajo checkout:<id>, con bloqueo de fila sobre la
+    suscripción;
+  - las facturas y suscripciones, bajo sub:<id>, identificando la suscripción con
+    data.object.subscription del evento firmado; decide el recurso actual.
+- **Asunto y contenido de los mensajes:**
+  - asunto del aviso: «Aviso de cuota de socio no cobrada»;
+  - el resumen de confirmación de una cuota añade periodicidad y fechaProximoCobro;
+  - el aviso contiene referencia, importe, motivo y fechaProximoCobro.
+- **Vencimiento de la previsión:** se compara con ahora(), que respeta AHORA_SIMULADO; la
+  ventana de 23 horas de la creación no cambia.
+
+Las dos decisiones de cancelación (Checkout del alta caducado sin Subscription y alta nunca
+cobrada al cerrarse la suscripción) deben comentarse con el revisor de HU-01.
+
+**Frontend y semillas, T069–T071:**
+
+- **Modalidad como desplegable** sin valor por defecto, que obliga a una elección explícita.
+- **Cuota posterior:** se identifica en pantalla por la ausencia de preparacion; su rechazo
+  muestra «Esta cuota no se ha podido cobrar» y no ofrece «Hacer otra donación».
+- **Suscripción cancelada:** no muestra línea de próximo cobro.
+- **Textos nuevos:** «Pendiente de confirmación del primer cobro» y «¡Gracias! Esta cuota de
+  socio está confirmada».
+- **Semillas sin operaciones_pago**, para no inventar una instantánea de Checkout.
+- **Idempotencia de las semillas por la referencia del alta:** cada caso se crea completo en
+  su propia transacción.
+
+### Comandos y resultados reales
+
+| Comando o recorrido | Resultado |
+| --- | --- |
+| Primera ejecución de la suite de donaciones tras T054–T068 (ong_test_hu01) | 349/350. El fallo era de aislamiento (fixtures.proyecto inactivo); se corrigió en las pruebas sin cambiar el código de producción. |
+| `npm test -- src/modulos/donaciones --no-file-parallelism` (ong_test_hu01) | 11 archivos; 350 pruebas aprobadas y 0 omitidas: `cuotas.test.js` 26, `servicio.test.js` 24, `rutas.test.js` 11 y `textoCorreo.test.js` 26. Las pruebas de US1 se mantienen. |
+| `src/servicios-comunes/correo.test.js` | 16/16 aprobadas. |
+| `npm run build` (frontend) | Correcto. |
+| `npm run semillas`, primera ejecución sobre `ong` | 4 suscripciones y 7 cuotas de socio; 0 aportaciones puntuales nuevas. |
+| `npm run semillas`, segunda ejecución | 0 nuevas. Recuentos y huellas MD5 de suscripciones_socio, aportaciones y correos_aportacion idénticos. |
+
+Casos sembrados:
+
+- activa mensual con próxima fecha futura;
+- activa con cuota de ciclo rechazada, aviso fallo_cuota y previsión nula;
+- alta trimestral pendiente sin fecha;
+- anual cancelada con sus cuotas confirmadas conservadas.
+
+No tienen identificadores de Stripe. Son datos sintéticos y el estado «enviado» no acredita
+envíos.
+
+Recorridos en el navegador:
+
+- **Formulario.** La modalidad es obligatoria; con «Hacerme socio» aparece la periodicidad.
+  Sin ella, el error aparece en el campo y no se hace ninguna petición a la API.
+- **Alta completa** (trimestral, 12,50 €, Agua potable): devuelve 503
+  PASARELA_NO_CONFIGURADA. En la base:
+  - suscripción pendiente, sin fecha_alta ni identificador externo;
+  - cuota_socio pendiente con su operación;
+  - Donante no vinculado a la cuenta con sesión por coincidir el correo;
+  - UUID conservado.
+- **Resultado del alta:** «Pendiente de confirmación del primer cobro» y próximo cobro
+  «Pendiente de confirmación».
+- **Cuenta ajena:** no ve las cuotas sembradas («No podemos mostrar esta aportación»).
+- **Cuotas de donante2@ong.test:**
+  - cuota confirmada con periodicidad Mensual, suscripción Activa y próximo cobro 26/11/2026;
+  - cuota rechazada con «Esta cuota no se ha podido cobrar», sin presentarla como pagada y
+    con próximo cobro «Pendiente de confirmación»;
+  - alta pendiente sin fecha;
+  - cuota confirmada de una suscripción cancelada, sin línea de próximo cobro y con el aviso
+    de que se conservan las cuotas cobradas.
+
+### Límites
+
+- No se ha usado Stripe real, así que no se prueban el Checkout de suscripción, los webhooks
+  reales de invoice.* y customer.subscription.*, Smart Retries ni la idempotencia real.
+- Los correos de confirmación de cuota y de fallo_cuota se verifican solo con pruebas
+  automatizadas, no en Mailpit, porque los genera la recepción de webhooks.
+- Las altas sembradas no tienen operación de navegador: se ven solo con la cuenta vinculada y
+  se presentan como una cuota posterior.
+- La base de desarrollo contiene además un alta de socio pendiente de prueba.
+- T006 y T007 siguen pendientes.

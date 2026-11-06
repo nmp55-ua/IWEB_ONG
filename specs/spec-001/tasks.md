@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T053 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T054 y siguientes, pendientes.
+**Estado**: T001–T005 y T008–T072 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T073 y siguientes, pendientes.
 
 ## Backend puntual — T024–T044 · 2026-11-06
 
@@ -427,81 +427,116 @@ automática ni modificación concurrente del mismo archivo.
 
 **Comprobación del incremento**: S01–S13 usan fixtures propios de socio: primera cuota única, ciclos deduplicados y fallo sin sumar ni cancelar por sí solo. No requieren efectuar una donación puntual real ni implementar HU-02.
 
-- [ ] T054 [US2] Escribir los casos del alta en tres periodicidades, primer cobro fallido, datos incompatibles y ausencia de cuenta. Archivos: `backend/src/modulos/donaciones/servicio.test.js`.
+- [x] T054 [US2] Escribir los casos del alta en tres periodicidades, primer cobro fallido, datos incompatibles y ausencia de cuenta. Archivos: `backend/src/modulos/donaciones/servicio.test.js`.
       **Origen**: FR-001–FR-006, FR-008, FR-011, FR-014, FR-015; S01, S03, S04, S07, S08. **Depende de**: T053.
       **Comprobación**: Se aceptan extremos de importe y las tres recurrencias; conflicto detiene antes de Stripe y primer rechazo no deja alta activa ni cuota confirmada.
+      **Resultado (2026-11-06)**: Casos en `servicio.test.js`: alta sin cuenta en las tres periodicidades con los extremos 1,00 € y 999.999,99 €, recurrencia congelada en la instantánea, repetición con el mismo UUID sin otra suscripción, cambio de periodicidad o modalidad incompatible, conflictos de identidad (S07/S08) detenidos antes de Stripe y reutilización del Donante sin vincular la cuenta por el correo. El primer cobro fallido (S03) se cubre en `cuotas.test.js`, porque requiere reconciliar facturas. La primera ejecución tras T054–T068 dio 349/350 por un fallo de aislamiento: la prueba del destino de socio reutilizaba fixtures.proyecto, que otra prueba deja inactivo. Se corrigió creando un proyecto propio en esa prueba, sin cambiar el código de producción. En la ejecución final, `servicio.test.js` tiene 24 pruebas aprobadas.
 
-- [ ] T055 [US2] Escribir los casos de primera factura, ciclos, reentregas y secuencias desordenadas de cuotas. Archivos: `backend/src/modulos/donaciones/pasarela.test.js`.
+- [x] T055 [US2] Escribir los casos de primera factura, ciclos, reentregas y secuencias desordenadas de cuotas. Archivos: `backend/src/modulos/donaciones/pasarela.test.js`.
       **Origen**: FR-008–FR-010, FR-017; S01–S03, S09; SC-004. **Depende de**: T054.
       **Comprobación**: Invoice antes/después de Checkout y ciclo antes del aviso inicial no duplican; factura/pago recuperados se verifican, factura ajena/discrepante no suma y fallo→éxito reutiliza fila.
+      **Resultado (2026-11-06)**: Los casos están en `cuotas.test.js`, no en `pasarela.test.js`, porque necesitan PostgreSQL real; `pasarela.test.js` simula el SDK y la configuración sin base de datos. Cubren factura inicial en las tres periodicidades, Checkout antes o después de la factura, reentregas y entregas simultáneas, ciclo pagado, ciclo notificado antes del primer cobro local (recuperación por Session o por listado con coincidencia única), facturas discrepantes o ajenas como incidencia o evento ignorado, y fallo→éxito de la misma factura. La prueba S02 crea también su propio proyecto activo. `cuotas.test.js` tiene 26 pruebas aprobadas (T055 y T056).
 
-- [ ] T056 [US2] Añadir casos de fallo posterior, previsión futura/nula/vencida y cancelación efectiva o programada. Archivos: `backend/src/modulos/donaciones/servicio.test.js`.
+- [x] T056 [US2] Añadir casos de fallo posterior, previsión futura/nula/vencida y cancelación efectiva o programada. Archivos: `backend/src/modulos/donaciones/servicio.test.js`.
       **Origen**: FR-008, FR-018, FR-019; S10–S13. **Depende de**: T055.
       **Comprobación**: Los casos conservan totales anteriores, actualizan desde invoice.updated, no inventan fechas y un evento antiguo no reactiva ni anuncia un cobro posterior a cancelación.
+      **Resultado (2026-11-06)**: Los casos están en `cuotas.test.js`, no en `servicio.test.js`, porque necesitan PostgreSQL real y recursos canónicos simulados de factura y suscripción. Cubren cuota posterior fallida con aviso único, next_payment_attempt futuro y su actualización por invoice.updated, previsión nula, pasada o vencida sin otro webhook, cancelación programada o cobro no automático, factura antigua que no reemplaza la previsión vigente, past_due/unpaid sin cancelación y cancelación definitiva seguida de eventos antiguos y de un cobro tardío sin reactivación. Incluidos en las 26 pruebas aprobadas de `cuotas.test.js`.
 
-- [ ] T057 [US2] Añadir casos de correo de cuota y permisos diferentes entre alta invitada y cuotas posteriores. Archivos: `backend/src/modulos/donaciones/rutas.test.js`.
+- [x] T057 [US2] Añadir casos de correo de cuota y permisos diferentes entre alta invitada y cuotas posteriores. Archivos: `backend/src/modulos/donaciones/rutas.test.js`.
       **Origen**: FR-007, FR-012, FR-016; S05, S06. **Depende de**: T056.
       **Comprobación**: El fallo conserva alta y pago; solo cuenta vinculada propia o permiso de esa operación puede reintentar, sin cargo ni otra suscripción; la sesión del alta no autoriza ciclos.
+      **Resultado (2026-11-06)**: Casos en `rutas.test.js`: alta de socio por HTTP sin cuenta, validación de periodicidad, resultado con suscripción, SMTP fallido con alta activa y reintento que solo reenvía (S04/S05); la sesión del alta no autoriza cuotas posteriores, la cuenta vinculada propietaria sí, sin cargos ni filas nuevas, y una cuota rechazada no ofrece reintento de confirmación (S06). `rutas.test.js` tiene 11 pruebas aprobadas.
 
-- [ ] T058 [US2] Añadir persistencia de suscripción pendiente y referencia externa, manteniendo las reglas del modelo común. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T058 [US2] Añadir persistencia de suscripción pendiente y referencia externa, manteniendo las reglas del modelo común. Archivos: `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: FR-008, FR-010; S01, S03. **Depende de**: T054, T055, T056, T057.
       **Comprobación**: Creación atómica de alta/cuota inicial, identificador único nullable hasta conocerlo y sin fecha de alta antes del primer cobro.
+      **Resultado (2026-11-06)**: La preparación crea en la misma transacción la suscripción pendiente y su cuota inicial, sin fecha de alta ni identificador externo. En el navegador, un alta trimestral de 12,50 € a Agua potable devolvió 503 PASARELA_NO_CONFIGURADA y la base mostró la suscripción pendiente sin fecha_alta ni identificador externo, y la cuota_socio pendiente con su operación.
 
-- [ ] T059 [US2] Extender la preparación para crear una sola alta, aportación inicial y operación antes de Checkout. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T059 [US2] Extender la preparación para crear una sola alta, aportación inicial y operación antes de Checkout. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-001, FR-002, FR-008, FR-011, FR-014, FR-015; S01, S03, S04, S07, S08. **Depende de**: T058.
       **Comprobación**: Usa exactamente el protocolo de creación de US1: identidad sin sobrescribir, snapshot, exclusión por UUID y límite no renovable. Las tres periodicidades se congelan en la solicitud; no se cambia destino/cuerpo al reanudar ni se vincula cuenta por correo solo.
+      **Resultado (2026-11-06)**: El alta reutiliza el protocolo de creación de US1: identidad sin sobrescribir, instantánea antes del envío, clave hu01:UUID, exclusión por conexión y plazo fijo. La huella de socio añade la periodicidad; la puntual conserva su forma anterior. En el navegador se conservó el UUID y el Donante no quedó vinculado a la cuenta con sesión por coincidir el correo.
 
-- [ ] T060 [US2] Extender POST aportaciones con modalidad socio y periodicidad obligatoria. Archivos: `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
+- [x] T060 [US2] Extender POST aportaciones con modalidad socio y periodicidad obligatoria. Archivos: `backend/src/modulos/donaciones/controlador.js`, `backend/src/modulos/donaciones/rutas.js`.
       **Origen**: FR-001, FR-002, FR-008, FR-011; S01, S04. **Depende de**: T059.
       **Comprobación**: El esquema rechaza periodicidad inválida/ausente y campos ajenos; puntual no acepta periodicidad; se conservan importe como texto y los mismos errores.
+      **Resultado (2026-11-06)**: El esquema distingue puntual (sin periodicidad) y socio (periodicidad mensual, trimestral o anual obligatoria) y rechaza campos ajenos; lo comprueban las pruebas de 400 de `rutas.test.js`.
 
-- [ ] T061 [US2] Correlacionar Session y Subscription con el alta sin contabilizar por Checkout. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`.
+- [x] T061 [US2] Correlacionar Session y Subscription con el alta sin contabilizar por Checkout. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-008, FR-010, FR-017; S01, S09. **Depende de**: T060.
       **Comprobación**: Los metadatos localizan la aportación existente aun si Invoice llega primero; no se crea una segunda primera cuota ni se exige retorno del navegador.
+      **Resultado (2026-11-06)**: Checkout completado solo correlaciona la Subscription con el alta, antes o después de la factura, sin confirmar cuotas; lo cubre `cuotas.test.js`.
 
-- [ ] T062 [US2] Confirmar la factura inicial sobre la aportación del alta y activar solo sin cierre definitivo actual. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T062 [US2] Confirmar la factura inicial sobre la aportación del alta y activar solo sin cierre definitivo actual. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-006–FR-010, FR-017; S01, S03–S05, S09; SC-004. **Depende de**: T061.
       **Comprobación**: Se comprueban pago real/EUR/importe/pertenencia, paid_at fija fecha de alta/cobro, primer fallo conserva pendiente y SMTP fallido no desactiva una alta ya pagada.
+      **Resultado (2026-11-06)**: La factura inicial pagada y verificada (pago real, EUR, importe y pertenencia) confirma la aportación del alta, fija con paid_at la fecha de cobro y de alta, y activa la suscripción salvo cierre definitivo; el primer fallo la deja pendiente. Cubierto en `cuotas.test.js` y `rutas.test.js`.
 
-- [ ] T063 [US2] Crear o reconciliar una sola aportación por Invoice de ciclo, bajo bloqueo de la suscripción. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`.
+- [x] T063 [US2] Crear o reconciliar una sola aportación por Invoice de ciclo, bajo bloqueo de la suscripción. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-009, FR-010; S02. **Depende de**: T062.
       **Comprobación**: Reentregas y eventos distintos/simultáneos conservan una fila por factura, único pago y una sola suma; importes ajenos o liquidación fuera de pasarela generan incidencia.
+      **Resultado (2026-11-06)**: Cada factura de ciclo crea o reutiliza una sola aportación bajo el bloqueo sub:<id>; reentregas y eventos simultáneos no duplican y las discrepancias quedan como incidencia. Cubierto en `cuotas.test.js`.
 
-- [ ] T064 [US2] Recuperar y validar la factura inicial cuando el ciclo se notifica antes del primer cobro local. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T064 [US2] Recuperar y validar la factura inicial cuando el ciclo se notifica antes del primer cobro local. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-008–FR-010; S01, S02, S09. **Depende de**: T063.
       **Comprobación**: Session.invoice o listado por suscripción con límite 2 permiten reconciliar primero el alta; ausencia/ambigüedad no inventa el pago y el aviso inicial tardío es idempotente.
+      **Resultado (2026-11-06)**: Un ciclo notificado antes del primer cobro local recupera la factura inicial por Session.invoice o por listado con coincidencia única; la ambigüedad se registra como incidencia sin inventar el pago. Cubierto en `cuotas.test.js`.
 
-- [ ] T065 [US2] Registrar fallo posterior y su aviso deduplicado, manteniendo aportaciones y suscripción previas. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/confirmaciones.js`.
+- [x] T065 [US2] Registrar fallo posterior y su aviso deduplicado, manteniendo aportaciones y suscripción previas. Archivos: `backend/src/modulos/donaciones/repositorio.js`, `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/confirmaciones.js`.
       **Origen**: FR-007, FR-012, FR-018; S05, S06, S10. **Depende de**: T064.
       **Comprobación**: Una cuota rechazada no suma ni cancela; al acabar pagada se confirma la misma fila y se conserva el aviso histórico separado de la confirmación; cero órdenes de cargo.
+      **Resultado (2026-11-06)**: La cuota posterior fallida queda rechazada, no suma ni cancela, y genera un aviso fallo_cuota deduplicado y separado de la confirmación; si después se cobra, se confirma la misma fila. Cubierto en `cuotas.test.js` y en `textoCorreo.test.js` (26 pruebas aprobadas). Los correos de cuota no se comprobaron en Mailpit.
 
-- [ ] T066 [US2] Procesar cancelación canónica definitiva y evitar reactivación por eventos antiguos o cobros tardíos. Archivos: `backend/src/modulos/donaciones/servicio.js`.
+- [x] T066 [US2] Procesar cancelación canónica definitiva y evitar reactivación por eventos antiguos o cobros tardíos. Archivos: `backend/src/modulos/donaciones/servicio.js`.
       **Origen**: FR-008, FR-018; S13; PA1.1. **Depende de**: T065.
       **Comprobación**: canceled/incomplete_expired cierran; past_due/unpaid no cancelan por sí solos; dinero cobrado tarde se registra sin reactivar y no existe baja desde la aplicación.
+      **Resultado (2026-11-06)**: Solo canceled e incomplete_expired cierran; past_due y unpaid no. Tras el cierre, los eventos antiguos no reactivan ni anuncian cobros, y un cobro tardío se registra sin reactivar. Cubierto en `cuotas.test.js`; no existe baja desde la aplicación.
 
-- [ ] T067 [US2] Calcular la proyección de próxima fecha solo desde los recursos actuales y conservar instante/DATE conjuntamente. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/repositorio.js`.
+- [x] T067 [US2] Calcular la proyección de próxima fecha solo desde los recursos actuales y conservar instante/DATE conjuntamente. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/repositorio.js`.
       **Origen**: FR-019; S01, S11, S12, S13. **Depende de**: T066.
       **Comprobación**: Tras fallo usa next_payment_attempt de la última factura; sin fallo, previsión ordinaria del contrato. Nulo/pasado/cancelado no se muestra futuro y una factura vieja no reemplaza la previsión vigente.
+      **Resultado (2026-11-06)**: La previsión se calcula solo desde la suscripción y la última factura actuales y guarda juntos el instante y su DATE de Madrid; nula, pasada, vencida o cancelada se devuelve null. Cubierto en `cuotas.test.js`.
 
-- [ ] T068 [US2] Extender la consulta de resultado con suscripción, periodicidad y previsión, guardando propiedad por cada cuota. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`.
+- [x] T068 [US2] Extender la consulta de resultado con suscripción, periodicidad y previsión, guardando propiedad por cada cuota. Archivos: `backend/src/modulos/donaciones/servicio.js`, `backend/src/modulos/donaciones/controlador.js`.
       **Origen**: FR-007, FR-008, FR-012, FR-016, FR-019; S01, S05, S06, S11–S13. **Depende de**: T067.
       **Comprobación**: El instante ya vencido devuelve fecha null incluso sin nuevo evento; resumen histórico y previsión actual no se sobrescriben entre sí, y el alta invitada no da acceso a ciclos.
+      **Resultado (2026-11-06)**: El resultado incluye estado, periodicidad y próxima fecha de la suscripción, con fecha null si el instante ya venció. En el navegador, una cuenta ajena no vio las cuotas sembradas («No podemos mostrar esta aportación»), y donante2@ong.test vio sus cuotas con el estado real de cada suscripción.
 
-- [ ] T069 [P] [US2] Añadir selección de socio y sus tres periodicidades al formulario existente. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`.
+- [x] T069 [P] [US2] Añadir selección de socio y sus tres periodicidades al formulario existente. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`.
       **Origen**: FR-001, FR-002, FR-008, FR-011, FR-014, FR-015; S01, S04, S07, S08. **Depende de**: T068.
       **Comprobación**: Mismo rango y datos mínimos; sin edición de perfil/cuota ni baja, sin exigir cuenta y sin romper puntual.
+      **Resultado (2026-11-06)**: En el navegador, la modalidad es obligatoria y con «Hacerme socio» aparece la periodicidad; sin ella se muestra el error en el campo y no se hace ninguna petición a la API. El alta completa conservó el UUID. `npm run build` del frontend: correcto.
 
-- [ ] T070 [P] [US2] Añadir periodicidad, estado de socio, fallo de cuota y próxima fecha al resultado existente. Archivos: `frontend/src/components/donaciones/ResultadoDonacion.jsx`.
+- [x] T070 [P] [US2] Añadir periodicidad, estado de socio, fallo de cuota y próxima fecha al resultado existente. Archivos: `frontend/src/components/donaciones/ResultadoDonacion.jsx`.
       **Origen**: FR-007, FR-008, FR-012, FR-018, FR-019; S01, S05, S06, S10–S13. **Depende de**: T068.
       **Comprobación**: Pendiente de confirmación aparece sin fecha futura; rechazo no se muestra como pagado, correo conserva resultado real y cancelación no oculta aportaciones anteriores.
+      **Resultado (2026-11-06)**: En el navegador, el alta pendiente mostró «Pendiente de confirmación del primer cobro» y próximo cobro «Pendiente de confirmación». Con donante2@ong.test: cuota confirmada con periodicidad Mensual, suscripción Activa y próximo cobro 26/11/2026; cuota rechazada con «Esta cuota no se ha podido cobrar», sin presentarla como pagada y con próximo cobro «Pendiente de confirmación»; alta pendiente sin fecha; cuota confirmada de suscripción cancelada, sin línea de próximo cobro y con el aviso de que se conservan las cuotas cobradas.
 
-- [ ] T071 [US2] Añadir casos sintéticos de socio, cuotas y previsiones a las semillas existentes. Archivos: `backend/src/db/semillas/donaciones.js`.
+- [x] T071 [US2] Añadir casos sintéticos de socio, cuotas y previsiones a las semillas existentes. Archivos: `backend/src/db/semillas/donaciones.js`.
       **Origen**: Plan común §8; FR-008, FR-009, FR-018, FR-019. **Depende de**: T069, T070.
       **Comprobación**: Reejecutar no duplica altas/cuotas, no llama a Stripe ni altera semillas ajenas; los datos sintéticos se distinguen de las pruebas reales.
+      **Resultado (2026-11-06)**: Sobre la base de desarrollo `ong`, la primera ejecución de las semillas creó 4 suscripciones y 7 cuotas de socio (0 puntuales nuevas); la segunda, 0 nuevas, con recuentos y huellas MD5 de suscripciones_socio, aportaciones y correos_aportacion idénticos. Casos: activa mensual con próxima fecha futura; activa con cuota de ciclo rechazada, aviso fallo_cuota y previsión nula; alta trimestral pendiente sin fecha; anual cancelada con cuotas confirmadas conservadas. Sin identificadores de Stripe. Son datos sintéticos y el estado «enviado» no acredita envíos.
 
-- [ ] T072 [US2] Ejecutar localmente US2 y la regresión de US1 con pasarela simulada y PostgreSQL real de pruebas. Archivos: `backend/src/modulos/donaciones/servicio.test.js`, `backend/src/modulos/donaciones/rutas.test.js`, `backend/src/modulos/donaciones/pasarela.test.js`, `specs/spec-001/refinamiento/validacion-local-01.md`.
+- [x] T072 [US2] Ejecutar localmente US2 y la regresión de US1 con pasarela simulada y PostgreSQL real de pruebas. Archivos: `backend/src/modulos/donaciones/servicio.test.js`, `backend/src/modulos/donaciones/rutas.test.js`, `backend/src/modulos/donaciones/pasarela.test.js`, `specs/spec-001/refinamiento/validacion-local-01.md`.
       **Origen**: FR-001–FR-019; S01–S13 y regresión P01–P21. **Depende de**: T071.
       **Comprobación**: Cada caso registra resultado/cardinalidad/suma; se prueban carreras y rollback, firma sin sesión y fallos SMTP. No se omite HU-01 por conexión ni se afirma integración Stripe real.
+      **Resultado (2026-11-06)**: `npm test -- src/modulos/donaciones --no-file-parallelism` sobre ong_test_hu01: 11 archivos, 350 pruebas aprobadas y 0 omitidas (`cuotas.test.js` 26, `servicio.test.js` 24, `rutas.test.js` 11, `textoCorreo.test.js` 26; las pruebas de US1 se mantienen). `src/servicios-comunes/correo.test.js`: 16/16. La primera ejecución dio 349/350 por el fallo de aislamiento descrito en T054, corregido sin cambiar el código de producción. Las pruebas usan pasarela simulada; no se afirma integración con Stripe real. Cobertura de S01–S13:
+
+      | Caso | Pruebas que lo cubren |
+      | --- | --- |
+      | S01 | `cuotas.test.js` › «S01/S09: la factura inicial pagada (%s) confirma la aportación del alta y activa la suscripción sin navegador»; `servicio.test.js` › «alta de socio %s con importe %s sin cuenta: suscripción pendiente, cuota inicial y recurrencia congelada» |
+      | S02 | `cuotas.test.js` › «S02: una factura de ciclo pagada crea una sola cuota nueva y el total aumenta exactamente su importe», «un ciclo notificado antes del primer cobro local recupera y valida la factura inicial desde la Session del alta», «sin Session conocida el listado por suscripción exige una única coincidencia; la ambigüedad no inventa el pago» y «una factura de ciclo con %s se registra como incidencia y no suma» |
+      | S03 | `cuotas.test.js` › «S03: el primer cobro fallido deja el alta pendiente sin cuota confirmada; solo el cierre definitivo la cancela» |
+      | S04 | `rutas.test.js` › «S04/S05: alta de socio sin cuenta; SMTP fallido conserva el alta activa con periodicidad y próxima fecha y el reintento solo reenvía» |
+      | S05 | `rutas.test.js` › «S04/S05: …»; `textoCorreo.test.js` › «la confirmación de una cuota añade periodicidad y próximo cobro comunicado» |
+      | S06 | `rutas.test.js` › «S06: la sesión del alta no autoriza cuotas posteriores; la cuenta vinculada propietaria sí, sin cargos ni filas nuevas» |
+      | S07 | `servicio.test.js` › «S07/S08: un conflicto de identidad en el alta se detiene antes de Stripe sin crear suscripción ni modificar el Donante» |
+      | S08 | `servicio.test.js` › «S07/S08: …» y «un alta con datos equivalentes reutiliza el Donante sin sobrescribirlo ni vincular la cuenta por el correo» |
+      | S09 | `cuotas.test.js` › «S01/S09: …» y «Checkout completado antes o después de la factura solo correlaciona; reentregas y entregas simultáneas no duplican» |
+      | S10 | `cuotas.test.js` › «S10: una cuota posterior fallida queda rechazada, avisa una vez y no suma, cancela ni ordena cobros» y «fallo seguido de éxito de la misma factura de ciclo confirma la misma fila sin duplicar la suma»; `textoCorreo.test.js` › «el aviso de fallo de cuota no afirma cobro, no ordena pagos y muestra solo la fecha comunicada» |
+      | S11 | `cuotas.test.js` › «S11: tras el fallo solo se muestra el next_payment_attempt futuro y invoice.updated lo actualiza» y «una factura antigua no reemplaza la previsión vigente ni registra un rechazo si ya está pagada» |
+      | S12 | `cuotas.test.js` › «S12: una previsión nula o pasada se devuelve null, también al vencer sin otro webhook» y «sin fallo pendiente, %s impide anunciar current_period_end» |
+      | S13 | `cuotas.test.js` › «S13: la cancelación tras un fallo conserva las cuotas y un evento antiguo no reactiva ni anuncia otro cobro» y «%s no cancela por sí solo una suscripción activa» |
 
 ## Fase 5. Validación final: local, P-05 y Stripe real
 
