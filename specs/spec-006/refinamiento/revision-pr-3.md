@@ -48,13 +48,15 @@ ya lo traía; en la otra, la plaza ya estaba liberada antes de empezar.
 T014 se queda marcada por lo que sí se hizo, pero su nota ya dice que esas dos partes no están, y pasan a
 T026, sin marcar.
 
-| Comprobación | Persona | Navegador | Resultado |
-|---|---|---|---|
-| SC-002, cronometrado | | | pendiente |
-| Quickstart 2.3, cambiando de pestaña | | | pendiente |
-| Quickstart 2.3, cambiando de ventana | | | pendiente |
-| «Actividad cancelada por el coordinador» | | | pendiente |
-| «Cambio de fecha o lugar» | | | pendiente |
+Hecho a mano por Javi el 06/11/2026, en su navegador, con la versión corregida (T025) y los datos de
+`npm run semillas`:
+
+| Comprobación | Resultado |
+|---|---|
+| SC-002, cronometrado: desde que se abre *Mi calendario* hasta decir cuál es la siguiente actividad | Menos de 5 s (objetivo, < 10 s): **cumple** |
+| Quickstart 2.3, cambiando de pestaña: `voluntario6` cancela en una ventana privada y se vuelve a la pestaña | «Visita a la depuradora» pasa a **Confirmada** sin recargar |
+| Quickstart 2.3, cambiando de ventana | **Confirmada** sin recargar |
+| «Actividad cancelada por el coordinador» y «Cambio de fecha o lugar» | No se repitieron a mano: usan la misma recarga al volver que 2.3, y en la prueba manual del 06/11 ya pasaron lanzando los avisos |
 
 ## 3. Prueba inestable encontrada al repetir la batería
 
