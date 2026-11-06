@@ -5,12 +5,20 @@ import { horario } from './fechas.js';
 
 // Una actividad del calendario de HU-06: resumen (FR-001, FR-003) y, al pedirlo, el detalle con la
 // opción de cancelar de HU-05 (FR-004). El detalle se despliega aquí mismo (research R4).
-export default function ActividadCalendario({ entrada, siguiente = false, onCancelada }) {
+// nivelTitulo: h2 en la lista (debajo del h1 de la página) y h4 en el mes (debajo del h3 del día).
+export default function ActividadCalendario({
+  entrada,
+  siguiente = false,
+  nivelTitulo = 2,
+  onCancelada,
+  onRecargar,
+}) {
   const [abierta, setAbierta] = useState(false);
   const [confirmando, setConfirmando] = useState(false);
   const { actividad, estado, posicion, enCurso } = entrada;
   const enEspera = estado === 'en_espera';
   const idDetalle = `detalle-inscripcion-${entrada.id}`;
+  const Titulo = `h${nivelTitulo}`;
 
   return (
     <article
@@ -27,7 +35,7 @@ export default function ActividadCalendario({ entrada, siguiente = false, onCanc
         </span>
         {enCurso && <span className="font-medium text-marca-700">· En curso</span>}
       </div>
-      <h3 className="text-lg font-semibold text-marca-700">{actividad.titulo}</h3>
+      <Titulo className="text-lg font-semibold text-marca-700">{actividad.titulo}</Titulo>
       <p>{horario(actividad)}</p>
       <p className="text-sm text-gray-700">{actividad.lugar}</p>
 
@@ -65,7 +73,12 @@ export default function ActividadCalendario({ entrada, siguiente = false, onCanc
         abierto={confirmando}
         inscripcion={entrada}
         tituloActividad={actividad.titulo}
-        onCerrar={() => setConfirmando(false)}
+        onCerrar={() => {
+          // Si no se pudo cancelar (409: ya ha empezado o la canceló el coordinador), se vuelve a pedir
+          // la vista para que la tarjeta deje de ofrecerlo.
+          setConfirmando(false);
+          onRecargar();
+        }}
         onHecho={() => {
           setConfirmando(false);
           onCancelada(entrada);

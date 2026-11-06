@@ -29,19 +29,36 @@ function horaDelDia({ actividad }, dia) {
   return 'todo el día';
 }
 
+// Texto completo de una etiqueta, para leerlo al pasar el ratón aunque se vea recortado.
+function textoEtiqueta(entrada, dia) {
+  const texto = `${horaDelDia(entrada, dia)} ${entrada.actividad.titulo}`;
+  return entrada.estado === 'en_espera' ? `${texto} (en lista de espera)` : texto;
+}
+
 const cuantas = (n) => (n === 0 ? 'sin actividades' : n === 1 ? '1 actividad' : `${n} actividades`);
 
 // Vista mensual de HU-06 (research R6): semanas completas de lunes a domingo (los días de otro mes, en
 // gris y con sus actividades); cada actividad sale en todos sus días. Desde 640 px cada día enseña la
 // hora y el título; en móvil, una barra por actividad. Al pulsar un día, sus actividades salen debajo
 // con la misma tarjeta que la lista.
-export default function MesCalendario({ mes, entradas, puedeRetroceder, onMes, onCancelada }) {
-  const [elegido, setElegido] = useState(null);
+export default function MesCalendario({
+  mes,
+  entradas,
+  cargando,
+  puedeRetroceder,
+  onMes,
+  onCancelada,
+  onRecargar,
+}) {
+  // El día pulsado vale solo para el mes en que se pulsó; al cambiar de mes se vuelve a elegir solo.
+  const [pulsado, setPulsado] = useState(null); // { clave: 'aaaa-m', dia }
+  const clave = `${mes.anio}-${mes.mes}`;
+  const elegido = pulsado?.clave === clave ? pulsado.dia : null;
   const semanas = semanasDelMes(mes);
   const hoyEs = hoy();
 
   const porDia = new Map();
-  for (const entrada of entradas) {
+  for (const entrada of entradas ?? []) {
     for (const dia of diasDeActividad(entrada.actividad)) {
       if (!porDia.has(dia)) porDia.set(dia, []);
       porDia.get(dia).push(entrada);
@@ -72,85 +89,97 @@ export default function MesCalendario({ mes, entradas, puedeRetroceder, onMes, o
         </Boton>
       </div>
 
-      <div
-        className="grid grid-cols-7 text-center text-xs font-semibold text-gray-600 mb-1"
-        aria-hidden="true"
-      >
-        {DIAS_SEMANA.map(([letra, nombre]) => (
-          <abbr key={nombre} title={nombre} className="no-underline">
-            {letra}
-          </abbr>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded overflow-hidden">
-        {semanas.flat().map((dia) => {
-          const lista = porDia.get(dia) ?? [];
-          const esElegido = dia === diaVisto;
-          return (
-            <button
-              type="button"
-              key={dia}
-              onClick={() => setElegido(dia)}
-              aria-pressed={esElegido}
-              aria-label={`${nombreDia(dia)}: ${cuantas(lista.length)}`}
-              className={`min-h-16 sm:min-h-24 p-1 flex flex-col gap-1 text-left min-w-0 ${
-                delMes(dia) ? 'bg-white' : 'bg-gray-50 text-gray-400'
-              } ${esElegido ? 'ring-2 ring-inset ring-marca-500' : ''}`}
-            >
-              <span
-                className={`text-xs self-start ${
-                  dia === hoyEs ? 'rounded-full bg-marca-700 text-white px-1.5 font-semibold' : ''
-                }`}
-              >
-                {Number(dia.slice(8))}
-              </span>
-              {lista.map((entrada) => (
-                <span
-                  key={entrada.id}
-                  className={`block w-full rounded h-2 sm:h-auto sm:px-1 sm:py-0.5 text-[11px] leading-tight ${
-                    ESTILO[entrada.estado]
-                  }`}
+      {cargando && <p>Cargando…</p>}
+      {!cargando && entradas && (
+        <>
+          <div
+            className="grid grid-cols-7 text-center text-xs font-semibold text-gray-600 mb-1"
+            aria-hidden="true"
+          >
+            {DIAS_SEMANA.map(([letra, nombre]) => (
+              <abbr key={nombre} title={nombre} className="no-underline">
+                {letra}
+              </abbr>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded overflow-hidden">
+            {semanas.flat().map((dia) => {
+              const lista = porDia.get(dia) ?? [];
+              const esElegido = dia === diaVisto;
+              return (
+                <button
+                  type="button"
+                  key={dia}
+                  onClick={() => setPulsado({ clave, dia })}
+                  aria-pressed={esElegido}
+                  aria-label={`${nombreDia(dia)}: ${cuantas(lista.length)}`}
+                  className={`min-h-16 sm:min-h-24 p-1 flex flex-col gap-1 text-left min-w-0 ${
+                    delMes(dia) ? 'bg-white' : 'bg-gray-50 text-gray-600'
+                  } ${esElegido ? 'ring-2 ring-inset ring-marca-500' : ''}`}
                 >
-                  <span className="hidden sm:block truncate">
-                    {horaDelDia(entrada, dia)} {entrada.actividad.titulo}
+                  <span
+                    className={`text-xs self-start ${
+                      dia === hoyEs ? 'rounded-full bg-marca-700 text-white px-1.5 font-semibold' : ''
+                    }`}
+                  >
+                    {Number(dia.slice(8))}
                   </span>
-                  {entrada.estado === 'en_espera' && (
-                    <span className="hidden sm:block truncate">en lista de espera</span>
-                  )}
-                </span>
-              ))}
-            </button>
-          );
-        })}
-      </div>
+                  {lista.map((entrada) => (
+                    <span
+                      key={entrada.id}
+                      title={textoEtiqueta(entrada, dia)}
+                      className={`block w-full rounded h-2 sm:h-auto sm:px-1 sm:py-0.5 text-[11px] leading-tight ${
+                        ESTILO[entrada.estado]
+                      }`}
+                    >
+                      <span className="hidden sm:block truncate">
+                        {horaDelDia(entrada, dia)} {entrada.actividad.titulo}
+                      </span>
+                      {entrada.estado === 'en_espera' && (
+                        <span className="hidden sm:block truncate">en lista de espera</span>
+                      )}
+                    </span>
+                  ))}
+                </button>
+              );
+            })}
+          </div>
 
-      <div className="flex flex-wrap gap-4 text-xs text-gray-700 mt-2">
-        <span className="flex items-center gap-1">
-          <span className={`inline-block w-4 h-2 rounded ${ESTILO.confirmada}`} /> Confirmada
-        </span>
-        <span className="flex items-center gap-1">
-          <span className={`inline-block w-4 h-2 rounded ${ESTILO.en_espera}`} /> En lista de espera
-        </span>
-      </div>
+          <div className="flex flex-wrap gap-4 text-xs text-gray-700 mt-2">
+            <span className="flex items-center gap-1">
+              <span className={`inline-block w-4 h-2 rounded ${ESTILO.confirmada}`} /> Confirmada
+            </span>
+            <span className="flex items-center gap-1">
+              <span className={`inline-block w-4 h-2 rounded ${ESTILO.en_espera}`} /> En lista de espera
+            </span>
+          </div>
 
-      <section className="mt-6" aria-live="polite">
-        {diaVisto ? (
-          <>
-            <h3 className="font-semibold mb-3">{nombreDia(diaVisto)}</h3>
-            {delDia.length === 0 ? (
-              <EstadoVacio mensaje="No tienes actividades este día." />
+          <section className="mt-6" aria-live="polite">
+            {diaVisto ? (
+              <>
+                <h3 className="font-semibold mb-3">{nombreDia(diaVisto)}</h3>
+                {delDia.length === 0 ? (
+                  <EstadoVacio mensaje="No tienes actividades este día." />
+                ) : (
+                  <div className="space-y-3">
+                    {delDia.map((entrada) => (
+                      <ActividadCalendario
+                        key={entrada.id}
+                        entrada={entrada}
+                        nivelTitulo={4}
+                        onCancelada={onCancelada}
+                        onRecargar={onRecargar}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="space-y-3">
-                {delDia.map((entrada) => (
-                  <ActividadCalendario key={entrada.id} entrada={entrada} onCancelada={onCancelada} />
-                ))}
-              </div>
+              <EstadoVacio mensaje="No tienes actividades por delante en este mes." />
             )}
-          </>
-        ) : (
-          <EstadoVacio mensaje="No tienes actividades por delante en este mes." />
-        )}
-      </section>
+          </section>
+        </>
+      )}
     </div>
   );
 }

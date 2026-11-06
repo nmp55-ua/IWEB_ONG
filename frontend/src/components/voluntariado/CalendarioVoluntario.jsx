@@ -29,6 +29,7 @@ export default function CalendarioVoluntario() {
   }
 
   // Si llegan dos respuestas desordenadas (por ejemplo, al cambiar de mes deprisa), vale la última.
+  // Si falla, se conserva lo que ya se veía y el error sale encima (research R5).
   const cargar = useCallback(() => {
     const numero = ++ultimaPeticion.current;
     ultimaSalida.current = Date.now();
@@ -41,7 +42,6 @@ export default function CalendarioVoluntario() {
       })
       .catch((err) => {
         if (numero !== ultimaPeticion.current) return;
-        setEntradas(null);
         setError(err);
       });
   }, [ruta]);
@@ -95,6 +95,8 @@ export default function CalendarioVoluntario() {
       />
     );
   }
+  // Sin el rol de voluntario no hay calendario: solo el aviso, sin las pestañas.
+  if (error?.estado === 403) return <Aviso tipo="error">{error.message}</Aviso>;
 
   const boton = (valor, texto) => (
     <button
@@ -120,7 +122,7 @@ export default function CalendarioVoluntario() {
 
       {mensaje && <Aviso tipo="exito">{mensaje}</Aviso>}
       {error && <Aviso tipo="error">{error.message}</Aviso>}
-      {!error && entradas === null && <p>Cargando…</p>}
+      {!error && entradas === null && vista === 'lista' && <p>Cargando…</p>}
 
       {entradas &&
         vista === 'lista' &&
@@ -130,17 +132,19 @@ export default function CalendarioVoluntario() {
             accion={<Boton href="/actividades">Ver actividades disponibles</Boton>}
           />
         ) : (
-          <ListaCalendario entradas={entradas} onCancelada={alCancelar} />
+          <ListaCalendario entradas={entradas} onCancelada={alCancelar} onRecargar={cargar} />
         ))}
 
-      {entradas && vista === 'mes' && (
+      {/* La cabecera del mes no se desmonta al cambiar de mes: el foco sigue en «‹» o «›». */}
+      {vista === 'mes' && (
         <MesCalendario
-          key={`${mes.anio}-${mes.mes}`}
           mes={mes}
           entradas={entradas}
+          cargando={entradas === null && !error}
           puedeRetroceder={mes.anio * 12 + mes.mes > mesActual().anio * 12 + mesActual().mes}
           onMes={(cuantos) => setMes(desplazarMes(mes, cuantos))}
           onCancelada={alCancelar}
+          onRecargar={cargar}
         />
       )}
     </div>

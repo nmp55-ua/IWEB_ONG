@@ -47,7 +47,7 @@ Hacer los pasos en este orden (cada uno parte del anterior).
 
 | # | Pasos | Resultado esperado |
 |---|---|---|
-| 2.1 | Como `voluntario@`, en la lista, *Ver detalle* de Charla sobre el agua en el instituto | Se despliega: proyecto, descripción, fecha y horario, lugar, requisitos («Sin requisitos») y el botón *Cancelar inscripción*. En Visita a la depuradora el botón es *Salir de la lista de espera* |
+| 2.1 | Como `voluntario@`, en la lista, *Ver detalle* de Charla sobre el agua en el instituto | La tarjeta ya enseña la fecha, el horario y el lugar; *Ver detalle* despliega proyecto, requisitos («Sin requisitos»), descripción y el botón *Cancelar inscripción*. En Visita a la depuradora el botón es *Salir de la lista de espera* |
 | 2.2 | *Cancelar inscripción* en Charla y confirmar en la ventana | «Has cancelado tu inscripción en «Charla sobre el agua en el instituto».» y la actividad ya no está, sin recargar; Análisis de fuentes pasa a «Siguiente» |
 | 2.3 | Dejar abierta la pestaña. En una ventana privada u otro navegador, como `voluntario6@ong.test`, *Cancelar inscripción* en Visita a la depuradora (en `/actividades` o en su calendario). Volver a la ventana de `voluntario@` (basta con pulsar en ella, aunque la otra no se cierre) | Sin recargar, Visita a la depuradora sale «Confirmada»; en Mailpit, «Plaza confirmada: «Visita a la depuradora»» para `voluntario@ong.test` |
 | 2.4 | Tras `npm run semillas`, como `voluntario@`, *Ver detalle* en Visita a la depuradora, *Salir de la lista de espera* y confirmar | «Has salido de la lista de espera de «Visita a la depuradora».» y deja de salir, sin recargar |

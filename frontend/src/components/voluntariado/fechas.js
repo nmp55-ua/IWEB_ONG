@@ -4,7 +4,7 @@
 import { formatearFecha, formatearHora } from '../../lib/formato.js';
 
 const ZONA = 'Europe/Madrid';
-const formatoDia = new Intl.DateTimeFormat('en-CA', {
+const formatoDia = new Intl.DateTimeFormat('es-ES', {
   timeZone: ZONA,
   year: 'numeric',
   month: '2-digit',
@@ -19,9 +19,13 @@ export function horario({ inicio, fin }) {
   return `del ${formatearFecha(inicio)} a las ${formatearHora(inicio)} al ${formatearFecha(fin)} a las ${formatearHora(fin)}`;
 }
 
-// Instante → día que es en Madrid: «2026-11-18».
+// Instante → día que es en Madrid: «2026-11-18». Se monta con las partes, que no dependen del
+// formato de presentación de ningún idioma.
 export function diaMadrid(instante) {
-  return formatoDia.format(new Date(instante));
+  const partes = Object.fromEntries(
+    formatoDia.formatToParts(new Date(instante)).map(({ type, value }) => [type, value]),
+  );
+  return `${partes.year}-${partes.month}-${partes.day}`;
 }
 
 export const hoy = () => diaMadrid(new Date());

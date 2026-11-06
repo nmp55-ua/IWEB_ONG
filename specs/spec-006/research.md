@@ -17,7 +17,8 @@ HU-06.
 - **Por qué no `exigirVoluntario`**: en HU-05 el rol se comprueba en el servicio porque su escenario
   10 pide explicar que hace falta una cuenta de voluntario para inscribirse (research R5 de
   spec-005), y ese mensaje habla de inscribirse. HU-06 no tiene un escenario así y el enlace solo se
-  ve con el rol, así que basta con el middleware común y su mensaje (CONVENCIONES §4).
+  ve con el rol, así que basta con el middleware común y su mensaje (CONVENCIONES §4). La página, con ese
+  403, solo enseña el aviso, sin las pestañas *Lista* y *Mes* (T023).
 - **Alternatives considered**: `GET /api/voluntarios/:id/calendario` con comprobación de dueño (deja
   la puerta a equivocarse en la comprobación, y plan-comun ya eligió `/yo/...`).
 
@@ -43,7 +44,7 @@ HU-06.
 - **Decision**: sale toda inscripción `confirmada` o `en_espera` cuya actividad está publicada y
   tiene `fin > ahora()`. `desde` y `hasta` son opcionales, con formato `aaaa-mm-dd`, y son días
   completos de Madrid (`inicioDia` de `fechas.js`, la misma validación que el filtro de HU-05, R8 de
-  spec-005). Con ellos solo salen las que **se solapan** con el intervalo: `fin > inicio de desde` e
+  spec-005). El orden entre las dos solo se comprueba si las dos son válidas (T019). Con ellos solo salen las que **se solapan** con el intervalo: `fin > inicio de desde` e
   `inicio < inicio del día siguiente a hasta`. Cada entrada lleva `enCurso = inicio <= ahora()`.
 - **Rationale**: «aún no ha terminado» resuelve el choque entre FR-002 y el escenario 2 (clarify Q3).
   El solape, y no la fecha de inicio, hace que una actividad de varios días que empieza el 30 de un mes
@@ -60,7 +61,9 @@ HU-06.
 - **Decision**: es la vista que se abre primero. Una fila por inscripción, ordenadas por inicio, con
   fecha y horario (una de varios días sale una vez, «del 21/11/2026 a las 09:00 al 23/11/2026 a las
   14:00»), título, lugar y el estado: «Confirmada» o «En lista de espera · posición N», y «En curso» si ya
-  ha empezado. La marca «Siguiente» va en la primera confirmada que todavía no ha empezado: una en lista
+  ha empezado. El título de cada tarjeta es `h2` en la lista y `h4` en el mes, debajo del `h3` del día, para
+  que los encabezados vayan en orden (T022). La marca «Siguiente» va en la primera confirmada que todavía no
+  ha empezado: una en lista
   de espera no es un compromiso seguro y una en curso ya no es «la siguiente»; si no hay ninguna así, no
   se marca nada. Al pulsar *Ver detalle* se despliega en la misma
   tarjeta: proyecto, descripción, requisitos («Sin requisitos» si no hay) y *Cancelar inscripción* o
@@ -84,8 +87,11 @@ HU-06.
     en `window` al volver desde otra ventana que seguía a la vista (otra aplicación, el correo, otra
     ventana del navegador). Como al volver pueden llegar los dos seguidos, no se pide otra vez si la
     última petición salió hace menos de 2 s;
-  - cuando el navegador restaura la página desde su caché al ir atrás (`pageshow` con `persisted`).
-  Las recargas en segundo plano no vacían la pantalla: se cambian los datos al llegar.
+  - cuando el navegador restaura la página desde su caché al ir atrás (`pageshow` con `persisted`);
+  - al cerrar la confirmación de cancelar, aunque no se haya podido (un 409 porque la actividad ya ha
+    empezado o la ha cancelado el coordinador), para que la tarjeta deje de ofrecerlo (T017).
+  Las recargas en segundo plano no vacían la pantalla: se cambian los datos al llegar y, si fallan, se
+  conserva lo que ya se veía y el error sale encima (T016).
 - **Rationale**: los cambios de otros llegan con un correo de HU-07 (actividad cancelada, cambio de
   fecha, plaza confirmada) y el voluntario vuelve al calendario para mirarlos, muchas veces desde otra
   ventana: por eso hace falta también `focus`, que `visibilitychange` no cubre. Es lo más simple que cumple
@@ -109,6 +115,10 @@ HU-06.
     confirmada; borde discontinuo ámbar y «en lista de espera» si está en espera;
   - en móvil, una barra de color por actividad (con el mismo código) y el número de actividades para los
     lectores de pantalla; los textos se leen en las tarjetas del día elegido.
+  Cada etiqueta lleva en `title` su texto completo, por si se ve recortada (T024). Los días de otro mes
+  van en gris oscuro (`text-gray-600`), que se lee bien (T018). Al cambiar de mes la cabecera («‹», el
+  mes y «›») no se desmonta: el foco sigue en el botón pulsado, el nombre del mes se anuncia y el
+  «Cargando…» sale solo en el sitio de la cuadrícula (T015).
   Debajo, una leyenda con los dos estilos y, en vez de las tarjetas, un `EstadoVacio` si el día pulsado no
   tiene actividades («No tienes actividades este día.») o si en el mes no queda ninguna desde hoy («No
   tienes actividades por delante en este mes.»). Con el calendario vacío la pestaña *Mes* sigue ahí y
@@ -117,7 +127,7 @@ HU-06.
   del reloj del navegador en hora de Madrid. Qué actividades salen y si se pueden cancelar lo decide el
   servidor con `ahora()` (R3).
 - **Ayudantes**: `fechas.js` del módulo (`diaMadrid`, `diasDeActividad`, `semanasDelMes`…). `diaMadrid`
-  es una línea con `Intl.DateTimeFormat`; no se importa `isoALocalMadrid` de
+  monta «aaaa-mm-dd» con `Intl.DateTimeFormat(...).formatToParts` (T020); no se importa `isoALocalMadrid` de
   `components/actividades/fechasFormulario.js` porque es del módulo de Nicole y sirve a sus formularios,
   y lo compartido iría en `lib/` (CONVENCIONES §2), que no hace falta tocar por una línea.
 - **Rationale**: con 375 px cada día mide unos 45 px: dos títulos no caben de forma legible, así que en

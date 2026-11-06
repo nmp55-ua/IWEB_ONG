@@ -2,7 +2,7 @@ import ActividadCalendario from './ActividadCalendario.jsx';
 
 // Vista de lista de HU-06 (la que se abre primero): por fecha, con la siguiente marcada (SC-002). La
 // siguiente es la primera confirmada que no ha empezado (research R4).
-export default function ListaCalendario({ entradas, onCancelada }) {
+export default function ListaCalendario({ entradas, onCancelada, onRecargar }) {
   const siguiente = entradas.find((e) => e.estado === 'confirmada' && !e.enCurso);
   return (
     <ol className="space-y-3">
@@ -11,7 +11,9 @@ export default function ListaCalendario({ entradas, onCancelada }) {
           <ActividadCalendario
             entrada={entrada}
             siguiente={entrada === siguiente}
+            nivelTitulo={2}
             onCancelada={onCancelada}
+            onRecargar={onRecargar}
           />
         </li>
       ))}

@@ -21,9 +21,10 @@ const dia = z.preprocess(
     .optional(),
 );
 
-// «desde» no puede ser posterior a «hasta» (filtros de HU-05 y calendario de HU-06).
+// «desde» no puede ser posterior a «hasta» (filtros de HU-05 y calendario de HU-06). Solo se comparan
+// si las dos son días válidos: si una está mal, basta con su «Fecha no válida.».
 const desdeAntesQueHasta = [
-  (f) => !f.desde || !f.hasta || f.desde <= f.hasta,
+  (f) => !f.desde || !f.hasta || !existeDia(f.desde) || !existeDia(f.hasta) || f.desde <= f.hasta,
   { message: 'La fecha «desde» no puede ser posterior a «hasta».', path: ['hasta'] },
 ];
 

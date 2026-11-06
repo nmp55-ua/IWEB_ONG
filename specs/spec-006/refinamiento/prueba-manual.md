@@ -85,3 +85,9 @@ solo (10 segundos, con el paso 2.3).
   terminar y salen las 4 (1.1); la prueba automática lo compara con la base.
 - **SC-002**: la siguiente actividad sale arriba y marcada «Siguiente». Los datos llegan a los 132 ms de abrir
   la página. Falta cronometrarlo a mano con una persona; el objetivo es menos de 10 s.
+
+## Después del converge
+
+Repetidos en la aplicación tras T015–T024 (detalle del antes y el después en
+[converge-2.md](converge-2.md)): P1, P2 y P3 corregidos; a 1440 y a 375 px la lista y el mes se ven igual que
+antes y nada se sale de la pantalla (`scrollWidth` = 375). Lighthouse ya no marca `heading-order`.

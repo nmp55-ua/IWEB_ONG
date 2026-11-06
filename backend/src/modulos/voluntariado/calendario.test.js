@@ -281,6 +281,10 @@ describe.skipIf(!URL_PRUEBAS)('HU-06 · calendario del voluntario', () => {
         expect(mal.status).toBe(400);
         expect(mal.body.error.campos.hasta).toBe('Fecha no válida.');
       }
+      // Con una mal escrita, solo su error: no se dice además que «desde» es posterior a «hasta».
+      const solo = await agente.get('/api/yo/calendario?desde=2026-13-01&hasta=2026-12-01');
+      expect(solo.status).toBe(400);
+      expect(solo.body.error.campos).toEqual({ desde: 'Fecha no válida.' });
     });
   });
 
