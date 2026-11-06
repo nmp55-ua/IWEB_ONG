@@ -32,8 +32,8 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 **Purpose**: la tabla `asistencias`, que también lee spec-004 (Rubén).
 
-- [ ] T001 Crear `backend/src/db/migraciones/007_asistencias.sql` con la tabla `asistencias` como en [data-model.md](data-model.md): `inscripcion_id BIGINT NOT NULL UNIQUE REFERENCES inscripciones(id) ON DELETE RESTRICT` (siempre, sin comprobar si la tabla existe, research R2), `asistio BOOLEAN NOT NULL`, `horas NUMERIC(5,2) NOT NULL CHECK (horas > 0)`, `registrada_por BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE RESTRICT`, `fecha_registro TIMESTAMPTZ NOT NULL`; comentario de cabecera `-- spec-008 (Nicole). Ver specs/modelo-datos.md#asistencias-spec-008`
-- [ ] T002 Marcar `007_asistencias.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md` y aplicarla con `npm run migrar` en `backend/`
+- [X] T001 Crear `backend/src/db/migraciones/007_asistencias.sql` con la tabla `asistencias` como en [data-model.md](data-model.md): `inscripcion_id BIGINT NOT NULL UNIQUE REFERENCES inscripciones(id) ON DELETE RESTRICT` (siempre, sin comprobar si la tabla existe, research R2), `asistio BOOLEAN NOT NULL`, `horas NUMERIC(5,2) NOT NULL CHECK (horas > 0)`, `registrada_por BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE RESTRICT`, `fecha_registro TIMESTAMPTZ NOT NULL`; comentario de cabecera `-- spec-008 (Nicole). Ver specs/modelo-datos.md#asistencias-spec-008`
+- [X] T002 Marcar `007_asistencias.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md` y aplicarla con `npm run migrar` en `backend/`
 
 ---
 

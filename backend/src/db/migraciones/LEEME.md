@@ -10,7 +10,7 @@ Numeración reservada (ver `specs/modelo-datos.md`):
 | `004_donaciones.sql` (donantes, suscripciones_socio, aportaciones) | Nada · spec-001 | pendiente |
 | `005_actividades.sql` | Nicole · spec-007 | hecha |
 | `006_voluntariado.sql` (voluntarios, inscripciones) | Javi · spec-005 | hecha |
-| `007_asistencias.sql` | Nicole · spec-008 | pendiente |
+| `007_asistencias.sql` | Nicole · spec-008 | hecha |
 | `008_certificados.sql` | Rubén · spec-003 | pendiente |
 
 Nunca se edita una migración ya subida a `main`. Los cambios posteriores usan `009` en adelante,
