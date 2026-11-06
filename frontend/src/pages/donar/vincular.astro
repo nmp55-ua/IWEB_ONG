@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import VincularDonante from '../../components/donaciones/VincularDonante.jsx';
+// spec-001 (Nada). Abrir esta página no envía ni consume enlaces: solo acciones explícitas.
+---
+
+<Layout titulo="Vincular mis aportaciones a una cuenta">
+  <VincularDonante client:load />
+</Layout>
