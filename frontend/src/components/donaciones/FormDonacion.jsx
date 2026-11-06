@@ -5,15 +5,41 @@ import Boton from '../comunes/Boton.jsx';
 import Campo from '../comunes/Campo.jsx';
 import { EnlaceVincular, guardarClaveSolicitud, leerClaveSolicitud } from './comunDonacion.jsx';
 
-// HU-01 · Formulario de donación puntual. Sin cuenta obligatoria. El servidor valida todo;
-// aquí solo se adelantan los errores evidentes para no llamar a la pasarela en balde.
-const VACIO = { importe: '', destino: '', nombre: '', apellidos: '', nifNie: '', correo: '', direccion: '' };
+// HU-01 · Formulario de donación puntual o alta de socio. Sin cuenta obligatoria. El servidor
+// valida todo; aquí solo se adelantan los errores evidentes para no llamar a la pasarela en balde.
+// No hay edición de cuota ni baja desde la aplicación (PA1.1).
+const VACIO = {
+  modalidad: '',
+  periodicidad: '',
+  importe: '',
+  destino: '',
+  nombre: '',
+  apellidos: '',
+  nifNie: '',
+  correo: '',
+  direccion: '',
+};
+const MODALIDADES = [
+  { valor: '', texto: 'Elige cómo quieres colaborar' },
+  { valor: 'puntual', texto: 'Donación puntual' },
+  { valor: 'socio', texto: 'Hacerme socio' },
+];
+const PERIODICIDADES = [
+  { valor: '', texto: 'Elige la periodicidad' },
+  { valor: 'mensual', texto: 'Mensual' },
+  { valor: 'trimestral', texto: 'Trimestral' },
+  { valor: 'anual', texto: 'Anual' },
+];
 const IMPORTE = /^\d+([.,]\d{1,2})?$/;
 const MENSAJE_IMPORTE = 'Indica un importe entre 1,00 y 999.999,99 €, con un máximo de dos decimales.';
 const CAMPOS_DONANTE = ['nombre', 'apellidos', 'nifNie', 'correo', 'direccion'];
 
 function validar(datos) {
   const errores = {};
+  if (!['puntual', 'socio'].includes(datos.modalidad))
+    errores.modalidad = 'Elige donación puntual o hacerte socio.';
+  if (datos.modalidad === 'socio' && !['mensual', 'trimestral', 'anual'].includes(datos.periodicidad))
+    errores.periodicidad = 'Elige una periodicidad mensual, trimestral o anual.';
   const importe = datos.importe.trim();
   if (!IMPORTE.test(importe)) errores.importe = MENSAJE_IMPORTE;
   else {
@@ -91,9 +117,11 @@ export default function FormDonacion() {
       guardarClaveSolicitud(clave);
       setPendiente(clave);
     }
+    const socio = datos.modalidad === 'socio';
     solicitar({
       claveSolicitud: clave,
-      modalidad: 'puntual',
+      modalidad: socio ? 'socio' : 'puntual',
+      ...(socio && { periodicidad: datos.periodicidad }),
       importe: datos.importe.trim(),
       proyectoId: datos.destino === 'general' ? null : datos.destino,
       donante: Object.fromEntries(CAMPOS_DONANTE.map((c) => [c, datos[c]])),
@@ -136,10 +164,32 @@ export default function FormDonacion() {
       <form onSubmit={enviar} className="bg-white rounded shadow-sm p-6" noValidate>
         <h2 className="text-lg font-semibold text-marca-700 mb-4">Tu donación</h2>
         <p className="mb-4 text-sm text-gray-600">
-          Donación puntual con tarjeta, en euros. No necesitas cuenta.
+          Pago con tarjeta, en euros. No necesitas cuenta. Como socio, los cobros periódicos los
+          realiza la pasarela de pago.
         </p>
         <Campo
-          etiqueta="Importe (€)"
+          etiqueta="Modalidad"
+          name="modalidad"
+          tipo="select"
+          opciones={MODALIDADES}
+          value={datos.modalidad}
+          onChange={cambiar}
+          error={errores.modalidad}
+        />
+        {datos.modalidad === 'socio' && (
+          <Campo
+            etiqueta="Periodicidad"
+            name="periodicidad"
+            tipo="select"
+            opciones={PERIODICIDADES}
+            value={datos.periodicidad}
+            onChange={cambiar}
+            error={errores.periodicidad}
+            ayuda="Elige cada cuánto se cobrará la cuota. No se puede modificar la cuota ni darse de baja desde esta aplicación."
+          />
+        )}
+        <Campo
+          etiqueta={datos.modalidad === 'socio' ? 'Importe de la cuota (€)' : 'Importe (€)'}
           name="importe"
           inputMode="decimal"
           autoComplete="off"

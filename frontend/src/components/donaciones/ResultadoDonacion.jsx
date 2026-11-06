@@ -17,6 +17,41 @@ const TEXTO_CORREO = {
   fallido: 'No se ha podido enviar el correo de confirmación. Tu donación sigue confirmada.',
 };
 
+const PERIODICIDADES = { mensual: 'Mensual', trimestral: 'Trimestral', anual: 'Anual' };
+const ESTADOS_SUSCRIPCION = {
+  pendiente: 'Pendiente de confirmación del primer cobro',
+  activa: 'Activa',
+  cancelada: 'Cancelada',
+};
+
+// DATE «aaaa-mm-dd» → «dd/mm/aaaa», sin convertir zonas (ya es la fecha de Madrid).
+function formatearDia(texto) {
+  const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto ?? '');
+  return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : null;
+}
+
+// Estado actual de la suscripción, separado del resumen histórico de la cuota. La próxima
+// fecha es solo la que devuelve el servidor; null se muestra como «Pendiente de confirmación».
+function Suscripcion({ s }) {
+  const filas = [
+    ['Periodicidad', PERIODICIDADES[s.periodicidad] ?? s.periodicidad],
+    ['Suscripción', ESTADOS_SUSCRIPCION[s.estado] ?? s.estado],
+    ...(s.estado === 'cancelada'
+      ? []
+      : [['Próximo cobro', formatearDia(s.fechaProximoCobro) ?? 'Pendiente de confirmación']]),
+  ];
+  return (
+    <dl className="grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2 bg-white rounded shadow-sm p-6 mb-4">
+      {filas.map(([etiqueta, valor]) => (
+        <div key={etiqueta} className="contents">
+          <dt className="font-medium">{etiqueta}</dt>
+          <dd>{valor}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function Resumen({ r }) {
   const s = r.resumenConfirmacion ?? r;
   const destino = String(s.destino ?? '').trim().toLowerCase() === 'fondo general' ? 'Fondo general' : s.destino;
@@ -174,6 +209,10 @@ export default function ResultadoDonacion() {
   const r = resultado;
   const revision = r.preparacion?.requiereRevision;
   const puedeReanudar = !revision && r.preparacion && r.estado !== 'confirmada';
+  const cuota = r.modalidad === 'cuota_socio';
+  // Una cuota posterior no tiene operación de este navegador: su rechazo no cierra el alta.
+  const cuotaPosterior = cuota && !r.preparacion;
+  const cerrada = r.estado === 'rechazada' || r.estado === 'cancelada';
 
   return (
     <div className="max-w-2xl">
@@ -184,14 +223,25 @@ export default function ResultadoDonacion() {
         </Aviso>
       )}
 
-      {r.estado === 'confirmada' && <Aviso tipo="exito" titulo="¡Gracias! Tu donación está confirmada" />}
+      {r.estado === 'confirmada' && (
+        <Aviso
+          tipo="exito"
+          titulo={cuota ? '¡Gracias! Esta cuota de socio está confirmada' : '¡Gracias! Tu donación está confirmada'}
+        />
+      )}
       {r.estado === 'pendiente' && (
         <Aviso tipo="info" titulo="Pago pendiente de confirmación">
           Todavía no tenemos la confirmación de la pasarela. Esta página se actualiza sola durante unos
           minutos; no hace falta que vuelvas a pagar.
         </Aviso>
       )}
-      {(r.estado === 'rechazada' || r.estado === 'cancelada') && (
+      {cerrada && cuotaPosterior && (
+        <Aviso tipo="error" titulo="Esta cuota no se ha podido cobrar">
+          {r.motivo ?? 'La pasarela no ha confirmado el cobro de esta cuota.'} No consta como pagada ni se
+          suma a tus aportaciones. Las cuotas anteriores no cambian.
+        </Aviso>
+      )}
+      {cerrada && !cuotaPosterior && (
         <Aviso
           tipo="error"
           titulo={r.estado === 'rechazada' ? 'El pago no se ha completado' : 'El pago se ha cancelado'}
@@ -204,6 +254,13 @@ export default function ResultadoDonacion() {
       )}
 
       <Resumen r={r} />
+
+      {r.suscripcion && <Suscripcion s={r.suscripcion} />}
+      {r.suscripcion?.estado === 'cancelada' && (
+        <Aviso tipo="info">
+          La suscripción está cancelada. Las cuotas ya cobradas se conservan.
+        </Aviso>
+      )}
 
       {/* Tras un reenvío aceptado basta el aviso de la acción: un único mensaje de éxito. */}
       {r.estado === 'confirmada' && accion?.tipo !== 'exito' && (
@@ -232,7 +289,7 @@ export default function ResultadoDonacion() {
             Actualizar estado
           </Boton>
         )}
-        {(r.estado === 'rechazada' || r.estado === 'cancelada') && !revision && (
+        {cerrada && !revision && !cuotaPosterior && (
           <Boton variante="secundario" disabled={cargando} onClick={hacerOtra}>
             Hacer otra donación
           </Boton>
