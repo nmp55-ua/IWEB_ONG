@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005, T014–T018 y T020–T021 completadas y verificadas. Las demás tareas permanecen pendientes; la revisión de Rubén de T006 no se ha realizado.
+**Estado**: T001–T005, T014–T018 y T020–T023 completadas y verificadas. Las demás tareas permanecen pendientes; la revisión de Rubén de T006 no se ha realizado.
 
 ## Entrega temprana de 004 — 2026-11-06
 
@@ -49,6 +49,14 @@ El [informe de pasarela](refinamiento/validacion-pasarela-01.md) conserva result
 No se implementan persistencia, bloqueos o reconciliación ni se acredita idempotencia real.
 La ampliación se prepara para revisión; T006 permanece pendiente de Rubén.
 
+## Autorización aislada — 2026-11-06
+
+T022–T023 incorporan permisos por operación, guardado esperable, origen/CSRF y comprobación
+unitaria de propiedad con datos de servidor. Las 35 pruebas dirigidas pasan con sesiones
+y datos sintéticos. El [informe de autorización](refinamiento/validacion-autorizacion-01.md)
+conserva resultados y límites. No se acredita protección de rutas futuras: T019 y la
+integración siguen pendientes, al igual que la revisión de Rubén de T006.
+
 ## Alcance y fuentes
 
 [US1] y [US2] son las dos modalidades de **HU-01**, definidas en [spec.md](spec.md).
@@ -79,6 +87,10 @@ automática ni modificación concurrente del mismo archivo.
   la incorporación compartida de 004 y de esas ampliaciones; no se da por realizado.
   T017–T018 preparan únicamente el adaptador de correo en esta rama para revisión,
   sin acreditar acuerdo colectivo ni incorporación compartida.
+- **Autorización independiente**: T022 depende de T002, no de T019. Se prueban
+  funciones con sesiones y propiedad sintéticas sin fixtures PostgreSQL. T023 conserva
+  su dependencia de T022. T019 y la integración posterior mantienen sus dependencias
+  y su estado pendiente; no se modifican autenticación, cookies, roles o rutas.
 - **Pasarela independiente**: T014 depende de T002, no de T013. El constructor puro,
   la firma local y las peticiones simuladas no necesitan tablas operativas. T015 sigue
   dependiendo de T014 y T016 de T015; T027 conserva sus requisitos de integración.
@@ -219,11 +231,11 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: FR-002, FR-004, FR-015; P03, P04, P17. **Depende de**: T020.
       **Comprobación**: Los casos de formato pasan y todo cambio real sigue siendo distinto; conversión en céntimos enteros, sin redondear entradas inválidas.
 
-- [ ] T022 Escribir casos de permiso por operación y cuenta vinculada, CSRF, origen y caducidad absoluta. Archivos: `backend/src/modulos/donaciones/autorizacion.test.js`.
-      **Origen**: FR-011, FR-013, FR-016; P11, P18, P19, P20. **Depende de**: T019.
+- [x] T022 Escribir casos de permiso por operación y cuenta vinculada, CSRF, origen y caducidad absoluta. Archivos: `backend/src/modulos/donaciones/autorizacion.test.js`.
+      **Origen**: FR-011, FR-013, FR-016; P11, P18, P19, P20. **Depende de**: T002.
       **Comprobación**: Referencia, UUID, cookie sin permiso y correo coincidente no autorizan; la operación A no concede B y el acceso de cuenta exige rol y vínculo.
 
-- [ ] T023 Implementar permisos de sesión por referencia, guardado previo a redirección y comprobación de propiedad en servidor. Archivos: `backend/src/modulos/donaciones/autorizacion.js`.
+- [x] T023 Implementar permisos de sesión por referencia, guardado previo a redirección y comprobación de propiedad en servidor. Archivos: `backend/src/modulos/donaciones/autorizacion.js`.
       **Origen**: FR-011, FR-013, FR-016; PA1.7. **Depende de**: T022.
       **Comprobación**: Caducidad absoluta de ocho horas, POST con origen/CSRF y 404 genérico para recurso no autorizado; no cambia login, cookie común o roles.
 
@@ -489,6 +501,8 @@ flowchart TD
     A -. "contrato revisado para incorporación autorizada" .-> R["Rubén puede consumir el dominio al incorporarse 004"]
     N["T002: dependencias instaladas"] --> P["T020–T021: normalización pura"]
     P -. "prerrequisito de T027" .-> B
+    N --> U["T022–T023: autorización unitaria"]
+    U -. "prerrequisito de T027" .-> B
     N --> Q["T014–T016: adaptador Stripe simulado"]
     Q -. "prerrequisito de T027" .-> B
     N --> S["T017–T018: adaptador de correo simulado"]
@@ -526,6 +540,13 @@ de sus propios casos con conexiones controladas.
 
 Se usan scripts y dependencias existentes. No se añade un comando de frontend test,
 una biblioteca de navegador, ORM, cola o herramienta de despliegue.
+
+**Para T022–T023**: desde PowerShell en
+`E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\backend`, sin cargar .env ni servicios:
+
+```powershell
+npm test -- src/modulos/donaciones/autorizacion.test.js
+```
 
 **Para T014–T016**: desde PowerShell en
 `E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\backend`, sin cargar .env, con
