@@ -2,8 +2,8 @@
 
 Recorrido de [quickstart.md](../quickstart.md) (T014) con la aplicación en marcha en local: back-end en el
 puerto 3000, front-end en el 4321 y PostgreSQL con `npm run migrar` y `npm run semillas`. Versión: rama
-`spec-006`, commit `a751d67`. Navegador: el integrado de la aplicación de escritorio, a 1440×900 y a
-375×812; el Lighthouse y el paso de cambiar de pestaña, también en Chrome. Los pasos de «otra persona»
+`spec-006`, commit `a751d67`. Navegador: Chromium con la ventana a 1440×900 y a 375×812; el Lighthouse y el paso de cambiar de
+pestaña, también en Chrome controlado desde las herramientas de desarrollo. Los pasos de «otra persona»
 (`voluntario6` y el coordinador) se hicieron con `curl` desde otra sesión, que equivale a otro navegador.
 Fechas de las semillas ejecutadas el 06/11/2026.
 
@@ -28,12 +28,12 @@ Fechas de las semillas ejecutadas el 06/11/2026.
 
 ### Volver a la pestaña (FR-005)
 
-Ni el navegador integrado ni el Chrome que maneja chrome-devtools ocultan la pestaña al cambiar de una a
-otra: la página sigue en `visibilityState = "visible"` y no reciben `visibilitychange` ni `focus`
+En los dos navegadores de la prueba, controlados de forma remota para hacer los pasos, la pestaña no se
+oculta al cambiar de una a otra: la página sigue en `visibilityState = "visible"` y no reciben `visibilitychange` ni `focus`
 (comprobado registrando los eventos antes de cambiar). Por eso, el «volver» se ha hecho lanzando en la
 página el mismo evento que lanza un navegador normal:
 
-- `focus` en el navegador integrado (paso 2.3 y los dos casos límite de abajo): se hace una petición y la
+- `focus` en Chromium (paso 2.3 y los dos casos límite de abajo): se hace una petición y la
   pantalla cambia;
 - `visibilitychange` seguido de `focus` en Chrome: se hace **una sola** petición a `/api/yo/calendario`
   (el `focus` llega dentro del margen de 2 s) y Análisis de fuentes, cancelada por el coordinador,
