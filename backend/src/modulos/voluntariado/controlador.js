@@ -21,6 +21,12 @@ const dia = z.preprocess(
     .optional(),
 );
 
+// «desde» no puede ser posterior a «hasta» (filtros de HU-05 y calendario de HU-06).
+const desdeAntesQueHasta = [
+  (f) => !f.desde || !f.hasta || f.desde <= f.hasta,
+  { message: 'La fecha «desde» no puede ser posterior a «hasta».', path: ['hasta'] },
+];
+
 const esquemaFiltros = z
   .object({
     proyectoId: z.preprocess(
@@ -34,10 +40,10 @@ const esquemaFiltros = z
     desde: dia,
     hasta: dia,
   })
-  .refine((f) => !f.desde || !f.hasta || f.desde <= f.hasta, {
-    message: 'La fecha «desde» no puede ser posterior a «hasta».',
-    path: ['hasta'],
-  });
+  .refine(...desdeAntesQueHasta);
+
+// HU-06: cualquier otro parámetro (voluntarioId, usuarioId…) se descarta (research R1).
+const esquemaCalendario = z.object({ desde: dia, hasta: dia }).refine(...desdeAntesQueHasta);
 
 const esquemaPerfil = z
   .object({
@@ -100,4 +106,9 @@ export async function modificarInscripcion(req, res) {
   servicio.exigirVoluntario(req.usuario);
   esquemaCambio.parse(req.body ?? {});
   res.json(await servicio.cancelar(idDe(req), req.usuario));
+}
+
+// HU-06: el rol lo comprueba requiereRol('voluntario') en la ruta; el calendario es siempre el propio.
+export async function calendario(req, res) {
+  res.json(await servicio.calendario(req.usuario, esquemaCalendario.parse(req.query)));
 }
