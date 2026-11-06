@@ -6,12 +6,10 @@ Base: [plan-comun.md §8](../plan-comun.md#8-pruebas-y-datos-de-prueba-comunes).
 ## Preparación
 
 1. `docker compose up -d`, luego en `backend/`: `npm run migrar` y `npm run semillas`.
-   Si la base es anterior a `006` (spec-005), recrearla (research R2).
 2. `npm run dev` en `backend/` y en `frontend/`; abrir `http://localhost:4321`.
-3. Datos necesarios (semillas): actividad celebrada de 10:00 a 13:30 con 2 confirmados
+3. Datos necesarios (semillas): «Recogida de ropa», celebrada de 10:00 a 13:30, con 2 confirmados
    (`voluntario@ong.test`, `voluntario2@ong.test`), una en espera en otra actividad, una
    actividad futura, una cancelada y una asistencia de 2 h de `voluntario@ong.test`.
-   Mientras spec-005 no exista, las listas vienen vacías: validar con las pruebas automáticas.
 
 ## Pruebas automáticas
 

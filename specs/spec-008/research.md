@@ -13,37 +13,30 @@ Aquí solo las propias de HU-08.
 - **Alternatives considered**: contador `horas_totales` en `voluntarios` (se descuadra y es tabla
   de Javi).
 
-## R2. Migración `007_asistencias.sql` antes de que exista `inscripciones`
+## R2. Migración `007_asistencias.sql` con clave foránea a `inscripciones`
 
-- **Decision**: `007` crea `asistencias` y añade la FK `inscripcion_id → inscripciones(id)
-  ON DELETE RESTRICT` **solo si** la tabla `inscripciones` ya existe (bloque `DO` con
-  `to_regclass('inscripciones')`). Cuando `006` esté en `main`, una base nueva aplica `006`
-  antes que `007` y la FK se crea siempre; las bases de desarrollo creadas antes se rehacen
-  (`docker compose down -v`, `migrar`, `semillas`).
-- **Rationale**: spec-005 aún no ha empezado. Con la FK obligatoria, `migrar.js` se pararía en
-  `007` y bloquearía la rama. La base de pruebas se crea desde cero, así que en CI y en la
-  entrega la FK siempre existe.
-- **Alternatives considered**: FK fija (bloquea hasta spec-005); sin FK nunca (rompe
-  modelo-datos y principio VI); pedir el número `009` para la FK (dos migraciones para una tabla).
+- **Decision**: `007` crea `asistencias` con la FK `inscripcion_id → inscripciones(id)
+  ON DELETE RESTRICT` siempre, sin comprobar si la tabla existe.
+- **Rationale**: `006_voluntariado.sql` ya está en `main` y se aplica antes que `007`, de modo que
+  `inscripciones` siempre existe al migrar. Es lo que fija modelo-datos.
+- **Alternatives considered**: crear la FK solo si la tabla existe (innecesario con `006` en
+  `main`); sin FK (rompe modelo-datos y principio VI).
 
 ## R3. Acceso a inscripciones desde `actividades`
 
 - **Decision**: igual que spec-007 R3, el módulo nunca consulta `inscripciones` ni `voluntarios`
-  con SQL propio. Se añaden a `inscripciones.js` (provisional hasta spec-005, luego reexporta de
-  `voluntariado/servicio.js`):
+  con SQL propio. Usa estas funciones del servicio de voluntariado, que `inscripciones.js` ya
+  reexporta de `voluntariado/servicio.js`:
   - `listarConfirmadasDeActividad(actividadId)` →
     `[{ inscripcionId, nombre, apellidos, correo }]`.
   - `listarInscripcionesDeUsuario(usuarioId)` → `[{ inscripcionId, actividadId }]` (cualquier
     estado; sin voluntario → `[]`).
-  La provisional devuelve `[]` como las de spec-007; para las pruebas se sustituye con
-  `vi.mock`.
 - **Rationale**: plan-comun §1 (servicio, nunca repositorio de otro) y la petición de no tocar
   `modulos/voluntariado`. La consulta de horas une `asistencias` y `actividades` (ambas de
   Nicole) filtrando por los ids recibidos.
 - **Alternatives considered**: reutilizar `listarInscripcionesDeActividad` y filtrar
   `confirmadas` (válido para la pantalla, pero no sirve para `/yo/horas`); se mantiene una
   función propia para no depender de la forma de la lista de espera.
-- **Pendiente**: acordar las dos funciones con Javi.
 
 ## R4. Un solo `PUT` con la lista completa
 
@@ -78,8 +71,11 @@ Aquí solo las propias de HU-08.
 
 - **Decision**: página `/mis-horas` con enlace «Mis horas» en el menú para el rol `voluntario`.
   `GET /api/yo/horas` solo exige sesión; un usuario sin perfil de voluntario recibe 0 h.
-- **Rationale**: el «perfil» de voluntario es de spec-005 (`PUT /api/yo/perfil-voluntario`) y no
-  existe aún; una página propia no toca su módulo. Ruta sin identificador (plan-comun §3), así
-  que nadie puede pedir las horas de otro (escenario 2.3).
-- **Alternatives considered**: incrustar el bloque en la página de perfil de spec-005 (se puede
-  hacer después reutilizando `MisHoras.jsx`).
+- **Rationale**: el perfil de voluntario de spec-005 existe en la API (`GET` y
+  `PUT /api/yo/perfil-voluntario`), pero no tiene página propia en `frontend/src/pages`: solo se
+  usa dentro de `FormInscripcion.jsx`, al inscribirse. Por eso las horas van en una página propia,
+  que no toca su módulo. Ruta sin identificador (plan-comun §3), así que nadie puede pedir las
+  horas de otro (escenario 2.3).
+- **Alternatives considered**: mostrar las horas en el formulario de inscripción (no es donde el
+  voluntario consulta su perfil); crear una página de perfil de voluntario (añade alcance que
+  HU-08 no necesita). Si más adelante existe esa página, puede reutilizar `MisHoras.jsx`.

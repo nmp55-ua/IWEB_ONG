@@ -8,7 +8,7 @@ se concreta la migración y las reglas de HU-08.
 | Columna | Tipo | Reglas |
 |---|---|---|
 | `id` | BIGSERIAL | PK |
-| `inscripcion_id` | BIGINT → inscripciones | `NOT NULL`, `UNIQUE`; FK `ON DELETE RESTRICT` (si `inscripciones` existe, research R2); la inscripción debe estar `confirmada` al guardar (FR-006, en el servicio) |
+| `inscripcion_id` | BIGINT → inscripciones | `NOT NULL`, `UNIQUE`; FK `ON DELETE RESTRICT` (research R2); la inscripción debe estar `confirmada` al guardar (FR-006, en el servicio) |
 | `asistio` | BOOLEAN | `NOT NULL` |
 | `horas` | NUMERIC(5,2) | `NOT NULL`, `CHECK (horas > 0)`; `fin − inicio` de la actividad al guardar (FR-003) |
 | `registrada_por` | BIGINT → usuarios | `NOT NULL`, `ON DELETE RESTRICT`; coordinador que guardó por última vez |

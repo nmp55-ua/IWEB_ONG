@@ -18,7 +18,7 @@ Todo vive en el módulo `backend/src/modulos/actividades/`, dueño de la nueva t
 (migración `007_asistencias.sql`). Una fila por inscripción (único), horas copiadas de la
 actividad al registrar y total **derivado** con `SUM(horas) WHERE asistio`, así que repetir el
 guardado no duplica y corregir resta sola (FR-004, FR-005, SC-001). Las inscripciones se leen
-solo a través de `modulos/actividades/inscripciones.js` (provisional de spec-007); no se toca
+solo a través de `modulos/actividades/inscripciones.js`, que reexporta el servicio de voluntariado; no se toca
 `modulos/voluntariado`.
 
 ## Technical Context
@@ -50,7 +50,7 @@ están en [research.md](research.md).
 | V. Seguridad | `requiereRol('coordinador')` en las rutas de actividad; `/api/yo/horas` usa solo `req.usuario.id` (FR-007, escenario 2.3). |
 | VI. Nada se borra | No hay `DELETE`; corregir cambia `asistio` (edge case de la spec). FK `ON DELETE RESTRICT`. |
 | VIII. Una sola aplicación | `Layout`, `Tabla`, `Boton`, `Aviso`, `EstadoVacio`, `lib/api.js`, `transaccion()`, `ErrorApi`. Inscripciones solo vía `inscripciones.js`. |
-| XII. Cambios comunes con acuerdo | Dos funciones nuevas de lectura en el contrato con Javi y la regla FR-009 para spec-005 (research R3, R6). |
+| XII. Cambios comunes con acuerdo | No cambia nada común: usa las funciones de lectura que ya expone el servicio de voluntariado y la regla FR-009 de spec-005 (research R3, R6). |
 
 ## Project Structure
 
@@ -72,7 +72,7 @@ specs/spec-008/
 ```text
 backend/src/
 ├── db/migraciones/007_asistencias.sql        ← tabla asistencias (research R2)
-├── db/semillas/asistencias.js                ← asistencia de 2 h de voluntario@ong.test (si hay inscripciones)
+├── db/semillas/asistencias.js                ← asistencia de 2 h de voluntario@ong.test
 ├── db/semillas/index.js                      ← llamar a sembrarAsistencias tras las inscripciones
 └── modulos/actividades/
     ├── rutas.js                  ← + GET/PUT /actividades/:id(\d+)/asistencias (coordinador)
@@ -80,7 +80,6 @@ backend/src/
     ├── controlador.js            ← + esquema zod del PUT y respuestas de asistencias y horas
     ├── asistencias.js            ← servicio de asistencia (reglas abajo); separado de servicio.js
     ├── repositorio.js            ← + SQL de asistencias (upsert, listar, sumar)
-    ├── inscripciones.js          ← + listarConfirmadasDeActividad, listarInscripcionesDeUsuario (provisional)
     └── asistencias.test.js
 backend/src/app.js                ← api.use(rutasYoActividades)
 
@@ -110,16 +109,17 @@ Sin plazo posterior (PA8.1): no se compara con `fin`. `registrable = estado = 'p
 
 - **spec-007 (Nicole, en `main`)**: tabla `actividades`, `servicio.obtener`, derivado `celebrada`
   y `inscripciones.js` como único acceso a inscripciones.
-- **spec-005 (Javi)** *(las dos funciones de lectura, a acordar con Javi)*:
-  - Migración `006_voluntariado.sql` (tablas `voluntarios` e `inscripciones`) en `main` para la
+- **spec-005 (Javi, en `main`)**:
+  - Migración `006_voluntariado.sql` (tablas `voluntarios` e `inscripciones`), necesaria para la
     FK de `007` (research R2).
-  - Dos funciones de solo lectura en su servicio, que `inscripciones.js` reexportará:
+  - Dos funciones de solo lectura de su servicio, que `inscripciones.js` ya reexporta:
     `listarConfirmadasDeActividad(actividadId)` y `listarInscripcionesDeUsuario(usuarioId)`
-    (research R3). Mientras no existan, `inscripciones.js` lleva una versión provisional.
+    (research R3).
   - **FR-009** *(ya en spec-005 FR-009)*: no permitir cancelar una inscripción confirmada desde la hora de inicio de la
     actividad (research R6). Ya encaja con «el voluntario cancela antes del inicio» de
     modelo-datos.
-  - Semilla con las 2 inscripciones confirmadas de la actividad celebrada de 10:00–13:30.
+  - Semilla con las 2 inscripciones confirmadas de «Recogida de ropa», la actividad celebrada de
+    10:00–13:30.
 - **spec-004 (Rubén)** solo **lee** `asistencias` (`SUM(horas) WHERE asistio`) para el informe.
 
 ## Complexity Tracking
