@@ -172,6 +172,12 @@ Son limitaciones ajenas existentes; configurar la base no las resuelve ni autori
 No debe omitirse toda la suite de actividades por TEST_DATABASE_URL ausente, ni ningún caso
 de HU-01 por configuración. No se ha ejecutado ninguna suite al redactar esta guía.
 
+**Nota sobre la regresión completa.** La suite de actividades ejecuta TRUNCATE sobre el
+esquema public. Para no vaciar public de ong_test_hu01, la regresión completa se ejecuta por
+separado: la suite de donaciones sobre ong_test_hu01 y el resto de módulos sobre una base
+temporal propia, migrada desde cero y eliminada al terminar. El bloque anterior se conserva
+como referencia de selección de conexión, migración y compilación.
+
 ## C. Comprobación manual posterior
 
 Después de P-05 y de las pruebas automatizadas, usar la misma base exclusiva, sin ejecutar

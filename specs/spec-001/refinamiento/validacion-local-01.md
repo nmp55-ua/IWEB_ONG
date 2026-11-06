@@ -486,3 +486,61 @@ Recorridos en el navegador:
   se presentan como una cuota posterior.
 - La base de desarrollo contiene además un alta de socio pendiente de prueba.
 - T006 y T007 siguen pendientes.
+
+## Regresión completa y seguridad — T073–T074 · 2026-11-06
+
+Entorno: Windows y Node 22.20.0.
+
+### Regresión completa (T073)
+
+La suite de actividades ejecuta TRUNCATE sobre el esquema public. Para no vaciar public de
+ong_test_hu01, la regresión se ejecuta por separado: la suite de donaciones sobre
+ong_test_hu01 y el resto de módulos sobre una base temporal propia. La nota correspondiente
+se ha añadido a la sección B de quickstart.md.
+
+| Comando | Resultado |
+| --- | --- |
+| `npx vitest run src/modulos/donaciones --no-file-parallelism` (ong_test_hu01) | 11 archivos; 350 pruebas aprobadas y 0 omitidas. |
+| Base temporal ong_test_t073: creación y `node src/db/migrar.js` | Migraciones aplicadas: 001, 002, 003, 004, 005 y 009. |
+| `npx vitest run src/app.test.js src/modulos/actividades src/servicios-comunes --no-file-parallelism` (ong_test_t073) | 4 archivos; 70 pruebas aprobadas y 3 omitidas: `actividades/servicio.test.js` 44, con los 3 it.skip de HU-07 que esperan la integración con spec-005; `correo.test.js` 16; `app.test.js` 6; `comunes.test.js` 7. |
+| Eliminación de ong_test_t073 | Base eliminada al terminar. |
+| `npm --prefix frontend run build` | Correcto. El frontend no tiene suite de pruebas. |
+
+Ningún caso de HU-01 se omitió por el entorno. Los it.skip ajenos no se han activado ni
+modificado.
+
+### Datos persistidos, sesión y registros (T074)
+
+Comprobación sobre los datos generados en la base de desarrollo y sobre el código:
+
+- **Instantánea de Checkout** (operaciones_pago.solicitud_checkout). Solo contiene estas
+  claves:
+  - mode, success_url y cancel_url;
+  - client_reference_id y customer_email;
+  - line_items;
+  - metadata (modulo, referencia);
+  - payment_intent_data o subscription_data, con la misma metadata;
+  - payment_method_types ["card"].
+
+  No contiene NIF, dirección, apellidos, CSRF, contraseñas, sesión ni datos de tarjeta.
+- **verificaciones_donante:** guarda solo token_hash SHA-256 (64 hexadecimales). El token
+  usado en la prueba de navegador no aparece en la base.
+- **Esquema:** no hay columnas de tarjeta, IBAN o CVC; la única que contiene «token» es
+  token_hash.
+- **Sesiones:** solo guardan usuarioId y cookie, sin NIF, dirección ni token.
+- **Acceso y errores:** que ni la referencia ni el UUID solos den acceso, y que los errores no
+  revelen otro Donante, lo cubren `autorizacion.test.js`, `rutas.test.js` y
+  `servicio.test.js` (S07/S08 y P13–P16), además de los recorridos de T052 y T068.
+- **Registros:** el módulo de donaciones solo emite avisos genéricos (`servicio.js:381` y
+  `383`).
+
+### Límites y observaciones
+
+- `servicios-comunes/correo.js:27` registra la dirección del destinatario cuando falla el
+  SMTP. No registra el texto ni el token.
+- `middleware/errores.js:33` registra el error completo en los 500 inesperados, que podría
+  incluir valores de PostgreSQL.
+- Ambos son archivos comunes: no se han modificado y quedan para la revisión con el revisor
+  de HU-01.
+- No se ha modificado la autenticación ni los roles.
+- T006 y T007 siguen pendientes.
