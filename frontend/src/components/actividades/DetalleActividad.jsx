@@ -108,6 +108,9 @@ export default function DetalleActividad({ id, recienCreada = false }) {
             </p>
           </div>
           <div className="flex gap-3">
+            {actividad.celebrada && (
+              <Boton href={`/coordinacion/actividades/${id}/asistencia`}>Registrar asistencia</Boton>
+            )}
             {actividad.estado === 'borrador' && (
               <Boton cargando={cargando} onClick={() => cambiarEstado('publicar', 'Actividad publicada.')}>
                 Publicar
