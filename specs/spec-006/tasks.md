@@ -1,0 +1,121 @@
+# Tasks: HU-06 — Calendario personal del voluntario
+
+**Input**: [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md),
+[data-model.md](data-model.md), [contracts/api-calendario.md](contracts/api-calendario.md),
+[quickstart.md](quickstart.md). Base común: [plan-comun.md](../plan-comun.md),
+[modelo-datos.md](../modelo-datos.md), [CONVENCIONES.md](../../CONVENCIONES.md).
+
+**Responsable**: *Javi* · **Revisora**: *Nada*
+
+**Tests**: plan-comun §8 exige pruebas automáticas de permisos (401, 403 y «cada uno ve lo suyo») en
+toda ruta personal; por eso hay tareas de prueba en cada historia.
+
+**Commits**: en español y empezando por `HU-06:` (CONVENCIONES §9).
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: se puede hacer en paralelo (otro fichero, sin dependencias pendientes).
+- **[Story]**: US1 = ver mis próximas actividades; US2 = gestionar una actividad desde el calendario.
+
+## Path Conventions
+
+Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
+`backend/src/modulos/voluntariado/` y `frontend/src/components/voluntariado/`.
+
+---
+
+## Phase 1: Setup
+
+No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-model.md](data-model.md)).
+
+---
+
+## Phase 2: Foundational (bloquea US1 y US2)
+
+- [ ] T001 [P] Añadir `obtener` a la reexportación de `backend/src/modulos/voluntariado/actividades.js` (junto a `listar`, `bloquearActividad` y `avisarPlazaConfirmada`), sin tocar `modulos/actividades/servicio.js` (research R2). Lo importado solo se usa dentro de funciones (importación circular)
+- [ ] T002 [P] En `backend/src/db/semillas/voluntariado.js`, crear antes de las inscripciones las 4 actividades publicadas de [research R7](research.md#r7-semillas-para-el-independent-test) (por título e idempotentes, fechas relativas a hoy en Madrid, `creada_por` = `coordinador@ong.test`, requisitos «Mayor de edad.», «Calzado cerrado.» y «Calzado de montaña y agua.» salvo la Charla, sin requisitos) y añadir sus inscripciones previstas (`voluntario@` en las 4, en espera en Visita a la depuradora detrás de `voluntario6` y `voluntario7`). Actualizar en `specs/spec-005/quickstart.md` el paso 1.1 y la tabla de Preparación con las actividades nuevas (el paso 1.3 sigue igual)
+- [ ] T003 [P] Crear `frontend/src/components/voluntariado/fechas.js` con `horario({ inicio, fin })` (movida tal cual desde `TarjetaActividad.jsx`, que pasa a importarla), `diaMadrid(iso)` → `aaaa-mm-dd` en `Europe/Madrid`, `diasDeActividad({ inicio, fin })` (del día del inicio al de `fin − 1 ms`), `semanasDelMes(anio, mes)` (semanas de lunes a domingo que contienen el mes) y `mesActual()` en Madrid ([data-model](data-model.md#días-de-la-vista-mensual-en-la-interfaz))
+
+**Checkpoint**: las semillas cargan (`npm run semillas` dos veces seguidas da lo mismo) y las 88 pruebas de antes siguen pasando.
+
+---
+
+## Phase 3: User Story 1 — Ver mis próximas actividades (P1) 🎯 MVP
+
+**Goal**: el voluntario ve en lista y en el mes sus actividades sin terminar, con las de espera etiquetadas.
+
+**Independent Test**: [quickstart.md](quickstart.md#historia-1--ver-mis-próximas-actividades), 1.1–1.5.
+
+### Tests for User Story 1
+
+- [ ] T004 [US1] Pruebas en `backend/src/modulos/voluntariado/calendario.test.js` (Vitest + Supertest contra la base de pruebas, `AHORA_SIMULADO` fijo, correo simulado, módulo `actividades` real; research R8): 401 sin sesión y 403 como donante; voluntario sin perfil → 200 `datos: []`; 3 confirmadas futuras y 1 en espera → las 4 por `inicio`, con `estado`, `posicion` (solo la de espera), `enCurso: false` y las fechas ISO con desfase de Madrid (SC-001: mismas que las activas de la base); terminada hoy, inscripción cancelada y actividad cancelada por el coordinador (con `cancelar` del servicio de `actividades`) → no salen; de varios días ya empezada → sale con `enCurso: true`; otro voluntario solo ve las suyas y `?voluntarioId=`/`?usuarioId=` no cambian nada; `desde`/`hasta` por solape (una de varios días entre el 30/11 y el 02/12 sale en noviembre y en diciembre); fechas mal escritas o imposibles y `desde > hasta` → 400 con `campos`
+
+### Implementation for User Story 1
+
+- [ ] T005 [US1] `calendario(usuario, { desde, hasta })` en `servicio.js` según «Reglas de `servicio.js`» del [plan](plan.md#reglas-de-servicio-js) (`listarActivasDeUsuario` + `actividades.obtener`, publicadas con `fin > ahora()`, solape con `inicioDeDia`, orden por `inicio` e id, forma `EntradaCalendario` del contrato); en `controlador.js`, esquema de `desde`/`hasta` con el `dia` de HU-05 y el mismo `refine` de orden, y controlador `calendario`; en `rutas.js`, `GET /yo/calendario` con `requiereRol('voluntario')`
+- [ ] T006 [P] [US1] `frontend/src/components/voluntariado/ActividadCalendario.jsx`: resumen de una entrada con `horario()`, título, lugar y estado («Confirmada», «En lista de espera · posición N», «En curso»), con estilos distintos para la espera (borde discontinuo ámbar) y la marca «Siguiente» si se le indica (research R4)
+- [ ] T007 [US1] `frontend/src/components/voluntariado/ListaCalendario.jsx` (entradas por fecha, la primera con «Siguiente») y `MesCalendario.jsx` (cuadrícula de lunes a domingo, «‹» desactivado en el mes actual, «›», cada día es un botón con etiquetas desde 640 px y barras en móvil, día elegido con sus `ActividadCalendario` debajo, primer día con actividades elegido al abrir el mes y leyenda; research R6). `CalendarioVoluntario.jsx`: pestañas *Lista* (la primera) y *Mes* con `aria-pressed`; la lista pide `GET /api/yo/calendario` y el mes, con `desde`/`hasta` de sus semanas; `EstadoVacio` «Todavía no tienes actividades por delante.» con *Ver actividades disponibles* (`/actividades`); con 401, «Inicia sesión para ver tu calendario.» y *Entrar* (`/entrar?volver=/mi-calendario`); otros errores, con su mensaje en un `Aviso`
+- [ ] T008 [US1] `frontend/src/pages/mi-calendario.astro` con `Layout` («Mi calendario») y descomentar el enlace «Mi calendario» en `frontend/src/components/comunes/Menu.jsx`
+
+**Checkpoint**: 1.1–1.5 del quickstart pasan.
+
+---
+
+## Phase 4: User Story 2 — Gestionar una actividad desde el calendario (P2)
+
+**Goal**: ver el detalle, cancelar o salir de la lista de espera y que el calendario se actualice solo.
+
+**Independent Test**: [quickstart.md](quickstart.md#historia-2--gestionar-una-actividad-desde-el-calendario), 2.1–2.3 y casos límite.
+
+### Tests for User Story 2
+
+- [ ] T009 [US2] Pruebas en `calendario.test.js`: cancelar desde el calendario (`PATCH /api/yo/inscripciones/:id`) y volver a pedir → ya no sale; salir de la lista de espera → ya no sale; quien estaba en espera sale «confirmada» después de que otro cancele (escenario 2.3); `PATCH` sobre la inscripción de otro voluntario → 404 y su calendario no cambia; una en curso no se puede cancelar (409)
+
+### Implementation for User Story 2
+
+- [ ] T010 [US2] En `ActividadCalendario.jsx`, *Ver detalle* / *Ocultar detalle* (`aria-expanded`) que despliega proyecto, descripción, requisitos («Sin requisitos» si no hay) y *Cancelar inscripción* o *Salir de la lista de espera*, que abre `CancelarInscripcion.jsx` sin cambiarlo; si `enCurso`, «La actividad ya ha empezado: no se puede cancelar.» en vez del botón (FR-004, research R4)
+- [ ] T011 [US2] En `CalendarioVoluntario.jsx`, la actualización de [research R5](research.md#r5-actualización-sin-recargar-fr-005-clarify-q2): recargar la vista actual tras cancelar, con el aviso «Has cancelado tu inscripción en «…».» o «Has salido de la lista de espera de «…».»; al volver a la pestaña (`visibilitychange`) y al restaurarse desde la caché (`pageshow` con `persisted`), sin vaciar la pantalla mientras llega
+
+**Checkpoint**: 2.1–2.3 y los casos límite del quickstart pasan.
+
+---
+
+## Phase 5: Polish & Cross-Cutting
+
+- [ ] T012 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos o tocados de `backend/src/modulos/voluntariado/`, `backend/src/db/semillas/voluntariado.js`, `frontend/src/components/voluntariado/` y `frontend/src/pages/mi-calendario.astro` (no a `app.js` ni a `Menu.jsx`, que ya estaban sin formatear en `main`)
+- [ ] T013 Coordinarse con Nicole: las 4 actividades de prueba nuevas se crean en `semillas/voluntariado.js` (por si prefiere moverlas a `semillas/actividades.js`), `obtener` se usa desde `voluntariado/actividades.js` sin tocar su servicio, y el paso 1.1 del quickstart de spec-005 cambia. Pedir la revisión del PR a Nada
+- [ ] T014 Recorrer [quickstart.md](quickstart.md) completo en el navegador a 375 y 1440 px, revisar la consola y cronometrar SC-002 (< 10 s); dejar el resultado en `refinamiento/prueba-manual.md` y actualizar plan o contrato si algo implementado difiere (principio III)
+
+---
+
+## Dependencies & Execution Order
+
+### Phase Dependencies
+
+- **Foundational (T001–T003)** → bloquea US1 y US2. T001 → T005; T003 → T006 y T007.
+- **US1 (T004–T008)** → MVP; T005 → T007 (la interfaz necesita la ruta).
+- **US2 (T009–T011)** → depende de US1: T010 amplía `ActividadCalendario.jsx` (T006) y T011, `CalendarioVoluntario.jsx` (T007).
+- **Polish (T012–T014)** → al final.
+
+### Within Each Story
+
+Pruebas (que fallan) → servicio → controlador → rutas → componentes → páginas.
+
+### Parallel Opportunities
+
+- T001, T002 y T003 en paralelo.
+- T004 en paralelo con T005; T006 en paralelo con el back-end en cuanto el contrato es estable.
+- T004 y T009 en orden (mismo fichero); T010 y T011 en paralelo (ficheros distintos).
+
+## Implementation Strategy
+
+1. Fase 2 y comprobar que las semillas y las pruebas de antes siguen bien.
+2. US1 y validar 1.1–1.5.
+3. US2 y validar 2.1–2.3 y casos límite.
+4. Polish, y PR de `spec-006` a `main` revisado por Nada.
+
+## Notes
+
+- No hay rutas `DELETE`; cancelar es la ruta de HU-05, que cambia el estado (principio VI).
+- Nunca se consulta `actividades` desde `voluntariado/repositorio.js`; siempre a través de
+  `voluntariado/actividades.js`.
