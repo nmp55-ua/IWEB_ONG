@@ -87,7 +87,7 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 - [ ] T016 [US2] Añadir el manejador `misHoras` a `backend/src/modulos/actividades/controlador.js`, que usa solo `req.usuario.id`
 - [ ] T017 [US2] Crear `backend/src/modulos/actividades/rutasYo.js` exportando `rutasYoActividades` con `GET /yo/horas` detrás de `requiereRol()`, y registrarlo en `backend/src/app.js` junto a `rutasActividades`
 - [ ] T018 [P] [US2] Crear `frontend/src/components/actividades/MisHoras.jsx`: total y `Tabla` con actividad, fecha (`formatearFecha`, dd/mm/aaaa) y horas (`formatearHoras`); sin asistencias, «0 h» y `EstadoVacio` con «Aún no tienes horas registradas»
-- [ ] T019 [P] [US2] Crear `frontend/src/pages/mis-horas.astro`, que monta `MisHoras` con `client:load`, y añadir `{ rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }` en `frontend/src/components/comunes/Menu.jsx`
+- [ ] T019 [US2] Crear `frontend/src/pages/mis-horas.astro`, que monta `MisHoras` con `client:load`, y añadir `{ rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }` en `frontend/src/components/comunes/Menu.jsx`
 - [ ] T020 [US2] Añadir la actividad celebrada de 2 h de plan-comun §8 en `backend/src/db/semillas/actividades.js`: «Banco de alimentos», proyecto «Comedor social», `inicio: enMadrid(-10, 17)`, `fin: enMadrid(-10, 19)` (17:00–19:00), lugar «Calle Mayor 3», 10 plazas, `publicada`, sin requisitos, y crear `backend/src/db/semillas/asistencias.js` (idempotente) con la inscripción confirmada de `voluntario@ong.test` en ella y su asistencia de 2 h; llamar a `sembrarAsistencias` en `backend/src/db/semillas/index.js` después de `sembrarVoluntariado`. No registrar asistencia en «Recogida de ropa», que queda libre para los escenarios 1.2–1.4; la asistencia de `voluntario@ong.test` allí se marca a mano como paso previo de 2.1, y así llega a 5,5 h
 
 **Checkpoint**: escenarios 2.1–2.3 validados; las dos historias funcionan juntas.
@@ -113,7 +113,7 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ```text
 # US1, con T006–T009 terminadas: T010 y T012 (T011 después de T010)
-# US2, con T015–T017 terminadas: T018 y T019
+# US2, con T015–T017 terminadas: T018; T019 después de T018
 ```
 
 ## Implementation Strategy
