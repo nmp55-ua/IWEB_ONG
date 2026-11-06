@@ -1,4 +1,5 @@
 import { ErrorApi } from '../../middleware/errores.js';
+import { textoCorreoConfirmacion } from './textoCorreo.js';
 
 export function crearConfirmaciones(repo, enviarCorreo) {
   return {
@@ -26,9 +27,7 @@ export function crearConfirmaciones(repo, enviarCorreo) {
           {
             para: actual.correo,
             asunto: 'Confirmación de aportación',
-            texto: Object.entries(intento.resumen)
-              .map(([campo, valor]) => `${campo}: ${valor ?? ''}`)
-              .join('\n'),
+            texto: textoCorreoConfirmacion(intento.resumen),
           },
           { tiempoConexionMs: 3000, tiempoSaludoMs: 3000, tiempoInactividadMs: 5000 },
         );

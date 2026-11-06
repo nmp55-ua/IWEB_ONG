@@ -3,6 +3,8 @@ import { randomUUID, createHash } from 'node:crypto';
 import { crearEntornoPruebas, crearSimuladorStripe } from './pruebas/soporte.js';
 import { crearServicio } from './servicio.js';
 import { claveBloqueo } from './repositorio.js';
+import { textoCorreoVerificacion } from './textoCorreo.js';
+import { config } from '../../config.js';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -180,6 +182,10 @@ it('vincula solo con hash, cuenta solicitante, caducidad y consumo único atómi
   expect(mensaje.para).toBe(u.correo);
   const token = mensaje.texto.match(/#token=([A-Za-z0-9_-]+)/)[1];
   expect(Buffer.from(token, 'base64url')).toHaveLength(32);
+  expect(mensaje.asunto).toBe('Verificar vínculo de aportaciones');
+  expect(mensaje.texto).toBe(textoCorreoVerificacion(`${config.urlFrontend}/donar/vincular#token=${token}`));
+  expect(mensaje.texto).toContain('caduca en 30 minutos');
+  expect(mensaje.texto).not.toMatch(/DON-|SEM-DON|€/);
   const v = (await entorno.pool.query('SELECT * FROM verificaciones_donante ORDER BY id DESC LIMIT 1'))
     .rows[0];
   expect(v.token_hash).not.toBe(token);

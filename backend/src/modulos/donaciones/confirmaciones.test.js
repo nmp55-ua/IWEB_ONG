@@ -3,6 +3,7 @@ import { crearEntornoPruebas } from './pruebas/soporte.js';
 import { randomUUID } from 'node:crypto';
 import { crearRepositorio } from './repositorio.js';
 import { crearConfirmaciones } from './confirmaciones.js';
+import { textoCorreoConfirmacion } from './textoCorreo.js';
 
 let entorno, repo, aportacion, correo, fixtures;
 beforeAll(async () => {
@@ -68,10 +69,23 @@ it.each([true, false])('envía fuera de transacción y conserva el resumen; SMTP
   expect(enviar).toHaveBeenCalledWith(
     expect.objectContaining({
       para: 'invitado@example.test',
-      texto: expect.stringContaining(aportacion.referencia),
+      texto: textoCorreoConfirmacion(correo.resumen),
     }),
     { tiempoConexionMs: 3000, tiempoSaludoMs: 3000, tiempoInactividadMs: 5000 },
   );
+  const texto = enviar.mock.calls[0][0].texto;
+  expect(texto).toContain(aportacion.referencia);
+  expect(texto).toContain('Importe: 20,00 €');
+  expect(texto).toContain('Fecha de cobro: 06/11/2026');
+  expect(texto).toContain('Destino: Fondo general');
+  expect((await repo.correo(aportacion.id)).resumen).toEqual(correo.resumen);
+  if (!aceptado) {
+    // Reintento del mismo resumen: mismo texto, y el resumen guardado sigue igual.
+    expect(await servicio.enviar(aportacion.id)).toBe('fallido');
+    expect(enviar).toHaveBeenCalledTimes(2);
+    expect(enviar.mock.calls[1][0].texto).toBe(texto);
+    expect((await repo.correo(aportacion.id)).resumen).toEqual(correo.resumen);
+  }
   expect(
     (await entorno.pool.query('SELECT estado FROM aportaciones WHERE id=$1', [aportacion.id])).rows[0].estado,
   ).toBe('pendiente');

@@ -10,6 +10,7 @@ import {
 } from './autorizacion.js';
 import { crearRepositorio } from './repositorio.js';
 import { crearConfirmaciones } from './confirmaciones.js';
+import { textoCorreoVerificacion } from './textoCorreo.js';
 
 const hash = (texto) => createHash('sha256').update(texto).digest('hex');
 const revision = () =>
@@ -251,7 +252,7 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
             {
               para: destinatario.correo,
               asunto: 'Verificar vínculo de aportaciones',
-              texto: `Confirma el vínculo: ${config.urlFrontend}/donar/vincular#token=${token}`,
+              texto: textoCorreoVerificacion(`${config.urlFrontend}/donar/vincular#token=${token}`),
             },
             { tiempoConexionMs: 3000, tiempoSaludoMs: 3000, tiempoInactividadMs: 5000 },
           );
