@@ -217,8 +217,14 @@ El diseño reconcilia el recurso actual, sin reproducir ciegamente snapshots:
    las credenciales configuradas; no se mezclan datos de prueba y reales.
 2. Identificar la clave de serialización por pago puntual o suscripción. Las consultas
    preliminares solo identifican; no deciden estados. Un evento ajeno se ignora sin crear datos.
-3. Dentro de una transacción, adquirir bloqueo consultivo por `pi:<id>` o `sub:<id>` y
-   comprobar el identificador de evento. Recuperar entonces los recursos canónicos actuales.
+3. En una conexión dedicada de PostgreSQL, adquirir un bloqueo consultivo de sesión por
+   `pi:<id>`, `checkout:<id>` o `sub:<id>` y comprobar el identificador de evento. Con la
+   exclusión mantenida por esa conexión y FUERA de cualquier transacción SQL, recuperar de
+   Stripe los recursos canónicos actuales. Después, en la misma conexión, abrir una
+   transacción corta que aplica el resultado (paso 4) y registra el evento de forma
+   idempotente; en los pagos, además, vuelve a comprobar el evento dentro de esa
+   transacción. La exclusión se libera al terminar. Si la conexión falla durante la consulta, no se aplica
+   nada y se descarta la conexión.
 4. Correlacionar y verificar importe, moneda, factura y pertenencia. Aplicar una transición
    válida y las restricciones únicas. Insertar el registro de evento y, si corresponde, la
    notificación de correo, atómicamente con el cambio financiero.
