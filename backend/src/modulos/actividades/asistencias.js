@@ -70,3 +70,16 @@ export async function guardarAsistencia(actividadId, filas, usuario) {
   });
   return obtenerAsistencia(actividadId);
 }
+
+// Siempre a partir del usuario de la sesión: nadie puede pedir las horas de otro (FR-007).
+export async function horasDeUsuario(usuarioId) {
+  const pares = await inscripciones.listarInscripcionesDeUsuario(usuarioId);
+  const { totalHoras, filas } = await repositorio.sumarHorasDeInscripciones(pares);
+  const datos = filas.map((f) => ({
+    actividadId: Number(f.actividad_id),
+    titulo: f.titulo,
+    inicio: aIsoMadrid(new Date(f.inicio)),
+    horas: f.horas,
+  }));
+  return { totalHoras, datos, total: datos.length };
+}

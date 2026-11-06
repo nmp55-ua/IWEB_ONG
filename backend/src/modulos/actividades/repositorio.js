@@ -133,3 +133,22 @@ export async function guardarAsistencias(filas, cliente) {
     );
   }
 }
+
+// pares: [{ inscripcionId, actividadId }] de listarInscripcionesDeUsuario. asistencias no tiene
+// actividad_id: el enlace con actividades sale de cada par, sin consultar inscripciones (research R3).
+export async function sumarHorasDeInscripciones(pares) {
+  const parametros = [pares.map((p) => p.inscripcionId), pares.map((p) => p.actividadId)];
+  const desde = `FROM unnest($1::bigint[], $2::bigint[]) AS p(inscripcion_id, actividad_id)
+    JOIN asistencias s ON s.inscripcion_id = p.inscripcion_id
+    JOIN actividades a ON a.id = p.actividad_id
+    WHERE s.asistio`;
+  const { rows: total } = await consulta(`SELECT COALESCE(SUM(s.horas), 0) AS total ${desde}`, parametros);
+  const { rows: filas } = await consulta(
+    `SELECT a.id AS actividad_id, a.titulo, a.inicio, s.horas ${desde} ORDER BY a.inicio DESC`,
+    parametros,
+  );
+  return {
+    totalHoras: Number(total[0].total),
+    filas: filas.map((f) => ({ ...f, horas: Number(f.horas) })),
+  };
+}

@@ -279,4 +279,62 @@ describe.skipIf(!URL_PRUEBAS)('HU-08 · asistencias', () => {
       expect(res.body.actividad).toMatchObject({ id: actividadId, horas: 3.5, registrable: true });
     });
   });
+
+  describe('GET /api/yo/horas (FR-007, SC-001)', () => {
+    async function asistencia(inscripcionId, asistio, horas) {
+      await pool.query(
+        `INSERT INTO asistencias (inscripcion_id, asistio, horas, registrada_por, fecha_registro)
+         VALUES ($1, $2, $3, $4, now())`,
+        [inscripcionId, asistio, horas, coordinador],
+      );
+    }
+
+    it('401 sin sesión', async () => {
+      expect((await request(app).get('/api/yo/horas')).status).toBe(401);
+    });
+
+    it('total 5,5 con desglose, sin contar «no asistió», y coincide con la suma', async () => {
+      const antigua = await crearActividad({
+        titulo: 'Antigua',
+        inicio: '2026-10-01T17:00:00+02:00',
+        fin: '2026-10-01T19:00:00+02:00',
+      });
+      const reciente = await crearActividad({ titulo: 'Reciente' });
+      const noFue = await crearActividad({ titulo: 'No fue' });
+      const i1 = await inscribir(antigua, voluntarioA);
+      const i2 = await inscribir(reciente, voluntarioA);
+      const i3 = await inscribir(noFue, voluntarioA);
+      await asistencia(i1, true, 2);
+      await asistencia(i2, true, 3.5);
+      await asistencia(i3, false, 3.5);
+      inscripciones.listarInscripcionesDeUsuario.mockResolvedValue([
+        { inscripcionId: i1, actividadId: antigua },
+        { inscripcionId: i2, actividadId: reciente },
+        { inscripcionId: i3, actividadId: noFue },
+      ]);
+      const agente = await entrar('a@prueba.test');
+      const res = await agente.get('/api/yo/horas').expect(200);
+      expect(res.body.totalHoras).toBe(5.5);
+      expect(res.body.total).toBe(2);
+      expect(res.body.datos.map((f) => [f.titulo, f.horas])).toEqual([
+        ['Reciente', 3.5],
+        ['Antigua', 2],
+      ]);
+      expect(res.body.datos[0].actividadId).toBe(reciente);
+      expect(res.body.datos.reduce((suma, f) => suma + f.horas, 0)).toBe(res.body.totalHoras);
+    });
+
+    it('sin voluntario o sin asistencias → 0 y lista vacía', async () => {
+      const agente = await entrar('coordinador@prueba.test');
+      const res = await agente.get('/api/yo/horas').expect(200);
+      expect(res.body).toEqual({ totalHoras: 0, datos: [], total: 0 });
+    });
+
+    it('un parámetro con otro usuario se ignora: solo las propias', async () => {
+      const agente = await entrar('b@prueba.test');
+      await agente.get(`/api/yo/horas?usuarioId=${usuarios['a@prueba.test']}`).expect(200);
+      const [usuarioId] = inscripciones.listarInscripcionesDeUsuario.mock.calls[0];
+      expect(Number(usuarioId)).toBe(usuarios['b@prueba.test']);
+    });
+  });
 });

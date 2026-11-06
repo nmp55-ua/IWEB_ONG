@@ -9,6 +9,7 @@ const ENLACES = [
   // { rol: 'donante', href: '/mis-aportaciones', texto: 'Mis aportaciones' },     ← spec-002
   // { rol: 'donante', href: '/mis-certificados', texto: 'Certificados' },         ← spec-003
   // { rol: 'voluntario', href: '/mi-calendario', texto: 'Mi calendario' },        ← spec-006
+  { rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }, // spec-008
   { rol: 'coordinador', href: '/coordinacion/actividades', texto: 'Gestionar actividades' }, // spec-007
   // { rol: 'administrador', href: '/informes', texto: 'Informes' },               ← spec-004
 ];

@@ -104,3 +104,7 @@ export async function guardarAsistencias(req, res) {
   const { asistencias: filas } = esquemaAsistencias.parse(req.body ?? {});
   res.json(await asistencias.guardarAsistencia(idDe(req), filas, req.usuario));
 }
+
+export async function misHoras(req, res) {
+  res.json(await asistencias.horasDeUsuario(req.usuario.id));
+}
