@@ -30,7 +30,7 @@ Nunca se borra la fila (principio VI); corregir solo cambia `asistio`, `registra
 
 ## Precondiciones (servicio, no BD)
 
-- Actividad `publicada` con `inicio <= ahora()` (FR-001), sin límite posterior (PA8.1).
+- Actividad `publicada` con `inicio <= ahora()` (FR-001), sin límite posterior (Clarifications 2026-11-04).
 - `inscripcionId` ∈ confirmadas de esa actividad (FR-006).
 - Solo rol `coordinador` (FR-008).
 

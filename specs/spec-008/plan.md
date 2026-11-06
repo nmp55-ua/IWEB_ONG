@@ -12,7 +12,7 @@ de errores, pruebas, semillas). Solo añade lo propio de HU-08.
 
 El coordinador abre la pantalla de asistencia de una actividad publicada ya iniciada
 (`/coordinacion/actividades/:id/asistencia`), marca a cada inscrito confirmado como «asistió» o
-«no asistió» y guarda la lista entera de una vez (`PUT /api/actividades/:id/asistencias`). El
+«no asistió» y guarda de una vez las filas marcadas (`PUT /api/actividades/:id/asistencias`). El
 voluntario ve su total y el desglose por actividad en `/mis-horas` (`GET /api/yo/horas`).
 Todo vive en el módulo `backend/src/modulos/actividades/`, dueño de la nueva tabla `asistencias`
 (migración `007_asistencias.sql`). Una fila por inscripción (único), horas copiadas de la
@@ -27,13 +27,13 @@ Todo según [plan-comun.md](../plan-comun.md#technical-context): JavaScript ES m
 Node.js 22, Express 4 + `pg` + `zod`, PostgreSQL 16, Astro 5 + React 19 + Tailwind 3,
 Vitest + Supertest. No se añade ninguna dependencia.
 
-**Performance Goals**: SC-002 (20 personas en < 2 min): una sola tabla con un interruptor por
+**Performance Goals**: SC-002 (20 personas en < 2 min): una sola tabla con un control por
 fila, «Marcar todos como asistentes» y un único botón «Guardar».
 **Constraints**: «ahora» siempre de `servicios-comunes/fechas.js` (`AHORA_SIMULADO` en pruebas);
 horas con un decimal en la interfaz (`formatearHoras`).
 **Scale/Scope**: 2 páginas, 3 rutas, 1 tabla.
 
-No queda ningún NEEDS CLARIFICATION: PA8.1, PA8.2, quién registra, desde cuándo y la regla de
+No queda ningún NEEDS CLARIFICATION: el plazo, las asistencias parciales, quién registra, desde cuándo y la regla de
 cancelación se resolvieron en `/speckit-clarify` (sesión 2026-11-04). Las decisiones técnicas
 están en [research.md](research.md).
 
@@ -43,7 +43,7 @@ están en [research.md](research.md).
 
 | Principio | Cómo lo cumple HU-08 |
 |---|---|
-| I. Simplicidad | Sin plazo (PA8.1), sin horas parciales (PA8.2), cualquier coordinador; total derivado, sin contadores. Un único `PUT` con la lista completa. |
+| I. Simplicidad | Sin plazo y sin horas parciales (Clarifications 2026-11-04), cualquier coordinador; total derivado, sin contadores. Un único `PUT` con las filas marcadas. |
 | II. Cero alcance fantasma | Solo FR-001…FR-009; sin certificados de horas, sin exportar, sin notificaciones. |
 | III. Verificable | Cada escenario tiene un paso en [quickstart.md](quickstart.md); reglas de horas en `asistencias.test.js`. |
 | IV. Español | Mensajes en español; fechas dd/mm/aaaa con `formatearFecha`; horas `3,5 h`. |
@@ -87,7 +87,7 @@ backend/src/app.js                ← api.use(rutasYoActividades)
 frontend/src/
 ├── pages/coordinacion/actividades/[id]/asistencia.astro   ← pantalla de asistencia
 ├── pages/mis-horas.astro                                  ← horas del voluntario
-├── components/actividades/ListaAsistencia.jsx             ← tabla con interruptores y Guardar
+├── components/actividades/ListaAsistencia.jsx             ← tabla con un control de tres estados por fila y Guardar
 ├── components/actividades/MisHoras.jsx                    ← total + desglose
 ├── components/actividades/DetalleActividad.jsx            ← + enlace «Registrar asistencia» si celebrada
 └── components/comunes/Menu.jsx                            ← + { rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }
@@ -101,10 +101,10 @@ frontend/src/
 | Operación | Reglas | Error |
 |---|---|---|
 | `obtenerAsistencia(actividadId)` | Actividad existe. Devuelve la actividad (con `horas` derivadas y `registrable`) y una fila por inscripción **confirmada** (`listarConfirmadasDeActividad`) con `asistio: true / false / null` (null = sin registrar). Nunca en espera ni canceladas (escenario 1.5). | 404 `NO_ENCONTRADO` |
-| `guardarAsistencia(actividadId, filas, usuario)` | En `transaccion()` con `SELECT … FROM actividades WHERE id=$1 FOR UPDATE`. Actividad `publicada` y `inicio <= ahora()` (FR-001; borrador, cancelada o futura → error). Cada `inscripcionId` debe estar entre las confirmadas de **esa** actividad (FR-006). `horas = (fin − inicio)` calculado en SQL y redondeado a 2 decimales (FR-003, research R5; cruza medianoche sin caso especial). Upsert por `inscripcion_id`: inserta o actualiza `asistio`, `horas`, `registrada_por = usuario.id`, `fecha_registro = ahora()`. Inscripciones no enviadas no cambian. | 409 `ASISTENCIA_NO_PERMITIDA` · 400 `DATOS_INVALIDOS` (con `campos`) · 404 |
+| `guardarAsistencia(actividadId, filas, usuario)` | En `transaccion()` con `SELECT … FROM actividades WHERE id=$1 FOR UPDATE`. Actividad `publicada` y `inicio <= ahora()` (FR-001; borrador, cancelada o futura → error). Cada `inscripcionId` debe estar entre las confirmadas de **esa** actividad (FR-006). `horas = (fin − inicio)` calculado en SQL y redondeado a 2 decimales (FR-003, research R5; cruza medianoche sin caso especial). Upsert por `inscripcion_id`: inserta o actualiza `asistio`, `horas`, `registrada_por = usuario.id`, `fecha_registro = ahora()`. Se envían solo las filas marcadas («asistió» o «no asistió»); las no enviadas no cambian. | 409 `ASISTENCIA_NO_PERMITIDA` · 400 `DATOS_INVALIDOS` (con `campos`) · 404 |
 | `horasDeUsuario(usuarioId)` | `listarInscripcionesDeUsuario(usuarioId)` → pares `{ inscripcionId, actividadId }`; el repositorio los recibe y, en SQL, obtiene `SUM(horas)` y el desglose de las asistencias con `asistio = true` de esas inscripciones, enlazadas con `actividades` (título, inicio) mediante el `actividadId` de cada par, sin consultar `inscripciones`. Devuelve `{ totalHoras, datos, total }` (`total` = número de filas). Sin perfil de voluntario o sin asistencias → `{ totalHoras: 0, datos: [], total: 0 }` (escenario 2.2). | — |
 
-Sin plazo posterior (PA8.1): no se compara con `fin`. `registrable = estado = 'publicada' && inicio <= ahora()`.
+Sin plazo posterior (Clarifications 2026-11-04): no se compara con `fin`. `registrable = estado = 'publicada' && inicio <= ahora()`.
 
 ## Dependencias
 

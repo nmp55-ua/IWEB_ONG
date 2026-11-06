@@ -39,10 +39,11 @@ Aquí solo las propias de HU-08.
   `confirmadas` (válido para la pantalla, pero no sirve para `/yo/horas`); se mantiene una
   función propia para no depender de la forma de la lista de espera.
 
-## R4. Un solo `PUT` con la lista completa
+## R4. Un solo `PUT` con las filas marcadas
 
 - **Decision**: `PUT /api/actividades/:id/asistencias` con
-  `{ asistencias: [{ inscripcionId, asistio }] }` (1–500 filas, sin repetidos). Todo en una
+  `{ asistencias: [{ inscripcionId, asistio }] }` (1–500 filas, sin repetidos). Se envían solo
+  las filas marcadas («asistió» o «no asistió»); las no enviadas no cambian. Todo en una
   transacción: si una fila no es válida no se guarda ninguna.
 - **Rationale**: SC-002 (20 personas en < 2 min) con un solo botón; PUT es idempotente, que es
   justo el escenario 1.3. Es la ruta fijada en plan-comun §4.
@@ -51,7 +52,7 @@ Aquí solo las propias de HU-08.
 ## R5. Cuándo es registrable y cuántas horas
 
 - **Decision**: `registrable = estado = 'publicada' AND inicio <= ahora()`, sin límite posterior
-  (PA8.1). `horas = ROUND(EXTRACT(EPOCH FROM fin − inicio) / 3600, 2)`, calculado en SQL y
+  (Clarifications 2026-11-04). `horas = ROUND(EXTRACT(EPOCH FROM fin − inicio) / 3600, 2)`, calculado en SQL y
   copiado a la fila al guardar. Las actividades celebradas no se pueden editar (spec-007), así
   que las horas copiadas no se desfasan.
 - **Rationale**: `fin − inicio` sobre `TIMESTAMPTZ` resuelve la medianoche (22:00–01:00 = 3 h) y
