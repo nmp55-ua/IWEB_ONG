@@ -48,3 +48,19 @@ Las semillas no traen una actividad celebrada con 20 confirmados y la aplicació
 | 2.2 | Entrar como `voluntario3@ong.test`, de la semilla y sin asistencias | «0 h» y mensaje «Aún no tienes horas registradas» |
 | 2.3 | Buscar cómo ver las horas de otro (no hay parámetro en `/api/yo/horas`) | Solo se ven las propias; la aplicación no ofrece forma de pedir las de otro |
 | SC-001 | Comparar el total con la suma de su desglose | Coinciden siempre |
+
+## Resultado de la prueba (T022, 2026-11-06)
+
+| Escenario | Resultado | Cómo se comprobó |
+|---|---|---|
+| 1.1 | Correcto | Pantalla: controles desactivados y aviso, sin «Guardar». El `PUT` en futura, solo en las pruebas automáticas |
+| 1.2 | Correcto | Pantalla: marcar y Guardar; `/mis-horas` de `voluntario2` muestra 3,5 h |
+| 1.3, 1.4 | Correcto | Petición `PUT` con sesión de coordinador; tras corregir, `/mis-horas` de `voluntario2` muestra 0 h |
+| 1.5 | Correcto | API: actividad con 2 confirmados y 1 en espera, y la lista devuelve 2 |
+| 1.6 | Correcto | Pantalla: «No tienes permiso para registrar asistencias.»; API 403 |
+| Actividad cancelada y en borrador | Correcto | API 409 con su motivo |
+| Fila guardada | Correcto | Pantalla: «Sin registrar» queda desactivado |
+| 2.1, 2.2, SC-001 | Correcto | Pantalla: 5,5 h con el desglose (3,5 h y 2 h); `voluntario3` ve 0 h y el mensaje |
+| 2.3 | Correcto | Pruebas automáticas: un parámetro con otro usuario se ignora |
+| FR-009 | Correcto | API: 409 `INSCRIPCION_NO_CANCELABLE` |
+| SC-002 | **Pendiente** | Cronometrado manual a cargo de Nicole; «Marcar todos» tampoco se ha pulsado en pantalla |
