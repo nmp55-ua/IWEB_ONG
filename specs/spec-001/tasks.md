@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T044 completadas y verificadas en su alcance. T006 y T007 siguen pendientes, al igual que T045 y posteriores. La numeración 009 es provisional local.
+**Estado**: T001–T005 y T008–T053 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T054 y siguientes, pendientes.
 
 ## Backend puntual — T024–T044 · 2026-11-06
 
@@ -352,41 +352,74 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: FR-013; P11, P12. **Depende de**: T043.
       **Comprobación**: Otra cuenta, caducidad, repetición y carrera de consumo no vinculan; abrir la página por GET no consume; registro/login/roles permanecen intactos.
 
-- [ ] T045 [P] [US1] Crear la isla del formulario puntual con datos mínimos, selección expresa de destino y entrada visible de vinculación. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`.
+- [x] T045 [P] [US1] Crear la isla del formulario puntual con datos mínimos, selección expresa de destino y entrada visible de vinculación. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`.
       **Origen**: FR-001–FR-005, FR-011, FR-014, FR-015; P01–P04, P07, P13–P17. **Depende de**: T044.
       **Comprobación**: Reutiliza Campo/Boton/Aviso, api.js y formato.js. Ofrece «Vincular mis aportaciones a una cuenta» a /donar/vincular sin HU-02. Conserva solo UUID de la operación en sessionStorage; recarga usa DTO corto, no rota clave por error ni guarda datos fiscales o tarjeta allí.
+      **Resultado (2026-11-06)**: En el navegador, importe 0,99 y campos vacíos muestran errores junto a cada campo sin ninguna petición a la API. Tras el 503 PASARELA_NO_CONFIGURADA, al recargar se conserva el mismo UUID en sessionStorage, solo se ofrece «Continuar el pago» (DTO corto) y el envío del formulario queda desactivado; el reenvío no crea otra operación. Antes de registrar se corrigió que PAGO_NO_DISPONIBLE expresa incertidumbre sin afirmar que no haya cobro y se retiró del formulario cualquier opción de cambiar de clave, ante cualquier error y tras recargar.
 
-- [ ] T046 [US1] Montar /donar con Layout.astro y la isla del formulario. Archivos: `frontend/src/pages/donar/index.astro`.
+- [x] T046 [US1] Montar /donar con Layout.astro y la isla del formulario. Archivos: `frontend/src/pages/donar/index.astro`.
       **Origen**: FR-001, FR-011; P01, P07. **Depende de**: T045.
       **Comprobación**: La ruta pública renderiza el formulario sin exigir cuenta, sin alterar páginas o permisos de otros módulos.
+      **Resultado (2026-11-06)**: /donar es accesible sin cuenta en el navegador. `npm run build` del frontend termina correctamente.
 
-- [ ] T047 [P] [US1] Crear la isla de resultado, reintento exclusivo de correo y entrada visible de vinculación. Archivos: `frontend/src/components/donaciones/ResultadoDonacion.jsx`.
+- [x] T047 [P] [US1] Crear la isla de resultado, reintento exclusivo de correo y entrada visible de vinculación. Archivos: `frontend/src/components/donaciones/ResultadoDonacion.jsx`.
       **Origen**: FR-006, FR-007, FR-012, FR-016; P01, P02, P05, P08–P10, P18–P20; SC-004. **Depende de**: T044.
       **Comprobación**: Pago/envío separados; cancelado=1 no cambia dinero. Enlace a /donar/vincular siempre visible, sin revelar datos. preparacion permite reanudar la misma operación autorizada, nunca otra clave; revisión requerida desactiva creación. Consulta y correo siguen limitados por permiso, con el mismo resumen y resultado real.
+      **Resultado (2026-11-06)**: La aportación propia se muestra como pendiente, sin dar el cobro por hecho. El reintento del correo de una aportación confirmada con correo fallido mantiene la aportación confirmada, con el mismo importe y la misma fecha, y muestra un único aviso de éxito. La clave solo se libera tras «rechazada» o «cancelada» informadas por el servidor y sin revisión. Antes de registrar se retiró la fila «Fecha» vacía y se muestra «Fondo general» con mayúscula inicial solo en la presentación.
 
-- [ ] T048 [US1] Montar /donar/resultado con Layout y referencia tratada solo como identificador. Archivos: `frontend/src/pages/donar/resultado.astro`.
+- [x] T048 [US1] Montar /donar/resultado con Layout y referencia tratada solo como identificador. Archivos: `frontend/src/pages/donar/resultado.astro`.
       **Origen**: FR-007, FR-016; P18–P20. **Depende de**: T047.
       **Comprobación**: Un navegador sin permiso recibe aviso genérico sin resumen, sin recuperación invitada ni acceso a otras operaciones.
+      **Resultado (2026-11-06)**: /donar/resultado de una aportación ajena muestra «No podemos mostrar esta aportación», sin datos.
 
-- [ ] T049 [P] [US1] Crear /donar/vincular y su isla con estados sin token, solicitud autenticada y confirmación con token. Archivos: `frontend/src/components/donaciones/VincularDonante.jsx`, `frontend/src/pages/donar/vincular.astro`.
+- [x] T049 [P] [US1] Crear /donar/vincular y su isla con estados sin token, solicitud autenticada y confirmación con token. Archivos: `frontend/src/components/donaciones/VincularDonante.jsx`, `frontend/src/pages/donar/vincular.astro`.
       **Origen**: FR-011, FR-013; P11, P12. **Depende de**: T044.
       **Comprobación**: Desde ambas entradas se llega sin HU-02. Sin token: FormEntrar existente, contexto/CSRF y botón Enviar enlace de verificación; 202 muestra aviso genérico idéntico, no acredita envío/vínculo. Con token: retira fragmento, sessionStorage y Confirmar vinculación por POST; GET no envía/consume. Caducado/usado permite Solicitar otro explícitamente. Sin perfil, roles o registro nuevos.
+      **Resultado (2026-11-06)**: Con donante@ong.test, la solicitud devuelve 202 con aviso genérico y el correo llega a Mailpit. El token va en el fragmento; al abrir la página se retira de la URL y se guarda en sessionStorage, y la base confirma que no se consume. La confirmación por POST vincula el Donante y marca el token como usado; reutilizar el enlace muestra «El enlace no es válido…». Un token rechazado se conserva en la pestaña hasta pulsar «Solicitar otro enlace».
 
-- [ ] T050 [US1] Añadir Donantes y aportaciones sintéticas para comprobar resultados propios y ajenos sin llamar a Stripe. Archivos: `backend/src/db/semillas/donaciones.js`, `backend/src/db/semillas/index.js`.
+- [x] T050 [US1] Añadir Donantes y aportaciones sintéticas para comprobar resultados propios y ajenos sin llamar a Stripe. Archivos: `backend/src/db/semillas/donaciones.js`, `backend/src/db/semillas/index.js`.
       **Origen**: Plan común §8; FR-007, FR-014, FR-015, FR-016. **Depende de**: T046, T048, T049.
       **Comprobación**: Se ejecutan dos veces sin duplicar; conservan casos inicialmente no vinculados y semillas ajenas, sin credenciales reales ni cargos.
+      **Resultado (2026-11-06)**: El registro en semillas/index.js se rehízo tras la restauración. Sobre la base de desarrollo `ong`, inicialmente vacía, `npm run semillas` se ejecutó dos veces: la primera creó 6 usuarios, 3 proyectos, 5 actividades, 3 donantes, 5 aportaciones y 3 correos; la segunda, 0 aportaciones nuevas, con recuentos y huella MD5 de aportaciones y correos_aportacion idénticos. Las aportaciones son sintéticas, sin identificadores de Stripe: no son cobros, y el estado «enviado» de las semillas no acredita ningún envío.
 
-- [ ] T051 [US1] Añadir el acceso público a /donar conservando las opciones y permisos existentes. Archivos: `frontend/src/components/comunes/Menu.jsx`.
+- [x] T051 [US1] Añadir el acceso público a /donar conservando las opciones y permisos existentes. Archivos: `frontend/src/components/comunes/Menu.jsx`.
       **Origen**: P-02; FR-001, FR-011; P07. **Depende de**: T050.
       **Comprobación**: Invitado y cuenta pueden abrir formulario; no aparecen historial HU-02 ni acciones de edición de socio.
+      **Resultado (2026-11-06)**: Enlace «Donar» visible en el menú; el cambio sobre Menu.jsx se rehízo tras la restauración del árbol de trabajo.
 
-- [ ] T052 [US1] Revisar interfaz puntual, validaciones y estados de datos sintéticos sin efectuar un Checkout real. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`, `frontend/src/components/donaciones/ResultadoDonacion.jsx`, `frontend/src/components/donaciones/VincularDonante.jsx`, `specs/spec-001/refinamiento/validacion-local-01.md`.
+- [x] T052 [US1] Revisar interfaz puntual, validaciones y estados de datos sintéticos sin efectuar un Checkout real. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`, `frontend/src/components/donaciones/ResultadoDonacion.jsx`, `frontend/src/components/donaciones/VincularDonante.jsx`, `specs/spec-001/refinamiento/validacion-local-01.md`.
       **Origen**: FR-002, FR-007, FR-012, FR-013, FR-016; P03, P04, P08–P12, P18–P20. **Depende de**: T051.
       **Comprobación**: Recorrer P11/P12 desde formulario y desde resultado: sin token, login, solicitud, aviso genérico, correo Mailpit y confirmación de la misma cuenta; rechazar otra cuenta/caducidad/uso. La comprobación de vínculo es local y no requiere Stripe. Verificar también clave conservada tras recarga, error en curso/revisión y ausencia de nueva operación automática; semillas no prueban cobros reales.
+      **Resultado (2026-11-06)**: Recorridos en el navegador sin Stripe real (STRIPE_SECRET_KEY vacía) y con Mailpit local: validaciones del formulario, clave conservada tras recarga sin nueva operación automática, resultado propio y ajeno, solicitud y confirmación del vínculo con la misma cuenta, reutilización del enlace rechazada, y reintento del correo con el texto orientado al donante («Importe: 50,00 €», «Fecha de cobro: 01/11/2026», «Modalidad: Donación puntual», «Destino: Comedor social», referencia) en UTF-8. El correo de verificación recibido explica propósito, caducidad, cuenta, uso único y qué hacer si no se pidió. **No se recorrieron en el navegador** y quedan cubiertos solo por pruebas automatizadas: confirmación con otra cuenta, caducidad del enlace, error de operación en curso y revisión requerida. La recepción en Mailpit es local y no acredita entrega a buzones reales.
 
-- [ ] T053 [US1] Ejecutar las pruebas locales de US1, la integración común disponible y la compilación del frontend; registrar resultados reales. Archivos: `backend/src/modulos/donaciones/servicio.test.js`, `backend/src/modulos/donaciones/rutas.test.js`, `backend/src/modulos/donaciones/pasarela.test.js`, `specs/spec-001/refinamiento/validacion-local-01.md`.
+- [x] T053 [US1] Ejecutar las pruebas locales de US1, la integración común disponible y la compilación del frontend; registrar resultados reales. Archivos: `backend/src/modulos/donaciones/servicio.test.js`, `backend/src/modulos/donaciones/rutas.test.js`, `backend/src/modulos/donaciones/pasarela.test.js`, `specs/spec-001/refinamiento/validacion-local-01.md`.
       **Origen**: FR-001–FR-007, FR-010–FR-017; P01–P21; SC-003, SC-004. **Depende de**: T052.
       **Comprobación**: P01–P21 tienen resultado documentado con pasarela simulada; conexión/esquema ausentes fallan, no omiten casos. SC-001/SC-002 y Stripe real no se declaran por estas pruebas.
+      **Resultado (2026-11-06)**: `npm test -- src/modulos/donaciones --no-file-parallelism` sobre ong_test_hu01: 10 archivos, 310 pruebas aprobadas y 0 omitidas (289 previas más 21 de `textoCorreo.test.js`; antes de corregir los correos se habían obtenido 289/289). `src/servicios-comunes/correo.test.js`: 16/16. `npm run build` del frontend: correcto. Las pruebas usan pasarela simulada; SC-001, SC-002, Checkout e idempotencia real de Stripe no se declaran. Cobertura de P01–P21 en los archivos `*.test.js` de `backend/src/modulos/donaciones`:
+
+      | Escenario | Prueba que lo cubre | Observación |
+      | --- | --- | --- |
+      | P01 | `eventos.test.js` › «confirma una vez con evento repetido, distinto y concurrente; conserva fecha y resumen»; `textoCorreo.test.js` › «presenta el resumen en español, en el orden de la pantalla» | Checkout real pendiente. |
+      | P02 | `servicio.test.js` › «no revalida el proyecto de una operación existente y no acepta destinos inactivos nuevos»; `textoCorreo.test.js` › «muestra el nombre del proyecto, miles y la modalidad de cuota» | Pendiente: prueba identificable del mismo proyecto en base, resumen y correo de un cobro. |
+      | P03 | `normalizacion.test.js` › «HU-01 · normalización de importes · FR-002 / P03» | Límites de socio pendientes (US2). |
+      | P04 | `normalizacion.test.js` › «HU-01 · NIF/NIE · FR-004 / P04» y «HU-01 · datos del donante · FR-004 / FR-015 / P17» |  |
+      | P05 | `eventos.test.js` › «rechazo seguido de éxito del mismo pago reutiliza la fila; SMTP fallido no revierte», «un fallo tardío conserva cancelada y un cobro acreditado posterior confirma la misma fila», «Checkout completado solo correlaciona, expirado actual cancela y éxito tardío confirma la misma fila» | Pendiente: prueba identificable de que volver por cancel_url no confirma la cancelación. |
+      | P06 | Pendiente: no hay prueba automatizada que acredite la recepción en Mailpit | Corresponde a T077/T079. |
+      | P07 | `rutas.test.js` › «contexto, creación privada y DTO corto; rechaza CSRF, campos desconocidos y sesión ajena» | Recorrido invitado en navegador (T052). |
+      | P08 | `rutas.test.js` › «resultado y correo propios: un fallo SMTP conserva el cobro y reintentar no cobra otra vez»; `eventos.test.js` › «rechazo seguido de éxito del mismo pago reutiliza la fila; SMTP fallido no revierte» |  |
+      | P09 | `rutas.test.js` › «resultado y correo propios: un fallo SMTP conserva el cobro y reintentar no cobra otra vez»; `confirmaciones.test.js` › «envía fuera de transacción y conserva el resumen; SMTP=%s» |  |
+      | P10 | `confirmaciones.test.js` › «envía fuera de transacción y conserva el resumen; SMTP=%s» (SMTP=false) y «renueva cada diez segundos mientras espera SMTP y convierte excepciones en fallo» |  |
+      | P11 | `rutas.test.js` › «solicitud de vínculo no enumera, exige cuenta/rol y el cliente no elige destinatario» y «aviso 202 idéntico sin elegibilidad y ante fallo SMTP; cuenta sin rol recibe 403» |  |
+      | P12 | `rutas.test.js` › «el vínculo se solicita y confirma por POST; otra cuenta, repetición y GET no consumen»; `servicio.test.js` › «vincula solo con hash, cuenta solicitante, caducidad y consumo único atómico» y «solicitar otro enlace invalida el anterior y un enlace vencido no vincula» |  |
+      | P13 | `servicio.test.js` › «reutiliza formatos equivalentes sin sobrescribir y rechaza cambios reales antes de Stripe» y «la preparación ocupada no crea filas y dos identidades incompatibles no comparten correo» |  |
+      | P14 | `servicio.test.js` › «reutiliza formatos equivalentes sin sobrescribir y rechaza cambios reales antes de Stripe» y «serializa la identidad y conserva un único Donante en altas simultáneas» |  |
+      | P15 | `servicio.test.js` › «reutiliza formatos equivalentes sin sobrescribir y rechaza cambios reales antes de Stripe» |  |
+      | P16 | `servicio.test.js` › «reutiliza formatos equivalentes sin sobrescribir y rechaza cambios reales antes de Stripe» | Cubre el caso invitado. Pendiente: prueba identificable con cuenta vinculada. |
+      | P17 | `normalizacion.test.js` › «HU-01 · datos del donante · FR-004 / FR-015 / P17»; `servicio.test.js` › «reutiliza formatos equivalentes sin sobrescribir y rechaza cambios reales antes de Stripe» |  |
+      | P18 | `rutas.test.js` › «resultado y correo propios: un fallo SMTP conserva el cobro y reintentar no cobra otra vez»; `autorizacion.test.js` › «HU-01 · permiso absoluto por operación» |  |
+      | P19 | `rutas.test.js` › «contexto, creación privada y DTO corto; rechaza CSRF, campos desconocidos y sesión ajena»; `autorizacion.test.js` › «HU-01 · permiso absoluto por operación» y «no concede acceso por cookie vacía, correo, UUID o referencia del cliente» |  |
+      | P20 | `autorizacion.test.js` › «separa sesiones y operaciones A/B, incluidas cuotas posteriores»; `rutas.test.js` › «contexto, creación privada y DTO corto; rechaza CSRF, campos desconocidos y sesión ajena» |  |
+      | P21 | `eventos.test.js` › «confirma una vez con evento repetido, distinto y concurrente; conserva fecha y resumen»; `rutas.test.js` › «el webhook recibe Buffer sin cookie ni CSRF y rechaza firma inválida» | Webhook real de Stripe pendiente. |
 
 ## Fase 4. [US2] Alta y cuotas de socio — prioridad P1
 

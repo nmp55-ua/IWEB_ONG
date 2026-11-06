@@ -265,3 +265,90 @@ La suite completa posterior termina con código 0: 289 pruebas aprobadas en nuev
 ninguna fallida u omitida; inicio 20:53:14 y duración 26,46 s. Eventos pasa de 14 a 15 casos.
 La regresión de correo conserva sus 16 casos aprobados. Se mantienen las evidencias anteriores,
 las limitaciones de simulación y la alineación contractual pendiente.
+
+## Frontend de donación puntual, vínculo y semillas — T045–T053 · 2026-11-06
+
+Entorno: Windows, Node 22.20.0 y PowerShell. Backend en el puerto 3000, frontend en 4321 y
+Mailpit en 8025. STRIPE_SECRET_KEY vacía y sin Checkout real.
+
+### Cambios
+
+- **Restauración.** Los archivos nuevos de T045–T053 se habían borrado del árbol de trabajo
+  y se restauraron sin cambios. Los cambios sobre archivos versionados se rehicieron:
+  Menu.jsx, semillas/index.js y el paso 3 de pasarela-stripe.md.
+- **Correcciones antes de registrar:**
+  - FormDonacion: PAGO_NO_DISPONIBLE expresa incertidumbre y no afirma que no haya habido
+    cobro.
+  - El formulario ya no ofrece cambiar de clave ante ningún error ni tras recargar.
+    ResultadoDonacion solo libera la clave tras «rechazada» o «cancelada» informadas por el
+    servidor y sin revisión requerida.
+  - Los correos de confirmación y de verificación se dirigen al donante y se generan con
+    textoCorreo.js, una función pura. El resumen guardado no cambia.
+  - Resultado: no aparece la fila «Fecha» vacía, hay un único aviso tras el reenvío y
+    «Fondo general» se muestra con mayúscula inicial.
+  - Contrato pasarela-stripe.md, paso 3: la consulta a Stripe se hace fuera de la
+    transacción, con la exclusión mantenida por la conexión. En los pagos, la transacción
+    corta vuelve a comprobar el evento y lo registra de forma idempotente. La alineación
+    documental queda pendiente de la revisión de HU-01.
+
+### Comandos y resultados reales
+
+| Comando o recorrido | Resultado |
+| --- | --- |
+| `npm test -- src/modulos/donaciones --no-file-parallelism` (ong_test_hu01) | 10 archivos; 310 pruebas aprobadas y 0 omitidas: 289 previas más 21 de `textoCorreo.test.js`. Antes de corregir los correos se habían obtenido 289/289. |
+| `src/servicios-comunes/correo.test.js` | 16/16 aprobadas. |
+| `npm run build` (frontend) | Correcto. |
+| `npm run migrar` sobre `ong` (Docker, 127.0.0.1:5440), inicialmente vacía | Se aplicaron 001–005 y 009. |
+| `npm run semillas`, primera ejecución | 6 usuarios, 3 proyectos, 5 actividades, 3 donantes, 5 aportaciones y 3 correos. |
+| `npm run semillas`, segunda ejecución | 0 aportaciones nuevas. Recuentos y huella MD5 del contenido de aportaciones y correos_aportacion idénticos entre ejecuciones. |
+
+Las aportaciones sembradas son sintéticas y no tienen identificadores de Stripe: no son
+cobros, y el estado «enviado» de las semillas no acredita ningún envío.
+
+Recorridos en el navegador:
+
+- /donar es accesible sin cuenta y el menú muestra el enlace «Donar». Con importe 0,99 y
+  campos vacíos aparecen errores junto a cada campo y no se hace ninguna petición a la API.
+- Un envío válido devuelve 503 PASARELA_NO_CONFIGURADA con un mensaje neutro, y se conserva
+  la aportación pendiente con su operación. Al recargar:
+  - se mantiene el mismo UUID en sessionStorage;
+  - solo se ofrece «Continuar el pago»;
+  - el envío del formulario queda desactivado.
+
+  «Continuar el pago» reenvía con el mismo UUID y no crea otra operación: la base contiene
+  una sola.
+- /donar/resultado de una aportación ajena muestra «No podemos mostrar esta aportación», sin
+  datos. La propia se muestra como pendiente, sin dar el cobro por hecho.
+- Vínculo con donante@ong.test:
+  - la solicitud devuelve 202 con un aviso genérico y el correo llega a Mailpit;
+  - el token va en el fragmento: al abrir la página se retira de la URL y se guarda en
+    sessionStorage, y la base confirma que no se consume;
+  - al confirmar por POST, el Donante queda vinculado y el token se marca como usado
+    (caducidad de 30 minutos);
+  - reutilizar el enlace muestra «El enlace no es válido…»;
+  - la cuenta vinculada ve su aportación confirmada y no ve una ajena.
+- Reintento del correo de una aportación confirmada con correo fallido (donante2@ong.test):
+  - el correo llega a Mailpit en UTF-8, con el texto nuevo: «Importe: 50,00 €», «Fecha de
+    cobro: 01/11/2026», «Modalidad: Donación puntual», «Destino: Comedor social» y la
+    referencia;
+  - la aportación sigue confirmada, con el mismo importe y la misma fecha, y aparece un
+    único aviso de éxito;
+  - para repetir la prueba, el correo sintético se volvió a poner en «fallido» en la base de
+    desarrollo.
+- El nuevo correo de verificación llega a Mailpit. Explica el propósito, la caducidad, la
+  cuenta, el uso único y qué hacer si no se pidió.
+
+### Límites
+
+- No se ha usado Stripe real, así que no se prueban Checkout ni la idempotencia real. SC-001 y
+  SC-002 no se declaran.
+- La recepción en Mailpit es local y no acredita la entrega a buzones reales.
+- La confirmación con otra cuenta, la caducidad, la operación en curso y la revisión requerida
+  se cubren solo con pruebas automatizadas, no con recorridos en el navegador.
+- La caducidad de 30 minutos está en el SQL y repetida en el texto del correo.
+- Un token rechazado se conserva en la pestaña hasta pulsar «Solicitar otro enlace».
+- La pantalla no separa los miles en importes de cuatro cifras («1234,50 €»), porque formato.js
+  es común; el correo sí los separa («1.234,50 €»).
+- La base de desarrollo contiene además una aportación pendiente de prueba y una cuenta local
+  de prueba.
+- T006 y T007 siguen pendientes.
