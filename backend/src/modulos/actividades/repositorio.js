@@ -99,3 +99,37 @@ export async function obtenerProyecto(id, cliente) {
   const { rows } = await ejecutar(cliente, 'SELECT id, activo FROM proyectos WHERE id = $1', [id]);
   return rows[0] ?? null;
 }
+
+// --- Asistencias (spec-008). Solo asistencias y actividades: las inscripciones, vía ./inscripciones.js.
+
+export async function listarAsistencias(inscripcionIds) {
+  const { rows } = await consulta(
+    'SELECT inscripcion_id, asistio FROM asistencias WHERE inscripcion_id = ANY($1::bigint[])',
+    [inscripcionIds],
+  );
+  return rows;
+}
+
+// Horas de la actividad, calculadas sobre los instantes (22:00–01:00 = 3; research R5).
+export async function horasDeActividad(id, cliente) {
+  const { rows } = await ejecutar(
+    cliente,
+    'SELECT ROUND(EXTRACT(EPOCH FROM fin - inicio) / 3600, 2) AS horas FROM actividades WHERE id = $1',
+    [id],
+  );
+  return Number(rows[0].horas);
+}
+
+// Una fila por inscripción: repetir no duplica y corregir solo cambia la fila (research R1).
+export async function guardarAsistencias(filas, cliente) {
+  for (const fila of filas) {
+    await ejecutar(
+      cliente,
+      `INSERT INTO asistencias (inscripcion_id, asistio, horas, registrada_por, fecha_registro)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (inscripcion_id) DO UPDATE SET asistio = EXCLUDED.asistio, horas = EXCLUDED.horas,
+         registrada_por = EXCLUDED.registrada_por, fecha_registro = EXCLUDED.fecha_registro`,
+      [fila.inscripcionId, fila.asistio, fila.horas, fila.registradaPor, fila.fechaRegistro],
+    );
+  }
+}

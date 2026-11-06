@@ -39,8 +39,8 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ## Phase 2: Foundational (bloquea US1 y US2)
 
-- [ ] T003 Añadir a `backend/src/modulos/actividades/repositorio.js`, con SQL parametrizado sobre `asistencias` y `actividades` (nunca sobre `inscripciones` ni `voluntarios`): `listarAsistencias(inscripcionIds)` y `horasDeActividad(id, cliente)`, que devuelve como número `ROUND(EXTRACT(EPOCH FROM fin - inicio) / 3600, 2)` (22:00–01:00 = 3, research R5), y `guardarAsistencias(filas, cliente)`, un upsert `INSERT … ON CONFLICT (inscripcion_id) DO UPDATE` de `asistio`, `horas`, `registrada_por` y `fecha_registro` (research R1). Reutilizar `obtenerPorId` y `bloquearPorId` de spec-007
-- [ ] T004 Crear `backend/src/modulos/actividades/asistencias.js` con la ayuda `esRegistrable(actividad)`; las horas no se calculan aquí, sino en SQL con `horasDeActividad` del repositorio (T003, research R5). `esRegistrable`: `estado === 'publicada' && inicio <= ahora()`, con `ahora()` de `servicios-comunes/fechas.js` y sin límite posterior (Clarifications 2026-11-04)
+- [X] T003 Añadir a `backend/src/modulos/actividades/repositorio.js`, con SQL parametrizado sobre `asistencias` y `actividades` (nunca sobre `inscripciones` ni `voluntarios`): `listarAsistencias(inscripcionIds)` y `horasDeActividad(id, cliente)`, que devuelve como número `ROUND(EXTRACT(EPOCH FROM fin - inicio) / 3600, 2)` (22:00–01:00 = 3, research R5), y `guardarAsistencias(filas, cliente)`, un upsert `INSERT … ON CONFLICT (inscripcion_id) DO UPDATE` de `asistio`, `horas`, `registrada_por` y `fecha_registro` (research R1). Reutilizar `obtenerPorId` y `bloquearPorId` de spec-007
+- [X] T004 Crear `backend/src/modulos/actividades/asistencias.js` con la ayuda `esRegistrable(actividad)`; las horas no se calculan aquí, sino en SQL con `horasDeActividad` del repositorio (T003, research R5). `esRegistrable`: `estado === 'publicada' && inicio <= ahora()`, con `ahora()` de `servicios-comunes/fechas.js` y sin límite posterior (Clarifications 2026-11-04)
 
 **Checkpoint**: migración aplicada y módulo arrancando sin rutas nuevas.
 
