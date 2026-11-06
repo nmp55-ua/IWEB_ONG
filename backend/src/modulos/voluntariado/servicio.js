@@ -168,6 +168,45 @@ export async function cancelar(inscripcionId, usuario) {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Ruta de HU-06 (specs/spec-006/plan.md, «Reglas de servicio.js»)
+// ---------------------------------------------------------------------------------------------
+
+// FR-002 y FR-006: las inscripciones activas del usuario de la sesión en actividades publicadas que
+// aún no han terminado (clarify Q3), por fecha. Con desde y hasta, solo las que se solapan con esos
+// días de Madrid (research R3). Las actividades se piden a su servicio, una por inscripción (R2).
+export async function calendario(usuario, { desde, hasta } = {}) {
+  const momento = ahora();
+  const minimo = desde ? inicioDeDia(desde) : null;
+  const limite = hasta ? inicioDeDia(hasta, 1) : null;
+  const entradas = [];
+  for (const fila of await repositorio.listarActivasDeUsuario(usuario.id)) {
+    const actividad = await actividades.obtener(Number(fila.actividad_id));
+    const inicio = new Date(actividad.inicio);
+    const fin = new Date(actividad.fin);
+    if (actividad.estado !== 'publicada' || fin <= momento) continue;
+    if ((minimo && fin <= minimo) || (limite && inicio >= limite)) continue;
+    entradas.push({
+      id: Number(fila.id),
+      estado: fila.estado,
+      posicion: fila.posicion ?? null,
+      enCurso: inicio <= momento,
+      actividad: {
+        id: actividad.id,
+        titulo: actividad.titulo,
+        descripcion: actividad.descripcion,
+        proyecto: actividad.proyecto,
+        inicio: actividad.inicio,
+        fin: actividad.fin,
+        lugar: actividad.lugar,
+        requisitos: actividad.requisitos,
+      },
+    });
+  }
+  entradas.sort((a, b) => new Date(a.actividad.inicio) - new Date(b.actividad.inicio) || a.id - b.id);
+  return { datos: entradas, total: entradas.length };
+}
+
+// ---------------------------------------------------------------------------------------------
 // Funciones para el módulo actividades (spec-007 y spec-008), vía actividades/inscripciones.js
 // ---------------------------------------------------------------------------------------------
 
