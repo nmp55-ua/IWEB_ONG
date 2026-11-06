@@ -2,9 +2,9 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: Implementación parcial de T001–T005 completada y verificada. T006–T081 permanecen pendientes; la revisión de Rubén no se ha realizado.
+**Estado**: T001–T005 y T020–T021 completadas y verificadas. Las demás tareas permanecen pendientes; la revisión de Rubén de T006 no se ha realizado.
 
-## Ejecución parcial — 2026-11-06
+## Entrega temprana de 004 — 2026-11-06
 
 T001–T005 preparan la entrega temprana de 004. La
 [ficha de revisión](refinamiento/revision-tecnica-01.md) conserva la revisión de Rubén como
@@ -13,9 +13,19 @@ inicial por ausencia de 004 y las 50 pruebas aprobadas después de crearla, sobr
 esquemas aislados de ong_test_hu01. Node.js y dependencias se han preparado desde los
 lockfiles, sin modificarlos; .env queda ignorado y PostgreSQL de Docker usa el puerto 5440.
 
-Solo se marcan esas cinco tareas. No se ha ejecutado el bloque B completo, P-05, la suite
-general, compilación, Stripe real o tareas posteriores. Se conservan los informes históricos
-y el estado preparado en el índice de Git, sin nuevos commits o cambios de rama.
+La validación de 004 no incluyó el bloque B completo, P-05, la suite general, compilación
+o Stripe real. Sus resultados e informes se conservan como evidencia de esa entrega.
+
+## Normalización pura — 2026-11-06
+
+T020–T021 incorporan validación de importes y NIF/NIE, normalización de los cinco campos
+del donante y comparación de equivalencias, sin persistencia. Se reutilizan los ayudantes
+de importes existentes sin modificarlos. Las 102 pruebas dirigidas pasan sin cargar .env,
+conectar PostgreSQL o Stripe. El [informe de normalización](refinamiento/validacion-normalizacion-01.md)
+conserva los comandos, los fallos anteriores y el resultado final.
+
+Este bloque no incorpora las tablas operativas ni completa otras tareas. T006 sigue
+pendiente de la revisión real de Rubén; no se realizan cambios comunes, git add o commit.
 
 ## Alcance y fuentes
 
@@ -45,6 +55,10 @@ automática ni modificación concurrente del mismo archivo.
 - **Revisión compartida**: P-01–P-03 están definidos en esta rama; la revisión de Rubén y
   la coordinación común siguen pendientes. T006 es el control anterior a
   incorporar 004 y a ejecutar las ampliaciones comunes; no se da por realizado.
+- **Normalización independiente**: T020 depende de T002, no de T013. Sus pruebas y las
+  funciones puras de T021 no usan base de datos, tablas operativas o Stripe; pueden
+  prepararse con las dependencias instaladas. T021 conserva su dependencia de T020 y
+  T027 sigue requiriendo T021. El ajuste no completa T006 ni adelanta cambios comunes.
 - **Ruta de la migración operativa**: no puede fijarse honestamente un nombre numérico antes
   de T007. Esa tarea registra el nombre completo en
   `backend/src/db/migraciones/LEEME.md`; T009, T010, T011, T012
@@ -166,11 +180,11 @@ automática ni modificación concurrente del mismo archivo.
   **Origen**: Quickstart B; FR-010, FR-013, FR-016, FR-017. **Depende de**: T013.
   **Comprobación**: Falta de TEST_DATABASE_URL/esquema falla, no omite. Los fixtures controlan dos conexiones y reinicio de proceso con base/secreto de sesión conservados y simulador Stripe persistente por clave, sin contactar Stripe ni modificar pruebas ajenas.
 
-- [ ] T020 [P] Escribir casos de normalización y límites de importe, sin confundir diferencias de formato y cambios reales. Archivos: `backend/src/modulos/donaciones/normalizacion.test.js`.
-  **Origen**: FR-002, FR-004, FR-015; P03, P04, P17. **Depende de**: T013.
+- [x] T020 [P] Escribir casos de normalización y límites de importe, sin confundir diferencias de formato y cambios reales. Archivos: `backend/src/modulos/donaciones/normalizacion.test.js`.
+  **Origen**: FR-002, FR-004, FR-015; P03, P04, P17. **Depende de**: T002.
   **Comprobación**: Se incluyen extremos 1.00/999999.99, coma, tres decimales, exponente, NIF/NIE con letra, NFC, espacios, mayúsculas y conservación de tildes/puntuación.
 
-- [ ] T021 Implementar las equivalencias del research reutilizando los ayudantes comunes de importes y sin sobrescribir Donante. Archivos: `backend/src/modulos/donaciones/normalizacion.js`.
+- [x] T021 Implementar las equivalencias del research reutilizando los ayudantes comunes de importes y sin sobrescribir Donante. Archivos: `backend/src/modulos/donaciones/normalizacion.js`.
   **Origen**: FR-002, FR-004, FR-015; P03, P04, P17. **Depende de**: T020.
   **Comprobación**: Los casos de formato pasan y todo cambio real sigue siendo distinto; conversión en céntimos enteros, sin redondear entradas inválidas.
 
@@ -443,8 +457,10 @@ orden indicado; una tarea sin [P] no se presume paralela. No se modifican a la v
 
 ```mermaid
 flowchart TD
-    A["T001–T006: preparar, validar y revisar 004"] --> B["T007–T027: fundamentos"]
+    A["T001–T006: preparar, validar y revisar 004"] --> B["T007–T027: resto de fundamentos"]
     A -. "contrato revisado para incorporación autorizada" .-> R["Rubén puede consumir el dominio al incorporarse 004"]
+    N["T002: dependencias instaladas"] --> P["T020–T021: normalización pura"]
+    P -. "prerrequisito de T027" .-> B
     B --> C["T028–T053: US1"]
     C --> D["T054–T072: US2 y regresión puntual"]
     D --> E["T073–T074: regresión local y seguridad"]
@@ -461,7 +477,8 @@ ninguna de las dos modalidades ni la numeración de la ampliación operativa.
 
 | Ventana | Tareas | Condición y ausencia de conflicto |
 |---|---|---|
-| Fundamentos, tras T013 | T014, T017, T019, T020 | Contratos Stripe, SMTP, fixtures y normalización en cuatro archivos diferentes. |
+| Normalización, tras T002 | T020 | Pruebas puras en archivo propio, independientes de los fundamentos con base. T021 espera a T020. |
+| Fundamentos, tras T013 | T014, T017, T019 | Contratos Stripe, SMTP y fixtures en tres archivos diferentes. |
 | UI US1, tras T044 | T045, T047, T049 | Islas y página de vínculo distintas. Las páginas de formulario/resultado esperan a su isla y las semillas a las tres ramas. |
 | UI US2, tras T068 | T069, T070 | FormDonacion.jsx y ResultadoDonacion.jsx diferentes; T071 espera a ambas. |
 
@@ -471,10 +488,18 @@ suites simultáneamente sobre ong_test_hu01 ni se mezcla una validación
 manual con limpieza de fixtures. Las pruebas que provocan carreras lo hacen dentro
 de sus propios casos con conexiones controladas.
 
-## Comandos previstos, no ejecutados en esta fase
+## Comandos de ejecución y validación
 
 Se usan scripts y dependencias existentes. No se añade un comando de frontend test,
 una biblioteca de navegador, ORM, cola o herramienta de despliegue.
+
+**Para T020–T021**: desde PowerShell en
+`E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\backend`, ejecutar solo las pruebas puras,
+sin cargar .env ni configurar PostgreSQL o Stripe:
+
+```powershell
+npm test -- src/modulos/donaciones/normalizacion.test.js
+```
 
 **Para T005 y T013**: desde PowerShell en
 `E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\backend`, después de crear la base y
