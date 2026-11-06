@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ActividadesDisponibles from '../../components/voluntariado/ActividadesDisponibles.jsx';
+// spec-005. Público: cualquiera ve las actividades; para inscribirse hace falta entrar como voluntario.
+---
+
+<Layout titulo="Actividades de voluntariado">
+  <ActividadesDisponibles client:load />
+</Layout>
