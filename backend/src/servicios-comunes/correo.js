@@ -2,15 +2,26 @@
 import nodemailer from 'nodemailer';
 import { config } from '../config.js';
 
-const transporte = nodemailer.createTransport({
+const opcionesBase = {
   host: config.smtp.host,
   port: config.smtp.puerto,
   secure: false,
-});
+};
 
-export async function enviarCorreo({ para, asunto, texto }) {
+const transporte = nodemailer.createTransport({ ...opcionesBase });
+
+export async function enviarCorreo({ para, asunto, texto }, opciones = {}) {
   try {
-    await transporte.sendMail({ from: config.smtp.remitente, to: para, subject: asunto, text: texto });
+    const tiempos = {};
+    if (opciones.tiempoConexionMs !== undefined) tiempos.connectionTimeout = opciones.tiempoConexionMs;
+    if (opciones.tiempoSaludoMs !== undefined) tiempos.greetingTimeout = opciones.tiempoSaludoMs;
+    if (opciones.tiempoInactividadMs !== undefined) tiempos.socketTimeout = opciones.tiempoInactividadMs;
+
+    const transporteEnvio = Object.keys(tiempos).length
+      ? nodemailer.createTransport({ ...opcionesBase, ...tiempos })
+      : transporte;
+    await transporteEnvio.sendMail({ from: config.smtp.remitente, to: para, subject: asunto, text: texto });
+    // La aceptación SMTP no acredita la recepción en el buzón destinatario.
     return true;
   } catch (error) {
     console.error(`No se pudo enviar el correo «${asunto}» a ${para}: ${error.message}`);
