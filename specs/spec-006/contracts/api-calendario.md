@@ -17,7 +17,7 @@ Formato común (claves `camelCase`, fechas ISO con desfase de Madrid, errores
     "id": 12, "titulo": "Visita a la depuradora", "descripcion": "…",
     "proyecto": { "id": 1, "nombre": "Agua potable" },
     "inicio": "2026-11-18T11:00:00+01:00", "fin": "2026-11-18T13:00:00+01:00",
-    "lugar": "Depuradora municipal", "requisitos": ""
+    "lugar": "Depuradora municipal", "requisitos": "Calzado cerrado."
   }
 }
 ```

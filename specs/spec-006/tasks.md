@@ -32,9 +32,9 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 
 ## Phase 2: Foundational (bloquea US1 y US2)
 
-- [ ] T001 [P] Añadir `obtener` a la reexportación de `backend/src/modulos/voluntariado/actividades.js` (junto a `listar`, `bloquearActividad` y `avisarPlazaConfirmada`), sin tocar `modulos/actividades/servicio.js` (research R2). Lo importado solo se usa dentro de funciones (importación circular)
-- [ ] T002 [P] En `backend/src/db/semillas/voluntariado.js`, crear antes de las inscripciones las 4 actividades publicadas de [research R7](research.md#r7-semillas-para-el-independent-test) (por título e idempotentes, fechas relativas a hoy en Madrid, `creada_por` = `coordinador@ong.test`, requisitos «Mayor de edad.», «Calzado cerrado.» y «Calzado de montaña y agua.» salvo la Charla, sin requisitos) y añadir sus inscripciones previstas (`voluntario@` en las 4, en espera en Visita a la depuradora detrás de `voluntario6` y `voluntario7`). Actualizar en `specs/spec-005/quickstart.md` el paso 1.1 y la tabla de Preparación con las actividades nuevas (el paso 1.3 sigue igual)
-- [ ] T003 [P] Crear `frontend/src/components/voluntariado/fechas.js` con `horario({ inicio, fin })` (movida tal cual desde `TarjetaActividad.jsx`, que pasa a importarla), `diaMadrid(iso)` → `aaaa-mm-dd` en `Europe/Madrid`, `diasDeActividad({ inicio, fin })` (del día del inicio al de `fin − 1 ms`), `semanasDelMes(anio, mes)` (semanas de lunes a domingo que contienen el mes) y `mesActual()` en Madrid ([data-model](data-model.md#días-de-la-vista-mensual-en-la-interfaz))
+- [ ] T001 [P] Añadir `obtener` a la reexportación de `backend/src/modulos/voluntariado/actividades.js` (junto a `listar`, `bloquearActividad` y `avisarPlazaConfirmada`), sin tocar `modulos/actividades/servicio.js` (research R2), y que su comentario apunte también al contrato de spec-006. Lo importado solo se usa dentro de funciones (importación circular)
+- [ ] T002 [P] En `backend/src/db/semillas/voluntariado.js`, crear antes de las inscripciones las 4 actividades publicadas de la tabla de [research R7](research.md#r7-semillas-para-el-independent-test), con su lugar, plazas y requisitos (por título e idempotentes, descripción «Actividad de prueba: …», `creada_por` = `coordinador@ong.test`). Las horas, con un `enMadrid(dias, hh, mm)` propio que corrige el desfase si ese día cambia la hora (R7). Añadir sus inscripciones previstas (`voluntario@` en las 4, en espera en Visita a la depuradora detrás de `voluntario6` y `voluntario7`). Actualizar en `specs/spec-005/quickstart.md` el paso 1.1 y la tabla de Preparación con las actividades nuevas (el paso 1.3 sigue igual)
+- [ ] T003 [P] Crear `frontend/src/components/voluntariado/fechas.js` con `horario({ inicio, fin })` (movida tal cual desde `TarjetaActividad.jsx`, que pasa a importarla), `diaMadrid(iso)` → `aaaa-mm-dd` en `Europe/Madrid` (propia, con `Intl.DateTimeFormat`; research R6, «Ayudantes»), `diasDeActividad({ inicio, fin })` (del día del inicio al de `fin − 1 ms`), `semanasDelMes({ anio, mes })` (semanas de lunes a domingo que contienen el mes), `mesActual()` en Madrid y los nombres del mes y del día en español ([data-model](data-model.md#días-de-la-vista-mensual-en-la-interfaz))
 
 **Checkpoint**: las semillas cargan (`npm run semillas` dos veces seguidas da lo mismo) y las 88 pruebas de antes siguen pasando.
 
@@ -52,9 +52,9 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 
 ### Implementation for User Story 1
 
-- [ ] T005 [US1] `calendario(usuario, { desde, hasta })` en `servicio.js` según «Reglas de `servicio.js`» del [plan](plan.md#reglas-de-servicio-js) (`listarActivasDeUsuario` + `actividades.obtener`, publicadas con `fin > ahora()`, solape con `inicioDeDia`, orden por `inicio` e id, forma `EntradaCalendario` del contrato); en `controlador.js`, esquema de `desde`/`hasta` con el `dia` de HU-05 y el mismo `refine` de orden, y controlador `calendario`; en `rutas.js`, `GET /yo/calendario` con `requiereRol('voluntario')`
-- [ ] T006 [P] [US1] `frontend/src/components/voluntariado/ActividadCalendario.jsx`: resumen de una entrada con `horario()`, título, lugar y estado («Confirmada», «En lista de espera · posición N», «En curso»), con estilos distintos para la espera (borde discontinuo ámbar) y la marca «Siguiente» si se le indica (research R4)
-- [ ] T007 [US1] `frontend/src/components/voluntariado/ListaCalendario.jsx` (entradas por fecha, la primera con «Siguiente») y `MesCalendario.jsx` (cuadrícula de lunes a domingo, «‹» desactivado en el mes actual, «›», cada día es un botón con etiquetas desde 640 px y barras en móvil, día elegido con sus `ActividadCalendario` debajo, primer día con actividades elegido al abrir el mes y leyenda; research R6). `CalendarioVoluntario.jsx`: pestañas *Lista* (la primera) y *Mes* con `aria-pressed`; la lista pide `GET /api/yo/calendario` y el mes, con `desde`/`hasta` de sus semanas; `EstadoVacio` «Todavía no tienes actividades por delante.» con *Ver actividades disponibles* (`/actividades`); con 401, «Inicia sesión para ver tu calendario.» y *Entrar* (`/entrar?volver=/mi-calendario`); otros errores, con su mensaje en un `Aviso`
+- [ ] T005 [US1] `calendario(usuario, { desde, hasta })` en `servicio.js` según «Reglas de `servicio.js`» del [plan](plan.md#reglas-de-servicio-js) (`listarActivasDeUsuario` + `actividades.obtener`, publicadas con `fin > ahora()`, solape con `inicioDeDia`, orden por `inicio` e id, forma `EntradaCalendario` del contrato); en `controlador.js`, esquema de `desde`/`hasta` con el `dia` de HU-05 y el mismo `refine` de orden, y controlador `calendario`; en `rutas.js`, `GET /yo/calendario` con `requiereRol('voluntario')`, y su comentario, que hoy dice que el rol siempre se comprueba en el servicio, explica la excepción (research R1)
+- [ ] T006 [P] [US1] `frontend/src/components/voluntariado/ActividadCalendario.jsx` (props `entrada`, `siguiente` y `onCancelada(entrada)`): resumen de una entrada con `horario()`, título, lugar y estado («Confirmada», «En lista de espera · posición N», «En curso»), con estilos distintos para la espera (borde discontinuo ámbar) y la marca «Siguiente» si se le indica (research R4)
+- [ ] T007 [US1] `frontend/src/components/voluntariado/ListaCalendario.jsx` (entradas por fecha; «Siguiente» en la primera confirmada que no ha empezado) y `MesCalendario.jsx` (cuadrícula de lunes a domingo con las semanas completas, días de otro mes en gris y con sus actividades, «‹» desactivado en el mes actual, «›», cada día es un botón con etiquetas desde 640 px —hora de inicio, «hasta hh:mm» o «todo el día»— y barras en móvil, día elegido con sus `ActividadCalendario` debajo, primer día del mes con actividades desde hoy elegido al abrir, `EstadoVacio` si el día o el mes no tienen ninguna, y leyenda; research R6). Las dos pasan `onCancelada(entrada)` hacia arriba. `CalendarioVoluntario.jsx`: pestañas *Lista* (la primera) y *Mes* con `aria-pressed`; la lista pide `GET /api/yo/calendario` y el mes, con `desde`/`hasta` de sus semanas; `EstadoVacio` «Todavía no tienes actividades por delante.» con *Ver actividades disponibles* (`/actividades`); con 401, «Inicia sesión para ver tu calendario.» y *Entrar* (`/entrar?volver=/mi-calendario`); otros errores, con su mensaje en un `Aviso`
 - [ ] T008 [US1] `frontend/src/pages/mi-calendario.astro` con `Layout` («Mi calendario») y descomentar el enlace «Mi calendario» en `frontend/src/components/comunes/Menu.jsx`
 
 **Checkpoint**: 1.1–1.5 del quickstart pasan.
@@ -74,7 +74,7 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 ### Implementation for User Story 2
 
 - [ ] T010 [US2] En `ActividadCalendario.jsx`, *Ver detalle* / *Ocultar detalle* (`aria-expanded`) que despliega proyecto, descripción, requisitos («Sin requisitos» si no hay) y *Cancelar inscripción* o *Salir de la lista de espera*, que abre `CancelarInscripcion.jsx` sin cambiarlo; si `enCurso`, «La actividad ya ha empezado: no se puede cancelar.» en vez del botón (FR-004, research R4)
-- [ ] T011 [US2] En `CalendarioVoluntario.jsx`, la actualización de [research R5](research.md#r5-actualización-sin-recargar-fr-005-clarify-q2): recargar la vista actual tras cancelar, con el aviso «Has cancelado tu inscripción en «…».» o «Has salido de la lista de espera de «…».»; al volver a la pestaña (`visibilitychange`) y al restaurarse desde la caché (`pageshow` con `persisted`), sin vaciar la pantalla mientras llega
+- [ ] T011 [US2] En `CalendarioVoluntario.jsx`, la actualización de [research R5](research.md#r5-actualización-sin-recargar-fr-005-clarify-q2): recargar la vista actual tras cancelar (`onCancelada`), con el aviso «Has cancelado tu inscripción en «…».» o «Has salido de la lista de espera de «…».»; al volver (`visibilitychange` visible y `focus` de `window`, sin repetir si la última petición salió hace menos de 2 s) y al restaurarse desde la caché (`pageshow` con `persisted`), sin vaciar la pantalla mientras llega
 
 **Checkpoint**: 2.1–2.3 y los casos límite del quickstart pasan.
 
@@ -83,8 +83,8 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 ## Phase 5: Polish & Cross-Cutting
 
 - [ ] T012 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos o tocados de `backend/src/modulos/voluntariado/`, `backend/src/db/semillas/voluntariado.js`, `frontend/src/components/voluntariado/` y `frontend/src/pages/mi-calendario.astro` (no a `app.js` ni a `Menu.jsx`, que ya estaban sin formatear en `main`)
-- [ ] T013 Coordinarse con Nicole: las 4 actividades de prueba nuevas se crean en `semillas/voluntariado.js` (por si prefiere moverlas a `semillas/actividades.js`), `obtener` se usa desde `voluntariado/actividades.js` sin tocar su servicio, y el paso 1.1 del quickstart de spec-005 cambia. Pedir la revisión del PR a Nada
-- [ ] T014 Recorrer [quickstart.md](quickstart.md) completo en el navegador a 375 y 1440 px, revisar la consola y cronometrar SC-002 (< 10 s); dejar el resultado en `refinamiento/prueba-manual.md` y actualizar plan o contrato si algo implementado difiere (principio III)
+- [ ] T013 Coordinarse con el grupo: avisar de las 4 actividades de prueba nuevas de Agua potable (Rubén las verá en sus informes) y proponer añadirlas a la lista de semillas de plan-comun §8. Con Nicole: se crean en `semillas/voluntariado.js` (por si prefiere moverlas a `semillas/actividades.js`); su `enMadrid` da una hora de más o de menos el día del cambio de hora; hay dos actividades «completas de 2 plazas», así que sus pasos 1.6 y 2.3 deberían nombrar Reparto de alimentos; que su contrato recoja `listar`, `bloquearActividad` y `obtener` como funciones que usa voluntariado; dónde van las inscripciones de la actividad de 2 h y la de 20 confirmados de spec-008 (pendiente de la T021 de spec-005) y su línea «Mis horas» en `Menu.jsx`, para no chocar al fusionar; y que cambia el paso 1.1 del quickstart de spec-005. Pedir la revisión del PR a Nada
+- [ ] T014 Recorrer [quickstart.md](quickstart.md) completo en el navegador a 375 y 1440 px (también el caso «En curso» con `AHORA_SIMULADO`), revisar la consola y cronometrar SC-002 (< 10 s); dejar el resultado en `refinamiento/prueba-manual.md` y actualizar plan o contrato si algo implementado difiere (principio III)
 
 ---
 
@@ -94,7 +94,7 @@ No hay migraciones ni dependencias nuevas: el calendario es una vista ([data-mod
 
 - **Foundational (T001–T003)** → bloquea US1 y US2. T001 → T005; T003 → T006 y T007.
 - **US1 (T004–T008)** → MVP; T005 → T007 (la interfaz necesita la ruta).
-- **US2 (T009–T011)** → depende de US1: T010 amplía `ActividadCalendario.jsx` (T006) y T011, `CalendarioVoluntario.jsx` (T007).
+- **US2 (T009–T011)** → depende de US1: T010 amplía `ActividadCalendario.jsx` (T006) y T011, `CalendarioVoluntario.jsx` (T007). T010 → T011: el aviso de cancelación sube con `onCancelada(entrada)`, ya previsto en T006 y T007.
 - **Polish (T012–T014)** → al final.
 
 ### Within Each Story
@@ -105,7 +105,7 @@ Pruebas (que fallan) → servicio → controlador → rutas → componentes → 
 
 - T001, T002 y T003 en paralelo.
 - T004 en paralelo con T005; T006 en paralelo con el back-end en cuanto el contrato es estable.
-- T004 y T009 en orden (mismo fichero); T010 y T011 en paralelo (ficheros distintos).
+- T004 y T009 en orden (mismo fichero); T010 → T011.
 
 ## Implementation Strategy
 

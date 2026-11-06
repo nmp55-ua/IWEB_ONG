@@ -37,7 +37,7 @@ El voluntario tiene en su área personal una vista de lista, que es la que ve pr
 2. **Given** una actividad ya terminada, **When** el voluntario abre su calendario, **Then** no aparece.
 3. **Given** una actividad en la que el voluntario está en lista de espera, **When** abre el calendario, **Then** aparece con la etiqueta «en lista de espera», diferenciada de las confirmadas.
 4. **Given** un voluntario sin actividades por delante, **When** abre el calendario, **Then** ve un mensaje claro con un enlace al listado de actividades disponibles.
-5. **Given** un voluntario identificado, **When** intenta ver el calendario o una inscripción de otro voluntario, **Then** el sistema no se lo muestra: solo le da el suyo.
+5. **Given** un voluntario identificado, **When** intenta ver el calendario de otro voluntario o cancelar una de sus inscripciones, **Then** el sistema no se lo permite: solo le da el suyo.
 
 ---
 

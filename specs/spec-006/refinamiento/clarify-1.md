@@ -12,7 +12,7 @@ Las cuatro preguntas se hicieron juntas y en las cuatro se eligió la opción re
 
 ## Otros cambios en `spec.md`
 
-- **Escenario 5 y FR-006**: el calendario es una ruta personal (`/api/yo/calendario`, plan-comun §3) que no lleva el identificador de nadie, así que no hay forma de pedir el de otro. Para que el criterio se pueda comprobar, el escenario habla también de «una inscripción de otro voluntario»: abrirla o cancelarla da 404, como en HU-05.
+- **Escenario 5 y FR-006**: el calendario es una ruta personal (`/api/yo/calendario`, plan-comun §3) que no lleva el identificador de nadie, así que no hay forma de pedir el de otro. Para que el criterio se pueda comprobar, el escenario habla también de cancelar una inscripción de otro voluntario, que da 404, como en HU-05.
 - **FR-004 y escenario 2.1**: en lista de espera la opción es «salir de la lista de espera», que es la misma cancelación de HU-05.
 - **Edge Cases**: se añaden la actividad de varios días ya empezada, el cambio de fecha o lugar hecho por el coordinador (HU-07) y el usuario sin rol de voluntario, que no tiene calendario. Se precisa que una actividad de varios días sale en todos sus días en la vista mensual y una vez en la lista.
 - **Assumptions**: los recordatorios por correo tampoco entran en la v1; el correo común solo tiene los avisos de spec-001 y spec-007 (plan-comun §6).

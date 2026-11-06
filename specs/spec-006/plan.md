@@ -28,7 +28,9 @@ Vitest + Supertest. No se añade ninguna dependencia (ni librería de calendario
 **Performance Goals**: SC-002 (la siguiente actividad en menos de 10 s): la lista se abre primero
 y empieza por la siguiente.
 **Constraints**: hora peninsular (`Europe/Madrid`) en el filtro del servidor, en el reparto por días
-de la vista mensual y en lo que se muestra; «ahora» siempre de `servicios-comunes/fechas.js`.
+de la vista mensual y en lo que se muestra. Qué sale y si se puede cancelar lo decide el servidor con
+«ahora» de `servicios-comunes/fechas.js`; el navegador solo usa su reloj para elegir el mes que se abre,
+el día que se marca como hoy y hasta dónde se puede retroceder (research R6).
 **Scale/Scope**: 1 página, 1 ruta, 0 tablas, 0 funciones nuevas para otros módulos.
 
 No queda ningún NEEDS CLARIFICATION: PA6.1 y las otras tres preguntas se resolvieron en
@@ -42,12 +44,12 @@ No queda ningún NEEDS CLARIFICATION: PA6.1 y las otras tres preguntas se resolv
 |---|---|
 | I. Simplicidad | Una ruta y una vista sin tablas; sin librería de calendario, sin consultas periódicas ni avisos desde el servidor (clarify Q2); sin exportar (PA6.1). |
 | II. Cero alcance fantasma | Solo FR-001…FR-006. La posición en la lista de espera ya la da HU-05 (su escenario 3); no se añaden recordatorios ni .ics. |
-| III. Verificable | Cada escenario y caso límite tiene un paso en [quickstart.md](quickstart.md), con semillas preparadas para ello (research R7). |
+| III. Verificable | Cada escenario y caso límite tiene un paso en [quickstart.md](quickstart.md), con semillas preparadas para ello (research R7); el de una actividad en curso, con `AHORA_SIMULADO`. |
 | IV. Español | Fechas dd/mm/aaaa y horas con `formatearFecha` y `formatearHora`; semana de lunes a domingo; días de Madrid. |
 | V. Seguridad y datos | Ruta personal `/yo/...` con `requiereRol('voluntario')`; el servicio busca a partir de `req.usuario.id` y no acepta el identificador de nadie; la respuesta no lleva datos de otros voluntarios. |
 | VI. Nada se borra | Cancelar desde el calendario es la cancelación de HU-05 (cambio de estado). |
 | VIII. Una sola aplicación | `Layout`, `Menu`, componentes comunes, `lib/api.js`, `lib/formato.js`; reutiliza `CancelarInscripcion.jsx`, `listarActivasDeUsuario` y la validación de días de HU-05. |
-| XII. Cambios comunes con acuerdo | No se toca nada común. Las cuatro actividades de prueba nuevas van en las semillas de Javi y se avisa a Nicole, que es la dueña de `actividades` (research R7). |
+| XII. Cambios comunes con acuerdo | Solo se tocan dos cosas compartidas: la línea de `Menu.jsx` reservada para spec-006 y los datos de prueba, con 4 actividades nuevas en `semillas/voluntariado.js` (de Javi). Se avisa al grupo, porque otras specs usan las actividades de prueba, y en especial a Nicole, que es la dueña de `actividades` (research R7, T013). |
 
 ## Project Structure
 
@@ -90,8 +92,9 @@ frontend/src/
 ```
 
 **Structure Decision**: aplicación web de plan-comun §1; todo dentro del módulo `voluntariado`.
-Fuera de él solo cambian la línea del enlace en `Menu.jsx` (ya reservada para spec-006) y el texto
-del quickstart de spec-005, que es de Javi (research R7).
+Fuera de él solo cambian la línea del enlace en `Menu.jsx` (ya reservada para spec-006), los datos de
+prueba comunes (desde el fichero de semillas de Javi) y el texto del quickstart de spec-005, que es de
+Javi (research R7).
 
 ## Reglas de `servicio.js`
 
