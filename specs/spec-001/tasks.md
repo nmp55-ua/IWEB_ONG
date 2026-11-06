@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005, T014–T018 y T020–T023 completadas y verificadas. Las demás tareas permanecen pendientes; la revisión de Rubén de T006 no se ha realizado.
+**Estado**: T001–T005 y T008–T023 completadas y verificadas en su alcance. T006 y T007 siguen pendientes, al igual que las tareas posteriores. La numeración 009 es provisional local.
 
 ## Entrega temprana de 004 — 2026-11-06
 
@@ -54,8 +54,17 @@ La ampliación se prepara para revisión; T006 permanece pendiente de Rubén.
 T022–T023 incorporan permisos por operación, guardado esperable, origen/CSRF y comprobación
 unitaria de propiedad con datos de servidor. Las 35 pruebas dirigidas pasan con sesiones
 y datos sintéticos. El [informe de autorización](refinamiento/validacion-autorizacion-01.md)
-conserva resultados y límites. No se acredita protección de rutas futuras: T019 y la
-integración siguen pendientes, al igual que la revisión de Rubén de T006.
+conserva resultados y límites. No se acredita protección de rutas futuras: al cerrar ese bloque T019 y la
+integración estaban pendientes, al igual que la revisión de Rubén de T006.
+
+## Persistencia operativa y soporte — 2026-11-06
+
+T008–T013 crean y validan las cuatro tablas técnicas en la propuesta local 009.
+T019 aporta fixtures y soporte comprobados con conexiones PostgreSQL, sesiones separadas
+persistidas y simulador de claves compartido entre procesos. La
+[validación local](refinamiento/validacion-local-01.md) conserva comandos, resultados y límites.
+No equivale a integración funcional: rutas, reconciliación y confirmaciones de correo siguen
+pendientes. T006 y T007 no se completan; 009 no está reservada colectivamente.
 
 ## Alcance y fuentes
 
@@ -89,8 +98,7 @@ automática ni modificación concurrente del mismo archivo.
   sin acreditar acuerdo colectivo ni incorporación compartida.
 - **Autorización independiente**: T022 depende de T002, no de T019. Se prueban
   funciones con sesiones y propiedad sintéticas sin fixtures PostgreSQL. T023 conserva
-  su dependencia de T022. T019 y la integración posterior mantienen sus dependencias
-  y su estado pendiente; no se modifican autenticación, cookies, roles o rutas.
+  su dependencia de T022. T019 mantiene su dependencia de T013; la integración posterior sigue pendiente; no se modifican autenticación, cookies, roles o rutas.
 - **Pasarela independiente**: T014 depende de T002, no de T013. El constructor puro,
   la firma local y las peticiones simuladas no necesitan tablas operativas. T015 sigue
   dependiendo de T014 y T016 de T015; T027 conserva sus requisitos de integración.
@@ -103,11 +111,11 @@ automática ni modificación concurrente del mismo archivo.
   funciones puras de T021 no usan base de datos, tablas operativas o Stripe; pueden
   prepararse con las dependencias instaladas. T021 conserva su dependencia de T020 y
   T027 sigue requiriendo T021. El ajuste no completa T006 ni adelanta cambios comunes.
-- **Ruta de la migración operativa**: no puede fijarse honestamente un nombre numérico antes
-  de T007. Esa tarea registra el nombre completo en
-  `backend/src/db/migraciones/LEEME.md`; T009, T010, T011, T012
-  trabajan secuencialmente en **ese mismo fichero**. El directorio y el registro son precisos;
-  el nombre de salida queda condicionado a esa coordinación. **009 no está reservado**.
+- **Migración operativa provisional**: 009_operativa_donaciones.sql se prepara localmente
+  en esta rama sin reserva colectiva. LEEME y la ficha de revisión registran su carácter
+  provisional. T008 depende de T005 para este desarrollo local; T009–T013 mantienen
+  su cadena y T019 espera a T013. T006 y T007 siguen pendientes y son requisitos anteriores
+  a la incorporación compartida. Las cuatro tablas solo dependen de 004, no de 006–008.
 - **Validación temprana**: quickstart B exige las siete tablas y los archivos de pruebas de
   HU-01. Ejecutarlo completo antes de la ampliación operativa bloquearía la entrega de 004.
   T005 usa selección segura de conexión y una prueba dirigida de migración;
@@ -175,27 +183,27 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: P-01; plan: incorporación en dos entregas; FR-010, FR-013. **Depende de**: T006.
       **Comprobación**: El nombre concreto se registra sin colisión, con número disponible desde 009; no se presenta 009 como reservado ni se reescribe 004 incorporada.
 
-- [ ] T008 Añadir los casos de esquema para las cuatro tablas técnicas y su dependencia exclusiva de 004. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`.
-      **Origen**: P-01; FR-010, FR-012, FR-013, FR-016. **Depende de**: T007.
+- [x] T008 Añadir los casos de esquema para las cuatro tablas técnicas y su dependencia exclusiva de 004. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`.
+      **Origen**: P-01; FR-010, FR-012, FR-013, FR-016. **Depende de**: T005.
       **Comprobación**: Se comprueban unicidad de solicitud, evento, token y pareja aportación/tipo, solicitud_checkout JSONB no nulo y restricciones. La instantánea se justifica para reanudación; no hay tabla de locks/lease de creación ni dependencia de 006–008.
 
-- [ ] T009 Añadir operaciones_pago, incluida solicitud_checkout inmutable, a la migración operativa cuyo nombre completo fija la coordinación. Archivos: `backend/src/db/migraciones/LEEME.md`, `backend/src/db/migraciones/`.
+- [x] T009 Añadir operaciones_pago y solicitud_checkout a la propuesta local 009_operativa_donaciones.sql. Archivos: `backend/src/db/migraciones/009_operativa_donaciones.sql`, `backend/src/db/migraciones/LEEME.md`.
       **Origen**: P-01; FR-010, FR-016. **Depende de**: T008.
-      **Comprobación**: La sección SQL coincide con el modelo único, usa el fichero registrado en T007 y no duplica datos de bloqueo. El cuerpo persistido no contiene NIF/dirección, sesión, secretos o tarjeta; 004 no cambia.
+      **Comprobación**: La sección SQL coincide con el modelo único, usa el fichero provisional registrado en LEEME; T007 sigue pendiente y no duplica datos de bloqueo. El cuerpo persistido no contiene NIF/dirección, sesión, secretos o tarjeta; 004 no cambia.
 
-- [ ] T010 Añadir eventos_pasarela y sus restricciones a la migración operativa cuyo nombre completo fija la coordinación. Archivos: `backend/src/db/migraciones/LEEME.md`, `backend/src/db/migraciones/`.
+- [x] T010 Añadir eventos_pasarela y sus restricciones a la propuesta local 009_operativa_donaciones.sql. Archivos: `backend/src/db/migraciones/009_operativa_donaciones.sql`, `backend/src/db/migraciones/LEEME.md`.
       **Origen**: P-01; FR-010, FR-017. **Depende de**: T009.
-      **Comprobación**: La sección SQL coincide con la definición única de eventos_pasarela; usa el fichero registrado en la tarea de coordinación, sin crear otra migración o duplicar entidades.
+      **Comprobación**: La sección SQL coincide con la definición única de eventos_pasarela; usa el fichero provisional registrado en LEEME, con T007 pendiente, sin crear otra migración o duplicar entidades.
 
-- [ ] T011 Añadir verificaciones_donante y sus restricciones a la migración operativa cuyo nombre completo fija la coordinación. Archivos: `backend/src/db/migraciones/LEEME.md`, `backend/src/db/migraciones/`.
+- [x] T011 Añadir verificaciones_donante y sus restricciones a la propuesta local 009_operativa_donaciones.sql. Archivos: `backend/src/db/migraciones/009_operativa_donaciones.sql`, `backend/src/db/migraciones/LEEME.md`.
       **Origen**: P-01; FR-013. **Depende de**: T010.
-      **Comprobación**: La sección SQL coincide con la definición única de verificaciones_donante; usa el fichero registrado en la tarea de coordinación, sin crear otra migración o duplicar entidades.
+      **Comprobación**: La sección SQL coincide con la definición única de verificaciones_donante; usa el fichero provisional registrado en LEEME, con T007 pendiente, sin crear otra migración o duplicar entidades.
 
-- [ ] T012 Añadir correos_aportacion y sus restricciones a la migración operativa cuyo nombre completo fija la coordinación. Archivos: `backend/src/db/migraciones/LEEME.md`, `backend/src/db/migraciones/`.
+- [x] T012 Añadir correos_aportacion y sus restricciones a la propuesta local 009_operativa_donaciones.sql. Archivos: `backend/src/db/migraciones/009_operativa_donaciones.sql`, `backend/src/db/migraciones/LEEME.md`.
       **Origen**: P-01; FR-007, FR-012, FR-018. **Depende de**: T011.
-      **Comprobación**: La sección SQL coincide con la definición única de correos_aportacion; usa el fichero registrado en la tarea de coordinación, sin crear otra migración o duplicar entidades.
+      **Comprobación**: La sección SQL coincide con la definición única de correos_aportacion; usa el fichero provisional registrado en LEEME, con T007 pendiente, sin crear otra migración o duplicar entidades.
 
-- [ ] T013 Validar la ampliación operativa y comprobar que 004 permanece intacta tras su incorporación. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`, `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/refinamiento/validacion-local-01.md`.
+- [x] T013 Validar la ampliación operativa y comprobar que 004 permanece intacta tras la ampliación local. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`, `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/refinamiento/validacion-local-01.md`.
       **Origen**: P-01; FR-010, FR-012, FR-013, FR-016. **Depende de**: T012.
       **Comprobación**: La suite dirigida valida las siete tablas de donaciones en la base exclusiva y la reejecución respeta el registro de migraciones.
 
@@ -219,7 +227,7 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: P-03; FR-007, FR-012. **Depende de**: T017.
       **Comprobación**: Los casos anteriores y nuevos pasan; HU-01 puede solicitar conexión/saludo de 3000 ms e inactividad de 5000 ms sin alterar otros módulos.
 
-- [ ] T019 [P] Preparar fixtures de usuarios, donantes, recursos canónicos y sesiones separadas para la integración local. Archivos: `backend/src/modulos/donaciones/pruebas/soporte.js`.
+- [x] T019 [P] Preparar fixtures de usuarios, donantes, recursos canónicos y sesiones separadas para la integración local. Archivos: `backend/src/modulos/donaciones/pruebas/soporte.js`.
       **Origen**: Quickstart B; FR-010, FR-013, FR-016, FR-017. **Depende de**: T013.
       **Comprobación**: Falta de TEST_DATABASE_URL/esquema falla, no omite. Los fixtures controlan dos conexiones y reinicio de proceso con base/secreto de sesión conservados y simulador Stripe persistente por clave, sin contactar Stripe ni modificar pruebas ajenas.
 
@@ -499,6 +507,8 @@ orden indicado; una tarea sin [P] no se presume paralela. No se modifican a la v
 flowchart TD
     A["T001–T006: preparar, validar y revisar 004"] --> B["T007–T027: resto de fundamentos"]
     A -. "contrato revisado para incorporación autorizada" .-> R["Rubén puede consumir el dominio al incorporarse 004"]
+    L["T005: dominio validado"] --> O["T008–T013: propuesta operativa local"]
+    O --> H["T019: soporte comprobado"]
     N["T002: dependencias instaladas"] --> P["T020–T021: normalización pura"]
     P -. "prerrequisito de T027" .-> B
     N --> U["T022–T023: autorización unitaria"]
