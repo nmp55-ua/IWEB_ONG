@@ -39,18 +39,18 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ## Phase 2: Foundational (bloquea US1 y US2)
 
-- [ ] T003 Añadir a `backend/src/modulos/actividades/repositorio.js`, con SQL parametrizado sobre `asistencias` y `actividades` (nunca sobre `inscripciones` ni `voluntarios`): `listarAsistencias(inscripcionIds)` y `guardarAsistencias(filas, cliente)`, un upsert `INSERT … ON CONFLICT (inscripcion_id) DO UPDATE` de `asistio`, `horas`, `registrada_por` y `fecha_registro` (research R1). Reutilizar `obtenerPorId` y `bloquearPorId` de spec-007
-- [ ] T004 Crear `backend/src/modulos/actividades/asistencias.js` con las ayudas `horasDeActividad(actividad)`, que devuelve `fin − inicio` en horas redondeado a 2 decimales y calculado sobre los instantes (22:00–01:00 = 3, research R5), y `esRegistrable(actividad)`: `estado === 'publicada' && inicio <= ahora()`, con `ahora()` de `servicios-comunes/fechas.js` y sin límite posterior (PA8.1)
+- [ ] T003 Añadir a `backend/src/modulos/actividades/repositorio.js`, con SQL parametrizado sobre `asistencias` y `actividades` (nunca sobre `inscripciones` ni `voluntarios`): `listarAsistencias(inscripcionIds)` y `horasDeActividad(id, cliente)`, que devuelve como número `ROUND(EXTRACT(EPOCH FROM fin - inicio) / 3600, 2)` (22:00–01:00 = 3, research R5), y `guardarAsistencias(filas, cliente)`, un upsert `INSERT … ON CONFLICT (inscripcion_id) DO UPDATE` de `asistio`, `horas`, `registrada_por` y `fecha_registro` (research R1). Reutilizar `obtenerPorId` y `bloquearPorId` de spec-007
+- [ ] T004 Crear `backend/src/modulos/actividades/asistencias.js` con la ayuda `esRegistrable(actividad)`; las horas no se calculan aquí, sino en SQL con `horasDeActividad` del repositorio (T003, research R5). `esRegistrable`: `estado === 'publicada' && inicio <= ahora()`, con `ahora()` de `servicios-comunes/fechas.js` y sin límite posterior (PA8.1)
 
 **Checkpoint**: migración aplicada y módulo arrancando sin rutas nuevas.
 
 ---
 
-## Phase 3: User Story 1 - Registrar la asistencia (Priority: P1) 🎯 MVP
+## Phase 3: User Story 1 - Registrar la asistencia (Priority: P1) 🎯 MVP (con US2)
 
 **Goal**: el coordinador marca a cada inscrito confirmado como «asistió» o «no asistió» desde la hora de inicio de la actividad, y puede corregirlo sin duplicar horas.
 
-**Independent Test**: en «Recogida de ropa» (10:00–13:30, ya celebrada, 2 confirmados), marcar a `voluntario2@ong.test` como asistente: `SUM(horas)` de sus asistencias con `asistio = true` sube 3,5 y las de `voluntario@ong.test` no cambian.
+**Independent Test**: en «Recogida de ropa» (10:00–13:30, ya celebrada, 2 confirmados), marcar a `voluntario2@ong.test` como asistente: en `/mis-horas` su total sube 3,5 h y el de `voluntario@ong.test` no cambia. Se comprueba cuando existen T015–T019.
 
 ### Tests for User Story 1
 
@@ -62,15 +62,15 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 - [ ] T007 [US1] Añadir `guardarAsistencia(actividadId, filas, usuario)` a `backend/src/modulos/actividades/asistencias.js`: en `transaccion()` con `bloquearPorId`; 404 si no existe; 409 `ASISTENCIA_NO_PERMITIDA` con un mensaje distinto para borrador, cancelada y aún no comenzada; 400 `DATOS_INVALIDOS` con `campos["asistencias.N"]` si un `inscripcionId` no es confirmado de esa actividad (FR-006); upsert con `horas`, `registrada_por = usuario.id` y `fecha_registro = ahora()`; devuelve lo mismo que `obtenerAsistencia`
 - [ ] T008 [US1] Añadir a `backend/src/modulos/actividades/controlador.js` el esquema zod del `PUT` (`asistencias` con 1–500 elementos, `inscripcionId` entero positivo sin repetir, `asistio` booleano; error 400 `DATOS_INVALIDOS`) y los manejadores `obtenerAsistencias` y `guardarAsistencias`
 - [ ] T009 [US1] Añadir `GET` y `PUT /actividades/:id(\\d+)/asistencias` con `requiereRol('coordinador')` a `backend/src/modulos/actividades/rutas.js`
-- [ ] T010 [P] [US1] Crear `frontend/src/components/actividades/ListaAsistencia.jsx` con `lib/api.js` y los componentes comunes: tabla de confirmados con control «asistió / no asistió» por fila, «Marcar todos como asistentes» y un único «Guardar» que envía las filas marcadas; si `registrable` es `false`, solo lectura y `Aviso` con el motivo; `EstadoVacio` sin confirmados; horas con `formatearHoras`; avisos de guardado y de error
+- [ ] T010 [P] [US1] Crear `frontend/src/components/actividades/ListaAsistencia.jsx` con `lib/api.js` y los componentes comunes: tabla de confirmados con control «asistió / no asistió» por fila, «Marcar todos como asistentes» y un único «Guardar» que envía las filas marcadas; si `registrable` es `false`, solo lectura y `Aviso` con el motivo; `EstadoVacio` sin confirmados; horas con `formatearHoras`; avisos de guardado y de error, y `Aviso` de permiso si la API responde 403
 - [ ] T011 [US1] Crear `frontend/src/pages/coordinacion/actividades/[id]/asistencia.astro`, que valida que `id` sea numérico como `[id].astro` (si no, redirige a `/coordinacion/actividades`) y monta `ListaAsistencia` con `client:load`
 - [ ] T012 [P] [US1] Añadir en `frontend/src/components/actividades/DetalleActividad.jsx` el enlace «Registrar asistencia» a `/coordinacion/actividades/:id/asistencia` cuando `actividad.celebrada` sea `true`
 
-**Checkpoint**: escenarios 1.1–1.6 y bordes de US1 validados en la aplicación.
+**Checkpoint**: escenarios 1.1, 1.5, 1.6 y bordes de US1 validados en la aplicación; 1.2–1.4 se validan cuando existen T015–T019 (`/mis-horas`).
 
 ---
 
-## Phase 4: User Story 2 - Ver mis horas (Priority: P2)
+## Phase 4: User Story 2 - Ver mis horas (Priority: P2) 🎯 MVP (con US1)
 
 **Goal**: el voluntario ve en `/mis-horas` su total y el desglose por actividad, solo los suyos.
 
@@ -82,13 +82,13 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Añadir `sumarHorasDeInscripciones(inscripcionIds)` a `backend/src/modulos/actividades/repositorio.js`: asistencias con `asistio = true` de esos ids, unidas a `actividades` por el `actividadId` que devuelve el servicio de voluntariado, con título, inicio y horas, ordenadas por inicio descendente
-- [ ] T015 [US2] Añadir `horasDeUsuario(usuarioId)` a `backend/src/modulos/actividades/asistencias.js` con `listarInscripcionesDeUsuario` de `./inscripciones.js`, devolviendo la forma del [contrato](contracts/api-asistencias.md#get-apiyohoras): `{ totalHoras, datos: [{ actividadId, titulo, inicio, horas }], total }`
+- [ ] T014 [US2] Añadir `sumarHorasDeInscripciones(pares)` a `backend/src/modulos/actividades/repositorio.js`, que recibe los pares `{ inscripcionId, actividadId }` de `listarInscripcionesDeUsuario` y, sin consultar `inscripciones`, enlaza en SQL `asistencias` con `actividades` mediante el `actividadId` de cada par: `SUM(horas)` y desglose con título, inicio y horas de las asistencias con `asistio = true`, ordenado por inicio descendente
+- [ ] T015 [US2] Añadir `horasDeUsuario(usuarioId)` a `backend/src/modulos/actividades/asistencias.js` con `listarInscripcionesDeUsuario` de `./inscripciones.js`, pasando sus pares a `sumarHorasDeInscripciones` y devolviendo la forma del [contrato](contracts/api-asistencias.md#get-apiyohoras): `{ totalHoras, datos: [{ actividadId, titulo, inicio, horas }], total }`
 - [ ] T016 [US2] Añadir el manejador `misHoras` a `backend/src/modulos/actividades/controlador.js`, que usa solo `req.usuario.id`
 - [ ] T017 [US2] Crear `backend/src/modulos/actividades/rutasYo.js` exportando `rutasYoActividades` con `GET /yo/horas` detrás de `requiereRol()`, y registrarlo en `backend/src/app.js` junto a `rutasActividades`
 - [ ] T018 [P] [US2] Crear `frontend/src/components/actividades/MisHoras.jsx`: total y `Tabla` con actividad, fecha (`formatearFecha`, dd/mm/aaaa) y horas (`formatearHoras`); sin asistencias, «0 h» y `EstadoVacio` con «Aún no tienes horas registradas»
 - [ ] T019 [P] [US2] Crear `frontend/src/pages/mis-horas.astro`, que monta `MisHoras` con `client:load`, y añadir `{ rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }` en `frontend/src/components/comunes/Menu.jsx`
-- [ ] T020 [US2] Añadir la actividad celebrada de 2 h de plan-comun §8 en `backend/src/db/semillas/actividades.js` y crear `backend/src/db/semillas/asistencias.js` (idempotente) con la inscripción confirmada de `voluntario@ong.test` en ella y su asistencia de 2 h; llamar a `sembrarAsistencias` en `backend/src/db/semillas/index.js` después de `sembrarVoluntariado`. No registrar asistencia en «Recogida de ropa», que queda libre para los escenarios 1.2–1.4
+- [ ] T020 [US2] Añadir la actividad celebrada de 2 h de plan-comun §8 en `backend/src/db/semillas/actividades.js`: «Banco de alimentos», proyecto «Comedor social», `inicio: enMadrid(-10, 17)`, `fin: enMadrid(-10, 19)` (17:00–19:00), lugar «Calle Mayor 3», 10 plazas, `publicada`, sin requisitos, y crear `backend/src/db/semillas/asistencias.js` (idempotente) con la inscripción confirmada de `voluntario@ong.test` en ella y su asistencia de 2 h; llamar a `sembrarAsistencias` en `backend/src/db/semillas/index.js` después de `sembrarVoluntariado`. No registrar asistencia en «Recogida de ropa», que queda libre para los escenarios 1.2–1.4; la asistencia de `voluntario@ong.test` allí se marca a mano como paso previo de 2.1, y así llega a 5,5 h
 
 **Checkpoint**: escenarios 2.1–2.3 validados; las dos historias funcionan juntas.
 
@@ -96,14 +96,14 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [ ] T021 Ejecutar `npm test` en `backend/` con `TEST_DATABASE_URL` apuntando a la base de pruebas y corregir los fallos en `backend/src/modulos/actividades/`
+- [ ] T021 Aplicar `007_asistencias.sql` también a la base de pruebas (`ong_test`, con `npm run migrar` y esa URL), ejecutar `npm test` en `backend/` con `TEST_DATABASE_URL` apuntando a ella y corregir los fallos en `backend/src/modulos/actividades/`
 - [ ] T022 Recorrer [quickstart.md](quickstart.md) a mano en la aplicación, incluidos SC-001, SC-002 cronometrado con 20 confirmados y la comprobación de que un voluntario no puede cancelar una inscripción de una actividad ya iniciada (FR-009, spec-005), y anotar el resultado en `specs/spec-008/quickstart.md`
 
 ---
 
 ## Dependencies & Execution Order
 
-- **Setup (T001–T002)** → **Foundational (T003–T004)** → US1 y US2, que no dependen entre sí en el back-end.
+- **Setup (T001–T002)** → **Foundational (T003–T004)** → US1 y US2, que no dependen entre sí en el back-end; los escenarios 1.2–1.4 de US1 sí necesitan T015–T019 para validarse.
 - **US2** usa la tabla de la fase 1; sus datos pueden venir de la semilla (T020), sin la pantalla de US1.
 - **Polish** tras las dos historias.
 - Dentro de cada historia: pruebas → repositorio → servicio → controlador → rutas → front-end.
@@ -118,14 +118,14 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ## Implementation Strategy
 
-### MVP First (US1)
+### MVP First (US1 + US2)
 
 1. Fases 1 y 2.
-2. US1 completa y validar 1.1–1.6 con «Recogida de ropa».
+2. US1 y validar 1.1, 1.5, 1.6 y bordes.
+3. US2 con su semilla, validar 1.2–1.4 en `/mis-horas` con «Recogida de ropa» y después 2.1–2.3.
 
 ### Incremental Delivery
 
-3. US2 con su semilla y validar 2.1–2.3.
 4. Polish y PR de `spec-008` a `main` revisado por Rubén.
 
 ## Notes

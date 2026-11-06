@@ -45,7 +45,7 @@ están en [research.md](research.md).
 |---|---|
 | I. Simplicidad | Sin plazo (PA8.1), sin horas parciales (PA8.2), cualquier coordinador; total derivado, sin contadores. Un único `PUT` con la lista completa. |
 | II. Cero alcance fantasma | Solo FR-001…FR-009; sin certificados de horas, sin exportar, sin notificaciones. |
-| III. Verificable | Cada escenario tiene un paso en [quickstart.md](quickstart.md); reglas de horas en `servicio.test.js`. |
+| III. Verificable | Cada escenario tiene un paso en [quickstart.md](quickstart.md); reglas de horas en `asistencias.test.js`. |
 | IV. Español | Mensajes en español; fechas dd/mm/aaaa con `formatearFecha`; horas `3,5 h`. |
 | V. Seguridad | `requiereRol('coordinador')` en las rutas de actividad; `/api/yo/horas` usa solo `req.usuario.id` (FR-007, escenario 2.3). |
 | VI. Nada se borra | No hay `DELETE`; corregir cambia `asistio` (edge case de la spec). FK `ON DELETE RESTRICT`. |
@@ -72,7 +72,8 @@ specs/spec-008/
 ```text
 backend/src/
 ├── db/migraciones/007_asistencias.sql        ← tabla asistencias (research R2)
-├── db/semillas/asistencias.js                ← asistencia de 2 h de voluntario@ong.test
+├── db/semillas/actividades.js                ← + «Banco de alimentos», celebrada, de 2 h
+├── db/semillas/asistencias.js                ← inscripción y asistencia de 2 h de voluntario@ong.test en ella
 ├── db/semillas/index.js                      ← llamar a sembrarAsistencias tras las inscripciones
 └── modulos/actividades/
     ├── rutas.js                  ← + GET/PUT /actividades/:id(\d+)/asistencias (coordinador)
@@ -100,8 +101,8 @@ frontend/src/
 | Operación | Reglas | Error |
 |---|---|---|
 | `obtenerAsistencia(actividadId)` | Actividad existe. Devuelve la actividad (con `horas` derivadas y `registrable`) y una fila por inscripción **confirmada** (`listarConfirmadasDeActividad`) con `asistio: true / false / null` (null = sin registrar). Nunca en espera ni canceladas (escenario 1.5). | 404 `NO_ENCONTRADO` |
-| `guardarAsistencia(actividadId, filas, usuario)` | En `transaccion()` con `SELECT … FROM actividades WHERE id=$1 FOR UPDATE`. Actividad `publicada` y `inicio <= ahora()` (FR-001; borrador, cancelada o futura → error). Cada `inscripcionId` debe estar entre las confirmadas de **esa** actividad (FR-006). `horas = (fin − inicio)` redondeado a 2 decimales (FR-003, cruza medianoche sin caso especial). Upsert por `inscripcion_id`: inserta o actualiza `asistio`, `horas`, `registrada_por = usuario.id`, `fecha_registro = ahora()`. Inscripciones no enviadas no cambian. | 409 `ASISTENCIA_NO_PERMITIDA` · 400 `DATOS_INVALIDOS` (con `campos`) · 404 |
-| `horasDeUsuario(usuarioId)` | `listarInscripcionesDeUsuario(usuarioId)` → ids; `SUM(horas)` y desglose de las asistencias con `asistio = true` de esas inscripciones, unidas a `actividades` (título, inicio). Sin perfil de voluntario o sin asistencias → `{ total: 0, datos: [] }` (escenario 2.2). | — |
+| `guardarAsistencia(actividadId, filas, usuario)` | En `transaccion()` con `SELECT … FROM actividades WHERE id=$1 FOR UPDATE`. Actividad `publicada` y `inicio <= ahora()` (FR-001; borrador, cancelada o futura → error). Cada `inscripcionId` debe estar entre las confirmadas de **esa** actividad (FR-006). `horas = (fin − inicio)` calculado en SQL y redondeado a 2 decimales (FR-003, research R5; cruza medianoche sin caso especial). Upsert por `inscripcion_id`: inserta o actualiza `asistio`, `horas`, `registrada_por = usuario.id`, `fecha_registro = ahora()`. Inscripciones no enviadas no cambian. | 409 `ASISTENCIA_NO_PERMITIDA` · 400 `DATOS_INVALIDOS` (con `campos`) · 404 |
+| `horasDeUsuario(usuarioId)` | `listarInscripcionesDeUsuario(usuarioId)` → pares `{ inscripcionId, actividadId }`; el repositorio los recibe y, en SQL, obtiene `SUM(horas)` y el desglose de las asistencias con `asistio = true` de esas inscripciones, enlazadas con `actividades` (título, inicio) mediante el `actividadId` de cada par, sin consultar `inscripciones`. Devuelve `{ totalHoras, datos, total }` (`total` = número de filas). Sin perfil de voluntario o sin asistencias → `{ totalHoras: 0, datos: [], total: 0 }` (escenario 2.2). | — |
 
 Sin plazo posterior (PA8.1): no se compara con `fin`. `registrable = estado = 'publicada' && inicio <= ahora()`.
 

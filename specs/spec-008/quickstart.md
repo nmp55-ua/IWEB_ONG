@@ -19,9 +19,11 @@ confirmada → 400); 401/403 en las rutas de coordinador; 401 en `/api/yo/horas`
 
 ## Historia 1 — Registrar la asistencia (`coordinador@ong.test`)
 
+Los escenarios 1.2–1.4 se validan cuando existen T015–T019 (`/mis-horas`), que es donde se ve el total.
+
 | Escenario | Pasos | Resultado esperado |
 |---|---|---|
-| 1.1 | Abrir una actividad futura → «Registrar asistencia» (o `/coordinacion/actividades/<id>/asistencia`) | Sin interruptores; aviso «La actividad todavía no ha comenzado»; el `PUT` da 409 |
+| 1.1 | Abrir directamente `/coordinacion/actividades/<id>/asistencia` de una actividad futura | Sin interruptores; aviso «La actividad todavía no ha comenzado»; el `PUT` da 409 |
 | 1.2 | En la actividad de 10:00–13:30, marcar a `voluntario2` como «asistió» y Guardar | Aviso de guardado; en `/mis-horas` de `voluntario2` el total sube 3,5 h |
 | 1.3 | Guardar otra vez sin cambios | El total de `voluntario2` sigue igual |
 | 1.4 | Cambiar `voluntario2` a «no asistió» y Guardar | Su total baja 3,5 h |
@@ -34,7 +36,7 @@ confirmada → 400); 401/403 en las rutas de coordinador; 401 en `/api/yo/horas`
 
 | Escenario | Pasos | Resultado esperado |
 |---|---|---|
-| 2.1 | Menú «Mis horas» | Total (p. ej. 5,5 h) y desglose con título, fecha dd/mm/aaaa y horas |
+| 2.1 | Paso previo: como `coordinador@ong.test`, marcar a `voluntario@ong.test` como asistente en «Recogida de ropa» y Guardar. Después, como `voluntario@ong.test`, menú «Mis horas» | Total de 5,5 h y desglose de las dos actividades con título, fecha dd/mm/aaaa y horas |
 | 2.2 | Entrar como un voluntario sin asistencias | «0 h» y mensaje «Aún no tienes horas registradas» |
-| 2.3 | Buscar cómo ver las horas de otro (no hay parámetro en `/api/yo/horas`) | Solo se ven las propias |
+| 2.3 | Buscar cómo ver las horas de otro (no hay parámetro en `/api/yo/horas`) | Solo se ven las propias; la aplicación no ofrece forma de pedir las de otro |
 | SC-001 | Comparar el total con la suma de su desglose | Coinciden siempre |

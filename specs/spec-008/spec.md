@@ -55,7 +55,7 @@ Como voluntario, quiero ver en mi perfil el total de horas acumuladas y el detal
 
 1. **Given** un voluntario con asistencias registradas, **When** abre su perfil, **Then** ve su total de horas y el desglose por actividad con fecha (dd/mm/aaaa) y horas de cada una.
 2. **Given** un voluntario sin asistencias, **When** abre su perfil, **Then** ve 0 horas y un mensaje claro.
-3. **Given** un voluntario identificado, **When** intenta ver las horas de otro voluntario, **Then** el sistema deniega el acceso.
+3. **Given** un voluntario identificado, **When** consulta sus horas, **Then** solo puede ver las suyas y la aplicación no ofrece forma de pedir las de otro.
 
 ---
 
@@ -76,7 +76,7 @@ Como voluntario, quiero ver en mi perfil el total de horas acumuladas y el detal
 - **FR-004**: Marcar «asistió» MUST sumar las horas al total del voluntario; cambiar a «no asistió» MUST restarlas.
 - **FR-005**: Una misma asistencia MUST NOT sumar horas más de una vez.
 - **FR-006**: El sistema MUST NOT permitir registrar asistencia de una persona sin inscripción confirmada en la actividad.
-- **FR-007**: El voluntario MUST ver en su perfil su total de horas y el desglose por actividad; solo el suyo.
+- **FR-007**: El voluntario MUST ver en su perfil (la página `/mis-horas`) su total de horas y el desglose por actividad; solo el suyo.
 - **FR-008**: Solo los usuarios con rol coordinador MUST poder registrar o corregir asistencias, y cualquiera de ellos puede hacerlo en cualquier actividad (no solo quien la creó); la comprobación se hace en el servidor.
 - **FR-009**: Desde la hora de inicio de la actividad, una Inscripción confirmada MUST NOT poder cancelarse (ya cubierto por spec-005 FR-009, que solo permite cancelar hasta el inicio).
 
@@ -88,7 +88,7 @@ Como voluntario, quiero ver en mi perfil el total de horas acumuladas y el detal
 ## Dependencies
 
 - **spec-005 (Javi)**: Inscripción confirmada y Voluntario. FR-009 de spec-008 ya lo cubre spec-005 FR-009 (cancelar solo hasta el inicio de la actividad), así que no hace falta un acuerdo nuevo.
-- **spec-004 (B)** consume Asistencia para las horas de voluntariado del informe.
+- **spec-004 (Rubén)** consume Asistencia para las horas de voluntariado del informe.
 
 ## Success Criteria *(mandatory)*
 
@@ -99,4 +99,5 @@ Como voluntario, quiero ver en mi perfil el total de horas acumuladas y el detal
 
 ## Assumptions
 
-- Las horas se muestran con un decimal (3,5 h).
+- Las horas se guardan con 2 decimales y se muestran con 1 (3,5 h). Por el redondeo de la interfaz, la suma de los valores mostrados puede no coincidir exactamente con el total mostrado (1,75 h + 1,75 h se ve como 1,8 h + 1,8 h, con un total de 3,5 h); SC-001 se refiere a los valores guardados.
+- «Su perfil», en esta historia, es la página `/mis-horas`.

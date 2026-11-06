@@ -32,8 +32,9 @@ Aquí solo las propias de HU-08.
   - `listarInscripcionesDeUsuario(usuarioId)` → `[{ inscripcionId, actividadId }]` (cualquier
     estado; sin voluntario → `[]`).
 - **Rationale**: plan-comun §1 (servicio, nunca repositorio de otro) y la petición de no tocar
-  `modulos/voluntariado`. La consulta de horas une `asistencias` y `actividades` (ambas de
-  Nicole) filtrando por los ids recibidos.
+  `modulos/voluntariado`. `asistencias` no tiene `actividad_id`, así que la consulta de horas recibe
+  los pares `{ inscripcionId, actividadId }` de `listarInscripcionesDeUsuario` y con ellos enlaza
+  `asistencias` y `actividades` (ambas de Nicole), sin consultar `inscripciones`.
 - **Alternatives considered**: reutilizar `listarInscripcionesDeActividad` y filtrar
   `confirmadas` (válido para la pantalla, pero no sirve para `/yo/horas`); se mantiene una
   función propia para no depender de la forma de la lista de espera.
