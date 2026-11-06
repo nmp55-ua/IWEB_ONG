@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005, T017–T018 y T020–T021 completadas y verificadas. Las demás tareas permanecen pendientes; la revisión de Rubén de T006 no se ha realizado.
+**Estado**: T001–T005, T014–T018 y T020–T021 completadas y verificadas. Las demás tareas permanecen pendientes; la revisión de Rubén de T006 no se ha realizado.
 
 ## Entrega temprana de 004 — 2026-11-06
 
@@ -40,6 +40,15 @@ La ampliación queda preparada en spec-001 para revisión, sin acreditar acuerdo
 o incorporación compartida. T006 sigue pendiente de Rubén. No se implementan persistencia
 de mensajes, reintentos de negocio, rutas o certificados, ni se completan otras tareas.
 
+## Adaptador de Stripe — 2026-11-06
+
+T014–T016 incorporan el constructor puro, creación compatible con instantánea/clave,
+API explícita y consultas proyectadas de Acacia. Las 36 pruebas dirigidas pasan con
+peticiones simuladas y firma comprobada por el SDK real, sin cargar .env o contactar Stripe.
+El [informe de pasarela](refinamiento/validacion-pasarela-01.md) conserva resultados y límites.
+No se implementan persistencia, bloqueos o reconciliación ni se acredita idempotencia real.
+La ampliación se prepara para revisión; T006 permanece pendiente de Rubén.
+
 ## Alcance y fuentes
 
 [US1] y [US2] son las dos modalidades de **HU-01**, definidas en [spec.md](spec.md).
@@ -70,6 +79,10 @@ automática ni modificación concurrente del mismo archivo.
   la incorporación compartida de 004 y de esas ampliaciones; no se da por realizado.
   T017–T018 preparan únicamente el adaptador de correo en esta rama para revisión,
   sin acreditar acuerdo colectivo ni incorporación compartida.
+- **Pasarela independiente**: T014 depende de T002, no de T013. El constructor puro,
+  la firma local y las peticiones simuladas no necesitan tablas operativas. T015 sigue
+  dependiendo de T014 y T016 de T015; T027 conserva sus requisitos de integración.
+  Preparar esta ampliación en la rama no completa T006 ni acredita Stripe real.
 - **Correo independiente**: T017 depende de T002, no de T013. Nodemailer y la
   configuración se simulan para comprobar el adaptador sin SMTP real, secretos o
   tablas operativas. T018 conserva su dependencia de T017; las dependencias de T024
@@ -174,15 +187,15 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: P-01; FR-010, FR-012, FR-013, FR-016. **Depende de**: T012.
       **Comprobación**: La suite dirigida valida las siete tablas de donaciones en la base exclusiva y la reejecución respeta el registro de migraciones.
 
-- [ ] T014 [P] Escribir pruebas de la envoltura Stripe sin red: creación idempotente, card/eur, metadatos propagados, firma y proyecciones canónicas. Archivos: `backend/src/modulos/donaciones/pasarela.test.js`.
-      **Origen**: P-02, P-04; FR-005, FR-006, FR-010; SC-003, SC-004. **Depende de**: T013.
+- [x] T014 [P] Escribir pruebas de la envoltura Stripe sin red: creación idempotente, card/eur, metadatos propagados, firma y proyecciones canónicas. Archivos: `backend/src/modulos/donaciones/pasarela.test.js`.
+      **Origen**: P-02, P-04; FR-005, FR-006, FR-010; SC-003, SC-004. **Depende de**: T002.
       **Comprobación**: Recursos Acacia y secretos sintéticos prueban prepararSesionPago sin red y la creación con instantánea original, incluso tras cambiar configuración; misma clave/cuerpo, 3000 ms, cero reintentos y proyecciones sin tarjeta.
 
-- [ ] T015 Añadir el preparador puro y la creación con solicitudCheckout persistida, preservando la firma anterior y la salida id/url. Archivos: `backend/src/servicios-comunes/pasarela.js`.
+- [x] T015 Añadir el preparador puro y la creación con solicitudCheckout persistida, preservando la firma anterior y la salida id/url. Archivos: `backend/src/servicios-comunes/pasarela.js`.
       **Origen**: P-02, P-04; FR-001, FR-005, FR-010. **Depende de**: T014.
       **Comprobación**: HU-01 no reconstruye el cuerpo al reintentar: modo, tres recurrencias, card/EUR, una línea, metadatos protegidos y URL originales coinciden; llamadas compatibles sin instantánea usan el mismo preparador.
 
-- [ ] T016 Añadir las consultas de Session, PaymentIntent, Invoice y Subscription del plan común, incluido listado acotado de Session por suscripción. Archivos: `backend/src/servicios-comunes/pasarela.js`.
+- [x] T016 Añadir las consultas de Session, PaymentIntent, Invoice y Subscription del plan común, incluido listado acotado de Session por suscripción. Archivos: `backend/src/servicios-comunes/pasarela.js`.
       **Origen**: P-02; FR-006, FR-009, FR-010, FR-018, FR-019. **Depende de**: T015.
       **Comprobación**: Las pruebas cubren nulls, campos Acacia y límite 2 sin paginación automática; error transitorio es 503 y solo esta envoltura importa Stripe.
 
@@ -476,6 +489,8 @@ flowchart TD
     A -. "contrato revisado para incorporación autorizada" .-> R["Rubén puede consumir el dominio al incorporarse 004"]
     N["T002: dependencias instaladas"] --> P["T020–T021: normalización pura"]
     P -. "prerrequisito de T027" .-> B
+    N --> Q["T014–T016: adaptador Stripe simulado"]
+    Q -. "prerrequisito de T027" .-> B
     N --> S["T017–T018: adaptador de correo simulado"]
     S -. "prerrequisito de T024 y T026" .-> B
     B --> C["T028–T053: US1"]
@@ -496,7 +511,8 @@ ninguna de las dos modalidades ni la numeración de la ampliación operativa.
 | ------------------------ | ---------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | Normalización, tras T002 | T020             | Pruebas puras en archivo propio, independientes de los fundamentos con base. T021 espera a T020.                            |
 | Correo, tras T002        | T017             | Pruebas del adaptador SMTP simulado en archivo propio, sin base. T018 espera a T017.                                        |
-| Fundamentos, tras T013   | T014, T019       | Contratos Stripe y fixtures en dos archivos diferentes.                                                                     |
+| Pasarela, tras T002      | T014             | Constructor, firmas locales y peticiones simuladas en archivo propio. T015–T016 siguen su cadena.                           |
+| Fundamentos, tras T013   | T019             | Fixtures de integración con base de datos.                                                                                  |
 | UI US1, tras T044        | T045, T047, T049 | Islas y página de vínculo distintas. Las páginas de formulario/resultado esperan a su isla y las semillas a las tres ramas. |
 | UI US2, tras T068        | T069, T070       | FormDonacion.jsx y ResultadoDonacion.jsx diferentes; T071 espera a ambas.                                                   |
 
@@ -510,6 +526,14 @@ de sus propios casos con conexiones controladas.
 
 Se usan scripts y dependencias existentes. No se añade un comando de frontend test,
 una biblioteca de navegador, ORM, cola o herramienta de despliegue.
+
+**Para T014–T016**: desde PowerShell en
+`E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\backend`, sin cargar .env, con
+configuración sintética y peticiones simuladas:
+
+```powershell
+npm test -- src/modulos/donaciones/pasarela.test.js
+```
 
 **Para T017–T018**: desde PowerShell en
 `E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\backend`, ejecutar solo las pruebas del
