@@ -252,51 +252,159 @@ pasarela; no generan carga contra Stripe.
 Los códigos P01–P21 y S01–S13 son **alias de esta guía**, no nuevos identificadores en la
 especificación: P corresponde al escenario numerado de User Story 1 y S al de User Story 2
 de [spec.md](spec.md). Cada caso se repetirá con la aplicación y se complementará con pruebas
-de reglas y API. El resultado de todas las filas siguientes es actualmente **no ejecutado**.
+de reglas y API. Las tablas describen los casos previstos; los resultados y sus límites
+se registran en refinamiento/. La prueba adicional P21 se ejecutó y su resultado consta en
+[validacion-stripe-01.md](refinamiento/validacion-stripe-01.md#cierre-final-de-t077-primera-confirmación-de-la-prueba-adicional-p21--2026-11-07).
 
 ## Donación puntual y reglas compartidas
 
-| Caso | Requisitos | Ejecución y resultado verificable |
-|---|---|---|
-| P01 | FR-001, FR-002, FR-005–FR-007 | Donar 20 € con tarjeta en Checkout, EUR y fondo general. Confirmación con 20,00 €, fecha de Madrid, modalidad, destino y referencia; una sola fila confirmada. |
-| P02 | FR-003, FR-007 | Donar a Agua potable. Mismo proyecto en base, resumen y correo. |
-| P03 | FR-002 | Probar 0, -1, 0,99, 1000000, 1000000.00, texto, exponente, miles y tres decimales: error junto al importe y cero llamadas a Checkout. Admitir 1.00 y 999999.99, ambos extremos, también con coma decimal. Repetir límites para socio. No se redondea 999999.999. |
-| P04 | FR-004 | Letra errónea y formato NIF/NIE inválido; no se llega a Stripe. Probar también correo inválido y campos obligatorios vacíos. |
-| P05 | FR-006 | Rechazo real simulado y expiración/cancelación acreditada: sin confirmada, motivo claro y opción de reintento compatible con el estado actual. Volver por cancel_url no confirma cancelación. |
-| P06 | FR-007 | Cobro confirmado con SMTP disponible. Mensaje recibido en Mailpit con el mismo resumen visible; no basta estado enviado. |
-| P07 | FR-011 | Completar puntual en navegador invitado; no exige registro ni login. |
-| P08 | FR-007, FR-012 | Simular SMTP caído al confirmar. Pago confirmado, resumen visible y aviso de correo pendiente. |
-| P09 | FR-012 | Restablecer SMTP y reintentar con permiso. Misma referencia, resumen y única aportación; cero llamadas de cobro. |
-| P10 | FR-012 | Reintentar con SMTP aún caído. Aviso real de fallo y opción de repetir; no mensaje de éxito ni filas financieras nuevas. |
-| P11 | FR-011, FR-013 | Abrir «Vincular mis aportaciones a una cuenta» desde formulario y resultado. Sin token, entrar con FormEntrar existente y solicitar el enlace. El 202 muestra el mismo aviso genérico con/sin Donante elegible y no vincula o autoriza por correo coincidente. |
-| P12 | FR-013 | Recorrer entrada visible → página sin token → solicitud autenticada → aviso genérico → mensaje Mailpit → abrir token → confirmar POST con la misma cuenta. GET no envía/consume; token caducado/usado u otra cuenta no vinculan, y solicitar otro requiere acción explícita. Sin depender de HU-02. |
-| P13 | FR-014 | Mismo correo y otro NIF válido. Rechazo antes de Stripe, mensaje genérico, Donante y aportaciones intactos. |
-| P14 | FR-015 | Nueva donación con todos los datos equivalentes. Reutiliza un Donante sin actualizarlo; nueva operación independiente. |
-| P15 | FR-015 | Mismo NIF y otro correo. Se detiene sin pago, nueva identidad o exposición de datos guardados. |
-| P16 | FR-015 | Cambiar nombre, apellidos o dirección con el mismo NIF, invitado y cuenta vinculada. Se detiene en ambos casos. |
-| P17 | FR-015 | Variar mayúsculas, espacios y representación NFC; NIF con espacios/guion de presentación. Reutiliza sin sobrescribir. Cambiar tildes, puntuación o contenido real sigue siendo conflicto. |
-| P18 | FR-012, FR-016 | Consultar y reintentar correo desde el navegador de origen, permiso vigente. Solo esa operación. |
-| P19 | FR-016 | Otro navegador con referencia, cookie eliminada o permiso vencido: 404 genérico, sin datos ni envío. |
-| P20 | FR-016 | Sesión A intenta resultado y correo de B. Ambos denegados. La sesión invitada tampoco autoriza historial. |
-| P21 | FR-010, FR-017 | Cerrar navegador antes del pago; entregar después webhook firmado válido dos veces. Una aportación confirmada y envío independiente de sesión. |
+| Caso | Requisitos                    | Ejecución y resultado verificable                                                                                                                                                                                                                                                                                                                                            |
+| ---- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P01  | FR-001, FR-002, FR-005–FR-007 | Donar 20 € con tarjeta en Checkout, EUR y fondo general. Confirmación con 20,00 €, fecha de Madrid, modalidad, destino y referencia; una sola fila confirmada.                                                                                                                                                                                                               |
+| P02  | FR-003, FR-007                | Donar a Agua potable. Mismo proyecto en base, resumen y correo.                                                                                                                                                                                                                                                                                                              |
+| P03  | FR-002                        | Probar 0, -1, 0,99, 1000000, 1000000.00, texto, exponente, miles y tres decimales: error junto al importe y cero llamadas a Checkout. Admitir 1.00 y 999999.99, ambos extremos, también con coma decimal. Repetir límites para socio. No se redondea 999999.999.                                                                                                             |
+| P04  | FR-004                        | Letra errónea y formato NIF/NIE inválido; no se llega a Stripe. Probar también correo inválido y campos obligatorios vacíos.                                                                                                                                                                                                                                                 |
+| P05  | FR-006                        | Rechazo real simulado y expiración/cancelación acreditada: sin confirmada, motivo claro y opción de reintento compatible con el estado actual. Volver por cancel_url no confirma cancelación.                                                                                                                                                                                |
+| P06  | FR-007                        | Cobro confirmado con SMTP disponible. Mensaje recibido en Mailpit con el mismo resumen visible; no basta estado enviado.                                                                                                                                                                                                                                                     |
+| P07  | FR-011                        | Completar puntual en navegador invitado; no exige registro ni login.                                                                                                                                                                                                                                                                                                         |
+| P08  | FR-007, FR-012                | Simular SMTP caído al confirmar. Pago confirmado, resumen visible y aviso de correo pendiente.                                                                                                                                                                                                                                                                               |
+| P09  | FR-012                        | Restablecer SMTP y reintentar con permiso. Misma referencia, resumen y única aportación; cero llamadas de cobro.                                                                                                                                                                                                                                                             |
+| P10  | FR-012                        | Reintentar con SMTP aún caído. Aviso real de fallo y opción de repetir; no mensaje de éxito ni filas financieras nuevas.                                                                                                                                                                                                                                                     |
+| P11  | FR-011, FR-013                | Abrir «Vincular mis aportaciones a una cuenta» desde formulario y resultado. Sin token, entrar con FormEntrar existente y solicitar el enlace. El 202 muestra el mismo aviso genérico con/sin Donante elegible y no vincula o autoriza por correo coincidente.                                                                                                               |
+| P12  | FR-013                        | Recorrer entrada visible → página sin token → solicitud autenticada → aviso genérico → mensaje Mailpit → abrir token → confirmar POST con la misma cuenta. GET no envía/consume; token caducado/usado u otra cuenta no vinculan, y solicitar otro requiere acción explícita. Sin depender de HU-02.                                                                          |
+| P13  | FR-014                        | Mismo correo y otro NIF válido. Rechazo antes de Stripe, mensaje genérico, Donante y aportaciones intactos.                                                                                                                                                                                                                                                                  |
+| P14  | FR-015                        | Nueva donación con todos los datos equivalentes. Reutiliza un Donante sin actualizarlo; nueva operación independiente.                                                                                                                                                                                                                                                       |
+| P15  | FR-015                        | Mismo NIF y otro correo. Se detiene sin pago, nueva identidad o exposición de datos guardados.                                                                                                                                                                                                                                                                               |
+| P16  | FR-015                        | Cambiar nombre, apellidos o dirección con el mismo NIF, invitado y cuenta vinculada. Se detiene en ambos casos.                                                                                                                                                                                                                                                              |
+| P17  | FR-015                        | Variar mayúsculas, espacios y representación NFC; NIF con espacios/guion de presentación. Reutiliza sin sobrescribir. Cambiar tildes, puntuación o contenido real sigue siendo conflicto.                                                                                                                                                                                    |
+| P18  | FR-012, FR-016                | Consultar y reintentar correo desde el navegador de origen, permiso vigente. Solo esa operación.                                                                                                                                                                                                                                                                             |
+| P19  | FR-016                        | Otro navegador con referencia, cookie eliminada o permiso vencido: 404 genérico, sin datos ni envío.                                                                                                                                                                                                                                                                         |
+| P20  | FR-016                        | Sesión A intenta resultado y correo de B. Ambos denegados. La sesión invitada tampoco autoriza historial.                                                                                                                                                                                                                                                                    |
+| P21  | FR-010, FR-017                | Completar el pago de prueba en Stripe reteniendo la entrega; acreditar aportación local pendiente y cerrar el navegador antes de recibir su primera notificación válida de cobro. Entregarla con el navegador cerrado, comprobar la primera transición a confirmada y el correo recibido, y reentregar el mismo evento sin duplicados. Véase el procedimiento adicional P21. |
+
+## Procedimiento adicional P21 — procedimiento y evidencia de ejecución
+
+### Aclaración del orden
+
+El escenario puntual 21 de [spec.md](spec.md) parte de «una aportación iniciada cuyo pago
+todavía no se ha confirmado» y sitúa después del cierre del navegador la llegada de la
+notificación válida que confirma esa aportación. La indicación anterior de esta guía,
+«cerrar navegador antes del pago», era imprecisa para un Checkout que debe completar la
+persona. Se aclara únicamente el procedimiento: pago de prueba completado en Stripe,
+aportación **local todavía pendiente**, cierre del navegador y primera confirmación local
+tras recibir la notificación válida. No se modifica spec.md ni se equipara una reentrega
+sobre una fila ya confirmada con esa primera transición.
+
+Esta será una operación **nueva e independiente**, identificada en las evidencias como
+«prueba adicional P21»: 1,23 €, fondo general. No se modifica ni se vuelve a cobrar
+DON-47619c0b-0cb7-4149-9a80-29e2b133829c, de 15,75 €. T077 permanece parcial hasta obtener
+la evidencia; la preparación de este procedimiento no marca tareas ni autoriza su ejecución.
+
+### Identidad de cuenta y control de secretos
+
+CLI comprobada: 1.55.8, C:/herramientas/stripe/stripe.exe. Para cada proceso se cargan desde
+el mismo archivo .env de la raíz **STRIPE_SECRET_KEY** y **STRIPE_WEBHOOK_SECRET**, sin
+mostrarlos ni modificar el archivo. Node.js 22.20.0 dispone de node:util.parseEnv para
+leerlo en memoria sin interpretar su contenido como comandos. No se usa la cuenta del
+login de la CLI. La clave debe ser de pruebas; si falta o su modo no es el esperado, se detiene.
+
+Los tres procesos reciben explícitamente --api-key con el valor de STRIPE_SECRET_KEY.
+Debe eliminarse STRIPE_API_KEY del entorno heredado del proceso hijo: según la ayuda
+instalada, esa variable prevalece sobre --api-key y podría seleccionar otra cuenta.
+La eliminación solo afecta al entorno del hijo, no a .env ni al entorno global.
+
+Argumentos previstos, representados con variables protegidas en memoria:
+
+```text
+stripe listen --events payment_intent.succeeded,checkout.session.completed --api-key <STRIPE_SECRET_KEY de .env>
+stripe listen --events payment_intent.succeeded --forward-to http://localhost:3000/api/pasarela/webhook --api-key <la misma STRIPE_SECRET_KEY de .env>
+stripe events resend <ID auténtico del evento nuevo> --api-key <la misma STRIPE_SECRET_KEY de .env>
+```
+
+Son una representación del comando, no una invitación a escribir claves en el terminal.
+La ejecución debe capturar stdout/stderr de ambos listeners antes de mostrarlos: su mensaje
+de disponibilidad contiene el secreto de firma. Se extrae ese secreto únicamente en memoria
+y se compara con STRIPE_WEBHOOK_SECRET del mismo .env **en cada arranque**, incluido el
+cambio al listener con forwarding. Solo se informa «coincide» o «no coincide», sin valores,
+comandos expandidos, payloads completos ni detalles de errores que incluyan argumentos.
+
+Si difiere, se detiene el proceso recién iniciado y se comunica el desajuste; no se
+sobrescribe .env, rota una clave o cambia la cuenta automáticamente. Si no se puede obtener
+un resultado fiable de esa comparación, tampoco se continúa. Se mantiene la verificación
+de firma del backend; no se construyen cuerpos o firmas locales para simular una entrega.
+Antes de ejecutar, el controlador de procesos debe estar preparado para esta captura y
+comparación y para no registrar secretos. No se ha ejecutado ni probado ese controlador
+en esta fase documental. La coincidencia del listener de observación se verifica antes
+de crear la operación; la del listener con forwarding se verifica de nuevo al cambiarlo,
+con el navegador cerrado. No se supone que la coincidencia anterior baste para continuar.
+
+### Puntos de control y secuencia, tras revisión
+
+1. Comprobar backend, PostgreSQL y Mailpit disponibles y cuenta de pruebas correcta. Verificar
+   que no hay otros listeners, proxies o endpoints que puedan adelantar la entrega al backend.
+   Preparar las evidencias sin secretos y validar el secreto del listener de observación
+   antes de crear la operación; el segundo listener se comprobará al cambiarlo.
+2. Con revisión previa para cambiar los procesos, mantener solo el listener de observación
+   **sin --forward-to** durante creación y pago; no detener el backend ni la base de datos.
+   Su salida se filtra y el secreto debe coincidir. Los eventos visibles todavía no deben
+   entregarse a la aplicación. Si no se puede garantizar esa separación, no se inicia el pago.
+3. Crear la nueva operación desde el formulario real. Conservar referencia, UUID, ID local,
+   Checkout y datos sintéticos válidos; si se reutiliza un Donante, conservar sus datos
+   equivalentes sin sobrescribirlos. Preparar acceso posterior con cuenta ya vinculada o
+   perfil normal de invitado que conserve su cookie. La referencia por sí sola no autoriza.
+4. Nada completa **un solo pago de prueba** de 1,23 € en Checkout. Identificar su PaymentIntent
+   y su evento auténtico payment_intent.succeeded, sin reutilizar los ID de la donación anterior.
+   Solo por consultas de lectura, acreditar simultáneamente: Stripe complete/paid, modo de
+   pruebas, EUR/123 céntimos y pertenencia correctos; aportación local pendiente, fecha de
+   cobro nula, una operación y ausencia de confirmación por correo. Si ya está confirmada,
+   la prueba no cumple este punto: detenerse sin restaurar estados ni fabricar evidencia.
+5. Con ese estado acreditado, Nada cierra el navegador y las páginas de la aplicación. Registrar
+   hora y comprobar ausencia de sus procesos. Mantener backend, PostgreSQL y Mailpit activos.
+6. Cambiar del listener de observación al de forwarding **con la misma --api-key de .env**,
+   y repetir la comparación del secreto sin mostrarlo. Si difiere, detenerse y comunicarlo.
+   Si al conectar llega una entrega automática, identificarla y registrarla como tal; no
+   atribuirla al reenvío manual. Si todavía no llega, solicitar una sola vez events resend
+   para el evento auténtico nuevo, con la misma clave. No se usa --live, no se crea otro pago
+   y no se genera un evento sintético. Un comando correcto sin recepción no demuestra entrega.
+7. Con navegador cerrado, guardar evidencia de la primera recepción y su respuesta observada.
+   Comprobar por lectura la transición pendiente → confirmada, referencia/importe/PaymentIntent,
+   una aportación y una operación. Comprobar confirmación enviada y mensaje recibido en Mailpit.
+   No exigir la vuelta del donante para procesar el webhook ni confundir enviado con recepción.
+8. Reentregar **el mismo evento nuevo** con --api-key procedente de .env. Registrar otra recepción
+   y contrastar ausencia de duplicados: misma fila, importe, fecha de cobro, operación y evento
+   lógico; mismo correo enviado, número de intentos, fecha de envío y una coincidencia en Mailpit.
+   No forzar un reintento de correo satisfactorio ni añadir una clave de idempotencia al comando
+   que pueda impedir que se produzca la segunda entrega que se quiere observar.
+9. Reabrir y consultar con autorización válida. El cierre no implica por sí solo borrar la cookie:
+   la sesión común persiste en PostgreSQL y su cookie tiene maxAge de ocho horas; el permiso
+   invitado de la operación también tiene límite absoluto de ocho horas y no se renueva al
+   consultar. Usar el mismo perfil normal y conservar cookies. Si se pierden o caducan, se
+   requiere una cuenta con vínculo verificado, mediante el flujo existente; el correo coincidente
+   o la referencia no sustituyen esa prueba. Registrar el resultado confirmado y correo enviado.
+
+La ejecución real debe registrar quién realiza cada acción, horas, referencia nueva, estado
+previo pendiente, primera transición y comparación tras la reentrega. Estas líneas son el
+procedimiento preparado, **no resultados observados**. Se detiene aquí antes de crear
+operaciones, pagar, iniciar/detener listeners o reenviar eventos. T078 y siguientes y las
+revisiones y coordinación pendientes conservan su estado.
 
 ## Alta y cuotas de socio
 
-| Caso | Requisitos | Ejecución y resultado verificable |
-|---|---|---|
-| S01 | FR-001, FR-008 | Alta de 10 €/mes, primer cobro válido. Una aportación, suscripción activa, periodicidad y fecha futura de pasarela. Repetir con trimestral y anual. |
-| S02 | FR-009, FR-010 | Notificar una factura de ciclo posterior pagada. Una nueva cuota confirmada; el total aumenta exactamente su importe. |
-| S03 | FR-006, FR-008 | Primer cobro fallido. Ninguna suscripción activa ni aportación confirmada; pendiente recuperable según P-01, cancelada solo ante cierre definitivo. |
-| S04 | FR-011 | Alta completa sin cuenta, resultado y confirmación en el navegador autorizado. |
-| S05 | FR-007, FR-008, FR-012 | Primer cobro válido y SMTP fallido. Alta activa, resumen con periodicidad y próxima fecha, aviso real de correo pendiente. |
-| S06 | FR-012, FR-016 | Reenviar confirmación de cuota con permiso. Misma cuota y suscripción; sin cargo. Invitado del alta intenta una cuota posterior y se deniega. Cuenta vinculada propietaria puede autorizarla. |
-| S07 | FR-014 | Correo existente y otro NIF en alta. Detención previa a Stripe, sin modificación ni mezcla. |
-| S08 | FR-015 | Mismo NIF con cambios reales en correo o datos fiscales en alta. Detención, sin duplicación ni actualización. |
-| S09 | FR-010, FR-017 | Primer cobro se notifica sin retorno o sesión. Una primera cuota y activación; no requiere navegador. |
-| S10 | FR-018 | Cuota posterior falla. Fila rechazada, aviso de fallo, total anterior intacto, suscripción aún activa y ninguna orden adicional de cobro. |
-| S11 | FR-019 | Tras fallo, next_payment_attempt futuro canónico. Solo se muestra esa fecha en Madrid, incluida actualización posterior por invoice.updated. |
-| S12 | FR-019 | Previsión nula o pasada, incluido vencimiento dentro del mismo día sin otro webhook. Mostrar «Pendiente de confirmación», no el fin de periodo ni una suma local de meses. |
-| S13 | FR-008, FR-018 | Cancelación definitiva posterior al fallo, seguida de evento antiguo. Suscripción cancelada, próxima fecha null, anteriores confirmadas intactas y sin nuevo cobro. |
+| Caso | Requisitos             | Ejecución y resultado verificable                                                                                                                                                             |
+| ---- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| S01  | FR-001, FR-008         | Alta de 10 €/mes, primer cobro válido. Una aportación, suscripción activa, periodicidad y fecha futura de pasarela. Repetir con trimestral y anual.                                           |
+| S02  | FR-009, FR-010         | Notificar una factura de ciclo posterior pagada. Una nueva cuota confirmada; el total aumenta exactamente su importe.                                                                         |
+| S03  | FR-006, FR-008         | Primer cobro fallido. Ninguna suscripción activa ni aportación confirmada; pendiente recuperable según P-01, cancelada solo ante cierre definitivo.                                           |
+| S04  | FR-011                 | Alta completa sin cuenta, resultado y confirmación en el navegador autorizado.                                                                                                                |
+| S05  | FR-007, FR-008, FR-012 | Primer cobro válido y SMTP fallido. Alta activa, resumen con periodicidad y próxima fecha, aviso real de correo pendiente.                                                                    |
+| S06  | FR-012, FR-016         | Reenviar confirmación de cuota con permiso. Misma cuota y suscripción; sin cargo. Invitado del alta intenta una cuota posterior y se deniega. Cuenta vinculada propietaria puede autorizarla. |
+| S07  | FR-014                 | Correo existente y otro NIF en alta. Detención previa a Stripe, sin modificación ni mezcla.                                                                                                   |
+| S08  | FR-015                 | Mismo NIF con cambios reales en correo o datos fiscales en alta. Detención, sin duplicación ni actualización.                                                                                 |
+| S09  | FR-010, FR-017         | Primer cobro se notifica sin retorno o sesión. Una primera cuota y activación; no requiere navegador.                                                                                         |
+| S10  | FR-018                 | Cuota posterior falla. Fila rechazada, aviso de fallo, total anterior intacto, suscripción aún activa y ninguna orden adicional de cobro.                                                     |
+| S11  | FR-019                 | Tras fallo, next_payment_attempt futuro canónico. Solo se muestra esa fecha en Madrid, incluida actualización posterior por invoice.updated.                                                  |
+| S12  | FR-019                 | Previsión nula o pasada, incluido vencimiento dentro del mismo día sin otro webhook. Mostrar «Pendiente de confirmación», no el fin de periodo ni una suma local de meses.                    |
+| S13  | FR-008, FR-018         | Cancelación definitiva posterior al fallo, seguida de evento antiguo. Suscripción cancelada, próxima fecha null, anteriores confirmadas intactas y sin nuevo cobro.                           |
 
 ## Pruebas técnicas complementarias
 
@@ -375,12 +483,12 @@ complementan las pruebas de backend.
 
 ## Criterios de éxito y salida de validación
 
-| Criterio | Evidencia que se obtendrá al implementar |
-|---|---|
-| SC-001 | Cronometrar donación puntual desde entrada al formulario hasta resultado confirmado; debe ser < 3 minutos. Registrar condiciones y duración real, sin afirmarlo por diseño. |
-| SC-002 | Relacionar todas las confirmadas de la prueba con un mensaje recibido en Mailpit, tras recuperación de fallos si procede. Cobertura del 100 %; cualquier pendiente impide darlo por cumplido. |
-| SC-003 | Comprobar payloads de la ONG, columnas, logs, sesión y evidencias: no contienen números ni datos de tarjeta. La tarjeta solo se introduce en Checkout. |
-| SC-004 | Comparar céntimos recibidos de Stripe, base, pantalla y correo para puntual y cuotas. No comparar floats ni solo textos visuales. |
+| Criterio | Evidencia que se obtendrá al implementar                                                                                                                                                      |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SC-001   | Cronometrar donación puntual desde entrada al formulario hasta resultado confirmado; debe ser < 3 minutos. Registrar condiciones y duración real, sin afirmarlo por diseño.                   |
+| SC-002   | Relacionar todas las confirmadas de la prueba con un mensaje recibido en Mailpit, tras recuperación de fallos si procede. Cobertura del 100 %; cualquier pendiente impide darlo por cumplido. |
+| SC-003   | Comprobar payloads de la ONG, columnas, logs, sesión y evidencias: no contienen números ni datos de tarjeta. La tarjeta solo se introduce en Checkout.                                        |
+| SC-004   | Comparar céntimos recibidos de Stripe, base, pantalla y correo para puntual y cuotas. No comparar floats ni solo textos visuales.                                                             |
 
 La checklist de requisitos existente contiene 16/16 marcas de calidad documental; no
 acredita ejecución de esta guía, revisión de Rubén o preparación de P-05. Los resultados se

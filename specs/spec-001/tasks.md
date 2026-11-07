@@ -2,16 +2,17 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T076 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T077 y siguientes, pendientes. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
+**Estado**: T001–T005 y T008–T077 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T078 y siguientes, pendientes. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
 
-**Evidencia real posterior (2026-11-07)**: La operación puntual original está confirmada
-con correo recibido y retorno automático acreditado. T076 se cierra al completar la
-inspección de configuración mediante las capturas aportadas por Nada: Smart Retries
-activado, hasta ocho reintentos en dos semanas; al agotarlos, cancelar la suscripción y
-dejar la factura como vencida. En T077 se acredita ya una reentrega aceptada con el
-navegador cerrado y sin duplicados. Sigue pendiente acreditar en la prueba real el
-escenario P21 desde una aportación aún no confirmada; no se equiparan ambas situaciones. Véanse `refinamiento/preparacion-stripe-01.md`
-y `refinamiento/validacion-stripe-01.md`. No se marca T078 ni se declara converge.
+**Evidencia real posterior (2026-11-07)**: T076 conserva su cierre documentado. T077 se
+completa con la prueba adicional P21 de 1,23 €, independiente de la donación original de
+15,75 €: aportación local pendiente acreditada antes de cerrar las páginas y antes de
+entregar la notificación; primera transición a confirmada sin reabrirlas, correo recibido
+en Mailpit y reentrega del mismo evento sin duplicados. Nada comprobó el resultado con
+su cuenta vinculada. Firefox conservó páginas ajenas; no se afirma cierre de todos sus
+procesos, inspección visual del nuevo correo ni duración inferior a tres minutos.
+Evidencias y atribución en `refinamiento/validacion-stripe-01.md` y
+`refinamiento/preparacion-stripe-01.md`. T078 y siguientes siguen pendientes; no se declara converge.
 
 ## Backend puntual — T024–T044 · 2026-11-06
 
@@ -575,12 +576,14 @@ automática ni modificación concurrente del mismo archivo.
 
       **Cierre documental (2026-11-07)**: Las tres capturas aportadas por Nada acreditan el entorno de pruebas de Practica IWEB ONG y la configuración visible: pagos con tarjeta activados, Smart Retries seleccionado, hasta 8 reintentos en 2 semanas; primer fallo de renovación deja la suscripción como vencida y, al agotarse los reintentos, se cancela la suscripción y se deja la factura como vencida. Se conserva el resultado parcial anterior como etapa previa. Junto a las comprobaciones reales de cuenta, avisos y conectividad ya registradas, queda cubierto T076. No se ha cambiado configuración ni ejecutado un ciclo fallido o una cancelación; esas pruebas pertenecen a T078.
 
-- [ ] T077 Completar una donación puntual real de prueba con Stripe Checkout y verificar su notificación firmada y correo. Archivos: `frontend/src/pages/donar/index.astro`, `frontend/src/pages/donar/resultado.astro`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
+- [x] T077 Completar una donación puntual real de prueba con Stripe Checkout y verificar su notificación firmada y correo. Archivos: `frontend/src/pages/donar/index.astro`, `frontend/src/pages/donar/resultado.astro`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: FR-005–FR-007, FR-010, FR-011, FR-017; P01, P02, P05–P07, P21; SC-002, SC-004. **Depende de**: T076.
       **Comprobación**: Se comparan importe/moneda/referencia, único registro y mensaje recibido en Mailpit; se comprueba retorno y cierre de navegador sin condicionar el webhook. Tarjeta solo en Stripe.
       **Resultado parcial (2026-11-07)**: Se acredita el pago original de 15,75 € para Agua potable, dos eventos procesados, una sola aportación/operación por referencia y pago, y una confirmación enviada con un intento. Nada abrió el mensaje y comprobó importe, destino y referencia. El navegador distinto denegó el acceso invitado y, tras vínculo verificado, mostró el resultado confirmado. Las consultas actuales contrastan Stripe, persistencia, vínculo y una coincidencia en Mailpit. Nada y el guía observaron el retorno automático desde Checkout a /donar/resultado con la referencia original; la captura mostró «Ha ocurrido un error inesperado» y el frontend registró la página de resultado y ECONNREFUSED al consultar el backend apagado. El retorno queda acreditado; falta la prueba explícita de cierre del navegador durante el flujo, que no se deduce del cambio de navegador ni de la recuperación del backend. T077 sigue sin marcar por la prueba de cierre del navegador; su dependencia de T076 queda resuelta documentalmente. Evidencia detallada en `refinamiento/validacion-stripe-01.md`.
 
       **Comprobación adicional y límite (2026-11-07)**: Nada confirmó el cierre del navegador y páginas de la aplicación; el guía no encontró procesos Firefox, Chrome, Edge, Brave u Opera y contrastó datos antes y después. Nada aportó recepción a las 03:03:55 y respuesta HTTP 200 a las 03:03:56 del listener para la reentrega autorizada del evento original evt_3UYy99E0jEvPnEcp0NoohXWh, con Docker, backend y listener activos. Se conservan aportación 30 confirmada, referencia, 15,75 €, PaymentIntent, una aportación/operación, correo enviado con un intento y misma fecha, y una coincidencia en Mailpit. Tras reabrir, Nada vio el resultado correcto. Esto acredita recepción y aceptación de una REENTREGA con navegador cerrado, no la primera confirmación. El criterio textual de T077 es general, pero su origen P21 exige una aportación todavía no confirmada y una notificación posterior al cierre (spec.md, escenario puntual 21; quickstart.md, P21). Por esa trazabilidad, T077 permanece parcial y sin marcar; no se añade otro pago ni se modifica el criterio. Se conserva el fallo inicial por backend apagado y su recuperación anterior. Detalle y fuentes en `refinamiento/validacion-stripe-01.md`.
+
+      **Cierre con prueba adicional P21 (2026-11-07)**: Aportación 31, operación 4, referencia DON-868afebb-090a-492e-9966-ab31b6bad6bf, 1,23 € EUR y fondo general; PaymentIntent pi_3UYzXwE0jEvPnEcp18Nr4OIV. Según Nada y el guía, el pago se completó una sola vez con listener sin forwarding y PostgreSQL seguía pendiente, sin fecha/pago local, correo o evento, antes del cierre y justo antes del reenvío a las 02:53:15.438Z. Se cerraron las páginas de aplicación/Checkout y las pestañas del navegador integrado; Firefox conservó páginas ajenas. El listener con la misma clave y secreto coincidente recibió el evento auténtico evt_3UYzXwE0jEvPnEcp1ECh1dn8 a las 03:53:16 locales y respondió 200 a las 03:53:18. Sin reabrir páginas, el guía constató a las 02:53:20.900Z la primera transición a confirmada, una aportación y operación, evento procesado sin error, correo enviado con un intento y una coincidencia en Mailpit. La segunda entrega del mismo evento obtuvo 200 a las 03:56:10 locales sin cambiar recuentos ni envío; Nada comprobó después el resultado con cuenta vinculada. T077 queda completada junto a las evidencias anteriores de pago, retorno y correo original. No se afirma primera confirmación con navegador cerrado de la operación de 15,75 €, cierre total de Firefox, duración inferior a tres minutos o inspección visual del nuevo correo. No se marca T078 ni se modifica el criterio funcional.
 
 - [ ] T078 Comprobar altas con periodicidades admitidas, primera factura, reentrega firmada y cancelación comunicada desde la pasarela de pruebas. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`, `frontend/src/components/donaciones/ResultadoDonacion.jsx`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: FR-001, FR-008–FR-010, FR-017–FR-019; S01–S04, S09–S13; SC-004. **Depende de**: T077.

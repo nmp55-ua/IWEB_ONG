@@ -186,3 +186,62 @@ esta reentrega. No se atribuye a los reenvíos anteriores sin captura HTTP. Se c
 fallo inicial por backend apagado y su recuperación, además de pago, correo, retorno y
 acceso verificado ya acreditados. No se realizan nuevos pagos, reenvíos o ajustes en esta
 revisión documental. T078 y siguientes y las demás revisiones pendientes no cambian.
+
+## Preparación documental de la prueba adicional P21 — 2026-11-07
+
+Tras revisión del procedimiento, se aclara [quickstart.md](../quickstart.md#procedimiento-adicional-p21--preparación-revisada-sin-ejecutar):
+el escenario puntual 21 de spec.md exige una aportación aún sin confirmar localmente al
+cerrar el navegador y la llegada posterior de la notificación. La expresión previa de la
+guía «antes del pago» se sustituye por el orden verificable: pago correcto en Stripe,
+aportación local pendiente acreditada, cierre y primera confirmación local tras el webhook.
+No se modifica el criterio funcional ni se convierte en primera confirmación la reentrega
+ya observada. La nueva operación prevista de 1,23 € es independiente de la donación de 15,75 €.
+
+La preparación prescribe el mismo valor STRIPE_SECRET_KEY de .env mediante --api-key en
+ambos listeners y events resend, sin depender del login de la CLI. Se excluye del proceso
+hijo una posible STRIPE_API_KEY heredada, que prevalecería sobre ese argumento según la
+ayuda instalada. La salida de cada listener se captura; su secreto se compara en memoria
+con STRIPE_WEBHOOK_SECRET y solo se comunica coincidencia o desajuste. Un desajuste o una
+comparación no fiable detienen la prueba, sin actualizar .env ni eludir la firma del backend.
+
+Se conservan los controles de primera transición con navegador cerrado, reentrega sin
+duplicados, recepción en Mailpit y consulta autorizada posterior. Node 22.20.0 y la
+disponibilidad de node:util.parseEnv se comprobaron localmente; la lectura de secretos,
+los arranques/cambios de listener y la comprobación real de su secreto no se ejecutan en
+esta fase. No se crea ninguna operación, paga, reenvía o cambia configuración. T077 sigue
+parcial y sin marcar; T076 completada y el resto de pendientes conservan su estado.
+
+## Evidencia posterior de ejecución y cierre de T077/P21 — 2026-11-07
+
+La prueba adicional preparada se ejecutó, según las evidencias comunicadas por Nada y
+el guía, con la aportación 31, operación 4, referencia DON-868afebb-090a-492e-9966-ab31b6bad6bf,
+importe 1,23 € EUR y fondo general. La donación anterior de 15,75 € permanece independiente
+y conserva su relato de fallo inicial por backend apagado, recuperación y reentrega.
+
+El listener observó sin forwarding durante el pago único de Nada. El guía confirmó por
+GET de Stripe el pago de pruebas y por lecturas de PostgreSQL el estado local pendiente,
+sin fecha/pago local, correo o evento, antes del cierre y justo antes de la primera entrega
+a las 02:53:15.438Z. Se cerraron las páginas de aplicación/Checkout y todas las pestañas del
+integrado, incluida Mailpit. Firefox mantuvo páginas ajenas: no se afirma que sus procesos
+estuvieran terminados. Backend y demás servicios siguieron activos.
+
+Con la misma clave de .env, el secreto del listener con forwarding coincidió con el
+configurado, según la comprobación del guía sin exponer valores. Se reenvió únicamente el
+evento auténtico nuevo evt_3UYzXwE0jEvPnEcp1ECh1dn8, payment_intent.succeeded, API endive.
+Nada aportó recepción a las 03:53:16 y respuesta 200 a las 03:53:18 locales. Sin reabrir
+páginas, el guía comprobó a las 02:53:20.900Z la primera transición a confirmada, unicidad
+local, evento procesado y correo enviado con un intento y recibido en Mailpit. Tras otra
+entrega del mismo evento con 200 a las 03:56:10 locales, los recuentos y el envío se conservaron.
+Nada reabrió el resultado con cuenta vinculada y confirmó sus datos.
+
+El [cierre detallado](validacion-stripe-01.md#cierre-final-de-t077-primera-confirmación-de-la-prueba-adicional-p21--2026-11-07)
+contrasta el escenario 21 y el procedimiento aclarado; **T077 se marca completada** con
+T076 ya resuelta. Ahora se acredita una primera transición desde pendiente, distinta de
+la reentrega sobre la aportación anterior ya confirmada. Los apartados de preparación y
+estados parciales anteriores se conservan como evolución y no se presentan como el balance vigente.
+
+No se afirma inspección visual del nuevo correo, cierre completo de Firefox o duración
+inferior a tres minutos. La recepción del correo se acredita por Mailpit y las consultas
+del guía. T078 y siguientes, T006, T007, converge y coordinación de 009 siguen pendientes.
+Esta revisión solo actualiza documentación: no ejecuta suites, consultas externas, pagos,
+reenvíos, configuración o acciones de Git de escritura; conserva secretos e históricos.

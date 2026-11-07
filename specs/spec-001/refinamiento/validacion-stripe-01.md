@@ -84,24 +84,24 @@ secretos, tokens o URL completa de Checkout.
 
 ## Contraste de criterios y estado de tareas
 
-| Tarea y criterio exacto                                               | Cobertura                                             | Evidencia y limitación                                                                                                                                                                                                                   |
-| --------------------------------------------------------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| T076: cuenta y credenciales de pruebas                                | Cubierto para el circuito puntual                     | GET actuales de los recursos originales, en modo de pruebas; sin exponer claves                                                                                                                                                          |
-| T076: versión y firma/eventos                                         | Cubierto para los avisos reenviados al listener local | El guía comunica endive; ruta con firma obligatoria y ambos eventos procesados. No se atribuye una versión a un endpoint permanente no inspeccionado                                                                                     |
-| T076: conectividad y destino                                          | Fallo inicial y recuperación acreditados              | Connection refused comunicado; comandos de reenvío correctos y persistencia posterior. Sin captura de códigos HTTP                                                                                                                       |
-| T076: recuperación/cancelación configuradas                           | Cubierto mediante capturas de Nada                    | Smart Retries activado, hasta 8 reintentos en 2 semanas; al agotarlos, cancelar la suscripción y dejar la factura como vencida. Véase el cierre posterior de T076                                                                        |
-| T077: pago de tarjeta alojado en Stripe, importe, moneda y referencia | Cubierto                                              | Snapshot card/eur/1575, Checkout paid y PaymentIntent succeeded con pertenencia correcta                                                                                                                                                 |
-| T077: único registro y mensaje recibido en Mailpit                    | Cubierto para esta ejecución                          | Unicidad local actual; un intento de correo; búsqueda con una coincidencia y revisión visual de Nada                                                                                                                                     |
-| T077: resultado y privacidad                                          | Cubierto                                              | Nada observa denegación invitada y resultado confirmado tras vincular la cuenta; consultas actuales corroboran el vínculo                                                                                                                |
-| T077: retorno desde Checkout                                          | Cubierto; observado por Nada y el guía                | Retorno automático a /donar/resultado con la referencia original; captura del error y registro de la página y ECONNREFUSED en el frontend por backend apagado.                                                                           |
-| T077: cierre del navegador sin condicionar el webhook                 | Acreditado para una reentrega; P21 real parcial       | Nada confirma el cierre; guía comprueba ausencia de procesos y unicidad antes/después; líneas nuevas del listener muestran recepción y HTTP 200. La aportación ya estaba confirmada, por lo que no acredita la primera transición de P21 |
+| Tarea y criterio exacto                                               | Cobertura                                             | Evidencia y limitación                                                                                                                                                                                                |
+| --------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| T076: cuenta y credenciales de pruebas                                | Cubierto para el circuito puntual                     | GET actuales de los recursos originales, en modo de pruebas; sin exponer claves                                                                                                                                       |
+| T076: versión y firma/eventos                                         | Cubierto para los avisos reenviados al listener local | El guía comunica endive; ruta con firma obligatoria y ambos eventos procesados. No se atribuye una versión a un endpoint permanente no inspeccionado                                                                  |
+| T076: conectividad y destino                                          | Fallo inicial y recuperación acreditados              | Connection refused comunicado; comandos de reenvío correctos y persistencia posterior. Sin captura de códigos HTTP                                                                                                    |
+| T076: recuperación/cancelación configuradas                           | Cubierto mediante capturas de Nada                    | Smart Retries activado, hasta 8 reintentos en 2 semanas; al agotarlos, cancelar la suscripción y dejar la factura como vencida. Véase el cierre posterior de T076                                                     |
+| T077: pago de tarjeta alojado en Stripe, importe, moneda y referencia | Cubierto                                              | Snapshot card/eur/1575, Checkout paid y PaymentIntent succeeded con pertenencia correcta                                                                                                                              |
+| T077: único registro y mensaje recibido en Mailpit                    | Cubierto para esta ejecución                          | Unicidad local actual; un intento de correo; búsqueda con una coincidencia y revisión visual de Nada                                                                                                                  |
+| T077: resultado y privacidad                                          | Cubierto                                              | Nada observa denegación invitada y resultado confirmado tras vincular la cuenta; consultas actuales corroboran el vínculo                                                                                             |
+| T077: retorno desde Checkout                                          | Cubierto; observado por Nada y el guía                | Retorno automático a /donar/resultado con la referencia original; captura del error y registro de la página y ECONNREFUSED en el frontend por backend apagado.                                                        |
+| T077: cierre del navegador sin condicionar el webhook                 | Cubierto por la prueba adicional P21 de 1,23 €        | Aportación 31 pendiente antes del cierre y antes de la primera entrega; confirmación con páginas de aplicación/Checkout cerradas, correo en Mailpit y reentrega sin duplicados; atribución y horas en el cierre final |
 
-**Balance vigente tras la comprobación de reentrega: T076 completada y T077 parcial.**
-Se acredita recepción y aceptación de una reentrega con el navegador cerrado, manteniendo
-la unicidad. El escenario P21 de origen exige notificar después del cierre una aportación
-aún no confirmada; ese recorrido real no queda demostrado por una reentrega posterior.
-No se modifica el criterio ni se atribuye esa condición a la primera confirmación. El pago,
-correo, retorno y consulta tras vínculo ya están acreditados y no se repiten.
+**Balance vigente tras la prueba adicional P21: T076 y T077 completadas en su alcance.**
+La aportación 31 de 1,23 € acredita ahora la primera transición local desde pendiente,
+con las páginas de aplicación y Checkout cerradas, y la reentrega del mismo evento sin
+duplicados. La prueba anterior de 15,75 € conserva su alcance propio: su cierre de navegador
+solo acreditaba una reentrega posterior. El cierre final y sus limitaciones se documentan
+más adelante; los relatos parciales anteriores se conservan como evolución.
 
 T078 y las demás tareas no se marcan por extensión. T006, T007, converge y coordinación
 de 009 siguen pendientes. Se conserva la revisión de Rubén como pendiente.
@@ -230,3 +230,138 @@ el escenario 21 de spec.md y las referencias del contrato HTTP a independencia d
 Se actualiza el balance vigente y se añade este relato sin eliminar las etapas anteriores.
 Las consultas del guía y las líneas de Nada no se presentan como pruebas ejecutadas aquí.
 No se repiten suites, pagos, reenvíos, cambios de configuración ni acciones de Git de escritura.
+
+## Aclaración posterior del procedimiento P21 — 2026-11-07
+
+Se contrasta de nuevo el escenario puntual 21 y se conserva spec.md intacto. La indicación
+«cerrar antes del pago» citada en el contraste anterior correspondía al texto de quickstart
+en aquella revisión. El [procedimiento vigente](../quickstart.md#procedimiento-adicional-p21--preparación-revisada-sin-ejecutar)
+aclara ahora que Nada completará el pago en Stripe con la entrega retenida; deberá constar
+todavía pendiente en la aplicación al cerrar el navegador, antes de su primera notificación
+válida. La aclaración resuelve el orden de ejecución sin modificar el criterio funcional.
+
+La prueba adicional prevista de 1,23 € no está ejecutada y no altera la operación original
+de 15,75 €, su correo o su vínculo. Ambos listeners y el reenvío quedan definidos con la
+misma STRIPE_SECRET_KEY de .env mediante --api-key y con verificación del secreto sin
+mostrar valores; un desajuste detendrá la prueba sin sobrescribir .env. No se atribuye a
+esta preparación una comprobación real de firma ni nuevos resultados de pago o entrega.
+Los puntos de control incluyen primera confirmación local con navegador cerrado, segunda
+entrega sin duplicados, correo recibido y consulta con sesión o vínculo válidos. Se mantiene
+la caducidad absoluta del permiso invitado; no se promete acceso por referencia o correo.
+T077 continúa parcial y sin marcar, y las demás tareas no se completan por extensión.
+
+## Cierre final de T077: primera confirmación de la prueba adicional P21 — 2026-11-07
+
+Este apartado registra la ejecución posterior del procedimiento aclarado en
+[quickstart.md](../quickstart.md#procedimiento-adicional-p21--preparación-revisada-sin-ejecutar).
+La preparación descrita allí no era evidencia de ejecución; los resultados reales son los
+comunicados por Nada y el guía que se recogen a continuación. No se modifica spec.md ni la
+operación anterior de 15,75 €, y se conservan sus fallos, recuperación y reentregas históricas.
+
+### Identificación independiente
+
+| Dato                                  | Prueba adicional P21                                    |
+| ------------------------------------- | ------------------------------------------------------- |
+| Aportación / operación                | 31 / 4                                                  |
+| Referencia                            | DON-868afebb-090a-492e-9966-ab31b6bad6bf                |
+| UUID de solicitud                     | 8d26aeaa-1cfb-4f1d-9146-a41beea14e02                    |
+| Importe, moneda y destino             | 1,23 € · EUR · fondo general                            |
+| PaymentIntent                         | pi_3UYzXwE0jEvPnEcp18Nr4OIV                             |
+| Evento auténtico                      | evt_3UYzXwE0jEvPnEcp1ECh1dn8 · payment_intent.succeeded |
+| API del evento comunicada por el guía | 2026-10-28.endive                                       |
+
+### Secuencia observada y atribución
+
+1. Nada creó la nueva operación mediante el formulario real y pagó una sola vez en
+   Checkout de pruebas. El guía mantuvo un listener de observación sin forwarding con
+   la misma clave de .env. Su GET de Stripe confirmó Checkout complete/paid, 123 céntimos,
+   EUR, livemode=false y referencia coincidente. No se reutilizó el pago de 15,75 €.
+2. El guía comprobó por lectura de PostgreSQL, antes del cierre, aportación pendiente,
+   fecha_cobro y pago local nulos, y ausencia de correo y evento de esa operación. Nada
+   observó el resultado pendiente en pantalla. Se distingue pago completado en Stripe
+   de confirmación local, todavía no producida.
+3. Nada cerró las páginas de aplicación y Checkout. El guía comprobó con la herramienta de
+   navegador que el integrado no tenía pestañas abiertas y cerró también la única pestaña
+   restante de Mailpit. Firefox conservaba otras páginas ajenas; Nada confirmó que no
+   quedaban páginas de la aplicación en Firefox. **No se afirma cierre total de Firefox ni
+   ausencia de todos sus procesos.** El cliente de la aplicación permaneció cerrado durante
+   la primera confirmación y las comprobaciones posteriores indicadas.
+4. Se activó el listener con forwarding y la misma clave de .env. Según la comprobación
+   del guía, su secreto coincidía con el configurado, sin exponer valores. Backend y demás
+   servicios continuaron activos. No se desactivó la verificación de firma.
+5. Justo antes de reenviar únicamente el evento auténtico nuevo, a las
+   **2026-11-07T02:53:15.438Z**, el guía verificó de nuevo que la aportación seguía pendiente,
+   sin fecha de cobro, pago local, correo ni evento de esa operación. Esta comprobación
+   acredita que no había adelantado la confirmación otra entrega.
+
+Nada aportó estas líneas de la primera entrega al backend, en hora local Europe/Madrid:
+
+```text
+2026-11-07 03:53:16 --> payment_intent.succeeded [evt_3UYzXwE0jEvPnEcp1ECh1dn8]
+2026-11-07 03:53:18 <-- [200] POST http://localhost:3000/api/pasarela/webhook [evt_3UYzXwE0jEvPnEcp1ECh1dn8]
+```
+
+6. Sin reabrir páginas, el guía comprobó a las **2026-11-07T02:53:20.900Z**:
+
+| Comprobación del guía tras la primera entrega | Resultado comunicado                                     |
+| --------------------------------------------- | -------------------------------------------------------- |
+| Estado local                                  | confirmada; mismo importe y PaymentIntent                |
+| fecha_cobro                                   | 2026-11-07T02:40:00.000Z                                 |
+| Unicidad                                      | Una aportación por referencia y por pago; una operación  |
+| Evento                                        | procesado, sin error                                     |
+| Confirmación de correo                        | enviado, un intento; enviado_en=2026-11-07T02:53:18.133Z |
+| Recepción en Mailpit                          | Una coincidencia de esa referencia                       |
+
+La fecha_cobro anterior al cierre no significa que el backend hubiera confirmado antes:
+el [contrato de pasarela](../contracts/pasarela-stripe.md#puntual) toma esa fecha del evento
+de éxito en Stripe, no del instante de persistencia local. La transición local queda
+acotada por la lectura pendiente de las 02:53:15.438Z y la confirmada de las 02:53:20.900Z.
+Las horas locales de las líneas corresponden a UTC+01:00; las terminadas en Z son UTC.
+
+7. El guía reenvió una vez el **mismo evento**, sin otro pago. Nada aportó:
+
+```text
+2026-11-07 03:56:10 --> payment_intent.succeeded [evt_3UYzXwE0jEvPnEcp1ECh1dn8]
+2026-11-07 03:56:10 <-- [200] POST http://localhost:3000/api/pasarela/webhook [evt_3UYzXwE0jEvPnEcp1ECh1dn8]
+```
+
+Las consultas posteriores del guía conservaron una aportación, una operación, correo
+enviado con un intento, la misma fecha de envío y una coincidencia en Mailpit. No se
+interpreta el segundo 200 como un nuevo cobro ni como otro correo. No se atribuye a esta
+comprobación una garantía universal de entrega física única del correo.
+
+8. Nada reabrió el resultado con su cuenta vinculada y comprobó visualmente: confirmada,
+   1,23 €, fondo general y correo enviado. La recepción del nuevo mensaje queda acreditada
+   por Mailpit y las consultas del guía; **no consta inspección visual del contenido de
+   ese nuevo correo**. La apertura visual del correo anterior de 15,75 € sigue registrada
+   únicamente para aquella operación.
+
+### Contraste final y límites del cierre
+
+| Criterio de T077/P21                                      | Evidencia que lo cubre                                                                                                                                                             |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pago de pruebas correcto y aportación local aún pendiente | Formulario y pago de Nada; GET de Stripe del guía; lecturas locales antes del cierre y justo antes de la entrega; pantalla pendiente observada por Nada                            |
+| Primera confirmación posterior al cierre del cliente      | Páginas de aplicación/Checkout cerradas, integrado sin pestañas y Firefox solo con páginas ajenas; primera entrega con 200 y transición pendiente → confirmada sin reabrir páginas |
+| Reentrega válida sin duplicados                           | Mismo evento entregado otra vez con 200; recuentos y envío conservados según consultas del guía                                                                                    |
+| Correo recibido                                           | Registro enviado con un intento y una coincidencia de la referencia en Mailpit                                                                                                     |
+| Resultado autorizado                                      | Nada reabrió con cuenta vinculada y observó los datos correctos                                                                                                                    |
+| Retorno y evidencias anteriores de T077                   | Se conservan el retorno automático, pago y correo de la operación original y la verificación del vínculo, sin atribuirle una primera confirmación con navegador cerrado            |
+
+Con T076 ya completada y este contraste frente al escenario 21 de spec.md y el
+procedimiento aclarado de quickstart, **T077 queda completada en el alcance observado**.
+La condición funcional es procesar la primera confirmación sin depender de una página
+abierta o del retorno del donante; no se añade el requisito de terminar procesos de
+Firefox que mantienen únicamente páginas ajenas. No se cambia el criterio ni se altera
+ningún estado para fabricar la transición.
+
+No se ha medido una duración inferior a tres minutos; SC-001 y T079 no se cierran por esta
+prueba. Tampoco se completan T078 y siguientes, T006, T007, converge o coordinación de 009.
+Los apartados anteriores con T077 parcial reflejan la evidencia disponible en cada etapa;
+este apartado fija el resultado posterior, sin borrar sus limitaciones históricas.
+
+Las observaciones de interfaz y líneas del listener proceden de Nada; GET, consultas de
+estado, Mailpit y control de entrega proceden del guía según el encargo. Las comprobaciones
+propias de esta revisión se limitan a rama/HEAD/estado local, lectura y contraste de los
+documentos y revisión de formato y alcance. No se repiten suites ni consultas externas,
+pagos, reenvíos o cambios de configuración. El estado inicial era spec-001, HEAD 789e154,
+con los tres documentos de preparación modificados y .claude/launch.json sin seguimiento.
