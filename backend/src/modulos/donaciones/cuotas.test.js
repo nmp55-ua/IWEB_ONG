@@ -586,6 +586,61 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
   });
 });
 
+describe('CONV-002 · recuperación del aviso histórico', () => {
+  it.each(['pago', 'cancelacion'])(
+    'no presenta el fallo/previsión como actuales tras %s y reentrega',
+    async (posterior) => {
+      const c = await alta();
+      await pagarInicial(c);
+      const intento = ahora() + 2 * DIA;
+      const f = factura(c, { pagada: false, intento });
+      const e = eventoFactura('invoice.payment_failed', f);
+      enviar.mockResolvedValueOnce(false);
+      await procesar(e);
+      const [aviso] = await correos(c, 'fallo_cuota');
+      expect(aviso).toMatchObject({ estado: 'fallido', intentos: 1, enviado_en: null });
+      if (posterior === 'pago') {
+        factura(c, { id: f.id, pagoId: f.payment_intent.id, pagadaEn: ahora() - 30 });
+        await procesar(eventoFactura('invoice.paid', f));
+        expect((await cuotas(c))[1].estado).toBe('confirmada');
+      } else {
+        Object.assign(stripe.suscripciones.get(c.subId), { status: 'canceled', canceled_at: ahora() });
+        await procesar(eventoSuscripcion('customer.subscription.deleted', c));
+        expect((await suscripcion(c)).estado).toBe('cancelada');
+      }
+      const antes = {
+        cuotas: await cuotas(c),
+        suscripcion: await suscripcion(c),
+        confirmaciones: await correos(c, 'confirmacion'),
+      };
+      const checkoutAntes = pasarela.crearSesionPago.mock.calls.length,
+        smtpAntes = enviar.mock.calls.length;
+      await procesar(e);
+      expect(enviar).toHaveBeenCalledTimes(smtpAntes + 1);
+      expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(checkoutAntes);
+      expect(await cuotas(c)).toEqual(antes.cuotas);
+      expect(await suscripcion(c)).toEqual(antes.suscripcion);
+      expect(await correos(c, 'confirmacion')).toEqual(antes.confirmaciones);
+      const [recuperado] = await correos(c, 'fallo_cuota');
+      expect(recuperado).toMatchObject({
+        id: aviso.id,
+        resumen: aviso.resumen,
+        estado: 'enviado',
+        intentos: 2,
+      });
+      const texto = enviar.mock.calls.at(-1)[0].texto;
+      expect(texto).toContain((await cuotas(c))[1].referencia);
+      expect(texto).toContain('En el intento al que se refiere este aviso');
+      expect(texto).toContain('No determina el estado actual de la cuota ni anuncia un nuevo cobro.');
+      expect(texto).toContain('Previsión comunicada en aquel momento: ');
+      expect(texto).not.toContain('Esa cuota no se ha contabilizado como pagada.');
+      expect(texto).not.toContain('Próximo intento de cobro:');
+      await procesar(e);
+      expect(enviar).toHaveBeenCalledTimes(smtpAntes + 1);
+    },
+  );
+});
+
 describe('T056 · fallo posterior, previsión y cancelación', () => {
   it('S10: una cuota posterior fallida queda rechazada, avisa una vez y no suma, cancela ni ordena cobros', async () => {
     const c = await alta();

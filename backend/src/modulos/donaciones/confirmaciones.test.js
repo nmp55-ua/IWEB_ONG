@@ -103,6 +103,51 @@ it('una reserva viva devuelve conflicto y no envía', async () => {
   });
   expect(enviar).not.toHaveBeenCalled();
 });
+
+it('CONV-001: relee enviado si el otro intento termina entre lectura y reclamación', async () => {
+  await entorno.pool.query(
+    "UPDATE aportaciones SET estado='confirmada',fecha_cobro=clock_timestamp() WHERE id=$1",
+    [aportacion.id],
+  );
+  const financiera = (await entorno.pool.query('SELECT * FROM aportaciones WHERE id=$1', [aportacion.id]))
+    .rows[0];
+  let liberar, avisar;
+  const iniciado = new Promise((resolver) => {
+    avisar = resolver;
+  });
+  const enviar = vi.fn(() => {
+    avisar();
+    return new Promise((resolver) => {
+      liberar = resolver;
+    });
+  });
+  const confirmaciones = crearConfirmaciones(repo, enviar);
+  const primero = confirmaciones.enviar(aportacion.id);
+  await iniciado;
+  const reclamar = repo.reclamarCorreo.bind(repo);
+  const intercalado = vi.spyOn(repo, 'reclamarCorreo').mockImplementationOnce(async (...args) => {
+    liberar(true);
+    expect(await primero).toBe('enviado');
+    return reclamar(...args);
+  });
+  try {
+    await expect(confirmaciones.enviar(aportacion.id)).resolves.toBe('enviado');
+    expect(intercalado).toHaveBeenCalledTimes(1);
+    expect(enviar).toHaveBeenCalledTimes(1);
+    expect(await repo.correo(aportacion.id)).toMatchObject({
+      estado: 'enviado',
+      intentos: 1,
+      resumen: correo.resumen,
+    });
+    expect(
+      (await entorno.pool.query('SELECT * FROM aportaciones WHERE id=$1', [aportacion.id])).rows[0],
+    ).toEqual(financiera);
+  } finally {
+    liberar(true);
+    await primero;
+    intercalado.mockRestore();
+  }
+});
 it('renueva cada diez segundos mientras espera SMTP y convierte excepciones en fallo', async () => {
   vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
   const renovar = vi.spyOn(repo, 'renovarCorreo');

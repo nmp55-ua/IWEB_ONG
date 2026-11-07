@@ -17,7 +17,11 @@ export function crearConfirmaciones(repo, enviarCorreo) {
       if (!actual) return 'noPrevisto';
       if (actual.estado === 'enviado') return 'enviado';
       const intento = await repo.reclamarCorreo(aportacionId, tipo);
-      if (!intento) throw new ErrorApi(409, 'CORREO_EN_ENVIO', 'El correo se está enviando.');
+      if (!intento) {
+        // Otro intento puede haber terminado entre la lectura y el UPDATE de reclamación.
+        if ((await repo.correo(aportacionId, tipo))?.estado === 'enviado') return 'enviado';
+        throw new ErrorApi(409, 'CORREO_EN_ENVIO', 'El correo se está enviando.');
+      }
       let vigente = true;
       let renovacion = Promise.resolve();
       const temporizador = setInterval(() => {

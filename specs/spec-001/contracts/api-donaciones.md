@@ -153,6 +153,8 @@ confirmación. Responde 200 `{ "estadoCorreo": "enviado" }` si consta éxito, o 
 real y mantiene el pago confirmado. No se representa fallo de correo como fallo de pago.
 Si ya está enviado, devuelve el estado sin enviar otro mensaje. Si hay envío reservado
 devuelve 409 `CORREO_EN_ENVIO`; si la aportación no está confirmada, 409 `COBRO_NO_CONFIRMADO`.
+Si una reclamación pierde la carrera con otro intento que ya terminó satisfactoriamente,
+se relee y devuelve enviado; no se confunde el estado terminal con una reserva viva.
 No se llama a Stripe ni se insertan aportaciones o suscripciones en este flujo.
 
 ## Verificación y vínculo

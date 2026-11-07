@@ -143,6 +143,75 @@ it('resultado y correo propios: un fallo SMTP conserva el cobro y reintentar no 
   expect(enviar).toHaveBeenCalledTimes(correos);
   expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(n);
 });
+it('CONV-001 HTTP: un envío terminado durante la reclamación responde enviado sin otro SMTP o Checkout', async () => {
+  const a = request.agent(app),
+    tokenCsrf = await contexto(a);
+  const creada = await a
+    .post('/api/aportaciones')
+    .set('origin', origen)
+    .send({ ...dto(), tokenCsrf })
+    .expect(201);
+  const ref = creada.body.referencia;
+  await entorno.pool.query(
+    "UPDATE aportaciones SET estado='confirmada',fecha_cobro=clock_timestamp() WHERE referencia=$1",
+    [ref],
+  );
+  const aporte = (await entorno.pool.query('SELECT * FROM aportaciones WHERE referencia=$1', [ref])).rows[0];
+  await servicio.repo.crearCorreo(entorno.pool, aporte.id, {
+    referencia: ref,
+    importe: '20.00',
+    modalidad: 'puntual',
+    destino: 'fondo general',
+    fechaCobro: aporte.fecha_cobro.toISOString(),
+  });
+  const operaciones = (
+    await entorno.pool.query('SELECT * FROM operaciones_pago WHERE aportacion_id=$1', [aporte.id])
+  ).rows;
+  const smtpAntes = enviar.mock.calls.length,
+    checkoutAntes = pasarela.crearSesionPago.mock.calls.length;
+  let liberar, avisar;
+  const iniciado = new Promise((resolver) => {
+    avisar = resolver;
+  });
+  enviar.mockImplementationOnce(() => {
+    avisar();
+    return new Promise((resolver) => {
+      liberar = resolver;
+    });
+  });
+  const ruta = '/api/aportaciones/referencia/' + ref + '/correo';
+  const primero = a
+    .post(ruta)
+    .set('origin', origen)
+    .send({ tokenCsrf })
+    .then((r) => r);
+  await iniciado;
+  const reclamar = servicio.repo.reclamarCorreo.bind(servicio.repo);
+  const intercalado = vi.spyOn(servicio.repo, 'reclamarCorreo').mockImplementationOnce(async (...args) => {
+    liberar(true);
+    expect((await primero).status).toBe(200);
+    return reclamar(...args);
+  });
+  try {
+    const segundo = await a.post(ruta).set('origin', origen).send({ tokenCsrf }).expect(200);
+    expect(segundo.body).toEqual({ estadoCorreo: 'enviado' });
+    expect(intercalado).toHaveBeenCalledTimes(1);
+    expect(enviar).toHaveBeenCalledTimes(smtpAntes + 1);
+    expect(pasarela.crearSesionPago).toHaveBeenCalledTimes(checkoutAntes);
+    expect(await servicio.repo.correo(aporte.id)).toMatchObject({ estado: 'enviado', intentos: 1 });
+    expect((await entorno.pool.query('SELECT * FROM aportaciones WHERE referencia=$1', [ref])).rows).toEqual([
+      aporte,
+    ]);
+    expect(
+      (await entorno.pool.query('SELECT * FROM operaciones_pago WHERE aportacion_id=$1', [aporte.id])).rows,
+    ).toEqual(operaciones);
+  } finally {
+    liberar(true);
+    await primero;
+    intercalado.mockRestore();
+  }
+});
+
 it('solicitud de vínculo no enumera, exige cuenta/rol y el cliente no elige destinatario', async () => {
   const a = request.agent(app),
     tokenCsrf = await contexto(a);
@@ -428,11 +497,13 @@ function socio(referencia) {
       livemode: false,
       data: { object: { id, subscription: subId } },
     });
-    return (await entorno.pool.query('SELECT * FROM aportaciones WHERE pasarela_factura_id=$1', [id])).rows[0];
+    return (await entorno.pool.query('SELECT * FROM aportaciones WHERE pasarela_factura_id=$1', [id]))
+      .rows[0];
   }
   return { subId, periodo, facturar };
 }
-const contarFilas = async (sql, valores = []) => Number((await entorno.pool.query(sql, valores)).rows[0].count);
+const contarFilas = async (sql, valores = []) =>
+  Number((await entorno.pool.query(sql, valores)).rows[0].count);
 
 it('S04/S05: alta de socio sin cuenta; SMTP fallido conserva el alta activa con periodicidad y próxima fecha y el reintento solo reenvía', async () => {
   const a = request.agent(app),
@@ -485,7 +556,13 @@ it('S04/S05: alta de socio sin cuenta; SMTP fallido conserva el alta activa con 
   const suscripciones = await contarFilas('SELECT count(*) FROM suscripciones_socio'),
     aportaciones = await contarFilas('SELECT count(*) FROM aportaciones');
   expect(
-    (await a.post(ruta + '/correo').set('origin', origen).send({ tokenCsrf }).expect(200)).body.estadoCorreo,
+    (
+      await a
+        .post(ruta + '/correo')
+        .set('origin', origen)
+        .send({ tokenCsrf })
+        .expect(200)
+    ).body.estadoCorreo,
   ).toBe('enviado');
   expect(await contarFilas('SELECT count(*) FROM suscripciones_socio')).toBe(suscripciones);
   expect(await contarFilas('SELECT count(*) FROM aportaciones')).toBe(aportaciones);
@@ -516,13 +593,20 @@ it('S06: la sesión del alta no autoriza cuotas posteriores; la cuenta vinculada
   const rutaCiclo = '/api/aportaciones/referencia/' + ciclo.referencia;
   const envios = enviar.mock.calls.length;
   await a.get(rutaCiclo).expect(404);
-  await a.post(rutaCiclo + '/correo').set('origin', origen).send({ tokenCsrf }).expect(404);
+  await a
+    .post(rutaCiclo + '/correo')
+    .set('origin', origen)
+    .send({ tokenCsrf })
+    .expect(404);
   expect(enviar).toHaveBeenCalledTimes(envios);
   await a.get('/api/aportaciones/referencia/' + r.body.referencia).expect(200);
 
   const u = fixtures.usuarios[1],
     d = fixtures.donantes[1];
-  await entorno.pool.query('UPDATE donantes SET usuario_id=NULL WHERE usuario_id=$1 AND id<>$2', [u.id, d.id]);
+  await entorno.pool.query('UPDATE donantes SET usuario_id=NULL WHERE usuario_id=$1 AND id<>$2', [
+    u.id,
+    d.id,
+  ]);
   await entorno.pool.query('UPDATE donantes SET usuario_id=$1 WHERE id=$2', [u.id, d.id]);
   const b = request.agent(app),
     t = await contexto(b, u);

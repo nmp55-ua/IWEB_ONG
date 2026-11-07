@@ -186,7 +186,7 @@ describe('HU-01 · US2 · textos de cuota de socio', () => {
     expect(texto).not.toContain('Próximo cobro');
   });
 
-  it('el aviso de fallo de cuota no afirma cobro, no ordena pagos y muestra solo la fecha comunicada', () => {
+  it('el aviso conserva el contexto histórico del intento y su previsión, sin afirmar el estado actual', () => {
     const aviso = {
       referencia: 'DON-cuota-0002',
       importe: '1234.5',
@@ -197,11 +197,15 @@ describe('HU-01 · US2 · textos de cuota de socio', () => {
     expect(texto).toContain('Referencia: DON-cuota-0002');
     expect(texto).toContain('Importe: 1.234,50 €');
     expect(texto).toContain('La cuota no se ha podido cobrar.');
-    expect(texto).toContain('Próximo intento de cobro: 20/11/2026');
+    expect(texto).toContain('En el intento al que se refiere este aviso');
+    expect(texto).toContain('No determina el estado actual de la cuota ni anuncia un nuevo cobro.');
+    expect(texto).toContain('Previsión comunicada en aquel momento: 20/11/2026');
+    expect(texto).not.toContain('Próximo intento de cobro:');
+    expect(texto).not.toContain('Esa cuota no se ha contabilizado como pagada.');
     expect(texto).toContain('Este es un correo automático.');
     expect(texto).not.toMatch(/confirmad|cobrad[oa] correctamente|paga ahora|haz clic/i);
     expect(textoCorreoFalloCuota({ ...aviso, fechaProximoCobro: null })).toContain(
-      'Próximo intento de cobro: Pendiente de confirmación',
+      'Previsión comunicada en aquel momento: Pendiente de confirmación',
     );
     expect(textoCorreoFalloCuota(aviso)).toBe(textoCorreoFalloCuota(structuredClone(aviso)));
   });

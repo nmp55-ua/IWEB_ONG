@@ -70,20 +70,21 @@ export function textoCorreoConfirmacion(resumen) {
   ].join('\n');
 }
 
-// Aviso de una cuota posterior no cobrada (PA1.8). Solo presenta el resumen guardado:
-// no afirma cobros, no indica otro pago y muestra únicamente la fecha comunicada.
+// Aviso del intento fallido (PA1.8). El resumen se conserva aunque la cuota o suscripción
+// cambien antes de recuperar el correo; su previsión no se presenta como estado actual.
 export function textoCorreoFalloCuota(resumen) {
   const r = resumen ?? {};
   const filas = [
     ['Referencia', r.referencia ?? ''],
     ['Importe', formatearImporteCorreo(r.importe)],
-    ['Motivo', r.motivo ?? ''],
-    ['Próximo intento de cobro', proximoCobro(r)],
+    ['Motivo del intento', r.motivo ?? ''],
+    ['Previsión comunicada en aquel momento', proximoCobro(r)],
   ].filter(([, valor]) => valor !== '');
   return [
     'Hola:',
     '',
-    'No se ha podido cobrar una cuota de tu suscripción de socio. Esa cuota no se ha contabilizado como pagada.',
+    'En el intento al que se refiere este aviso no se pudo cobrar una cuota de tu suscripción de socio.',
+    'No determina el estado actual de la cuota ni anuncia un nuevo cobro.',
     '',
     ...filas.map(([etiqueta, valor]) => `${etiqueta}: ${valor}`),
     '',
