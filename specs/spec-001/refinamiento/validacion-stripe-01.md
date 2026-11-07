@@ -1,4 +1,4 @@
-# Validación real de Stripe — donación puntual
+# Validación real de Stripe — HU-01
 
 **Historia**: HU-01 · **Rama**: spec-001 · **Fecha**: 2026-11-07
 
@@ -365,3 +365,146 @@ propias de esta revisión se limitan a rama/HEAD/estado local, lectura y contras
 documentos y revisión de formato y alcance. No se repiten suites ni consultas externas,
 pagos, reenvíos o cambios de configuración. El estado inicial era spec-001, HEAD 789e154,
 con los tres documentos de preparación modificados y .claude/launch.json sin seguimiento.
+
+## Bloque real de socios — cierre de T078 y evidencia parcial de T079–T080 · 2026-11-07
+
+Estado inicial de esta revisión: spec-001, HEAD cbafeef, únicamente .claude/launch.json sin
+seguimiento. Nada ejecutó las altas y la cancelación descritas; el guía contrastó por
+lectura PostgreSQL, Stripe con API acacia y Mailpit. Nada comunicó las confirmaciones en
+pantalla y aportó las líneas del listener. La revisión actual no repite esos comandos o
+consultas: contrasta las evidencias comunicadas con T078, contratos y escenarios, y actualiza
+documentación. No se modifican las donaciones puntuales anteriores de 15,75 € y 1,23 €.
+
+### Tres altas independientes y primeras facturas
+
+Todas son cuotas iniciales en EUR, fondo general y modo de pruebas. Nada comunicó las tres
+confirmaciones en pantalla; se comunicó la aportación de una captura mensual. No se añaden
+archivos de capturas que no se hayan recibido en este bloque documental ni se afirma que
+esta revisión haya inspeccionado directamente esas pantallas.
+
+| Campo                          | Mensual                                  | Trimestral                               | Anual                                    |
+| ------------------------------ | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
+| Aportación / suscripción local | 32 / 6                                   | 33 / 7                                   | 34 / 8                                   |
+| Referencia                     | DON-d929b6c6-a2bf-4c52-97ee-cf74a4897f96 | DON-8de7cf59-b711-4ffe-928c-a839d9345f63 | DON-6bb1aa78-1c3a-46a5-8647-a7bf9a5a2e57 |
+| Importe                        | 1,11 € / 111 céntimos                    | 1,22 € / 122 céntimos                    | 1,33 € / 133 céntimos                    |
+| Recurrencia Stripe             | month/1                                  | month/3                                  | year/1                                   |
+| Subscription                   | sub_1UZ0AVE0jEvPnEcpnf7HDK6Z             | sub_1UZ0FBE0jEvPnEcp6b0LR1Lz             | sub_1UZ0GNE0jEvPnEcprIex4dBv             |
+| Invoice                        | in_1UZ0AVE0jEvPnEcp9bcmLuB6              | in_1UZ0FBE0jEvPnEcpeCf8NPDx              | in_1UZ0GNE0jEvPnEcpCZc6CYqs              |
+| PaymentIntent                  | pi_3UZ0AVE0jEvPnEcp0UyLkLmV              | pi_3UZ0FBE0jEvPnEcp1gRP4vHz              | pi_3UZ0GOE0jEvPnEcp00xJzrxw              |
+| Alta y cobro locales (UTC)     | 2026-11-07T03:19:53Z                     | 2026-11-07T03:24:43Z                     | 2026-11-07T03:25:57Z                     |
+| Próximo cobro local inicial    | 2026-12-07                               | 2027-02-07                               | 2027-11-07                               |
+| Correo enviado_en (UTC)        | 2026-11-07T03:19:57.149Z                 | 2026-11-07T03:24:46.929Z                 | 2026-11-07T03:26:00.466Z                 |
+
+El guía comprobó en las tres: Invoice paid, billing_reason=subscription_create,
+amount_paid=111/122/133, relación factura–suscripción–PaymentIntent correcta y pago succeeded.
+Las fechas locales de alta y cobro coinciden con Invoice.status_transitions.paid_at.
+Las suscripciones quedaron inicialmente activas; se conserva una cuota inicial y una
+operación por alta. Cada confirmación tiene estado enviado, un intento y una coincidencia
+de su referencia en Mailpit. La próxima fecha anual de la tabla es la previsión inicial;
+queda anulada después de la cancelación descrita abajo, sin reescribir la historia del alta.
+
+Se acredita la consulta acacia de estas tres facturas iniciales reales y sus relaciones;
+no se generaliza la compatibilidad a todas las situaciones futuras de Billing o de endive.
+No se atribuye una versión concreta a los eventos de este bloque que no haya sido comunicada.
+
+### Primeras entregas y reentregas de invoice.paid
+
+El guía solicitó una reentrega de cada evento original. Nada aportó los registros siguientes,
+todos del 2026-11-07, hora local Europe/Madrid (UTC+01:00):
+
+| Modalidad y evento                        | Primera recepción / respuesta | Reentrega / respuesta         |
+| ----------------------------------------- | ----------------------------- | ----------------------------- |
+| Mensual · evt_1UZ0AYE0jEvPnEcpyqRpQKNJ    | 04:19:54 / 200 a las 04:19:57 | 04:27:07 / 200 a las 04:27:08 |
+| Trimestral · evt_1UZ0FEE0jEvPnEcpe5GxUCsZ | 04:24:44 / 200 a las 04:24:46 | 04:27:09 / 200 a las 04:27:09 |
+| Anual · evt_1UZ0GQE0jEvPnEcpr4PltHwa      | 04:25:58 / 200 a las 04:26:00 | 04:27:10 / 200 a las 04:27:10 |
+
+Las consultas posteriores del guía conservaron una cuota y operación por alta, importes
+y fechas originales, el mismo correo enviado con un intento y fecha de envío inalterada,
+y una coincidencia de cada referencia en Mailpit. No se crearon otros pagos. Se acredita
+idempotencia observada en estas reentregas, no una garantía universal de Stripe o SMTP.
+
+### Cancelación de la suscripción anual tras un alta satisfactoria
+
+Nada canceló únicamente sub_1UZ0GNE0jEvPnEcprIex4dBv desde Stripe de pruebas, seleccionando
+cancelación inmediata y sin reembolso. Se comunicó que aportó capturas de opciones y resultado.
+El evento original customer.subscription.deleted fue evt_1UZ0NwE0jEvPnEcpbCbnlNy7; las líneas
+del listener aportadas por Nada muestran recepción a las 04:33:44 y HTTP 200 a las 04:33:48
+locales del 2026-11-07.
+
+El guía contrastó:
+
+- Stripe: canceled, livemode=false y canceled_at=ended_at=1794022424.
+- Suscripción local 8: cancelada, fecha_proximo_cobro y pasarela_proximo_cobro_en nulas.
+- Aportación 34: confirmada, 1,33 €, mismo pago, factura y fecha de cobro.
+- Una única factura inicial pagada en Stripe; ninguna factura adicional y amount_refunded=0.
+- Confirmación original conservada con un intento y una coincidencia en Mailpit.
+- Mensual y trimestral no se cancelaron.
+
+Nada abrió el resultado anual; la captura comunicada muestra suscripción cancelada, ausencia
+de próximo cobro y aviso de conservación de cuotas cobradas. La cancelación no borra la cuota
+confirmada ni autoriza a modificar su resumen histórico.
+
+Este recorrido es **cancelación tras alta pagada satisfactoriamente**. No se presenta como
+cancelación después de una cuota fallida, ni como agotamiento real de Smart Retries, ni como
+comprobación completa de S13. La configuración de recuperación/cancelación observada en
+T076 tampoco sustituye la ejecución de esas secuencias.
+
+### Contraste de T078 y balance real/simulado para T080
+
+T078 pide «altas con periodicidades admitidas, primera factura, reentrega firmada y cancelación
+comunicada desde la pasarela de pruebas». Su comprobación exige ausencia de duplicados y
+distinguir lo real de ciclos/fallos cubiertos solo con simulación, sin inventar facturas.
+Las tres altas, sus primeras facturas y reentregas y la cancelación anual cubren ese bloque;
+**T078 queda completada en ese alcance**. Esto no equivale a ejecutar todos sus escenarios
+de origen íntegramente con Stripe: se conserva el balance pendiente siguiente.
+
+| Escenario o recorrido                                   | Evidencia real de este bloque                                                    | Límite y seguimiento                                                                                                   |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| S01: alta, primera cuota y tres periodicidades          | Tres altas y facturas iniciales, fechas, estado y previsión inicial contrastados | Importes de prueba 1,11/1,22/1,33 €; no se declara una renovación                                                      |
+| S02: renovación                                         | No realizada                                                                     | Requiere otra factura real subscription_cycle; existe cobertura simulada en cuotas.test.js                             |
+| S03: primer cobro fallido                               | No realizado                                                                     | Las tres altas aquí fueron satisfactorias; la evidencia previa es simulada                                             |
+| S04: alta sin cuenta                                    | No acreditada por los datos de este bloque                                       | No se infiere ausencia de cuenta de que el formulario permita invitados; requiere evidencia del recorrido              |
+| S05–S06: fallo y reintento del correo de socio          | No realizados aquí                                                               | En estos casos el primer envío fue satisfactorio; se conservan las pruebas locales, sin atribuir un fallo SMTP real    |
+| S07–S08: conflictos de identidad                        | Sin nueva evidencia de Stripe en este bloque                                     | Su balance local y documental se revisará en T080; estas altas no prueban conflictos                                   |
+| S09: primer cobro sin retorno/cierre del cliente        | No acreditado para socios                                                        | P21 puntual no acredita automáticamente la activación de un alta de socio en esas condiciones                          |
+| S10: fallo de cuota posterior                           | No realizado                                                                     | Requiere ciclo fallido real; cobertura simulada previa, no otra primera factura                                        |
+| S11–S12: próxima cuota tras fallo, fecha ausente/pasada | No realizados                                                                    | Las fechas iniciales normales y su anulación por cancelación no sustituyen esas condiciones; cobertura simulada previa |
+| S13: cancelación posterior a fallo                      | Solo observada la cancelación tras un alta satisfactoria                         | Falta el fallo previo y la secuencia completa; cobertura simulada de esa secuencia en cuotas.test.js                   |
+
+No se cambia el estado de T080: exige el balance completo de P01–P21/S01–S13, con entradas,
+observado y fuentes. Esta tabla aporta únicamente la parte de socios y sus límites.
+
+### Inventario de correos aprovechable para T079/SC-002
+
+En el bloque actual hay **tres referencias nuevas confirmadas y tres correspondencias de
+recepción en Mailpit**, una por referencia según las consultas del guía. Se conservan tras
+reentregas y cancelación. Correo enviado con un intento y una coincidencia no se confunde con
+un aviso de fallo o un enlace de vinculación.
+
+| Aportación y referencia                       | Evidencia de confirmación recibida       | Momento y fuente                                                                |
+| --------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------- |
+| 30 · DON-47619c0b-0cb7-4149-9a80-29e2b133829c | Registrada en el bloque puntual anterior | Guía/Mailpit y apertura visual de Nada en aquella prueba; no reconsultada ahora |
+| 31 · DON-868afebb-090a-492e-9966-ab31b6bad6bf | Registrada en P21                        | Guía/Mailpit en aquella prueba; no reconsultada ahora                           |
+| 32 · DON-d929b6c6-a2bf-4c52-97ee-cf74a4897f96 | enviado, un intento, una coincidencia    | Guía, bloque actual y contraste tras la reentrega                               |
+| 33 · DON-8de7cf59-b711-4ffe-928c-a839d9345f63 | enviado, un intento, una coincidencia    | Guía, bloque actual y contraste tras la reentrega                               |
+| 34 · DON-6bb1aa78-1c3a-46a5-8647-a7bf9a5a2e57 | enviado, un intento, una coincidencia    | Guía, bloque actual, reentrega y cancelación                                    |
+
+Es un inventario acumulado de referencias identificadas y comprobaciones en momentos
+distintos, no una auditoría global de todas las aportaciones confirmadas de la base. No se
+declara por ello cobertura global de SC-002 ni se afirma inspección visual del contenido de
+los tres correos nuevos. La cancelación no elimina la aportación 34 del conjunto confirmado.
+
+**T079 sigue pendiente**: no se cronometró una donación puntual desde la entrada al formulario,
+como exige SC-001. Las horas de pago, correo y listener no permiten reconstruir esa duración;
+tampoco la duración de un alta de socio la sustituye. Los importes contrastados aportan
+evidencia al céntimo para estos casos, sin afirmar todas las comprobaciones de SC-004 o del
+conjunto manual aún no revisadas. No se marca T079 ni T080 por extensión.
+
+### Revisión documental y parada
+
+Se conservan las evidencias anteriores y sus límites como evolución. Las actuaciones de
+Nada y las consultas del guía no se presentan como ejecuciones de esta revisión. Aquí solo
+se comprueban rama/HEAD/estado, documentos y formato. No se repiten suites o consultas
+externas, ni se ejecutan altas, pagos, cancelaciones, reenvíos, configuración o Git de escritura.
+T006, T007, T079 y siguientes, converge y coordinación de 009 permanecen pendientes; se conserva
+la revisión de Rubén sin atribuir aprobación colectiva.

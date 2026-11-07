@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T077 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T078 y siguientes, pendientes. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
+**Estado**: T001–T005 y T008–T078 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T079 y siguientes, pendientes. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
 
 **Evidencia real posterior (2026-11-07)**: T076 conserva su cierre documentado. T077 se
 completa con la prueba adicional P21 de 1,23 €, independiente de la donación original de
@@ -12,7 +12,7 @@ en Mailpit y reentrega del mismo evento sin duplicados. Nada comprobó el result
 su cuenta vinculada. Firefox conservó páginas ajenas; no se afirma cierre de todos sus
 procesos, inspección visual del nuevo correo ni duración inferior a tres minutos.
 Evidencias y atribución en `refinamiento/validacion-stripe-01.md` y
-`refinamiento/preparacion-stripe-01.md`. T078 y siguientes siguen pendientes; no se declara converge.
+`refinamiento/preparacion-stripe-01.md`. T078 se completa posteriormente con tres altas, reentregas y cancelación anual. T079 y siguientes siguen pendientes; no se declara converge.
 
 ## Backend puntual — T024–T044 · 2026-11-06
 
@@ -585,17 +585,23 @@ automática ni modificación concurrente del mismo archivo.
 
       **Cierre con prueba adicional P21 (2026-11-07)**: Aportación 31, operación 4, referencia DON-868afebb-090a-492e-9966-ab31b6bad6bf, 1,23 € EUR y fondo general; PaymentIntent pi_3UYzXwE0jEvPnEcp18Nr4OIV. Según Nada y el guía, el pago se completó una sola vez con listener sin forwarding y PostgreSQL seguía pendiente, sin fecha/pago local, correo o evento, antes del cierre y justo antes del reenvío a las 02:53:15.438Z. Se cerraron las páginas de aplicación/Checkout y las pestañas del navegador integrado; Firefox conservó páginas ajenas. El listener con la misma clave y secreto coincidente recibió el evento auténtico evt_3UYzXwE0jEvPnEcp1ECh1dn8 a las 03:53:16 locales y respondió 200 a las 03:53:18. Sin reabrir páginas, el guía constató a las 02:53:20.900Z la primera transición a confirmada, una aportación y operación, evento procesado sin error, correo enviado con un intento y una coincidencia en Mailpit. La segunda entrega del mismo evento obtuvo 200 a las 03:56:10 locales sin cambiar recuentos ni envío; Nada comprobó después el resultado con cuenta vinculada. T077 queda completada junto a las evidencias anteriores de pago, retorno y correo original. No se afirma primera confirmación con navegador cerrado de la operación de 15,75 €, cierre total de Firefox, duración inferior a tres minutos o inspección visual del nuevo correo. No se marca T078 ni se modifica el criterio funcional.
 
-- [ ] T078 Comprobar altas con periodicidades admitidas, primera factura, reentrega firmada y cancelación comunicada desde la pasarela de pruebas. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`, `frontend/src/components/donaciones/ResultadoDonacion.jsx`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
+- [x] T078 Comprobar altas con periodicidades admitidas, primera factura, reentrega firmada y cancelación comunicada desde la pasarela de pruebas. Archivos: `frontend/src/components/donaciones/FormDonacion.jsx`, `frontend/src/components/donaciones/ResultadoDonacion.jsx`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: FR-001, FR-008–FR-010, FR-017–FR-019; S01–S04, S09–S13; SC-004. **Depende de**: T077.
       **Comprobación**: La primera cuota y sus reentregas no duplican; se distingue lo observado realmente de ciclos/fallos cubiertos solo con simulación. Sin factura real correspondiente no se simula éxito usando un evento ajeno ni se afirma comprobación real.
+
+      **Resultado y alcance (2026-11-07)**: Nada realizó altas mensual (1,11 €, aportación 32, suscripción 6), trimestral (1,22 €, aportación 33, suscripción 7) y anual (1,33 €, aportación 34, suscripción 8), todas EUR/fondo general en pruebas. El guía contrastó con PostgreSQL, Stripe acacia y Mailpit primeras facturas subscription_create pagadas, relaciones de pago correctas, fechas iguales a paid_at, suscripciones inicialmente activas, una cuota y operación por alta, un intento de correo y una coincidencia por referencia. Las líneas aportadas por Nada muestran primera entrega y reentrega de cada invoice.paid con 200 y los recuentos se conservaron. Nada canceló solo la anual inmediatamente y sin reembolso; su customer.subscription.deleted obtuvo 200 y el guía comprobó cancelación local, previsión nula, cuota confirmada intacta, única factura inicial pagada y amount_refunded=0. T078 se completa para este bloque y la distinción exigida entre pruebas reales y simuladas, no como cobertura real íntegra de S01–S13. Renovación, primer fallo, fallos posteriores, alta sin cuenta y primer cobro de socio sin retorno/cierre no se acreditan aquí; S13 después de fallo sigue pendiente en su recorrido completo. Fuentes, identificadores y límites en `refinamiento/validacion-stripe-01.md`.
 
 - [ ] T079 Medir el tiempo de donación y verificar recepción de todas las confirmaciones del conjunto manual validado. Archivos: `specs/spec-001/quickstart.md`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: SC-001, SC-002, SC-004; P01, P06, P08–P10, S05, S06. **Depende de**: T078.
       **Comprobación**: Se registra duración real < tres minutos, comparación al céntimo y mensaje por cada referencia confirmada de esa ejecución, tras reintentos si proceden. Semillas/mocks se identifican aparte y cualquier correo pendiente impide cumplir SC-002.
 
+      **Evidencia aprovechable (2026-11-07)**: El bloque de socios aporta tres referencias confirmadas con un correo enviado, un intento y una coincidencia por referencia en Mailpit; la cancelación y las reentregas no los duplicaron. El inventario se añade al informe de Stripe sin extrapolarlo al 100 % de aportaciones de la base. No se cronometró la donación puntual exigida por SC-001; T079 continúa sin marcar. No se deducen duración ni inspección visual de los nuevos correos de las horas del listener.
+
 - [ ] T080 Completar el balance de los 34 escenarios, verificando los casos visibles en la aplicación y distinguiendo evidencia local de Stripe real. Archivos: `specs/spec-001/quickstart.md`, `specs/spec-001/refinamiento/validacion-local-01.md`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: FR-001–FR-019; P01–P21, S01–S13; SC-001–SC-004. **Depende de**: T079.
       **Comprobación**: Cada escenario tiene entrada, observado, referencia y resultado. Si un ciclo real o una comprobación no se realizó, queda pendiente explícitamente; no se declara convergencia por cobertura automática.
+
+      **Balance parcial añadido (2026-11-07)**: Se separan altas y reentregas reales, cancelación tras alta satisfactoria, y escenarios con evidencia exclusivamente simulada o sin recorrido real acreditado. Este inventario no completa el balance de los 34 escenarios; T080 sigue sin marcar y no se declara converge.
 
 - [ ] T081 Preparar la revisión final de Rubén con documentación coherente y evidencia, conservando los informes anteriores. Archivos: `README.md`, `backend/src/modulos/LEEME.md`, `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/plan.md`, `specs/spec-001/tasks.md`, `specs/spec-001/refinamiento/revision-tecnica-01.md`.
       **Origen**: Constitución III, X–XII; P-01–P-05; SC-001–SC-004. **Depende de**: T080.

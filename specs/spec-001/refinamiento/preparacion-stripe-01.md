@@ -245,3 +245,37 @@ inferior a tres minutos. La recepción del correo se acredita por Mailpit y las 
 del guía. T078 y siguientes, T006, T007, converge y coordinación de 009 siguen pendientes.
 Esta revisión solo actualiza documentación: no ejecuta suites, consultas externas, pagos,
 reenvíos, configuración o acciones de Git de escritura; conserva secretos e históricos.
+
+## Evidencia posterior de socios — T078 · 2026-11-07
+
+Nada realizó las altas mensual de 1,11 €, trimestral de 1,22 € y anual de 1,33 €, EUR y fondo
+general, en Stripe de pruebas. El guía contrastó con PostgreSQL, consultas Stripe acacia y
+Mailpit las facturas iniciales pagadas, relaciones correctas, fechas de alta/cobro iguales
+a paid_at, suscripciones inicialmente activas y una cuota, operación y confirmación por alta.
+Nada aportó primeras entregas y reentregas de invoice.paid con HTTP 200. Los recuentos, fechas
+y envíos se conservaron tras las reentregas. Estos casos aportan evidencia de recursos reales
+de suscripciones y facturas iniciales con el adaptador acacia, sin generalizar a todos los
+recorridos de Billing o a la estructura completa de eventos endive.
+
+Nada canceló solo la anual inmediatamente y sin reembolso desde el panel de pruebas.
+El customer.subscription.deleted obtuvo 200 según las líneas aportadas; el guía contrastó
+canceled en Stripe, cancelada localmente, previsión nula, aportación confirmada intacta,
+ausencia de factura adicional, amount_refunded=0 y confirmación original conservada. Nada
+comprobó el resultado anual. Mensual y trimestral no se cancelaron.
+
+El [bloque detallado](validacion-stripe-01.md#bloque-real-de-socios--cierre-de-t078-y-evidencia-parcial-de-t079t080--2026-11-07)
+registra identificadores, horas, fechas, fuentes y límites. **T078 queda completada para
+altas, primeras facturas, reentregas y cancelación comunicada**, distinguiendo esos resultados
+de ciclos y fallos simulados, tal como exige su comprobación. No se declara ejecución real
+de renovación, primer fallo, fallos posteriores, alta sin cuenta o activación sin retorno;
+la cancelación tras alta satisfactoria no equivale a S13 completo después de un fallo.
+
+El inventario de tres nuevas confirmaciones recibidas en Mailpit se incorpora a la evidencia
+parcial de T079–T080, sin atribuir inspección visual de sus contenidos ni cobertura global de
+SC-002. T079 sigue pendiente por falta de medición de la donación puntual de SC-001, y T080
+por el balance completo de 34 escenarios. T006, T007, converge y coordinación de 009 siguen
+pendientes. Los estados previos de este informe se conservan como evolución.
+
+Esta revisión es documental: no repite las acciones de Nada ni las consultas del guía, no
+ejecuta suites ni acciones externas y no modifica secretos, código o configuración. No se
+realizan acciones de Git de escritura; la rama y los commits anteriores se conservan.
