@@ -183,21 +183,25 @@ it('aísla la recurrencia entre cuerpos de sesiones periódicas', () => {
 });
 
 describe('HU-01 · firma real con secreto y cuerpo sintéticos, sin red', () => {
-  it('verifica la firma y devuelve el evento íntegro para su procesamiento posterior', async () => {
-    const { default: StripeReal } = await vi.importActual('stripe');
-    const cuerpo = JSON.stringify({
-      id: 'evt_test',
-      object: 'event',
-      type: 'checkout.session.completed',
-      data: { object: { id: 'cs_test' } },
-    });
-    const firma = StripeReal.webhooks.generateTestHeaderString({
-      payload: cuerpo,
-      secret: 'whsec_sintetico',
-    });
-    expect(api.verificarEvento(Buffer.from(cuerpo), firma)).toEqual(JSON.parse(cuerpo));
-    expect(simulado.red.crear).not.toHaveBeenCalled();
-  });
+  it.each(['2025-02-24.acacia', '2026-10-28.endive'])(
+    'verifica la firma %s y conserva el evento íntegro',
+    async (api_version) => {
+      const { default: StripeReal } = await vi.importActual('stripe');
+      const cuerpo = JSON.stringify({
+        id: 'evt_test',
+        object: 'event',
+        api_version,
+        type: 'checkout.session.completed',
+        data: { object: { id: 'cs_test' } },
+      });
+      const firma = StripeReal.webhooks.generateTestHeaderString({
+        payload: cuerpo,
+        secret: 'whsec_sintetico',
+      });
+      expect(api.verificarEvento(Buffer.from(cuerpo), firma)).toEqual(JSON.parse(cuerpo));
+      expect(simulado.red.crear).not.toHaveBeenCalled();
+    },
+  );
   it.each(['firma-invalida', 'cuerpo-alterado'])('rechaza %s', async (caso) => {
     const { default: StripeReal } = await vi.importActual('stripe');
     const cuerpo = '{"id":"evt_test"}';

@@ -12,6 +12,38 @@ const evento = (tipo = 'payment_intent.succeeded', cambios = {}) => ({
   data: { object: { id: pago.id } },
   ...cambios,
 });
+it.each(['2025-02-24.acacia', '2026-10-28.endive'])(
+  'admite aviso puntual %s sin usar el estado del snapshot',
+  async (api_version) => {
+    const e = evento(undefined, { api_version });
+    e.data.object.status = 'canceled';
+    await servicio.procesarEvento(e);
+    expect(
+      (await entorno.pool.query('SELECT estado FROM aportaciones WHERE id=$1', [aporte.id])).rows[0].estado,
+    ).toBe('confirmada');
+    await servicio.procesarEvento(e);
+    expect(enviar).toHaveBeenCalledTimes(1);
+  },
+);
+it.each(['2025-03-31.basil', '2026-10-29.endive', null])(
+  'rechaza versión no admitida %s sin consultas ni escrituras',
+  async (api_version) => {
+    await expect(servicio.procesarEvento(evento(undefined, { api_version }))).rejects.toMatchObject({
+      estado: 400,
+      codigo: 'EVENTO_NO_VALIDO',
+    });
+    expect(pasarela.obtenerPago).not.toHaveBeenCalled();
+  },
+);
+it('endive no permite modo real ni un aviso sin identificador de recurso', async () => {
+  await expect(
+    servicio.procesarEvento(evento(undefined, { api_version: '2026-10-28.endive', livemode: true })),
+  ).rejects.toMatchObject({ estado: 400 });
+  await expect(
+    servicio.procesarEvento(evento(undefined, { api_version: '2026-10-28.endive', data: { object: {} } })),
+  ).rejects.toMatchObject({ estado: 400 });
+  expect(pasarela.obtenerPago).not.toHaveBeenCalled();
+});
 beforeAll(async () => {
   entorno = await crearEntornoPruebas();
   fixtures = await entorno.crearFixtures();

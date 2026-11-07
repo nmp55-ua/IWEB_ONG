@@ -1,14 +1,15 @@
 # Contrato de pasarela y reconciliación — HU-01
 
-**Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: Diseño P-01/P-02 definido en esta rama; revisión de Rubén pendiente. P-05 es
-preparación del entorno antes de pruebas reales; integración sin ejecutar.
+**Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-07
+
+**Estado**: Compatibilidad de avisos acacia/endive comprobada localmente; revisión de Rubén
+pendiente. La entrega real de webhooks y las pruebas T076–T078 siguen pendientes.
 
 ## Versión y perímetro
 
-Referencia: SDK fijado en lockfile **17.7.0**, API **2025-02-24.acacia**. El paquete no está
-instalado en este entorno. Tanto el cliente como el endpoint deben usar esa versión antes
-de probar los contratos. Se conserva `backend/src/servicios-comunes/pasarela.js` como único
+Referencia: SDK fijado en lockfile e instalación comprobada **17.7.0**, cliente con API
+**2025-02-24.acacia**. Los avisos snapshot admiten únicamente esa versión y
+**2026-10-28.endive**, con el perímetro descrito a continuación. Se conserva `backend/src/servicios-comunes/pasarela.js` como único
 importador de Stripe. El módulo de donaciones no accede directamente al SDK.
 
 Fuentes de campos: [Checkout Session](https://docs.stripe.com/api/checkout/sessions/object?api-version=2025-02-24.acacia),
@@ -17,7 +18,40 @@ Fuentes de campos: [Checkout Session](https://docs.stripe.com/api/checkout/sessi
 [Subscription](https://docs.stripe.com/api/subscriptions/object?api-version=2025-02-24.acacia)
 y [tipos Invoice del SDK fijado](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Invoices.d.ts).
 La forma de Acacia usa `Invoice.subscription`, `Invoice.payment_intent` y
-`Subscription.current_period_end`; no se mezclan estructuras de versiones posteriores.
+`Subscription.current_period_end`; estas proyecciones son de las consultas acacia, no del snapshot recibido.
+
+### Compatibilidad limitada de webhooks — 2026-11-07
+
+Se distinguen la versión del evento firmado y la de las consultas HTTP al recurso. La
+[documentación de versionado](https://docs.stripe.com/api/versioning) identifica
+2026-10-28.endive como versión actual; la [configuración del SDK Node](https://docs.stripe.com/sdks/set-version)
+permite fijar apiVersion para las consultas, independientemente del webhook. No se actualiza
+el SDK, la cuenta, el endpoint ni sus claves. La compatibilidad comprobada es documental y
+mediante regresión local; falta comprobar las respuestas de esta cuenta en T076–T078.
+
+El evento conserva api_version y se verifica sobre sus bytes originales. Solo se consumen
+id, type, created, livemode y data.object.id del aviso; no se utiliza su estado financiero,
+importe, metadatos, subscription o parent. Las restantes versiones, incluida una revisión
+endive no enumerada, siguen devolviendo 400 EVENTO_NO_VALIDO. Los formatos sin data.object.id
+no se admiten. Se conservan los tipos de evento de este contrato; los demás se ignoran sin
+aplicar transiciones. No se ofrece compatibilidad general con todos los objetos endive.
+
+La referencia actual de [Invoice](https://docs.stripe.com/api/invoices/object) y su
+[consulta con versión endive](https://docs.stripe.com/api/invoices/retrieve) muestran parent.
+El [cambio introducido en Basil](https://docs.stripe.com/changelog/basil/2025-03-31/adds-new-parent-field-to-invoicing-objects)
+sitúa la suscripción en parent.subscription_details.subscription, comprobando parent.type,
+en lugar de invoice.subscription. HU-01 no interpreta ninguna de esas dos ubicaciones del
+evento: obtiene Invoice por ID con el adaptador acacia y toma su subscription normalizada.
+El repositorio tampoco lee data.object.subscription para acreditar una factura.
+
+La consulta preliminar solo determina sub:<id>. Bajo esa exclusión se consulta de nuevo
+la factura y se exige el mismo ID y la misma suscripción antes de reconciliar. Una
+discrepancia o fallo devuelve 503 sin procesar el evento; no se utiliza el lock de otra
+suscripción. Una factura canónica con subscription=null se ignora sin sustituirla por la
+del evento; un recurso incompleto o con otro ID no se ignora como si fuera ajeno. Las
+consultas siguen fuera de las transacciones SQL. Firma, modo, pertenencia, importe,
+unicidad de pago/factura/evento, confirmación atómica y recuperación del correo mantienen
+sus reglas anteriores. Que stripe listen muestre Ready no acredita una entrega ni un cobro.
 
 ## Creación y correlación
 
@@ -126,18 +160,18 @@ Estas fuentes justifican el diseño; no acreditan su implementación o prueba lo
 Todos los nombres se contrastaron con el [catálogo del SDK 17.7.0](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Events.d.ts).
 No es necesario suscribir todos los eventos de Stripe.
 
-| Evento | Uso propuesto y condición |
-|---|---|
-| `checkout.session.completed` | Guardar correlación de Session, PaymentIntent o Subscription. No insertar una segunda aportación ni confirmar una cuota. |
-| `checkout.session.expired` | Cerrar Checkout solo si su estado actual está expirado y no hay prueba de cobro. Un retorno a cancel_url no equivale a este evento. |
-| `payment_intent.succeeded` | Confirmar puntual tras consultar el PaymentIntent actual. Si pertenece a una factura, no contabilizarlo aquí. |
-| `payment_intent.payment_failed` | Registrar rechazo puntual recuperable si el estado actual sigue sin cobro. No deshacer una confirmación. |
-| `payment_intent.canceled` | Registrar cancelación puntual acreditada por el recurso actual, sin borrar. |
-| `invoice.paid` | Única ruta de éxito para cuotas: validar factura y pago actual, enlazar primera cuota o crear/reutilizar cuota posterior. |
-| `invoice.payment_failed` | Registrar rechazo de la misma factura, avisar del fallo posterior al alta y actualizar previsión, sin sumar ni ordenar otro cobro. |
-| `invoice.updated` | Actualizar información de factura pendiente y próxima fecha; no añadir una aportación confirmada por sí solo. |
-| `customer.subscription.updated` | Leer estado actual, previsión y cancelación definitiva. No activar antes de acreditar primer cobro. |
-| `customer.subscription.deleted` | Reflejar cancelación definitiva validada y conservar cobros anteriores. |
+| Evento                          | Uso propuesto y condición                                                                                                           |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `checkout.session.completed`    | Guardar correlación de Session, PaymentIntent o Subscription. No insertar una segunda aportación ni confirmar una cuota.            |
+| `checkout.session.expired`      | Cerrar Checkout solo si su estado actual está expirado y no hay prueba de cobro. Un retorno a cancel_url no equivale a este evento. |
+| `payment_intent.succeeded`      | Confirmar puntual tras consultar el PaymentIntent actual. Si pertenece a una factura, no contabilizarlo aquí.                       |
+| `payment_intent.payment_failed` | Registrar rechazo puntual recuperable si el estado actual sigue sin cobro. No deshacer una confirmación.                            |
+| `payment_intent.canceled`       | Registrar cancelación puntual acreditada por el recurso actual, sin borrar.                                                         |
+| `invoice.paid`                  | Única ruta de éxito para cuotas: validar factura y pago actual, enlazar primera cuota o crear/reutilizar cuota posterior.           |
+| `invoice.payment_failed`        | Registrar rechazo de la misma factura, avisar del fallo posterior al alta y actualizar previsión, sin sumar ni ordenar otro cobro.  |
+| `invoice.updated`               | Actualizar información de factura pendiente y próxima fecha; no añadir una aportación confirmada por sí solo.                       |
+| `customer.subscription.updated` | Leer estado actual, previsión y cancelación definitiva. No activar antes de acreditar primer cobro.                                 |
+| `customer.subscription.deleted` | Reflejar cancelación definitiva validada y conservar cobros anteriores.                                                             |
 
 Los eventos de otros métodos de pago asíncronos quedan fuera del alcance de tarjeta de P-04. Un evento ajeno
 a estas operaciones se ignora de forma registrada. Si se amplían métodos en otra versión,
@@ -236,16 +270,16 @@ notificación pendiente o una reserva vencida tras caída. Diferentes event IDs 
 pago tampoco crean filas nuevas: lo impiden pago/factura únicos y la reconciliación.
 No se compara solo `event.created` para decidir cuál manda.
 
-| Orden o carrera | Resultado exigido |
-|---|---|
-| Invoice antes de Checkout completado | Subscription.metadata permite asociar la primera cuota ya existente. |
-| Checkout antes de Invoice | Solo se correlaciona; Invoice confirma una vez. |
-| Primer fallo → éxito del mismo pago | Misma fila, referencia y única suma; P-01 permite la transición. |
+| Orden o carrera                                         | Resultado exigido                                                                                             |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Invoice antes de Checkout completado                    | Subscription.metadata permite asociar la primera cuota ya existente.                                          |
+| Checkout antes de Invoice                               | Solo se correlaciona; Invoice confirma una vez.                                                               |
+| Primer fallo → éxito del mismo pago                     | Misma fila, referencia y única suma; P-01 permite la transición.                                              |
 | Ciclo posterior pagado antes del aviso de primera cuota | Recuperar y verificar la factura inicial, reutilizar la aportación del alta y registrar cada factura una vez. |
-| Éxito → evento de fallo antiguo | Se conserva confirmada; el estado canónico y la inmutabilidad impiden retroceder. |
-| Dos entregas simultáneas | Exclusión mutua, evento único y claves de negocio únicas. |
-| Cancelación definitiva → evento de cuota antiguo | Se conserva cancelada; una cuota realmente cobrada se conserva sin reactivar. |
-| Fallo antiguo recibido cuando la factura ya está pagada | No se registra un nuevo rechazo ni aviso; la ruta invoice.paid confirma o ya lo hizo. |
+| Éxito → evento de fallo antiguo                         | Se conserva confirmada; el estado canónico y la inmutabilidad impiden retroceder.                             |
+| Dos entregas simultáneas                                | Exclusión mutua, evento único y claves de negocio únicas.                                                     |
+| Cancelación definitiva → evento de cuota antiguo        | Se conserva cancelada; una cuota realmente cobrada se conserva sin reactivar.                                 |
+| Fallo antiguo recibido cuando la factura ya está pagada | No se registra un nuevo rechazo ni aviso; la ruta invoice.paid confirma o ya lo hizo.                         |
 
 No hay cola adicional. La consulta externa bajo bloqueo es una concesión para un volumen
 pequeño; P-02 fija timeout de 3 s y cero reintentos automáticos por llamada. Se limita a

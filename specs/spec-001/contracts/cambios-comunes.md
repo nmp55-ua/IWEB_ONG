@@ -119,12 +119,17 @@ No es un bloqueo de diseño ni un requisito para las pruebas locales con pasarel
 Antes de las pruebas reales de Stripe, en una fase autorizada, deberá comprobarse:
 
 1. Instalación desde lockfile y versión efectiva; referencia actual 17.7.0.
-2. Cliente y destino de webhooks con API 2025-02-24.acacia y eventos del contrato.
+2. Cliente con API 2025-02-24.acacia y destino de webhooks con avisos snapshot acacia o
+   2026-10-28.endive, exclusivamente según la [compatibilidad limitada](pasarela-stripe.md#compatibilidad-limitada-de-webhooks--2026-11-07).
+   La instalación 17.7.0 está comprobada; sigue pendiente observar una entrega real y
+   contrastar los recursos canónicos de la cuenta, sin cambiar su configuración automáticamente.
 3. Credenciales y firma del entorno de pruebas, locales y sin publicarlas o enviarlas al frontend.
 4. Cobro automático, recuperación de cuotas y cancelación de la cuenta de pruebas.
 
-La cuenta, claves y endpoint no se han inspeccionado. No se declara instalación ni conexión
-efectiva. Una versión diferente exige revisar compatibilidad antes de probar.
+La comprobación local del SDK y la compatibilidad documental y simulada constan en
+[preparacion-stripe-01.md](../refinamiento/preparacion-stripe-01.md). No acredita cuenta,
+credenciales, entrega efectiva del endpoint, cobro ni recepción en buzón. Una versión de
+evento distinta de las dos enumeradas exige una nueva revisión antes de admitirla.
 
 ## Estado para el siguiente desglose
 

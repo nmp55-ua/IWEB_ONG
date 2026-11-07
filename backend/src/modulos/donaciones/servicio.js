@@ -19,10 +19,15 @@ const pagoNoDisponible = () => new ErrorApi(503, 'PAGO_NO_DISPONIBLE', 'El pago 
 const PERIODICIDADES = ['mensual', 'trimestral', 'anual'];
 const TIPOS_FACTURA = ['invoice.paid', 'invoice.payment_failed', 'invoice.updated'];
 const TIPOS_SUSCRIPCION = ['customer.subscription.updated', 'customer.subscription.deleted'];
+// Solo avisos snapshot de estas dos versiones; los recursos de negocio se consultan en acacia.
+const VERSIONES_EVENTO = new Set(['2025-02-24.acacia', '2026-10-28.endive']);
 const diaMadrid = (fecha) =>
-  new Intl.DateTimeFormat('en-CA', { timeZone: ZONA, year: 'numeric', month: '2-digit', day: '2-digit' }).format(
-    fecha,
-  );
+  new Intl.DateTimeFormat('en-CA', {
+    timeZone: ZONA,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(fecha);
 
 // Próximo cobro solo desde recursos actuales (pasarela-stripe.md, «Próxima fecha y cancelación»):
 // tras fallo de la última factura, next_payment_attempt; si no, current_period_end con cobro
@@ -107,6 +112,12 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
     if (await repo.eventoRegistrado(c, e.id)) return factura ? repo.correosDeFactura(c, factura) : [];
     const actual = factura ? await pasarela.obtenerFactura(factura) : null;
     conexionViva();
+    if (factura && (actual?.id !== factura || actual.subscription !== externa))
+      throw new ErrorApi(
+        503,
+        'NOTIFICACION_NO_DISPONIBLE',
+        'No se pudo acreditar la suscripción de la factura.',
+      );
     const sus = await pasarela.obtenerSuscripcion(externa);
     conexionViva();
     let ultima = null;
@@ -304,7 +315,7 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
         e.created < 0 ||
         !Number.isFinite(new Date(e.created * 1000).getTime()) ||
         typeof e.livemode !== 'boolean' ||
-        e.api_version !== '2025-02-24.acacia'
+        !VERSIONES_EVENTO.has(e.api_version)
       )
         throw new ErrorApi(400, 'EVENTO_NO_VALIDO', 'La notificación no es válida.');
       const real =
@@ -342,8 +353,21 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
             true,
           );
         } else if (TIPOS_FACTURA.includes(e.type) || TIPOS_SUSCRIPCION.includes(e.type)) {
-          // Identificación preliminar por el evento firmado; el recurso actual decide después.
-          const externa = TIPOS_FACTURA.includes(e.type) ? e.data.object.subscription : e.data.object.id;
+          // No leer subscription ni parent del snapshot: su forma depende de la versión.
+          // La consulta preliminar identifica el lock; se vuelve a consultar bajo exclusión.
+          let externa = e.data.object.id;
+          if (TIPOS_FACTURA.includes(e.type)) {
+            const factura = await pasarela.obtenerFactura(e.data.object.id);
+            if (
+              factura?.id !== e.data.object.id ||
+              !(
+                factura.subscription === null ||
+                (typeof factura.subscription === 'string' && factura.subscription.startsWith('sub_'))
+              )
+            )
+              throw new ErrorApi(503, 'NOTIFICACION_NO_DISPONIBLE', 'No se pudo identificar la factura.');
+            externa = factura.subscription;
+          }
           if (typeof externa !== 'string' || !externa) await repo.registrarEvento(pool, e, 'ignorado');
           else
             correos = await repo.conExclusion(

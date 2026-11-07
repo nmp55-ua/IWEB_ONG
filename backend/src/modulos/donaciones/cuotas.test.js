@@ -60,7 +60,10 @@ beforeEach(() => {
     })),
     obtenerSesionPago: vi.fn(async (id) => recurso(stripe.sesiones, id)),
     obtenerSesionDeSuscripcion: vi.fn(async (id) => ({
-      data: [...stripe.sesiones.values()].filter((s) => s.subscription === id).slice(0, 2).map(clon),
+      data: [...stripe.sesiones.values()]
+        .filter((s) => s.subscription === id)
+        .slice(0, 2)
+        .map(clon),
       has_more: false,
     })),
     obtenerFactura: vi.fn(async (id) => recurso(stripe.facturas, id)),
@@ -191,6 +194,99 @@ const eventoFactura = (tipo, f) => evento(tipo, { id: f.id, subscription: f.subs
 const eventoSuscripcion = (tipo, c) => evento(tipo, { id: c.subId });
 const procesar = (e) => servicio.procesarEvento(e);
 
+it.each(['2025-02-24.acacia', '2026-10-28.endive'])(
+  'resuelve la factura %s por consulta acacia, sin confiar en la suscripción del evento',
+  async (api_version) => {
+    const c = await alta(),
+      f = factura(c, { motivo: 'subscription_create' });
+    const e = evento(
+      'invoice.paid',
+      {
+        id: f.id,
+        subscription: 'sub_falsa',
+        parent: { type: 'subscription_details', subscription_details: { subscription: 'sub_tambien_falsa' } },
+      },
+      { api_version },
+    );
+    await procesar(e);
+    expect((await cuotas(c))[0].estado).toBe('confirmada');
+    expect(pasarela.obtenerSuscripcion).toHaveBeenCalledWith(c.subId);
+    expect(pasarela.obtenerSuscripcion).not.toHaveBeenCalledWith('sub_falsa');
+    expect((await estadoEvento(e)).estado).toBe('procesado');
+  },
+);
+it('endive sin subscription superior usa solo el identificador y confirma la primera factura una vez', async () => {
+  const c = await alta(),
+    f = factura(c, { motivo: 'subscription_create' });
+  const e = evento(
+    'invoice.paid',
+    { id: f.id, parent: { type: 'subscription_details', subscription_details: { subscription: c.subId } } },
+    { api_version: '2026-10-28.endive' },
+  );
+  await Promise.all([procesar(e), procesar(e)]);
+  expect(await sumaConfirmada(c)).toBe('10.00');
+  expect(await cuotas(c)).toHaveLength(1);
+});
+it('una consulta preliminar fallida no ignora ni registra la factura', async () => {
+  const c = await alta(),
+    f = factura(c),
+    e = eventoFactura('invoice.paid', f);
+  pasarela.obtenerFactura.mockRejectedValueOnce(new Error('Timeout sintético'));
+  await expect(procesar(e)).rejects.toMatchObject({ estado: 503 });
+  expect(await estadoEvento(e)).toBeUndefined();
+});
+it('una factura canónica sin suscripción se ignora sin tomar la del evento', async () => {
+  const c = await alta(),
+    f = factura(c);
+  stripe.facturas.set(f.id, { ...f, subscription: null });
+  const e = eventoFactura('invoice.paid', f);
+  await procesar(e);
+  expect(pasarela.obtenerSuscripcion).not.toHaveBeenCalled();
+  expect((await estadoEvento(e)).estado).toBe('ignorado');
+  expect(await sumaConfirmada(c)).toBe('0');
+});
+it('si la suscripción difiere al releer bajo exclusión, no se procesa con el lock anterior', async () => {
+  const c = await alta(),
+    f = factura(c),
+    e = eventoFactura('invoice.paid', f);
+  pasarela.obtenerFactura
+    .mockResolvedValueOnce(clon(f))
+    .mockResolvedValueOnce({ ...f, subscription: 'sub_distinta' });
+  await expect(procesar(e)).rejects.toMatchObject({ estado: 503 });
+  expect(await estadoEvento(e)).toBeUndefined();
+  expect(await sumaConfirmada(c)).toBe('0');
+});
+it('una factura canónica con identificador incompatible no se registra como ajena', async () => {
+  const c = await alta(),
+    f = factura(c),
+    e = eventoFactura('invoice.paid', f);
+  pasarela.obtenerFactura.mockResolvedValueOnce({ ...f, id: 'in_incompatible' });
+  await expect(procesar(e)).rejects.toMatchObject({ estado: 503 });
+  expect(await estadoEvento(e)).toBeUndefined();
+});
+it.each(['invoice.payment_failed', 'invoice.updated'])(
+  'resuelve %s endive sin subscription superior ni parent',
+  async (tipo) => {
+    const c = await alta(),
+      f = factura(c),
+      e = evento(tipo, { id: f.id }, { api_version: '2026-10-28.endive' });
+    await procesar(e);
+    expect(pasarela.obtenerSuscripcion).toHaveBeenCalledWith(c.subId);
+    expect((await estadoEvento(e)).estado).toBe('procesado');
+    expect(await sumaConfirmada(c)).toBe('0');
+  },
+);
+it('endive mantiene la cancelación canónica de suscripción', async () => {
+  const c = await alta();
+  await pagarInicial(c);
+  stripe.suscripciones.get(c.subId).status = 'canceled';
+  await procesar(
+    evento('customer.subscription.deleted', { id: c.subId }, { api_version: '2026-10-28.endive' }),
+  );
+  expect((await suscripcion(c)).estado).toBe('cancelada');
+  expect(await sumaConfirmada(c)).toBe('10.00');
+});
+
 async function pagarInicial(c, opciones = {}) {
   const f = factura(c, { motivo: 'subscription_create', ...opciones });
   await procesar(eventoFactura('invoice.paid', f));
@@ -260,7 +356,8 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
       expect(s.pasarela_proximo_cobro_en.getTime()).toBe(c.periodo * 1000);
       expect(s.proximo).toBe(fechaMadrid(c.periodo));
       expect(
-        (await entorno.pool.query('SELECT estado FROM operaciones_pago WHERE id=$1', [c.op.id])).rows[0].estado,
+        (await entorno.pool.query('SELECT estado FROM operaciones_pago WHERE id=$1', [c.op.id])).rows[0]
+          .estado,
       ).toBe('cerrada');
       const [confirmacion] = await correos(c, 'confirmacion');
       expect(confirmacion.resumen).toMatchObject({
@@ -337,10 +434,13 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
     expect((await suscripcion(c)).fecha_alta).toEqual(s0.fecha_alta);
     const confirmaciones = await correos(c, 'confirmacion');
     expect(confirmaciones).toHaveLength(2);
-    expect(confirmaciones[1].resumen).toMatchObject({ referencia: nueva.referencia, destino: proyecto.nombre });
+    expect(confirmaciones[1].resumen).toMatchObject({
+      referencia: nueva.referencia,
+      destino: proyecto.nombre,
+    });
     expect(
-      (await entorno.pool.query('SELECT count(*) FROM operaciones_pago WHERE aportacion_id=$1', [nueva.id])).rows[0]
-        .count,
+      (await entorno.pool.query('SELECT count(*) FROM operaciones_pago WHERE aportacion_id=$1', [nueva.id]))
+        .rows[0].count,
     ).toBe('0');
   });
 
@@ -353,7 +453,11 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
     expect(pasarela.obtenerSesionPago).toHaveBeenCalledWith(c.op.sesion_checkout_id);
     const filas = await cuotas(c);
     expect(filas).toHaveLength(2);
-    expect(filas[0]).toMatchObject({ id: c.aportacionId, estado: 'confirmada', pasarela_factura_id: inicial.id });
+    expect(filas[0]).toMatchObject({
+      id: c.aportacionId,
+      estado: 'confirmada',
+      pasarela_factura_id: inicial.id,
+    });
     expect(filas[0].fecha_cobro.getTime()).toBe(inicioEn * 1000);
     expect(filas[1]).toMatchObject({ estado: 'confirmada', pasarela_factura_id: ciclo.id });
     const s = await suscripcion(c);
@@ -368,20 +472,28 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
 
   it('sin Session conocida el listado por suscripción exige una única coincidencia; la ambigüedad no inventa el pago', async () => {
     const c = await alta();
-    await entorno.pool.query('UPDATE operaciones_pago SET sesion_checkout_id=NULL,url_checkout=NULL WHERE id=$1', [
-      c.op.id,
-    ]);
+    await entorno.pool.query(
+      'UPDATE operaciones_pago SET sesion_checkout_id=NULL,url_checkout=NULL WHERE id=$1',
+      [c.op.id],
+    );
     const inicial = factura(c, { motivo: 'subscription_create', ultima: false });
     await procesar(eventoFactura('invoice.paid', factura(c)));
     expect(pasarela.obtenerSesionDeSuscripcion).toHaveBeenCalledWith(c.subId);
-    expect((await cuotas(c)).map((a) => [a.pasarela_factura_id, a.estado])[0]).toEqual([inicial.id, 'confirmada']);
+    expect((await cuotas(c)).map((a) => [a.pasarela_factura_id, a.estado])[0]).toEqual([
+      inicial.id,
+      'confirmada',
+    ]);
 
     const d = await alta();
-    await entorno.pool.query('UPDATE operaciones_pago SET sesion_checkout_id=NULL,url_checkout=NULL WHERE id=$1', [
-      d.op.id,
-    ]);
+    await entorno.pool.query(
+      'UPDATE operaciones_pago SET sesion_checkout_id=NULL,url_checkout=NULL WHERE id=$1',
+      [d.op.id],
+    );
     factura(d, { motivo: 'subscription_create', ultima: false });
-    stripe.sesiones.set('cs_duplicada', { ...stripe.sesiones.get(d.op.sesion_checkout_id), id: 'cs_duplicada' });
+    stripe.sesiones.set('cs_duplicada', {
+      ...stripe.sesiones.get(d.op.sesion_checkout_id),
+      id: 'cs_duplicada',
+    });
     const e = eventoFactura('invoice.paid', factura(d));
     await procesar(e);
     expect(await estadoEvento(e)).toMatchObject({ estado: 'incidencia' });
@@ -437,7 +549,11 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
     await procesar(eventoFactura('invoice.paid', fallida));
     const filas = await cuotas(c);
     expect(filas).toHaveLength(2);
-    expect(filas[1]).toMatchObject({ id: rechazada.id, referencia: rechazada.referencia, estado: 'confirmada' });
+    expect(filas[1]).toMatchObject({
+      id: rechazada.id,
+      referencia: rechazada.referencia,
+      estado: 'confirmada',
+    });
     expect(filas[1].fecha_cobro.getTime()).toBe(pagadaEn * 1000);
     expect(await sumaConfirmada(c)).toBe('20.00');
     expect(await correos(c, 'fallo_cuota')).toHaveLength(1);
@@ -460,7 +576,11 @@ describe('T055 · primera factura, ciclos, reentregas y desorden', () => {
     stripe.suscripciones.get(c.subId).status = 'incomplete_expired';
     await procesar(eventoSuscripcion('customer.subscription.updated', c));
     s = await suscripcion(c);
-    expect(s).toMatchObject({ estado: 'cancelada', fecha_proximo_cobro: null, pasarela_proximo_cobro_en: null });
+    expect(s).toMatchObject({
+      estado: 'cancelada',
+      fecha_proximo_cobro: null,
+      pasarela_proximo_cobro_en: null,
+    });
     expect((await cuotas(c))[0].estado).toBe('cancelada');
     expect(await sumaConfirmada(c)).toBe('0');
   });
@@ -555,7 +675,11 @@ describe('T056 · fallo posterior, previsión y cancelación', () => {
     if (cambios.cancel_at === 'antes') s.cancel_at = c.periodo - DIA;
     if (cambios.current_period_end === 'pasado') s.current_period_end = ahora() - 60;
     await procesar(eventoSuscripcion('customer.subscription.updated', c));
-    expect(await suscripcion(c)).toMatchObject({ estado: 'activa', proximo: null, pasarela_proximo_cobro_en: null });
+    expect(await suscripcion(c)).toMatchObject({
+      estado: 'activa',
+      proximo: null,
+      pasarela_proximo_cobro_en: null,
+    });
   });
 
   it('una factura antigua no reemplaza la previsión vigente ni registra un rechazo si ya está pagada', async () => {
@@ -595,7 +719,11 @@ describe('T056 · fallo posterior, previsión y cancelación', () => {
     const creaciones = pasarela.crearSesionPago.mock.calls.length;
     Object.assign(stripe.suscripciones.get(c.subId), { status: 'canceled', canceled_at: ahora() });
     await procesar(eventoSuscripcion('customer.subscription.deleted', c));
-    expect(await suscripcion(c)).toMatchObject({ estado: 'cancelada', proximo: null, pasarela_proximo_cobro_en: null });
+    expect(await suscripcion(c)).toMatchObject({
+      estado: 'cancelada',
+      proximo: null,
+      pasarela_proximo_cobro_en: null,
+    });
     expect((await cuotas(c)).filter((a) => a.estado === 'confirmada')).toEqual(confirmadas);
     expect((await servicio.resultado(c.req, c.referencia)).suscripcion).toMatchObject({
       estado: 'cancelada',

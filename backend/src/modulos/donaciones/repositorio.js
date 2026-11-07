@@ -153,7 +153,14 @@ export function crearRepositorio(pool) {
           await c.query(
             `INSERT INTO aportaciones(donante_id,proyecto_id,modalidad,importe,referencia,suscripcion_socio_id)
           VALUES($1,$2,$3,$4,$5,$6) RETURNING id`,
-            [d.id, datos.proyectoId, socio ? 'cuota_socio' : 'puntual', datos.importe, referencia, suscripcionId],
+            [
+              d.id,
+              datos.proyectoId,
+              socio ? 'cuota_socio' : 'puntual',
+              datos.importe,
+              referencia,
+              suscripcionId,
+            ],
           )
         ).rows[0];
         const cuerpo = prepararSesion({
@@ -326,8 +333,11 @@ export function crearRepositorio(pool) {
         // Alta de socio: la Session solo correlaciona Subscription; nunca confirma una cuota.
         const socio = a?.modalidad === 'cuota_socio';
         const suscripcion = socio
-          ? (await c.query('SELECT * FROM suscripciones_socio WHERE id=$1 FOR UPDATE', [a.suscripcion_socio_id]))
-              .rows[0]
+          ? (
+              await c.query('SELECT * FROM suscripciones_socio WHERE id=$1 FOR UPDATE', [
+                a.suscripcion_socio_id,
+              ])
+            ).rows[0]
           : null;
         const comun =
           a &&
@@ -450,8 +460,9 @@ export function crearRepositorio(pool) {
       ).rows[0];
     },
     async cuotaDeFactura(c, facturaId) {
-      return (await c.query('SELECT * FROM aportaciones WHERE pasarela_factura_id=$1 FOR UPDATE', [facturaId]))
-        .rows[0];
+      return (
+        await c.query('SELECT * FROM aportaciones WHERE pasarela_factura_id=$1 FOR UPDATE', [facturaId])
+      ).rows[0];
     },
     // Confirma la cuota de una factura ya verificada. La primera activa el alta salvo cierre
     // definitivo actual; una confirmada no cambia y paid_at fija fecha de cobro y de alta.
@@ -489,7 +500,11 @@ export function crearRepositorio(pool) {
     // Devuelve un código de incidencia o null. No escribe nada si la factura no se acredita.
     async aplicarFactura(c, e, ctx) {
       const { local, alta, sus, factura, inicial, centimos, confirmadas, avisos } = ctx;
-      if (factura.subscription !== sus.id || factura.livemode !== e.livemode || factura.id !== e.data.object.id)
+      if (
+        factura.subscription !== sus.id ||
+        factura.livemode !== e.livemode ||
+        factura.id !== e.data.object.id
+      )
         return 'FACTURA_INCOMPATIBLE';
       if (e.type === 'invoice.updated') return null;
       if (!['subscription_create', 'subscription_cycle'].includes(factura.billing_reason))
@@ -558,7 +573,11 @@ export function crearRepositorio(pool) {
       return null;
     },
     // Transacción corta tras consultar la pasarela fuera de ella (bloqueo sub:<id> por conexión).
-    async reconciliarSuscripcion(c, e, { suscripcion: sus, factura = null, inicial = null, prevision = null }) {
+    async reconciliarSuscripcion(
+      c,
+      e,
+      { suscripcion: sus, factura = null, inicial = null, prevision = null },
+    ) {
       await c.query('BEGIN');
       try {
         if (await this.eventoRegistrado(c, e.id)) {
@@ -571,10 +590,12 @@ export function crearRepositorio(pool) {
           await c.query('COMMIT');
           return correos;
         };
-        const externa = e.type.startsWith('invoice.') ? e.data.object.subscription : e.data.object.id;
+        const externa = e.type.startsWith('invoice.') ? factura?.subscription : e.data.object.id;
         if (!sus || sus.id !== externa) return fin('incidencia', 'SUSCRIPCION_NO_ACREDITADA');
         let local = (
-          await c.query('SELECT * FROM suscripciones_socio WHERE pasarela_suscripcion_id=$1 FOR UPDATE', [sus.id])
+          await c.query('SELECT * FROM suscripciones_socio WHERE pasarela_suscripcion_id=$1 FOR UPDATE', [
+            sus.id,
+          ])
         ).rows[0];
         const referenciaAlta = sus.metadata?.modulo === 'donaciones' ? sus.metadata.referencia : null;
         if (!local && typeof referenciaAlta === 'string' && referenciaAlta) {
@@ -672,7 +693,8 @@ export function crearRepositorio(pool) {
         // El aviso de fallo no se emite con la suscripción cerrada: no anuncia otro cobro.
         if (estado !== 'cancelada') {
           for (const id of avisos) {
-            const a = (await c.query('SELECT referencia,importe FROM aportaciones WHERE id=$1', [id])).rows[0];
+            const a = (await c.query('SELECT referencia,importe FROM aportaciones WHERE id=$1', [id]))
+              .rows[0];
             await this.crearCorreo(
               c,
               id,
