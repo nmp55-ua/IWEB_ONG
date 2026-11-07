@@ -1,14 +1,18 @@
 # Uso del modelo común en HU-01
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: Diseño definido y alineado en `spec-001`; pendiente de revisión de Rubén.
+**Estado**: Modelo implementado y validado localmente en `spec-001`; revisión de Rubén
+e incorporación a main pendientes.
 
 ## Definición única
 
 [modelo-datos.md](../modelo-datos.md) es la única definición de columnas, tipos,
 nulabilidad, unicidad, estados y transiciones. P-01 incorpora allí las decisiones de esta
 rama. Este documento describe su uso por HU-01; no mantiene otro esquema alternativo.
-No se ha creado ni aplicado ninguna migración.
+Las migraciones 004 y 009 existen en esta rama y su aplicación en los entornos de pruebas
+consta en [validacion-004-01.md](refinamiento/validacion-004-01.md) y
+[validacion-local-01.md](refinamiento/validacion-local-01.md). Esta evidencia local no
+acredita publicación, aprobación ni incorporación compartida.
 
 | Elemento del modelo común | Uso en HU-01 |
 |---|---|
@@ -63,12 +67,14 @@ El algoritmo y las permutaciones están en [pasarela-stripe.md](contracts/pasare
 
 ## Incorporación de datos
 
-Primero se prepara `004_donaciones.sql`, reservada, con las tres entidades de dominio y
-sus restricciones e índice financiero. Su revisión pequeña permite a Rubén consumir las
-aportaciones sin esperar la interfaz o la persistencia técnica de HU-01.
+`004_donaciones.sql` contiene las tres entidades de dominio, sus restricciones e índice
+financiero, y está validada como entrega independiente. El paquete preparado permite a
+Rubén revisar el consumo de aportaciones sin depender de la interfaz o persistencia técnica.
 
-Las cuatro tablas de soporte van en una migración posterior a 004. El número se asignará
-al coordinar su incorporación entre los disponibles desde 009; **009 no está reservado**.
-No se modifica 004 una vez incorporada. Ninguna de esas entregas requiere tablas de otras
-historias que todavía no existen. El detalle de integración y revisión se conserva en
-[cambios-comunes.md](contracts/cambios-comunes.md).
+Las cuatro tablas de soporte están implementadas y validadas en
+`009_operativa_donaciones.sql`, dependiente de 004 y su base común, sin requerir 006–008.
+Es la elección local documentada en [ajuste-flujo-01.md](refinamiento/ajuste-flujo-01.md);
+**009 no está reservado colectivamente**. PR-R01 mantiene pendiente la revisión/aprobación
+de Rubén y PR-R02 exige comprobar y resolver conflictos antes de main, considerando los
+entornos donde 009 ya está aplicada. No se modifica 004 una vez incorporada. El detalle
+de integración y revisión se conserva en [cambios-comunes.md](contracts/cambios-comunes.md).

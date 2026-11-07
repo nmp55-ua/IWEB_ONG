@@ -200,8 +200,13 @@ en una aportación confirmada no se cambia por otra entrega.
 Un fallo con `requires_payment_method` permite volver al mismo Checkout abierto. Si el
 mismo PaymentIntent termina en éxito, `rechazada → confirmada` se aplica sobre la misma
 aportación. Si un evento antiguo de fallo llega después, el recurso actual no autoriza
-rechazarla. P-01 alinea estas transiciones en el modelo común de esta rama; su
-implementación y revisión de Rubén siguen pendientes.
+rechazarla. P-01 alinea estas transiciones en el modelo común de esta rama; están
+implementadas y comprobadas localmente según
+[validacion-local-01.md](../refinamiento/validacion-local-01.md), sin equiparar las
+regresiones con recursos simulados a una prueba real de todos los rechazos de Stripe.
+La revisión de Rubén y el control de incorporación siguen pendientes en PR-R01/PR-R02,
+según [ajuste-flujo-01.md](../refinamiento/ajuste-flujo-01.md); la implementación local
+no acredita publicación, aprobación ni incorporación a main.
 Un evento de fallo que ya encuentra el pago satisfecho no registra otro rechazo: la
 confirmación puntual se realiza por la ruta del evento de éxito, con su instante acreditado.
 

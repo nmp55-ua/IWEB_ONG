@@ -150,7 +150,9 @@ Como donante, quiero hacerme socio con una aportación mensual, trimestral o anu
   los otros módulos. Un aviso o aceptación SMTP no prueba recepción del mensaje.
 - **Pasarela (PA1.8; P-02)**: el [contrato Stripe](contracts/pasarela-stripe.md) define eventos,
   pertenencia, deduplicación, previsión futura y cancelación canónica. Webhooks independientes
-  del navegador. P-05 es preparación del entorno antes de pruebas reales, aún sin comprobar.
+  del navegador. La preparación P-05 y las comprobaciones T075–T076 constan en
+  [preparacion-stripe-01.md](refinamiento/preparacion-stripe-01.md); los recorridos reales
+  de pruebas y sus límites se documentan en [validacion-stripe-01.md](refinamiento/validacion-stripe-01.md).
 - **Alcance v1 P-04**: tarjeta, EUR y rango incluido de FR-002; límite propio de la aplicación,
   sin atribuirlo como máximo universal de la pasarela.
 - **HU-02, HU-03 y HU-04** consumen los datos comunes. La alineación documental se prepara
@@ -180,5 +182,8 @@ Como donante, quiero hacerme socio con una aportación mensual, trimestral o anu
 No quedan preguntas funcionales PA1.1–PA1.8 pendientes ni se abre otra ronda. El límite y
 medio de pago de v1 quedan fijados en FR-002 y FR-005. La normalización, seguridad, estados,
 correo y eventos se definen en el [plan](plan.md) y sus contratos, alineados con los documentos
-comunes. Quedan la revisión de Rubén y el trabajo futuro de implementación y preparación
-para pruebas, sin atribuir acuerdo colectivo ni resultados de ejecución.
+comunes. La implementación local y la validación realizada constan en la
+[matriz vigente](refinamiento/matriz-validacion-01.md), con sus fuentes y límites.
+El [ajuste de flujo](refinamiento/ajuste-flujo-01.md) mantiene PR-R01/PR-R02 pendientes
+antes de main: revisión/aprobación de Rubén y control actualizado de la elección local de
+009. Las evidencias de esta rama no acreditan publicación ni incorporación compartida.
