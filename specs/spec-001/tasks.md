@@ -862,3 +862,15 @@ Estos controles no bloquean finalizar desarrollo, preparar/abrir la PR o ejecuta
 próximo converge autorizado. La incorporación a main sí depende de resolverlos.
 Las correcciones están verificadas, pero el cierre técnico sigue pendiente del converge
 posterior. No se ejecuta esa fase ni se publica una PR en este bloque.
+
+## Phase 7: Convergence
+
+Segundo diagnóstico sobre spec-001, base 140718b. Informe:
+`refinamiento/converge-2.md`. CONV-001 y CONV-002 quedan resueltos por código y regresiones
+ya registradas. Se añade una sola corrección documental nueva; no se modifican las tareas
+anteriores ni sus marcas. T006/T007 mantienen su alcance técnico vigente y PR-R01/PR-R02
+siguen pendientes como controles externos antes de main.
+
+- [ ] T084 Alinear las afirmaciones de estado de implementación, migraciones y P-05 con las evidencias vigentes, per plan: documentación y evidencias; T081; constitución III; CONV-003 (partial). Archivos: `specs/spec-001/spec.md`, `specs/spec-001/data-model.md`, `specs/spec-001/contracts/pasarela-stripe.md`.
+      **Gravedad**: LOW. **Depende de**: T083.
+      **Comprobación**: Revisar data-model.md:11, spec.md:153/183–184 y pasarela-stripe.md:204 según converge-2.md; sustituir las afirmaciones absolutas de trabajo no realizado por el estado acreditado o identificarlas explícitamente como antecedentes de diseño, enlazando las evidencias pertinentes. Conservar requisitos e identificadores, modelo único, límites de pruebas y revisión/aprobación externas pendientes PR-R01/PR-R02, sin atribuir publicación o reserva colectiva de 009. Verificar formato y referencias; registrar la comprobación documental en el siguiente informe de seguimiento autorizado. No modificar históricos, código, SQL o configuración ni repetir suites/pagos por esta corrección de redacción. El cierre técnico completo queda pendiente de esta alineación y su contraste posterior.
