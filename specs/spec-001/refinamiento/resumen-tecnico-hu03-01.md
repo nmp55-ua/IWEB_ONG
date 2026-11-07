@@ -1,6 +1,6 @@
 # Resumen técnico de HU-01 para revisión y consumo desde HU-03
 
-**Fecha:** 2026-11-07 · **Rama:** spec-001 · **Base revisada:** 47e3ea1.
+**Fecha:** 2026-11-07 · **Rama:** spec-001 · **Base revisada:** 9468636.
 
 **Responsable HU-01:** Nada · **Revisor HU-01:** Rubén.
 
@@ -27,9 +27,7 @@ recuperable. No incluye historial, certificados, reembolsos o edición de datos 
 | 0b41695 / a7dda2b       | Banco y comprobación conjunta local G1–G3.                                         |
 | 9d86863                 | Segunda medición y cierre documentado de T079–T080.                                |
 
-El commit local 47e3ea1 registra después la preparación documental de T081 y de la revisión.
-No se repiten esos commits. Las correcciones T082–T083 y el ajuste de flujo de esta
-entrega son cambios locales posteriores a 47e3ea1, todavía sin registrar ni publicar.
+47e3ea1 prepara la revisión; 7c650fc registra las correcciones de correo; 140718b separa preparación técnica y controles de incorporación; ba1410d alinea el estado documental y 9468636 registra converge-3, sin nuevas brechas accionables. Todos son commits locales; no se atribuye publicación ni incorporación a main.
 
 ## Contrato de datos consumible
 

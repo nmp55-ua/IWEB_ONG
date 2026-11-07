@@ -117,8 +117,7 @@ la [ficha técnica](specs/spec-001/refinamiento/revision-tecnica-01.md) prepara 
 El [flujo vigente](specs/spec-001/refinamiento/ajuste-flujo-01.md) separa T006 (paquete de
 revisión) y T007 (comprobación publicada/elección local de 009) de los controles externos
 PR-R01/PR-R02. La aprobación de Rubén y los conflictos de integración se resolverán antes
-de main; no bloquean terminar desarrollo o preparar/abrir la PR. El cierre técnico sigue
-pendiente del converge posterior a las correcciones verificadas de T082–T083.
+de main; no bloquean terminar desarrollo o preparar/abrir la PR. El cierre técnico está acreditado en [converge-3](specs/spec-001/refinamiento/converge-3.md), con CONV-001–CONV-003 resueltos.
 La existencia de archivos o commits locales no acredita su publicación o integración compartida.
 
 ## Documentos

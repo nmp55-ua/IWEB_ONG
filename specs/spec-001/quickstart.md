@@ -2,7 +2,7 @@
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
 **Estado**: Procedimientos y ejecuciones identificados en la matriz vigente y sus informes.
-T082–T083 corregidas y verificadas; cierre técnico pendiente del converge posterior.
+T082–T084 completadas; cierre técnico acreditado en [converge-3](refinamiento/converge-3.md).
 La revisión/aprobación externas y conflictos de incorporación son controles antes de main.
 
 ## Condiciones previas

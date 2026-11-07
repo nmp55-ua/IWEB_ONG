@@ -5,7 +5,7 @@
 **Estado**: Implementación, validación y preparación de revisión documentadas; correcciones
 T082–T083 verificadas. T006 prepara el paquete y T007 acredita la elección local de 009.
 Revisión/aprobación y conflictos de integración permanecen como controles externos de la PR.
-Cierre técnico pendiente del converge posterior; no acredita incorporación compartida.
+Cierre técnico acreditado en [converge-3](refinamiento/converge-3.md); no acredita incorporación compartida.
 
 **Especificación vigente**: [spec.md](spec.md) · **Investigación**: [research.md](research.md)
 

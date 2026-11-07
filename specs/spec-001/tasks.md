@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T083 completadas en su alcance técnico documentado. T006/T007 se ajustan por autorización de Nada: paquete de revisión preparado y elección local de 009 contrastada, sin acreditar aprobación o reserva colectiva. PR-R01/PR-R02 siguen pendientes antes de main. El primer converge y las correcciones T082–T083 constan en sus informes; cierre técnico pendiente del converge posterior, que no se ejecuta en este bloque. T075 por sí sola acredita versiones/compatibilidad local, no pagos reales.
+**Estado**: T001–T084 completadas en su alcance técnico documentado. T006/T007 se ajustan por autorización de Nada: paquete de revisión preparado y elección local de 009 contrastada, sin acreditar aprobación o reserva colectiva. PR-R01/PR-R02 siguen pendientes antes de main. Converge-3 acredita el cierre técnico, con CONV-001–CONV-003 resueltos; los informes anteriores y sus resultados fechados se conservan como antecedentes. T075 por sí sola acredita versiones/compatibilidad local, no pagos reales.
 
 **Evidencia real posterior (2026-11-07)**: T076 conserva su cierre documentado. T077 se
 completa con la prueba adicional P21 de 1,23 €, independiente de la donación original de
@@ -876,3 +876,7 @@ siguen pendientes como controles externos antes de main.
       **Comprobación**: Revisar data-model.md:11, spec.md:153/183–184 y pasarela-stripe.md:204 según converge-2.md; sustituir las afirmaciones absolutas de trabajo no realizado por el estado acreditado o identificarlas explícitamente como antecedentes de diseño, enlazando las evidencias pertinentes. Conservar requisitos e identificadores, modelo único, límites de pruebas y revisión/aprobación externas pendientes PR-R01/PR-R02, sin atribuir publicación o reserva colectiva de 009. Verificar formato y referencias; registrar la comprobación documental en el siguiente informe de seguimiento autorizado. No modificar históricos, código, SQL o configuración ni repetir suites/pagos por esta corrección de redacción. El cierre técnico completo queda pendiente de esta alineación y su contraste posterior.
 
       **Resultado documental (2026-11-07)**: Afirmaciones de estado corregidas en los tres documentos y enlazadas a las evidencias existentes; aplicación local de 004/009, implementación y preparación de Stripe diferenciadas de publicación, aprobación e incorporación. Requisitos, escenarios, criterios y limitaciones conservados; enlaces y diferencias comprobados, con formato heredado de spec.md/data-model.md identificado. Evidencia: `refinamiento/validacion-documental-01.md`. T084 completada sin pruebas funcionales nuevas. PR-R01/PR-R02 y el contraste posterior de converge siguen pendientes; no se declara cierre técnico.
+
+## Estado vigente tras converge-3
+
+Las 84 tareas están completadas en su alcance técnico documentado. [converge-3.md](refinamiento/converge-3.md) acredita el cierre técnico sin nuevas brechas accionables. Las menciones anteriores a contrastes pendientes describen el estado de cada bloque fechado. PR-R01/PR-R02 siguen pendientes antes de main; no equivalen a tareas técnicas abiertas ni se presentan como aprobados.

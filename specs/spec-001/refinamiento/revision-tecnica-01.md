@@ -201,6 +201,4 @@ publicación de las correcciones. No se envía este material ni se abre una PR a
   antes de main; considerar los nombres aplicados en los entornos existentes antes
   de cualquier renombrado. No se cambia SQL o su registro en esta entrega.
 
-No bloquean terminar el desarrollo, preparar/abrir la PR ni el siguiente converge
-autorizado. Sí condicionan main. **El cierre técnico queda pendiente del converge
-posterior**; este bloque no lo ejecuta y no declara HU-01 terminada.
+No bloquean el cierre técnico ni preparar/abrir la PR. Sí condicionan main. El cierre técnico está acreditado posteriormente en [converge-3.md](converge-3.md), registrado en 9468636; la revisión externa y la incorporación siguen pendientes. Los apartados anteriores conservan los antecedentes fechados de la preparación.

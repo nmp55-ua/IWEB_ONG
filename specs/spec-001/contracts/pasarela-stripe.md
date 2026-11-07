@@ -4,8 +4,7 @@
 
 **Estado**: Compatibilidad acacia/endive comprobada localmente y entregas reales del
 entorno de pruebas documentadas en T076–T078. Alcance y límites por escenario en la
-[matriz de validación](../refinamiento/matriz-validacion-01.md). Revisión de Rubén y
-converge pendientes; no acredita compatibilidad general de versiones ni incorporación compartida.
+[matriz de validación](../refinamiento/matriz-validacion-01.md). Convergencia técnica acreditada en [converge-3](../refinamiento/converge-3.md); revisión de Rubén pendiente; no acredita compatibilidad general de versiones ni incorporación compartida.
 
 ## Versión y perímetro
 

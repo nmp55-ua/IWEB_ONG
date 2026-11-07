@@ -8,8 +8,7 @@
 T079 y T080 completadas tras contrastar la segunda medición, los 34 escenarios y
 SC-001–SC-004. Nada comunica 61 s; el guía acredita 7/7 correos en el conjunto 30–36.
 La medición 1 de 480,836 s conserva su resultado fallido. El primer converge detectó
-CONV-001/CONV-002, corregidos y verificados en T082–T083; el cierre técnico sigue pendiente
-del converge posterior. Revisión/aprobación e integración siguen separadas de ese cierre.
+CONV-001/CONV-002, corregidos y verificados en T082–T083; CONV-003 se cerró con T084. [converge-3.md](converge-3.md) acredita el cierre técnico. Revisión/aprobación e integración siguen separadas de ese cierre.
 Se conservan los cambios documentales previos, .env, .claude/launch.json y los históricos.
 La preparación inicial no ejecutó pruebas; los resultados posteriores se atribuyen a
 sus fuentes y se añaden sin presentar simulaciones como integración real.
@@ -289,6 +288,4 @@ defecto ni se presenta aprobación colectiva.
 paquete técnico y T007 registra la comprobación actual de nueve ramas y elección local
 de 009, según el [ajuste autorizado por Nada](ajuste-flujo-01.md). No acreditan aprobación
 ni reserva colectiva. T082–T083 tienen reproducción y regresión en A11; el primer informe
-[converge-1.md](converge-1.md) se conserva íntegro. **Cierre técnico pendiente del converge
-posterior**, no ejecutado aquí. PR-R01/PR-R02 siguen pendientes antes de main; no bloquean
-terminar desarrollo o preparar/abrir la PR. No se declara HU-01 terminada.
+[converge-1.md](converge-1.md) se conserva íntegro. **Cierre técnico acreditado en [converge-3.md](converge-3.md)**. PR-R01/PR-R02 siguen pendientes antes de main; el cierre técnico no acredita revisión externa ni incorporación.
