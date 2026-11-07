@@ -508,3 +508,42 @@ se comprueban rama/HEAD/estado, documentos y formato. No se repiten suites o con
 externas, ni se ejecutan altas, pagos, cancelaciones, reenvíos, configuración o Git de escritura.
 T006, T007, T079 y siguientes, converge y coordinación de 009 permanecen pendientes; se conserva
 la revisión de Rubén sin atribuir aprobación colectiva.
+
+## Segunda medición puntual y cierre T079–T080 · 2026-11-07
+
+Actualización posterior a los bloques anteriores, sobre spec-001 y HEAD inicial
+a7dda2b. Se conserva íntegra la [medición 1](medicion-puntual-01.md): 480,836 s,
+no satisface SC-001. La [medición 2](medicion-puntual-02.md) es independiente y
+registra **61 segundos observados por Nada**, con cronómetro iniciado antes de
+abrir el formulario y detenido al ver la confirmación en la aplicación. No se
+dispone de t0/t1 ni captura; no se reconstruyen con fechas del pago. Satisface
+SC-001 para esa ejecución, sin garantía universal.
+
+El guía comunica comprobaciones de solo lectura de la aportación **36**, puntual
+de **20,00 €, EUR, fondo general**, referencia
+`DON-a8fcdc66-4562-41b4-8133-6864d583f0e0`, UUID
+`d7a55893-8401-4dbf-a837-2c70ea09e54a`, PaymentIntent
+`pi_3UZ1OfE0jEvPnEcp0c6D19b3`: Checkout complete/paid, livemode=false,
+2000 céntimos y referencia coincidente; PaymentIntent succeeded y
+amount_received=2000. En PostgreSQL: confirmada, fecha_cobro
+2026-11-07T04:38:33Z, una aportación por el pago y una operación.
+
+Correo enviado con un intento, enviado_en 2026-11-07T04:38:35.483Z. El guía
+identifica una coincidencia Mailpit, mensaje `eEG6FFzV22N4sePVh9nzzp`, cuyo texto
+contiene referencia, 20,00 €, 07/11/2026, donación puntual y fondo general.
+Su nueva búsqueda conjunta acredita **7/7 confirmaciones recibidas por referencia
+para las aportaciones 30–36**, excluyendo semillas, avisos y vínculos. No es una
+auditoría global; la fecha persistida de envío no es una hora exacta de recepción.
+
+**T079 completada**, tras contrastar duración, importes y recepción del conjunto
+manual delimitado. **T080 completada para el balance de validación**, con la
+[matriz de 34 escenarios](matriz-validacion-01.md), G1–G3 acreditadas y
+SC-001–SC-004 respaldados según el alcance de sus fuentes. Se conservan las
+limitaciones reales y los recorridos de socio que solo cuentan con evidencia
+local/simulada; no se declaran por extensión como ejecutados con Stripe.
+
+Las observaciones de Nada y consultas del guía no se atribuyen a esta revisión,
+que es únicamente documental. No se repiten consultas externas, suites, pagos,
+envíos o reentregas. No se modifican configuración ni datos. **T081, T006, T007,
+converge y coordinación de 009 permanecen pendientes**; no se presenta aprobación
+de Rubén ni convergencia. Los apartados anteriores conservan su estado histórico.

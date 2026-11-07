@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T078 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T079 y siguientes, pendientes. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
+**Estado**: T001–T005 y T008–T080 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T081 permanece pendiente; no se declara converge. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
 
 **Evidencia real posterior (2026-11-07)**: T076 conserva su cierre documentado. T077 se
 completa con la prueba adicional P21 de 1,23 €, independiente de la donación original de
@@ -12,7 +12,7 @@ en Mailpit y reentrega del mismo evento sin duplicados. Nada comprobó el result
 su cuenta vinculada. Firefox conservó páginas ajenas; no se afirma cierre de todos sus
 procesos, inspección visual del nuevo correo ni duración inferior a tres minutos.
 Evidencias y atribución en `refinamiento/validacion-stripe-01.md` y
-`refinamiento/preparacion-stripe-01.md`. T078 se completa posteriormente con tres altas, reentregas y cancelación anual. T079 y siguientes siguen pendientes; no se declara converge.
+`refinamiento/preparacion-stripe-01.md`. T078 se completa posteriormente con tres altas, reentregas y cancelación anual. T079 y T080 se completan después con la segunda medición y el balance documentado en `refinamiento/medicion-puntual-02.md`; no se declara converge.
 
 ## Backend puntual — T024–T044 · 2026-11-06
 
@@ -591,7 +591,7 @@ automática ni modificación concurrente del mismo archivo.
 
       **Resultado y alcance (2026-11-07)**: Nada realizó altas mensual (1,11 €, aportación 32, suscripción 6), trimestral (1,22 €, aportación 33, suscripción 7) y anual (1,33 €, aportación 34, suscripción 8), todas EUR/fondo general en pruebas. El guía contrastó con PostgreSQL, Stripe acacia y Mailpit primeras facturas subscription_create pagadas, relaciones de pago correctas, fechas iguales a paid_at, suscripciones inicialmente activas, una cuota y operación por alta, un intento de correo y una coincidencia por referencia. Las líneas aportadas por Nada muestran primera entrega y reentrega de cada invoice.paid con 200 y los recuentos se conservaron. Nada canceló solo la anual inmediatamente y sin reembolso; su customer.subscription.deleted obtuvo 200 y el guía comprobó cancelación local, previsión nula, cuota confirmada intacta, única factura inicial pagada y amount_refunded=0. T078 se completa para este bloque y la distinción exigida entre pruebas reales y simuladas, no como cobertura real íntegra de S01–S13. Renovación, primer fallo, fallos posteriores, alta sin cuenta y primer cobro de socio sin retorno/cierre no se acreditan aquí; S13 después de fallo sigue pendiente en su recorrido completo. Fuentes, identificadores y límites en `refinamiento/validacion-stripe-01.md`.
 
-- [ ] T079 Medir el tiempo de donación y verificar recepción de todas las confirmaciones del conjunto manual validado. Archivos: `specs/spec-001/quickstart.md`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
+- [x] T079 Medir el tiempo de donación y verificar recepción de todas las confirmaciones del conjunto manual validado. Archivos: `specs/spec-001/quickstart.md`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: SC-001, SC-002, SC-004; P01, P06, P08–P10, S05, S06. **Depende de**: T078.
       **Comprobación**: Se registra duración real < tres minutos, comparación al céntimo y mensaje por cada referencia confirmada de esa ejecución, tras reintentos si proceden. Semillas/mocks se identifican aparte y cualquier correo pendiente impide cumplir SC-002.
 
@@ -601,7 +601,9 @@ automática ni modificación concurrente del mismo archivo.
 
       **Resultado posterior de la medición 1 (2026-11-07)**: `refinamiento/medicion-puntual-01.md`, del guía, conserva la aportación 35, referencia DON-0b914a77-2050-4429-ba19-19f16f62507c, confirmada con 20,00 € y correo recibido. Duración observada 480,836 segundos, incluidas todas las incidencias: no cumple SC-001. No se reinicia ni reconstruye. El guía acredita 6/6 confirmaciones recibidas por referencia para el conjunto delimitado 30–35; no es auditoría global. Las pruebas locales G1–G3 no añaden correos simulados a ese conjunto. T079 permanece sin marcar hasta una medición satisfactoria.
 
-- [ ] T080 Completar el balance de los 34 escenarios, verificando los casos visibles en la aplicación y distinguiendo evidencia local de Stripe real. Archivos: `specs/spec-001/quickstart.md`, `specs/spec-001/refinamiento/validacion-local-01.md`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
+      **Cierre posterior, medición 2 (2026-11-07)**: `refinamiento/medicion-puntual-02.md` registra 61 segundos observados por Nada, desde antes de abrir el formulario hasta confirmación en la aplicación, sin inventar t0/t1 ni captura. Aportación 36, DON-a8fcdc66-4562-41b4-8133-6864d583f0e0: el guía acredita Stripe de pruebas, 2000 céntimos/EUR, confirmación local de 20,00 €, una aportación y una operación, y texto recibido coincidente en Mailpit. Nueva búsqueda comunicada por el guía: 7/7 confirmaciones recibidas en el conjunto delimitado 30–36, sin semillas, avisos ni vínculos; no es auditoría global. SC-001 se satisface para esta ejecución; se conserva íntegra la medición 1 fallida de 480,836 s. T079 se marca tras contrastar duración, importes y recepción, sin repetir pruebas o consultas externas.
+
+- [x] T080 Completar el balance de los 34 escenarios, verificando los casos visibles en la aplicación y distinguiendo evidencia local de Stripe real. Archivos: `specs/spec-001/quickstart.md`, `specs/spec-001/refinamiento/validacion-local-01.md`, `specs/spec-001/refinamiento/validacion-stripe-01.md`.
       **Origen**: FR-001–FR-019; P01–P21, S01–S13; SC-001–SC-004. **Depende de**: T079.
       **Comprobación**: Cada escenario tiene entrada, observado, referencia y resultado. Si un ciclo real o una comprobación no se realizó, queda pendiente explícitamente; no se declara convergencia por cobertura automática.
 
@@ -610,6 +612,8 @@ automática ni modificación concurrente del mismo archivo.
       **Matriz preparada para revisión (2026-11-07)**: `refinamiento/matriz-validacion-01.md` es el balance documental vigente de P01–P21/S01–S13, distinguiendo A/M/R y fuentes concretas. Contiene 34 filas, 28 con cobertura en su alcance y 6 parciales identificadas; no equivale a 28 escenarios reales de Stripe ni completa T080. Se agrupan los huecos adicionales en retorno/resultado rechazado, navegación/conflicto puntual con cuenta vinculada y avisos de correo en interfaz; pueden comprobarse localmente sin nuevos cobros de Stripe. Los ciclos y fallos ya cubiertos automáticamente se conservan como simulación, sin imponer otra prueba real por defecto. No se repiten suites ni se modifican criterios o marcas de tareas.
 
       **Comprobación posterior G1–G3 (2026-11-07)**: `refinamiento/validacion-local-g1-g3-01.md` registra seis pruebas nuevas y regresión de rutas, 17/17 aprobadas, más recorridos de navegador sobre Astro y PostgreSQL aislados. Quedan comprobados P05, P08, P10, P11, P16 y S05: cancel_url sin transición, rechazo/reintento visibles, dos entradas al vínculo sin enviar enlace, tres cambios reales de identidad rechazados con cuenta vinculada y avisos de correo fallido con segundo fallo HTTP y alta activa. Filas financieras y Donante conservados; ningún Checkout adicional. La matriz vigente contiene 34/34 escenarios con evidencia en su alcance, distinguiendo simulación de Stripe real. T080 sigue sin marcar por su dependencia de T079 y SC-001 no satisfecho; no se declara converge ni se completan T081, T006 o T007.
+
+      **Cierre posterior del balance (2026-11-07)**: Se contrasta `refinamiento/matriz-validacion-01.md`, con 34/34 escenarios identificados, G1–G3 acreditadas y SC-001–SC-004 respaldados por las fuentes del balance de `refinamiento/medicion-puntual-02.md`. La dependencia T079 queda satisfecha. SC-002 se limita al conjunto manual 30–36, 7/7; SC-003 conserva T074 y las pruebas de proyecciones sin afirmar auditoría nueva; SC-004 se apoya en los cotejos visibles/pasarela ya acreditados y el nuevo contraste de 2000 céntimos, base y correo. Se marca T080 como balance completo en esos alcances, conservando explícitos los ciclos/fallos y recorridos de socio cubiertos solo localmente, sin atribuir integración real ni nueva evidencia visual a 36. No se declara converge ni se completan T081, T006 o T007; revisión de Rubén y coordinación de 009 pendientes.
 
 - [ ] T081 Preparar la revisión final de Rubén con documentación coherente y evidencia, conservando los informes anteriores. Archivos: `README.md`, `backend/src/modulos/LEEME.md`, `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/plan.md`, `specs/spec-001/tasks.md`, `specs/spec-001/refinamiento/revision-tecnica-01.md`.
       **Origen**: Constitución III, X–XII; P-01–P-05; SC-001–SC-004. **Depende de**: T080.
