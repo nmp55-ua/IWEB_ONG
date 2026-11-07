@@ -2,6 +2,9 @@ import { beforeAll, afterAll, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import session from 'express-session';
 import { randomUUID } from 'node:crypto';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { fileURLToPath } from 'node:url';
 import { crearEntornoPruebas, contrasenaPruebas } from './pruebas/soporte.js';
 const db = vi.hoisted(() => ({ pool: null }));
 vi.mock('../../db/pool.js', () => ({
@@ -110,4 +113,82 @@ it('registra donaciones en la aplicación real y conserva auth, proyectos y perm
   await request(app)
     .get('/api/aportaciones/referencia/' + aporte.referencia)
     .expect(404);
+});
+
+it('integra las rutas públicas y los permisos de calendario sin ocultar las rutas de actividades', async () => {
+  const publico = request.agent(app);
+  const disponibles = await publico.get('/api/actividades/disponibles').expect(200);
+  expect(disponibles.body.datos).toEqual([]);
+  await publico.get('/api/yo/calendario').expect(401);
+  await publico.get('/api/actividades').expect(401);
+  await publico.get('/api/donaciones/contexto').expect(200);
+
+  const donante = request.agent(app);
+  await donante
+    .post('/api/auth/sesion')
+    .send({ correo: fixtures.usuarios[0].correo, contrasena: contrasenaPruebas })
+    .expect(200);
+  await donante.get('/api/yo/calendario').expect(403);
+
+  const cuenta = fixtures.usuarios[1];
+  await entorno.pool.query("UPDATE usuarios SET roles=ARRAY['voluntario','donante'] WHERE id=$1", [
+    cuenta.id,
+  ]);
+  const voluntario = request.agent(app);
+  await voluntario
+    .post('/api/auth/sesion')
+    .send({ correo: cuenta.correo, contrasena: contrasenaPruebas })
+    .expect(200);
+  expect((await voluntario.get('/api/yo/calendario').expect(200)).body.datos).toEqual([]);
+  expect((await voluntario.get('/api/donaciones/contexto').expect(200)).body.usuario.id).toBe(cuenta.id);
+  await voluntario.get('/api/actividades').expect(403);
+});
+
+it('ejecuta dos veces el registro conjunto de semillas en un esquema exclusivo sin duplicar datos', async () => {
+  const semillas = await crearEntornoPruebas();
+  const ejecutar = promisify(execFile);
+  const cwd = fileURLToPath(new URL('../../../', import.meta.url));
+  const tablas = [
+    'usuarios',
+    'proyectos',
+    'actividades',
+    'donantes',
+    'aportaciones',
+    'suscripciones_socio',
+    'correos_aportacion',
+    'voluntarios',
+    'inscripciones',
+  ];
+  const contar = async () => {
+    const resultado = {};
+    for (const tabla of tablas)
+      resultado[tabla] = (await semillas.pool.query(`SELECT count(*) FROM ${tabla}`)).rows[0].count;
+    return resultado;
+  };
+  const sembrar = () =>
+    ejecutar(process.execPath, ['src/db/semillas/index.js'], {
+      cwd,
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+        DATABASE_URL: semillas.urlConexion,
+        TEST_DATABASE_URL: semillas.urlConexion,
+        CONTRASENA_SEMILLAS: contrasenaPruebas,
+      },
+      timeout: 30000,
+      windowsHide: true,
+    });
+  try {
+    const primera = await sembrar();
+    expect(primera.stderr).toBe('');
+    const antes = await contar();
+    for (const tabla of tablas) expect(Number(antes[tabla])).toBeGreaterThan(0);
+    const aportaciones = (await semillas.pool.query('SELECT * FROM aportaciones ORDER BY id')).rows;
+    const segunda = await sembrar();
+    expect(segunda.stderr).toBe('');
+    expect(await contar()).toEqual(antes);
+    expect((await semillas.pool.query('SELECT * FROM aportaciones ORDER BY id')).rows).toEqual(aportaciones);
+  } finally {
+    await semillas.cerrar();
+  }
 });

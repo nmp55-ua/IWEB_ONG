@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CalendarioVoluntario from '../components/voluntariado/CalendarioVoluntario.jsx';
+// spec-006. Solo para voluntarios: quien decide el acceso es el servidor (GET /api/yo/calendario).
+---
+
+<Layout titulo="Mi calendario">
+  <CalendarioVoluntario client:load />
+</Layout>

@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { pool } from '../pool.js';
 import { sembrarActividades } from './actividades.js';
 import { sembrarDonaciones } from './donaciones.js';
+import { sembrarVoluntariado } from './voluntariado.js';
 
 const contrasena = process.env.CONTRASENA_SEMILLAS;
 if (!contrasena) {
@@ -47,5 +48,6 @@ console.log(`Semillas comunes: ${usuarios.length} usuarios y ${proyectos.length}
 
 await sembrarActividades(pool); // spec-007
 await sembrarDonaciones(pool); // spec-001: usa los usuarios y proyectos comunes de arriba
+await sembrarVoluntariado(pool, hash); // spec-005
 
 await pool.end();
