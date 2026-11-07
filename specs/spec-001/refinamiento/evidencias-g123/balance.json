@@ -1,0 +1,134 @@
+{
+  "fecha": "2026-11-07",
+  "base": "ong_test_hu01",
+  "esquema": "hu01_integracion_51b86385362145de9105c51ab29b9c09",
+  "origen": "http://127.0.0.1:44321",
+  "referencias": {
+    "rechazada": "DON-c113c84f-b124-4c73-befc-d4a9565f5bb5",
+    "pendiente": "DON-777a55ba-edc4-4644-b3fd-8d9242dbeacf",
+    "puntual": "DON-3ab5ce15-925d-49fe-8325-62b0b763d36c",
+    "socio": "DON-f31330e4-ab98-4864-a360-61cb2b1ff371"
+  },
+  "comprobaciones": {
+    "aportacionesSinCambios": true,
+    "operacionesSinCambios": true,
+    "donanteSinCambios": true
+  },
+  "llamadasIniciales": {
+    "checkout": 4,
+    "smtp": 2,
+    "vinculos": 0,
+    "creaciones": [
+      {
+        "estado": 201
+      },
+      {
+        "estado": 201
+      },
+      {
+        "estado": 201
+      },
+      {
+        "estado": 201
+      }
+    ]
+  },
+  "llamadasFinales": {
+    "checkout": 4,
+    "smtp": 3,
+    "vinculos": 0,
+    "creaciones": [
+      {
+        "estado": 201
+      },
+      {
+        "estado": 201
+      },
+      {
+        "estado": 201
+      },
+      {
+        "estado": 201
+      },
+      {
+        "estado": 409
+      },
+      {
+        "estado": 409
+      },
+      {
+        "estado": 409
+      }
+    ]
+  },
+  "correosIniciales": [
+    {
+      "aportacion_id": "6",
+      "estado": "fallido",
+      "intentos": 1,
+      "enviado_en": null
+    },
+    {
+      "aportacion_id": "7",
+      "estado": "fallido",
+      "intentos": 1,
+      "enviado_en": null
+    }
+  ],
+  "correosFinales": [
+    {
+      "aportacion_id": "6",
+      "estado": "fallido",
+      "intentos": 2,
+      "enviado_en": null
+    },
+    {
+      "aportacion_id": "7",
+      "estado": "fallido",
+      "intentos": 1,
+      "enviado_en": null
+    }
+  ],
+  "aportacionesObjetivo": [
+    {
+      "id": "4",
+      "referencia": "DON-c113c84f-b124-4c73-befc-d4a9565f5bb5",
+      "estado": "rechazada",
+      "modalidad": "puntual",
+      "importe": "20.00",
+      "pago": "pi_local_9999c470-5de0-40fd-b550-b1c60458cae6",
+      "fechaCobro": null,
+      "motivo": "El pago no se ha completado."
+    },
+    {
+      "id": "5",
+      "referencia": "DON-777a55ba-edc4-4644-b3fd-8d9242dbeacf",
+      "estado": "pendiente",
+      "modalidad": "puntual",
+      "importe": "20.00",
+      "pago": null,
+      "fechaCobro": null,
+      "motivo": null
+    },
+    {
+      "id": "6",
+      "referencia": "DON-3ab5ce15-925d-49fe-8325-62b0b763d36c",
+      "estado": "confirmada",
+      "modalidad": "puntual",
+      "importe": "20.00",
+      "pago": "pi_local_7eed46a3-657e-411d-bc6d-8a17565fbb16",
+      "fechaCobro": "2027-01-15T08:00:00Z",
+      "motivo": null
+    },
+    {
+      "id": "7",
+      "referencia": "DON-f31330e4-ab98-4864-a360-61cb2b1ff371",
+      "estado": "confirmada",
+      "modalidad": "cuota_socio",
+      "importe": "20.00",
+      "pago": "pi_local_f9fa8df0-5f80-44f6-ba3d-9419af0e96a4",
+      "fechaCobro": "2027-01-15T08:00:00Z",
+      "motivo": null
+    }
+  ]
+}
