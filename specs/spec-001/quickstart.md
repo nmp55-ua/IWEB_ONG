@@ -238,6 +238,13 @@ pasarela; no generan carga contra Stripe.
 
 ## Datos y evidencia
 
+La [matriz vigente T079–T080](refinamiento/matriz-validacion-01.md) centraliza los 34 escenarios,
+sus fuentes y límites, las comprobaciones adicionales justificadas y el procedimiento de
+una puntual cronometrada de 20,00 € aún no ejecutada. También delimita el conjunto manual
+SC-002: aportaciones reales 30–34 y, después, la nueva prueba, separadas de semillas,
+avisos de fallo y vínculos. T079/T080 siguen pendientes; no se repiten pruebas acreditadas
+ni se exige Stripe real para todos los casos por defecto.
+
 - Invitado: navegador sin cuenta, datos sintéticos válidos, NIF `12345678Z`, correo de pruebas
   y dirección ficticia. No reutilizar esa identidad para otro caso sin comprobar su estado.
 - Cuenta propia y ajena: `donante@ong.test` y `donante2@ong.test`, contraseña local de semillas.
