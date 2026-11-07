@@ -1,6 +1,6 @@
 # Resumen técnico de HU-01 para revisión y consumo desde HU-03
 
-**Fecha:** 2026-11-07 · **Rama:** spec-001 · **Base revisada:** 9d86863.
+**Fecha:** 2026-11-07 · **Rama:** spec-001 · **Base revisada:** 47e3ea1.
 
 **Responsable HU-01:** Nada · **Revisor HU-01:** Rubén.
 
@@ -27,7 +27,9 @@ recuperable. No incluye historial, certificados, reembolsos o edición de datos 
 | 0b41695 / a7dda2b       | Banco y comprobación conjunta local G1–G3.                                         |
 | 9d86863                 | Segunda medición y cierre documentado de T079–T080.                                |
 
-No se repiten estos commits. Los documentos de T081 son trabajo local posterior a esta base.
+El commit local 47e3ea1 registra después la preparación documental de T081 y de la revisión.
+No se repiten esos commits. Las correcciones T082–T083 y el ajuste de flujo de esta
+entrega son cambios locales posteriores a 47e3ea1, todavía sin registrar ni publicar.
 
 ## Contrato de datos consumible
 
@@ -116,12 +118,18 @@ de Stripe; se conservan sus pruebas locales/simuladas. Las semillas no prueban c
 o recepción. Los avisos SMTP y registros de errores comunes observados en T074 quedan
 para revisión; no se ocultan como una auditoría nueva.
 
-004 está creada y validada; **T006 requiere revisión real de Rubén**, que puede quedar
-acreditada en la revisión de la PR, con evidencias y observaciones. **T007 continúa
-pendiente**: en la comprobación previa de ramas publicadas comunicada por Nada no se
-encontró 009; eso no es reserva colectiva ni descarta trabajo sin publicar. Coordinar
-el nombre antes de incorporación, considerando que el migrador registra nombres y
-algunos entornos locales ya ejecutan 009. No se renombra ni reaplica SQL en este bloque.
+004 está creada y validada. El [flujo autorizado por Nada](ajuste-flujo-01.md) distingue
+**T006: paquete completo preparado** y **T007: comprobación actual y elección local de 009**
+de los controles de incorporación. Nueve cabezas publicadas y sus seis commits distintos
+se comprobaron en lectura, sin 009 en la carpeta canónica y sin ramas de esa enumeración
+pendientes de verificar. No es reserva colectiva ni descarta trabajo sin publicar.
+
+**PR-R01 sigue pendiente de revisión y aprobación reales de Rubén** del paquete completo.
+**PR-R02 sigue pendiente de resolver numeración/conflictos antes de main**, considerando
+el registro por nombres y los entornos donde 009 ya está aplicada. Se explicará la
+elección en la PR. Esos controles no bloquean terminar el desarrollo o preparar/abrir
+la PR; no se renombra ni reaplica SQL aquí. Las correcciones de correo y sus regresiones
+constan en [validacion-converge-01.md](validacion-converge-01.md), sin nuevos pagos reales.
 
 ## Preguntas de integración para Rubén — pendientes, sin acuerdo atribuido
 
@@ -140,4 +148,6 @@ PA3.1/PA3.2. Las preguntas siguientes no se presentan como nuevos requisitos apr
    se regenera o se emite uno rectificativo? ¿Cómo se preservan el código/datos de las
    descargas anteriores? Se necesita la decisión de HU-03; no se presupone ninguna opción.
 
-T081 prepara este material, no completa T006/T007 ni declara HU-01 terminada o convergida.
+T081 y T006 preparan la revisión; no acreditan aprobación. T007 acredita una elección
+local contrastada, no reserva colectiva. Este material sigue sin enviarse; el cierre
+técnico requiere el converge posterior y no elimina los controles externos antes de main.

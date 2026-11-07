@@ -106,6 +106,13 @@ Un fallo ya respondido con 200 no obliga a Stripe a reenviar el evento. El reint
 autorización; sin ella, el correo puede quedar pendiente y SC-002 sin cumplir. Son límites
 conocidos, no decisiones de diseño sin resolver.
 
+Al recuperar un aviso de fallo de cuota, su texto distingue el intento y la previsión
+históricos: no afirma el estado actual de la cuota ni anuncia un próximo cobro vigente.
+El aviso y resumen se conservan incluso si hubo pago o cancelación posterior; no se
+introducen supresión de avisos, estados o estructuras nuevas. La confirmación conserva
+su texto y resumen. Una reclamación de correo fallida relee enviado antes de informar
+conflicto por reserva, según las correcciones CONV-001/CONV-002.
+
 ## P-04 — Alcance de pago en v1
 
 **Decisión cerrada**: exclusivamente tarjeta mediante Stripe Checkout, EUR e importe entre
@@ -142,5 +149,9 @@ No quedan decisiones de diseño identificadas sin resolver en HU-01: PA1.1–PA1
 P-01–P-03 tienen definición única y P-04 está incorporado. La revisión de Rubén y el proceso
 de incorporación compartida siguen pendientes; son condiciones anteriores a integrar cambios
 comunes, no acuerdos ya producidos. La implementación, SQL y comprobaciones de P-05 constan
-en esta rama y sus evidencias. La numeración de la ampliación sigue pendiente de T007.
-T081 prepara la revisión; no la sustituye ni ejecuta converge.
+en esta rama y sus evidencias. El [flujo autorizado por Nada](../refinamiento/ajuste-flujo-01.md)
+separa el paquete técnico de T006 y la comprobación/elección local de T007 de la aprobación
+de Rubén y los conflictos de incorporación, controles PR-R01/PR-R02 antes de main.
+No se atribuye reserva colectiva ni revisión realizada. La preparación/apertura de PR y
+el cierre del desarrollo no dependen de obtener antes esa aprobación; el cierre técnico
+sí requiere el converge posterior. Este bloque no lo ejecuta.

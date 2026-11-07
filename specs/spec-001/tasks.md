@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T081 completadas en su alcance. T081 prepara la revisión, sin acreditar su recepción o aprobación. T006 y T007 siguen pendientes: falta la revisión real de Rubén y la coordinación de la numeración provisional 009. Converge no ejecutado; no se declara HU-01 terminada. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
+**Estado**: T001–T083 completadas en su alcance técnico documentado. T006/T007 se ajustan por autorización de Nada: paquete de revisión preparado y elección local de 009 contrastada, sin acreditar aprobación o reserva colectiva. PR-R01/PR-R02 siguen pendientes antes de main. El primer converge y las correcciones T082–T083 constan en sus informes; cierre técnico pendiente del converge posterior, que no se ejecuta en este bloque. T075 por sí sola acredita versiones/compatibilidad local, no pagos reales.
 
 **Evidencia real posterior (2026-11-07)**: T076 conserva su cierre documentado. T077 se
 completa con la prueba adicional P21 de 1,23 €, independiente de la donación original de
@@ -117,8 +117,10 @@ automática ni modificación concurrente del mismo archivo.
 ## Límites y coordinación explícitos
 
 - **Revisión compartida**: P-01–P-03 están definidos en esta rama; la revisión de Rubén y
-  la coordinación común siguen pendientes. T006 es el control anterior a
-  la incorporación compartida de 004 y de esas ampliaciones; no se da por realizado.
+  la coordinación de incorporación siguen pendientes en PR-R01/PR-R02 antes de main.
+  T006 prepara el paquete y T007 registra la elección local de 009; no acreditan aprobación
+  ni bloquean completar el desarrollo o preparar/abrir la PR. Los ajustes de orden siguientes
+  conservan su alcance histórico; el estado vigente consta en las tareas y el ajuste de flujo.
   T017–T018 preparan únicamente el adaptador de correo en esta rama para revisión,
   sin acreditar acuerdo colectivo ni incorporación compartida.
 - **Autorización independiente**: T022 depende de T002, no de T019. Se prueban
@@ -139,8 +141,8 @@ automática ni modificación concurrente del mismo archivo.
 - **Migración operativa provisional**: 009_operativa_donaciones.sql se prepara localmente
   en esta rama sin reserva colectiva. LEEME y la ficha de revisión registran su carácter
   provisional. T008 depende de T005 para este desarrollo local; T009–T013 mantienen
-  su cadena y T019 espera a T013. T006 y T007 siguen pendientes y son requisitos anteriores
-  a la incorporación compartida. Las cuatro tablas solo dependen de 004, no de 006–008.
+  su cadena y T019 espera a T013. La aprobación y conflictos de incorporación se conservan
+  como PR-R01/PR-R02, separados de T006/T007 técnicas. Las cuatro tablas solo dependen de 004, no de 006–008.
 - **Validación temprana**: quickstart B exige las siete tablas y los archivos de pruebas de
   HU-01. Ejecutarlo completo antes de la ampliación operativa bloquearía la entrega de 004.
   T005 usa selección segura de conexión y una prueba dirigida de migración;
@@ -172,7 +174,7 @@ automática ni modificación concurrente del mismo archivo.
 
 **Objetivo**: Preparar el contrato de dominio que desbloquea a Rubén, validarlo de forma aislada y obtener revisión antes de su incorporación.
 
-**Comprobación del incremento**: 004 revisada, con pruebas propias sobre ambas secuencias; todavía no se necesita la migración operativa, UI ni Stripe real.
+**Comprobación del incremento**: 004 validada con pruebas propias sobre ambas secuencias y paquete preparado para revisión; la aprobación real se exige antes de main en PR-R01. Este incremento de dominio no necesita la migración operativa, UI ni Stripe real.
 
 - [x] T001 Preparar la ficha de revisión de P-01–P-03 y del contrato de consulta de 004, distinguiendo diseño de rama y acuerdos pendientes. Archivos: `specs/spec-001/refinamiento/revision-tecnica-01.md`.
       **Origen**: Constitución X–XII; P-01–P-03; FR-006, FR-010. **Depende de**: ninguna.
@@ -194,9 +196,9 @@ automática ni modificación concurrente del mismo archivo.
       **Origen**: P-01; FR-006, FR-010; SC-004. **Depende de**: T004.
       **Comprobación**: La prueba dirigida pasa en ambos esquemas; una segunda ejecución del migrador no reaplica 004 registrada. El bloque B completo no se usa aún y no se modifica el migrador para forzar el resultado.
 
-- [ ] T006 Registrar la revisión de Rubén de 004, sus evidencias y los cambios comunes P-01–P-03 antes de preparar su incorporación. Archivos: `specs/spec-001/refinamiento/revision-tecnica-01.md`, `specs/spec-001/refinamiento/validacion-004-01.md`, `backend/src/db/migraciones/LEEME.md`.
+- [x] T006 Preparar el paquete completo para revisión de Rubén de 004, P-01–P-03 y el incremento de HU-01, separando preparación técnica de revisión/aprobación externas. Archivos: `specs/spec-001/refinamiento/revision-tecnica-01.md`, `specs/spec-001/refinamiento/resumen-tecnico-hu03-01.md`, `specs/spec-001/refinamiento/ajuste-flujo-01.md`, `specs/spec-001/refinamiento/validacion-004-01.md`, `specs/spec-001/refinamiento/validacion-converge-01.md`, `backend/src/db/migraciones/LEEME.md`.
       **Origen**: Constitución XI–XII; P-01–P-03; FR-006, FR-010. **Depende de**: T001, T005.
-      **Comprobación**: Se registran resultado y observaciones reales, incluida la coordinación común exigible. Si hay reparos, la tarea sigue abierta. La entrega queda revisada para desbloquear a Rubén; no se hace commit, push o merge automáticamente.
+      **Comprobación vigente**: Ficha y resumen identifican código, contratos, migraciones, pruebas, límites y preguntas de HU-03; las correcciones T082–T083 tienen reproducción y validación. Paquete preparado, sin envío ni aprobación atribuida. La revisión/aprobación reales y resolución de observaciones son PR-R01 antes de main, no condición para terminar el desarrollo o preparar/abrir la PR. **Trazabilidad**: el significado anterior exigía registrar la revisión real y seguía pendiente en converge-1.md; el ajuste autorizado por Nada y su separación quedan en ajuste-flujo-01.md, sin modificar aquel informe.
 
 ## Fase 2. Fundamentos compartidos de HU-01
 
@@ -204,9 +206,9 @@ automática ni modificación concurrente del mismo archivo.
 
 **Comprobación del incremento**: Tablas y contratos locales comprobables sin cuenta Stripe. Se reutilizan autenticación, roles, sesiones, importes, fechas, errores y componentes existentes.
 
-- [ ] T007 Coordinar y registrar el número libre y el nombre completo de la migración operativa posterior a 004. Archivos: `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/refinamiento/revision-tecnica-01.md`.
+- [x] T007 Comprobar las ramas publicadas y documentar la elección local de 009_operativa_donaciones.sql para spec-001, con fecha, commits, alcance y tratamiento de conflictos/entornos ya migrados. Archivos: `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/refinamiento/revision-tecnica-01.md`, `specs/spec-001/refinamiento/ajuste-flujo-01.md`.
       **Origen**: P-01; plan: incorporación en dos entregas; FR-010, FR-013. **Depende de**: T006.
-      **Comprobación**: El nombre concreto se registra sin colisión, con número disponible desde 009; no se presenta 009 como reservado ni se reescribe 004 incorporada.
+      **Comprobación vigente**: Nueve ramas publicadas, seis commits distintos y árboles completos comprobados por ls-remote/API, sin 009 en la carpeta canónica; segunda lectura de referencias estable. Se elige 009 para esta rama, sin reserva colectiva ni garantía frente a trabajo sin publicar. La elección se explicará en la PR; PR-R02 exige comprobar/resolver conflictos antes de main y considerar el registro de nombres en entornos ya migrados. 004 y 009 no cambian. **Trazabilidad**: sustituye la coordinación efectiva previa que seguía pendiente en converge-1.md por esta comprobación técnica, manteniendo la coordinación de incorporación como control externo en ajuste-flujo-01.md.
 
 - [x] T008 Añadir los casos de esquema para las cuatro tablas técnicas y su dependencia exclusiva de 004. Archivos: `backend/src/modulos/donaciones/migraciones.test.js`.
       **Origen**: P-01; FR-010, FR-012, FR-013, FR-016. **Depende de**: T005.
@@ -629,8 +631,8 @@ orden indicado; una tarea sin [P] no se presume paralela. No se modifican a la v
 
 ```mermaid
 flowchart TD
-    A["T001–T006: preparar, validar y revisar 004"] --> B["T007–T027: resto de fundamentos"]
-    A -. "contrato revisado para incorporación autorizada" .-> R["Rubén puede consumir el dominio al incorporarse 004"]
+    A["T001–T006: validar 004 y preparar revisión"] --> B["T007–T027: resto de fundamentos"]
+    A -. "PR-R01/PR-R02 antes de main" .-> R["Incorporación compartida del dominio"]
     L["T005: dominio validado"] --> O["T008–T013: propuesta operativa local"]
     O --> H["T019: soporte comprobado"]
     N["T002: dependencias instaladas"] --> P["T020–T021: normalización pura"]
@@ -821,3 +823,42 @@ se comprobó con resolución de solo lectura (NoPersist); no se ejecutó setup-t
 también puede persistir feature.json. Los hooks opcionales de commit no se ejecutaron.
 Esta fase crea únicamente tasks.md y termina antes de analyze. No ejecuta las acciones
 futuras descritas, pruebas, instalaciones o cambios de Git.
+
+## Phase 6: Convergence
+
+Primer diagnóstico de converge sobre spec-001, base 47e3ea1. Informe:
+`refinamiento/converge-1.md`. Se añaden dos tareas por aristas nuevas de correo;
+no se reescriben las 81 tareas anteriores ni se reabre la ejecución de T079–T081.
+Las cabeceras y notas anteriores conservan el estado de sus etapas; este apartado
+registra las brechas de aquel diagnóstico. Entonces T006 y T007 seguían pendientes;
+su ajuste posterior se documenta al final, sin duplicarlas ni modificar converge-1.md.
+Este diagnóstico inicial no implementó correcciones ni declaró HU-01 terminada.
+
+- [x] T082 Corregir el resultado de una reclamación de correo que pierde la carrera frente a un envío ya terminado, con regresión determinista antes de la corrección, per FR-012; P09; contrato HTTP, Reintento exclusivo de correo; CONV-001 (partial). Archivos: `backend/src/modulos/donaciones/confirmaciones.js`, `backend/src/modulos/donaciones/confirmaciones.test.js`, `backend/src/modulos/donaciones/rutas.test.js`, `specs/spec-001/refinamiento/validacion-converge-01.md`.
+      **Gravedad**: MEDIUM. **Depende de**: T081.
+      **Comprobación**: Intercalar lectura de enviando y terminación satisfactoria de otro intento antes de reclamar. El reintento debe resolver el estado terminal enviado conforme al contrato, sin otra llamada SMTP ni cambios financieros; 409 se conserva para una reserva realmente viva. Contrastar también la respuesta HTTP autorizada. Usar ong_test_hu01 y esquemas aislados, sin Stripe/SMTP reales. Conservar evidencia de la regresión antes/después y no introducir tablas, nuevos estados o cambios comunes.
+
+      **Resultado acreditado (2026-11-07)**: Fallo inicial reproducido en servicio y HTTP (409 en lugar de enviado). Relectura mínima del estado terminal tras una reclamación sin fila; la reserva viva sigue dando 409. Regresión final conjunta: 83/83, con SMTP/Checkout sin duplicar y filas financieras conservadas. Fuente: validacion-converge-01.md.
+
+- [x] T083 Corregir la presentación del aviso histórico de fallo de cuota cuando se recupera después del pago o cancelación, con regresiones antes de la corrección, per FR-018/FR-019; S10–S13; plan, correo recuperable; CONV-002 (partial). Archivos: `backend/src/modulos/donaciones/textoCorreo.js`, `backend/src/modulos/donaciones/textoCorreo.test.js`, `backend/src/modulos/donaciones/cuotas.test.js`, `backend/src/modulos/donaciones/confirmaciones.js`, `specs/spec-001/refinamiento/validacion-converge-01.md`.
+      **Gravedad**: MEDIUM. **Depende de**: T082, para validación y registro secuenciales en el mismo entorno e informe; sin marca de paralelo.
+      **Comprobación**: SMTP simulado falla en el aviso de una cuota; posteriormente la misma factura se paga, o se cancela la suscripción, y se reentrega su evento original. Un aviso recuperado debe distinguir el fallo/previsión históricos sin afirmar que una cuota confirmada siga impagada ni anunciar como próximo un cobro ya sin vigencia. Conservar el aviso y resumen inmutables, confirmaciones, referencias, importes, fechas y cardinalidad, sin otro cobro. No suprimir avisos ni añadir estados o políticas nuevas sin revisión explícita. Documentar regresiones y texto resultante, manteniendo separados simulación y pruebas reales.
+
+      **Resultado acreditado (2026-11-07)**: Dos regresiones fallan inicialmente por texto de impago/previsión actual tras pago o cancelación. El texto ahora identifica aquel intento y su previsión histórica, sin suprimir avisos ni modificar resúmenes/estados. Regresión de cuatro archivos: 83/83; comprobación adicional de eventos puntuales: 21/21, ejecuciones separadas. No se repiten Stripe real, cronómetros ni la suite completa. Fuente: validacion-converge-01.md.
+
+## Ajuste de flujo técnico e incorporación — 2026-11-07
+
+[Ajuste autorizado por Nada](refinamiento/ajuste-flujo-01.md): T006 y T007 conservan ID,
+pero sus criterios vigentes se limitan al paquete técnico y a la comprobación/elección
+local de 009. Los significados y pendientes anteriores permanecen en los históricos.
+No se atribuye revisión/aprobación real ni acuerdo colectivo al marcar esas tareas.
+
+| Control externo | Condición antes de main                                                                                                            | Estado                                    |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| PR-R01          | Revisión y aprobación reales de Rubén del paquete completo, incluidas 004, P-01–P-03 y observaciones aplicables.                   | Pendiente; no realizada por esta entrega. |
+| PR-R02          | Elección de 009 explicada en la PR, comprobación frente a la integración y conflictos resueltos considerando entornos ya migrados. | Pendiente; T007 no es reserva colectiva.  |
+
+Estos controles no bloquean finalizar desarrollo, preparar/abrir la PR o ejecutar el
+próximo converge autorizado. La incorporación a main sí depende de resolverlos.
+Las correcciones están verificadas, pero el cierre técnico sigue pendiente del converge
+posterior. No se ejecuta esa fase ni se publica una PR en este bloque.

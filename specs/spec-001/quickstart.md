@@ -1,17 +1,26 @@
-# Guía de validación prevista — HU-01
+# Guía de validación — HU-01
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: Guía general prevista. La validación parcial de 004 está ejecutada y documentada; el procedimiento completo sigue pendiente.
+**Estado**: Procedimientos y ejecuciones identificados en la matriz vigente y sus informes.
+T082–T083 corregidas y verificadas; cierre técnico pendiente del converge posterior.
+La revisión/aprobación externas y conflictos de incorporación son controles antes de main.
 
 ## Condiciones previas
 
-El diseño está definido en esta rama y pendiente de revisión de Rubén. HU-01 todavía no
-está implementada por completo. T001–T005 han preparado el entorno y creado y validado 004
-en esquemas aislados; los resultados están en
-[validacion-004-01.md](refinamiento/validacion-004-01.md). La preparación local usa DB_PORT=5440
-porque otro PostgreSQL ocupa 5432. El bloque B completo requiere la implementación y las
-migraciones restantes revisadas; no se ha ejecutado ni corresponde a esta entrega temprana.
-Sus comprobaciones fallan si faltan tablas o pruebas, sin dar su ausencia por satisfactoria.
+El diseño y la implementación están en spec-001. T006 prepara el paquete de revisión y
+T007 registra la comprobación publicada/elección local de 009; no exigen obtener antes
+aprobación para completar desarrollo o preparar/abrir la PR. El [ajuste autorizado por
+Nada](refinamiento/ajuste-flujo-01.md) mantiene revisión/aprobación de Rubén y conflictos
+como PR-R01/PR-R02 antes de main, sin reserva colectiva ni aprobación atribuida.
+
+004 y la ampliación 009 se validaron en esquemas aislados; resultados en
+[validacion-004-01.md](refinamiento/validacion-004-01.md) y
+[validacion-local-01.md](refinamiento/validacion-local-01.md). La preparación local documentada
+usa DB_PORT=5440 porque otro PostgreSQL ocupa 5432. La [matriz vigente](refinamiento/matriz-validacion-01.md)
+distingue pasos ya acreditados y límites de cada ejecución; no se repiten por este ajuste.
+El bloque B requiere las tablas y pruebas existentes de HU-01: su ausencia debe fallar,
+no aceptarse como satisfactoria. Las [regresiones T082–T083](refinamiento/validacion-converge-01.md)
+usan selección dirigida sin ejecutar suites ajenas contra la base exclusiva.
 
 Node.js 22 y Docker Desktop son requisitos. La cuenta Stripe y P-05 solo se necesitan
 para las pruebas reales de Checkout; la suite local usa pasarela simulada y firma sintética,

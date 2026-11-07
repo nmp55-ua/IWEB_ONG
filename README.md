@@ -114,7 +114,11 @@ El historial HU-02 y los certificados HU-03 no están implementados por este inc
 La [matriz de validación](specs/spec-001/refinamiento/matriz-validacion-01.md) distingue
 pruebas automáticas, locales y Stripe real de pruebas. T079–T080 están documentadas;
 la [ficha técnica](specs/spec-001/refinamiento/revision-tecnica-01.md) prepara la revisión.
-La revisión real de Rubén (T006), la coordinación de 009 (T007) y converge siguen pendientes.
+El [flujo vigente](specs/spec-001/refinamiento/ajuste-flujo-01.md) separa T006 (paquete de
+revisión) y T007 (comprobación publicada/elección local de 009) de los controles externos
+PR-R01/PR-R02. La aprobación de Rubén y los conflictos de integración se resolverán antes
+de main; no bloquean terminar desarrollo o preparar/abrir la PR. El cierre técnico sigue
+pendiente del converge posterior a las correcciones verificadas de T082–T083.
 La existencia de archivos o commits locales no acredita su publicación o integración compartida.
 
 ## Documentos

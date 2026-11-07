@@ -158,3 +158,49 @@ locales hasta su registro e incorporación autorizados. No se envía ningún men
   salvo la ampliación autorizada de esta ficha. Solo cambian los documentos del bloque.
 - No se ejecutan suites, pagos, reenvíos, configuración, comunicaciones externas o
   escrituras de Git. Rama spec-001 y HEAD 9d86863 conservados.
+
+## Paquete completo y ajuste de flujo — 2026-11-07
+
+**Base de esta entrega:** 47e3ea1 en spec-001. El primer converge y las notas anteriores
+se conservan con sus estados históricos. [converge-1.md](converge-1.md) permanece íntegro;
+los cambios locales pendientes al comenzar no se descartan ni se repiten sus commits.
+
+El [ajuste de flujo autorizado por Nada](ajuste-flujo-01.md) separa el trabajo técnico
+de los controles antes de main. **T006 prepara ahora el paquete completo**, sin exigir
+recibir antes aprobación; **T007 comprueba y registra la elección local de 009**, sin
+reserva colectiva. Sus significados anteriores y estados pendientes quedan trazados en
+ese registro y en los informes históricos, sin presentar la revisión como realizada.
+
+### Contenido disponible para la revisión de Rubén
+
+| Parte del paquete                           | Archivos y evidencia                                                                                                                               |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dominio de 004                              | Migración intacta; modelo único y validacion-004-01.md con las dos secuencias, restricciones y migrador por nombre.                                |
+| P-01–P-03                                   | Contratos HTTP, pasarela y cambios comunes; plan, uso del modelo y pruebas de compatibilidad. Sin acuerdo colectivo atribuido.                     |
+| Implementación                              | Módulo donaciones, páginas/componentes y entradas comunes identificadas en el plan; commits locales reales en resumen-tecnico-hu03-01.md.          |
+| Correcciones posteriores al primer converge | CONV-001/CONV-002, cuatro fallos iniciales reproducidos, corrección mínima y regresiones en validacion-converge-01.md.                             |
+| Validación funcional y límites              | Matriz de 34 escenarios, Stripe real de pruebas frente a simulación, mediciones 1/2 y conjunto 7/7 delimitado conservados.                         |
+| Consumo desde HU-03                         | Resumen de campos, fechas Europe/Madrid, inmutabilidad, vínculo verificado y preguntas de NIF/correcciones/regeneración sin requisitos inventados. |
+| Numeración y controles de PR                | Consulta de nueve ramas/seis commits y elección local de 009, PR-R01/PR-R02 pendientes en ajuste-flujo-01.md y LEEME.                              |
+
+La regresión del bloque corregido da **83/83** en cuatro archivos y **21/21** de eventos
+puntuales en otra ejecución justificada por reutilizar el servicio de correo. No se
+presentan como una suite global nueva ni sustituyen pruebas reales. Se conserva el
+aviso de fallo como información histórica; no se suprime ni se cambia el resumen guardado.
+
+T006 se completa por tener este paquete preparado. T007 se completa por la comprobación
+actual y elección documentada; ninguna de ellas acredita aprobación o coordinación
+colectiva consumadas. Las consultas publicadas no contienen el HEAD local ni prueban
+publicación de las correcciones. No se envía este material ni se abre una PR aquí.
+
+### Controles externos que siguen pendientes
+
+- **PR-R01:** revisión y aprobación reales de Rubén del paquete completo y resolución
+  de observaciones, incluidos 004/P-01–P-03 y la coordinación común aplicable.
+- **PR-R02:** explicación de la elección de 009 en la PR y resolución de conflictos
+  antes de main; considerar los nombres aplicados en los entornos existentes antes
+  de cualquier renombrado. No se cambia SQL o su registro en esta entrega.
+
+No bloquean terminar el desarrollo, preparar/abrir la PR ni el siguiente converge
+autorizado. Sí condicionan main. **El cierre técnico queda pendiente del converge
+posterior**; este bloque no lo ejecuta y no declara HU-01 terminada.

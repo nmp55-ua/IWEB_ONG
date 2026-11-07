@@ -2,9 +2,10 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: Implementación y validación T001–T005/T008–T080 documentadas en spec-001;
-revisión preparada en T081. T006 (revisión de Rubén), T007 (coordinación de 009) y
-converge pendientes. No acredita acuerdo colectivo ni incorporación compartida.
+**Estado**: Implementación, validación y preparación de revisión documentadas; correcciones
+T082–T083 verificadas. T006 prepara el paquete y T007 acredita la elección local de 009.
+Revisión/aprobación y conflictos de integración permanecen como controles externos de la PR.
+Cierre técnico pendiente del converge posterior; no acredita incorporación compartida.
 
 **Especificación vigente**: [spec.md](spec.md) · **Investigación**: [research.md](research.md)
 
@@ -176,9 +177,11 @@ consumir aportaciones confirmadas antes de tener la interfaz o el procesamiento 
 
 Las cuatro tablas operativas ya están implementadas y validadas en
 `009_operativa_donaciones.sql`, dependiente solo de 004 y su base común, sin esperar
-006–008. **009 no está reservado colectivamente**: T007 coordina número y nombre antes
-de la incorporación compartida. La ausencia de 009 en las ramas publicadas comprobadas
-previamente no descarta trabajo sin publicar. 004 se conserva intacta; su creación y
+006–008. **009 no está reservado colectivamente**: T007 registra su elección para esta
+rama tras comprobar las nueve cabezas publicadas. La comprobación y alcance constan en
+[ajuste-flujo-01.md](refinamiento/ajuste-flujo-01.md). Antes de main se resolverán los
+conflictos de numeración, considerando entornos ya migrados; la ausencia publicada no
+descarta trabajo sin publicar. 004 se conserva intacta; su creación y
 validación constan en el commit local 5291d31, sin atribuir publicación o aprobación.
 
 ## Validación y evidencias vigentes
@@ -214,6 +217,14 @@ preparación y las comprobaciones de T075–T076 en
 [preparacion-stripe-01.md](refinamiento/preparacion-stripe-01.md); T077–T078 y los informes
 de medición acreditan los recorridos reales realizados, sin afirmar los ciclos o fallos
 reales no ejecutados. Este plan actualizado no ejecuta pruebas ni modifica configuración.
+
+El [ajuste autorizado por Nada](refinamiento/ajuste-flujo-01.md) separa preparación técnica
+y controles de incorporación: T006/T007 no incluyen aprobación ni reserva colectiva.
+Rubén revisará el paquete completo en la PR antes de main; esto no bloquea terminar el
+desarrollo, preparar/abrir la PR o ejecutar el próximo converge autorizado. PR-R01/PR-R02
+siguen pendientes. Las [correcciones T082–T083](refinamiento/validacion-converge-01.md)
+resuelven los dos hallazgos del primer diagnóstico sin modificarlo; no sustituyen el
+converge posterior ni declaran cierre técnico.
 
 Límites conocidos: no se recupera acceso directo invitado perdido; el enlace de donaciones
 no recupera cuentas reservadas con correo ajeno; SMTP puede duplicar un mensaje tras una
