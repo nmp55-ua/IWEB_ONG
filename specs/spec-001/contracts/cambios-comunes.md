@@ -3,7 +3,8 @@
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
 **Estado**: P-01–P-04 definidos y alineados documentalmente en `spec-001`. La revisión de
 Rubén y la incorporación compartida siguen pendientes. No se atribuye acuerdo colectivo.
-El código y las migraciones existentes no han cambiado.
+P-01–P-03 ya están implementados en esta rama; los resultados se conservan en la
+[matriz vigente](../refinamiento/matriz-validacion-01.md), sin atribuir publicación.
 
 ## P-01 — Persistencia y transiciones
 
@@ -23,7 +24,8 @@ seguridad del historial y recuperación del correo. No son entidades fiscales du
 La corrección UND-001 añade a operaciones_pago solo solicitud_checkout JSONB, la instantánea
 inmutable del cuerpo que la huella no puede reconstruir tras reinicio. Se reutiliza creado_en
 para el límite de 23 horas; no hay nueva tabla de locks, propietario o lease de creación.
-Este ajuste de P-01 se conserva para revisión de Rubén; todavía no hay SQL aplicado.
+Este ajuste de P-01 está implementado en la migración operativa local y se conserva
+para revisión de Rubén; no equivale a una incorporación compartida.
 La regla de conservación admite esos metadatos mínimos, sin cuerpos completos, tarjetas,
 contraseñas o tokens de enlace en claro. No se añade unicidad SQL al correo.
 
@@ -44,12 +46,14 @@ debe revisar los campos, fuentes temporales y transiciones antes de incorporar l
    Esta entrega desbloquea el consumo de aportaciones sin esperar HU-01 completa.
 3. **Ampliación operativa**: migración nueva con las cuatro tablas técnicas. Se coordina
    el siguiente número libre desde 009 al preparar su incorporación; **009 no está reservado**.
-   Solo depende de 004, sin referencias a 006–008. No se asigna aquí un nombre de fichero.
+   En esta rama existe `009_operativa_donaciones.sql` como nombre provisional, sin reserva
+   colectiva. Solo depende de 004 y su base común, sin referencias a 006–008.
 4. **Conservación**: no editar 004 publicada; ajustes posteriores requieren otra migración.
    La ampliación operativa es necesaria para ejecutar HU-01, pero no para consultar el dominio.
 
 La asignación de número es coordinación de integración, no una decisión pendiente sobre el
-esquema. Todavía no se ha creado SQL, una rama de integración o una solicitud de incorporación.
+esquema. El SQL existe y está validado localmente; esta documentación no afirma la
+existencia de una rama de integración, PR aprobada o incorporación compartida.
 
 ## P-02 — Pasarela e integración
 
@@ -65,22 +69,22 @@ de una operación existente. El protocolo de exclusión por conexión y el plazo
 llamadas de 3000 ms y cero reintentos automáticos; fallo transitorio responde 503 y no se
 considera procesado. Las opciones constan en el [SDK fijado](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/lib.d.ts).
 
-**Archivos de implementación afectados posteriormente**:
+**Archivos de implementación afectados en esta rama**:
 
-- `backend/src/servicios-comunes/pasarela.js`: ampliar la única envoltura, sin funciones
+- `backend/src/servicios-comunes/pasarela.js`: envoltura ampliada, sin funciones
   que ordenen cargos adicionales o cancelaciones.
-- `backend/src/app.js`: registrar rutasDonaciones; mantener raw antes de json en el webhook,
+- `backend/src/app.js`: rutasDonaciones registradas; raw antes de json en el webhook,
   sin exigir sesión o rol. Los permisos propios se comprueban dentro de donaciones.
-- `backend/src/db/semillas/index.js`: integrar semillas sintéticas e idempotentes después
+- `backend/src/db/semillas/index.js`: semillas sintéticas e idempotentes integradas después
   de proyectos, sin llamadas a Stripe ni cambios en las semillas ajenas.
 - `frontend/src/components/comunes/Menu.jsx`: entrada pública a /donar, conservando las
   otras opciones. FormDonacion y ResultadoDonacion ofrecen /donar/vincular; VincularDonante
   cubre solicitud sin token y confirmación con token. Se reutilizan FormEntrar, Layout y
   cliente API, sin depender de HU-02 o cambiar registro/login.
-- LEEME de módulos/migraciones y README: reflejar la integración cuando exista.
+- LEEME de módulos/migraciones y README: integración y límites actualizados en T081.
 
 No cambia registro, login, cookies, roles o lib/api.js. La revisión de Rubén sigue pendiente;
-no se presentan estas funciones como disponibles.
+las funciones están disponibles en esta rama, sin atribuir integración compartida.
 
 ## P-03 — Correo compatible y recuperación
 
@@ -121,20 +125,22 @@ Antes de las pruebas reales de Stripe, en una fase autorizada, deberá comprobar
 1. Instalación desde lockfile y versión efectiva; referencia actual 17.7.0.
 2. Cliente con API 2025-02-24.acacia y destino de webhooks con avisos snapshot acacia o
    2026-10-28.endive, exclusivamente según la [compatibilidad limitada](pasarela-stripe.md#compatibilidad-limitada-de-webhooks--2026-11-07).
-   La instalación 17.7.0 está comprobada; sigue pendiente observar una entrega real y
-   contrastar los recursos canónicos de la cuenta, sin cambiar su configuración automáticamente.
+   La instalación 17.7.0, entregas endive y recursos canónicos acacia constan en
+   T075–T078 y sus informes, sin cambiar automáticamente la configuración de la cuenta.
 3. Credenciales y firma del entorno de pruebas, locales y sin publicarlas o enviarlas al frontend.
 4. Cobro automático, recuperación de cuotas y cancelación de la cuenta de pruebas.
 
-La comprobación local del SDK y la compatibilidad documental y simulada constan en
-[preparacion-stripe-01.md](../refinamiento/preparacion-stripe-01.md). No acredita cuenta,
-credenciales, entrega efectiva del endpoint, cobro ni recepción en buzón. Una versión de
-evento distinta de las dos enumeradas exige una nueva revisión antes de admitirla.
+La preparación y su evolución constan en
+[preparacion-stripe-01.md](../refinamiento/preparacion-stripe-01.md); las comprobaciones
+reales posteriores, en [validacion-stripe-01.md](../refinamiento/validacion-stripe-01.md).
+Se conserva su atribución a Nada y al guía, y los límites de cada recorrido. Una versión
+de evento distinta de las dos enumeradas exige una nueva revisión antes de admitirla.
 
-## Estado para el siguiente desglose
+## Estado para revisión
 
 No quedan decisiones de diseño identificadas sin resolver en HU-01: PA1.1–PA1.8 se mantienen,
 P-01–P-03 tienen definición única y P-04 está incorporado. La revisión de Rubén y el proceso
 de incorporación compartida siguen pendientes; son condiciones anteriores a integrar cambios
-comunes, no acuerdos ya producidos. Implementación, SQL, numeración de la ampliación y P-05
-son trabajo futuro. Esta documentación no ejecuta el desglose de tareas.
+comunes, no acuerdos ya producidos. La implementación, SQL y comprobaciones de P-05 constan
+en esta rama y sus evidencias. La numeración de la ampliación sigue pendiente de T007.
+T081 prepara la revisión; no la sustituye ni ejecuta converge.

@@ -2,7 +2,7 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: T001–T005 y T008–T080 completadas en su alcance. T006 y T007 siguen pendientes: falta la revisión de Rubén y la numeración 009 sigue siendo provisional. T081 permanece pendiente; no se declara converge. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
+**Estado**: T001–T005 y T008–T081 completadas en su alcance. T081 prepara la revisión, sin acreditar su recepción o aprobación. T006 y T007 siguen pendientes: falta la revisión real de Rubén y la coordinación de la numeración provisional 009. Converge no ejecutado; no se declara HU-01 terminada. T075 acredita versiones y compatibilidad local, no entregas o pagos reales.
 
 **Evidencia real posterior (2026-11-07)**: T076 conserva su cierre documentado. T077 se
 completa con la prueba adicional P21 de 1,23 €, independiente de la donación original de
@@ -615,9 +615,11 @@ automática ni modificación concurrente del mismo archivo.
 
       **Cierre posterior del balance (2026-11-07)**: Se contrasta `refinamiento/matriz-validacion-01.md`, con 34/34 escenarios identificados, G1–G3 acreditadas y SC-001–SC-004 respaldados por las fuentes del balance de `refinamiento/medicion-puntual-02.md`. La dependencia T079 queda satisfecha. SC-002 se limita al conjunto manual 30–36, 7/7; SC-003 conserva T074 y las pruebas de proyecciones sin afirmar auditoría nueva; SC-004 se apoya en los cotejos visibles/pasarela ya acreditados y el nuevo contraste de 2000 céntimos, base y correo. Se marca T080 como balance completo en esos alcances, conservando explícitos los ciclos/fallos y recorridos de socio cubiertos solo localmente, sin atribuir integración real ni nueva evidencia visual a 36. No se declara converge ni se completan T081, T006 o T007; revisión de Rubén y coordinación de 009 pendientes.
 
-- [ ] T081 Preparar la revisión final de Rubén con documentación coherente y evidencia, conservando los informes anteriores. Archivos: `README.md`, `backend/src/modulos/LEEME.md`, `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/plan.md`, `specs/spec-001/tasks.md`, `specs/spec-001/refinamiento/revision-tecnica-01.md`.
+- [x] T081 Preparar la revisión final de Rubén con documentación coherente y evidencia, conservando los informes anteriores. Archivos: `README.md`, `backend/src/modulos/LEEME.md`, `backend/src/db/migraciones/LEEME.md`, `specs/spec-001/plan.md`, `specs/spec-001/tasks.md`, `specs/spec-001/refinamiento/revision-tecnica-01.md`.
       **Origen**: Constitución III, X–XII; P-01–P-05; SC-001–SC-004. **Depende de**: T080.
       **Comprobación**: Rutas y comandos reflejan lo implementado, tareas solo se marcan con evidencia y cada limitación queda visible. La revisión pendiente no se atribuye como acuerdo colectivo y no se ejecuta publicación o Git.
+
+      **Preparación acreditada (2026-11-07, base 9d86863)**: README, LEEME de módulos/migraciones, plan y estados de contratos contrastados con rutas, configuración, scripts y código actuales. Ficha ampliada y borrador `refinamiento/resumen-tecnico-hu03-01.md` preparado para Rubén, sin envío, con commits locales, datos consumibles y preguntas de integración sin inventar requisitos de HU-03. Las evidencias previas se enlazan sin repetir pruebas; T079–T080 conservan su cierre. Se consulta la definición local y sintaxis de converge y se prepara el siguiente encargo en `refinamiento/preparacion-converge-01.md`, sin ejecutarlo. T081 exige preparar la revisión, no recibir la aprobación: T006 permanece pendiente y puede acreditarse en la revisión real de la PR; T007 requiere coordinación efectiva y 009 no queda reservada por su ausencia en ramas publicadas consultadas. No se declara publicación, aprobación colectiva o HU-01 terminada.
 
 ## Dependencias y ejecución
 

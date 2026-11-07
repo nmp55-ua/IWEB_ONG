@@ -2,8 +2,10 @@
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-07
 
-**Estado**: Compatibilidad de avisos acacia/endive comprobada localmente; revisión de Rubén
-pendiente. La entrega real de webhooks y las pruebas T076–T078 siguen pendientes.
+**Estado**: Compatibilidad acacia/endive comprobada localmente y entregas reales del
+entorno de pruebas documentadas en T076–T078. Alcance y límites por escenario en la
+[matriz de validación](../refinamiento/matriz-validacion-01.md). Revisión de Rubén y
+converge pendientes; no acredita compatibilidad general de versiones ni incorporación compartida.
 
 ## Versión y perímetro
 
@@ -26,8 +28,11 @@ Se distinguen la versión del evento firmado y la de las consultas HTTP al recur
 [documentación de versionado](https://docs.stripe.com/api/versioning) identifica
 2026-10-28.endive como versión actual; la [configuración del SDK Node](https://docs.stripe.com/sdks/set-version)
 permite fijar apiVersion para las consultas, independientemente del webhook. No se actualiza
-el SDK, la cuenta, el endpoint ni sus claves. La compatibilidad comprobada es documental y
-mediante regresión local; falta comprobar las respuestas de esta cuenta en T076–T078.
+el SDK, la cuenta, el endpoint ni sus claves. La regresión local se complementa con las
+respuestas canónicas y entregas reales registradas en
+[validacion-stripe-01.md](../refinamiento/validacion-stripe-01.md), incluidos primeros
+cobros de tres periodicidades, reentregas y cancelación anual. No se extrapola a los
+ciclos o fallos no ejecutados con Stripe real.
 
 El evento conserva api_version y se verifica sobre sus bytes originales. Solo se consumen
 id, type, created, livemode y data.object.id del aviso; no se utiliza su estado financiero,

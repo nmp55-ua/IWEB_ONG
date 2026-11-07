@@ -2,8 +2,10 @@
 
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: Diseño definido y documentación común alineada en spec-001. P-04 incorporado;
-revisión de Rubén pendiente. No acredita acuerdo colectivo, código o pruebas ejecutadas.  
+**Estado**: Implementación y validación T001–T005/T008–T080 documentadas en spec-001;
+revisión preparada en T081. T006 (revisión de Rubén), T007 (coordinación de 009) y
+converge pendientes. No acredita acuerdo colectivo ni incorporación compartida.
+
 **Especificación vigente**: [spec.md](spec.md) · **Investigación**: [research.md](research.md)
 
 ## Resumen
@@ -14,7 +16,7 @@ aportación representa un cobro, no cada intento ni cada evento recibido. La pri
 reutiliza la aportación pendiente del alta; las siguientes se identifican por factura.
 
 Se conserva la arquitectura del [plan común](../plan-comun.md). Este documento añade
-únicamente los flujos de donaciones, su seguridad, sus contratos y su validación prevista.
+únicamente los flujos de donaciones, su seguridad, sus contratos y su validación.
 V1 usa exclusivamente tarjeta, EUR y entre 1,00 € y 999.999,99 €, ambos incluidos, con máximo
 dos decimales. El máximo es una elección de la aplicación.
 El historial, los certificados y los informes consumen datos de HU-01, pero no se implementan
@@ -22,28 +24,28 @@ como parte de esta historia. No hay edición de datos fiscales, cuota o baja des
 
 ## Contexto técnico
 
-| Aspecto | Base comprobada y decisión |
-|---|---|
-| Lenguaje | JavaScript con módulos ES; Node.js 22. Se ha comprobado Node.js 22.20.0 en el entorno. |
-| Interfaz | Astro SSR, React 19 y Tailwind 3; reutilización de `Layout.astro`, componentes comunes, `lib/api.js` y `lib/formato.js`. |
-| Servidor | Express 4, `zod`, `pg`, sesiones comunes, `ErrorApi` y envoltura `asincrono`. |
-| Persistencia | PostgreSQL 16. Entidades del [modelo común](../modelo-datos.md); definición única alineada en el modelo común y uso descrito en [data-model.md](data-model.md). |
-| Stripe | `backend/package.json`: `^17.5.0`; lockfile: **17.7.0**. No hay instalación local de Stripe. La referencia de diseño es API **2025-02-24.acacia**. |
-| Correo | `enviarCorreo({ para, asunto, texto })` devuelve un booleano; no conserva estado ni acredita recepción final. |
-| Pruebas | Vitest y Supertest previstos, PostgreSQL de pruebas y comprobación manual con Stripe de prueba y Mailpit. No se han ejecutado. |
-| Objetivos | Donación habitual en menos de tres minutos; importes exactos, interfaz española, fechas de Madrid y correo verificable según SC-002. |
-| Volumen | ONG pequeña. Procesamiento síncrono y acotado de notificaciones, sin nueva cola ni servicios independientes. |
+| Aspecto      | Base comprobada y decisión                                                                                                                                                                                                                           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Lenguaje     | JavaScript con módulos ES; Node.js 22. Se ha comprobado Node.js 22.20.0 en el entorno.                                                                                                                                                               |
+| Interfaz     | Astro SSR, React 19 y Tailwind 3; reutilización de `Layout.astro`, componentes comunes, `lib/api.js` y `lib/formato.js`.                                                                                                                             |
+| Servidor     | Express 4, `zod`, `pg`, sesiones comunes, `ErrorApi` y envoltura `asincrono`.                                                                                                                                                                        |
+| Persistencia | PostgreSQL 16. Entidades del [modelo común](../modelo-datos.md); definición única alineada en el modelo común y uso descrito en [data-model.md](data-model.md).                                                                                      |
+| Stripe       | SDK instalado **17.7.0**; cliente con API **2025-02-24.acacia**, timeout 3000 ms y cero reintentos automáticos. Avisos snapshot acacia y **2026-10-28.endive** según compatibilidad limitada del contrato; recursos canónicos consultados en acacia. |
+| Correo       | `enviarCorreo({ para, asunto, texto }, opciones)` devuelve booleano y conserva las llamadas de un argumento. HU-01 selecciona tiempos 3000/3000/5000 ms, persiste el envío en su módulo y exige recepción observada para SC-002.                     |
+| Pruebas      | Vitest/Supertest y PostgreSQL aislado, pasarela/SMTP simulados y recorridos de navegador. Stripe de pruebas y Mailpit acreditados para puntuales, altas, reentregas y cancelación; límites por escenario en la matriz. No se repiten en T081.        |
+| Objetivos    | Donación habitual en menos de tres minutos; importes exactos, interfaz española, fechas de Madrid y correo verificable según SC-002.                                                                                                                 |
+| Volumen      | ONG pequeña. Procesamiento síncrono y acotado de notificaciones, sin nueva cola ni servicios independientes.                                                                                                                                         |
 
 ## Comprobación de la constitución
 
-| Principios | Aplicación al diseño | Resultado de revisión documental |
-|---|---|---|
-| I–II: simplicidad y alcance | SQL directo, servicios existentes, sin edición de perfil, pagos propios, reembolsos ni funcionalidades de HU-02. | Compatible con el alcance. |
-| III–IV: verificabilidad y presentación | Matriz P01–P21/S01–S13 en [quickstart.md](quickstart.md); euros exactos y `Europe/Madrid`. | Casos previstos, sin ejecución. |
-| V–VI: seguridad e historial | Checkout alojado, vínculo acreditado, autorización por operación, registros conservados y confirmación de cobro no reversible por un evento antiguo. | Diseño alineado con el modelo común; persistencia por implementar. |
-| VII–IX: pila y reutilización | Se mantienen módulos, capas, errores y entidades comunes. Stripe solo se usa desde su envoltura; correo compatible por opciones propias de HU-01. | Diseño compatible; implementación pendiente. |
-| X–XI: autoría y revisión | Nada responsable y Rubén revisor; rama `spec-001`. | Revisión de Rubén no realizada. |
-| XII: cambios compartidos | P-01–P-03 alineados documentalmente y P-04 fijado en esta rama. P-05 es preparación de entorno. | Revisión de Rubén e incorporación compartida pendientes; no se acredita acuerdo colectivo. |
+| Principios                             | Aplicación al diseño                                                                                                                                 | Resultado de revisión documental                                                                                    |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| I–II: simplicidad y alcance            | SQL directo, servicios existentes, sin edición de perfil, pagos propios, reembolsos ni funcionalidades de HU-02.                                     | Compatible con el alcance.                                                                                          |
+| III–IV: verificabilidad y presentación | Matriz P01–P21/S01–S13 y SC-001–SC-004 en [matriz de validación](refinamiento/matriz-validacion-01.md); euros exactos y `Europe/Madrid`.             | Balance T080 documentado; evidencia real y simulada diferenciadas, sin declarar converge.                           |
+| V–VI: seguridad e historial            | Checkout alojado, vínculo acreditado, autorización por operación, registros conservados y confirmación de cobro no reversible por un evento antiguo. | Persistencia implementada y comprobaciones de seguridad T074 documentadas; observaciones para revisión conservadas. |
+| VII–IX: pila y reutilización           | Se mantienen módulos, capas, errores y entidades comunes. Stripe solo se usa desde su envoltura; correo compatible por opciones propias de HU-01.    | Implementado en esta rama; revisión e incorporación compartida pendientes.                                          |
+| X–XI: autoría y revisión               | Nada responsable y Rubén revisor; rama `spec-001`.                                                                                                   | Revisión de Rubén no realizada.                                                                                     |
+| XII: cambios compartidos               | P-01–P-03 alineados documentalmente y P-04 fijado en esta rama. P-05 es preparación de entorno.                                                      | Revisión de Rubén e incorporación compartida pendientes; no se acredita acuerdo colectivo.                          |
 
 ## Documentación de la fase
 
@@ -63,9 +65,10 @@ El estado vigente lo fijan `spec.md` y el plan común alineado. Los informes
 [clarify-3](refinamiento/clarify-3.md) conservan el recorrido metodológico; sus estados
 anteriores no reabren decisiones posteriores. Las ocho respuestas siguen vigentes.
 
-## Estructura prevista del código
+## Estructura implementada del código
 
-Los siguientes son destinos de implementación, no archivos generados por esta fase:
+Archivos principales existentes en esta rama; pruebas y soporte adicionales se identifican
+en tasks.md y la matriz de validación:
 
 ```text
 backend/src/modulos/donaciones/
@@ -77,13 +80,15 @@ frontend/src/pages/donar/
 frontend/src/components/donaciones/
   FormDonacion.jsx  ResultadoDonacion.jsx  VincularDonante.jsx
 backend/src/db/migraciones/004_donaciones.sql
+backend/src/db/migraciones/009_operativa_donaciones.sql (provisional)
 backend/src/db/semillas/donaciones.js
 ```
 
 `rutas.js` registra los contratos de [API](contracts/api-donaciones.md). El controlador
 valida con zod; el servicio aplica identidad, permisos, estados y transacciones; el
 repositorio contiene SQL parametrizado. Los ayudantes propios no duplican servicios comunes.
-La integración futura del router afecta a `backend/src/app.js` y está recogida en P-02.
+El router ya está registrado en `backend/src/app.js`, con raw antes de JSON y sin sesión
+en el webhook, según P-02. No se alteran autenticación, roles ni cookies comunes.
 
 ## Flujos de aplicación
 
@@ -169,12 +174,14 @@ factura, previsión temporal, auditoría e índice financiero. La revisión pequ
 comprueba el contrato de consulta y las secuencias 001–003 → 004 y 001–003/005 → 004. Permite
 consumir aportaciones confirmadas antes de tener la interfaz o el procesamiento Stripe.
 
-Después se incorporan las cuatro tablas operativas en una nueva migración dependiente
-solo de 004. Se coordinará el siguiente número libre desde 009 al preparar la entrega;
-**009 no está reservado**. No se modifica 004 publicada ni se espera a 006–008. No se crea
-SQL en esta fase; la numeración de esa ampliación es coordinación futura de integración.
+Las cuatro tablas operativas ya están implementadas y validadas en
+`009_operativa_donaciones.sql`, dependiente solo de 004 y su base común, sin esperar
+006–008. **009 no está reservado colectivamente**: T007 coordina número y nombre antes
+de la incorporación compartida. La ausencia de 009 en las ramas publicadas comprobadas
+previamente no descarta trabajo sin publicar. 004 se conserva intacta; su creación y
+validación constan en el commit local 5291d31, sin atribuir publicación o aprobación.
 
-## Validación prevista
+## Validación y evidencias vigentes
 
 [quickstart.md](quickstart.md) relaciona todos los escenarios con sus entradas, resultados y
 comprobaciones. Incluye rechazos, correos, límites de sesión, vínculo, concurrencia y cambios
@@ -185,7 +192,13 @@ de pruebas. No se somete la pasarela externa a pruebas de carga.
 
 SC-002 exige observar el mensaje en Mailpit; una respuesta booleana o un aviso de pantalla
 no demuestran recepción. Las pruebas financieras comprueban cardinalidad y sumas, no solo
-el texto de respuesta. No se ha ejecutado ni aprobado ninguna prueba funcional.
+el texto de respuesta. Las ejecuciones y límites constan en la
+[matriz vigente](refinamiento/matriz-validacion-01.md) y sus fuentes: regresión del módulo
+367/367, comprobación dirigida G1–G3 de 17/17 y pruebas reales comunicadas de Stripe.
+No se suman suites de fechas diferentes como una nueva ejecución conjunta.
+La [medición 2](refinamiento/medicion-puntual-02.md) registra 61 s observados por Nada y
+7/7 confirmaciones recibidas del conjunto 30–36, según el guía. Se conserva la medición 1
+fallida de 480,836 s. T079–T080 están documentadas; la revisión de Rubén no se ha realizado.
 
 ## Estado del diseño y revisión pendiente
 
@@ -195,10 +208,12 @@ P-04 fija tarjeta, EUR y rango de importe propio de la aplicación. No quedan de
 diseño identificadas sin resolver que impidan preparar el desglose en tareas.
 
 La revisión de Rubén y la incorporación de los cambios comunes siguen pendientes, según la
-constitución; el estado de esta rama no acredita un acuerdo colectivo. La implementación
-de funciones, migraciones, semillas y pruebas es trabajo posterior. P-05 prepara instalación,
-cuenta y webhooks antes de las pruebas reales de Stripe; no condiciona las pruebas locales
-con la pasarela simulada ni se presenta como una configuración ya comprobada.
+constitución; el estado de esta rama no acredita un acuerdo colectivo. Funciones,
+migraciones, semillas y pruebas están implementadas en spec-001. P-05 conserva la
+preparación y las comprobaciones de T075–T076 en
+[preparacion-stripe-01.md](refinamiento/preparacion-stripe-01.md); T077–T078 y los informes
+de medición acreditan los recorridos reales realizados, sin afirmar los ciclos o fallos
+reales no ejecutados. Este plan actualizado no ejecuta pruebas ni modifica configuración.
 
 Límites conocidos: no se recupera acceso directo invitado perdido; el enlace de donaciones
 no recupera cuentas reservadas con correo ajeno; SMTP puede duplicar un mensaje tras una

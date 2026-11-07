@@ -1,7 +1,9 @@
-# Contrato HTTP propuesto de HU-01
+# Contrato HTTP de HU-01
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: Diseño para revisión; rutas aún no implementadas.
+**Estado**: Rutas implementadas en spec-001 y evidencias identificadas en la
+[matriz de validación](../refinamiento/matriz-validacion-01.md). Preparado para revisión
+de Rubén; no acredita incorporación compartida ni convergencia.
 
 ## Convenciones y autorización
 
@@ -29,15 +31,15 @@ La sesión inicial no autoriza cuotas futuras. No se ofrece recuperación de acc
 
 ## Rutas
 
-| Método y ruta | Función | Autorización |
-|---|---|---|
-| GET `/api/donaciones/contexto` | Preparar sesión y CSRF; devolver estado de identificación. | Pública, sin datos de aportaciones. |
-| POST `/api/aportaciones` | Preparar una operación y Checkout. | Sesión de navegador y CSRF; cuenta opcional. |
-| GET `/api/aportaciones/referencia/:referencia` | Consultar el resultado de una aportación concreta. | Permiso de operación o cuenta vinculada. |
-| POST `/api/aportaciones/referencia/:referencia/correo` | Reintentar solo la confirmación por correo. | Misma autorización, más CSRF. |
-| POST `/api/donantes/vinculaciones` | Solicitar enlace al correo de la cuenta para el Donante coincidente. | `requiereRol('donante')` y CSRF. |
-| POST `/api/donantes/vinculaciones/confirmar` | Consumir el enlace y establecer el vínculo. | Misma cuenta solicitante, rol donante y CSRF. |
-| POST `/api/pasarela/webhook` | Reconciliar notificaciones firmadas. | Firma y cuerpo crudo; sin dependencia del navegador. |
+| Método y ruta                                          | Función                                                              | Autorización                                         |
+| ------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------- |
+| GET `/api/donaciones/contexto`                         | Preparar sesión y CSRF; devolver estado de identificación.           | Pública, sin datos de aportaciones.                  |
+| POST `/api/aportaciones`                               | Preparar una operación y Checkout.                                   | Sesión de navegador y CSRF; cuenta opcional.         |
+| GET `/api/aportaciones/referencia/:referencia`         | Consultar el resultado de una aportación concreta.                   | Permiso de operación o cuenta vinculada.             |
+| POST `/api/aportaciones/referencia/:referencia/correo` | Reintentar solo la confirmación por correo.                          | Misma autorización, más CSRF.                        |
+| POST `/api/donantes/vinculaciones`                     | Solicitar enlace al correo de la cuenta para el Donante coincidente. | `requiereRol('donante')` y CSRF.                     |
+| POST `/api/donantes/vinculaciones/confirmar`           | Consumir el enlace y establecer el vínculo.                          | Misma cuenta solicitante, rol donante y CSRF.        |
+| POST `/api/pasarela/webhook`                           | Reconciliar notificaciones firmadas.                                 | Firma y cuerpo crudo; sin dependencia del navegador. |
 
 El listado de proyectos reutiliza GET `/api/proyectos`, ya existente. No se crea historial,
 edición de perfil, modificación de cuota, baja ni endpoint que ordene cobros adicionales.
@@ -95,14 +97,14 @@ null; no vuelve a presentar pendiente un cobro confirmado ni crea otro Checkout.
 
 Errores específicos:
 
-| HTTP y código | Resultado |
-|---|---|
-| 400 `DATOS_INVALIDOS` | Errores junto a los campos; no se ha llamado a Stripe. |
-| 409 `DATOS_DONANTE_INCOMPATIBLES` | «Revisa los datos introducidos para continuar». Sin mostrar datos guardados ni distinguir qué identidad existe. |
-| 409 `PROYECTO_NO_DISPONIBLE` | El proyecto dejó de estar activo; elegir otro destino o fondo general expresamente. |
-| 409 `OPERACION_EN_CURSO` | Una conexión posee la exclusión de la misma solicitud; no se ha enviado otra creación. Reintentar conserva UUID y cuerpo. |
+| HTTP y código                     | Resultado                                                                                                                                |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 400 `DATOS_INVALIDOS`             | Errores junto a los campos; no se ha llamado a Stripe.                                                                                   |
+| 409 `DATOS_DONANTE_INCOMPATIBLES` | «Revisa los datos introducidos para continuar». Sin mostrar datos guardados ni distinguir qué identidad existe.                          |
+| 409 `PROYECTO_NO_DISPONIBLE`      | El proyecto dejó de estar activo; elegir otro destino o fondo general expresamente.                                                      |
+| 409 `OPERACION_EN_CURSO`          | Una conexión posee la exclusión de la misma solicitud; no se ha enviado otra creación. Reintentar conserva UUID y cuerpo.                |
 | 409 `OPERACION_REQUIERE_REVISION` | No hay ID externo conocido y venció creado_en + 23 horas. No se permite otra creación para recuperar la operación ni un cambio de clave. |
-| 503 `PAGO_NO_DISPONIBLE` | Fallo o resultado incierto de pasarela. Se conserva referencia y solicitud si ya existen; no se crea otro pago automáticamente. |
+| 503 `PAGO_NO_DISPONIBLE`          | Fallo o resultado incierto de pasarela. Se conserva referencia y solicitud si ya existen; no se crea otro pago automáticamente.          |
 
 No hay rollback de una operación ya cobrada por un error de respuesta HTTP. El resultado
 incierto se consulta por referencia con permiso; si la primera respuesta no dio referencia,
@@ -122,17 +124,17 @@ exige otra aportación; una sesión invitada perdida sigue sin recuperación en 
 
 La respuesta 200 contiene:
 
-| Campo | Contenido |
-|---|---|
-| `referencia`, `estado`, `modalidad`, `importe` | Identidad pública, estado local y modalidad de dominio; importe normalizado. |
-| `fechaCobro` | Instante ISO o null si no confirmada. |
-| `destino` | Nombre del proyecto o «fondo general». |
-| `motivo` | Motivo genérico de rechazo/cancelación o null, sin detalles internos. |
-| `resumenConfirmacion` | Proyección inmutable del resumen enviado o null; no contiene NIF ni tarjeta. |
-| `correo` | `{ estado, puedeReintentar }`; estado `noPrevisto` antes de confirmarse o pendiente/enviando/enviado/fallido después. |
-| `suscripcion` | Null para puntual; para socio, `{ estado, periodicidad, fechaProximoCobro }`. |
-| `urlPago` | URL del mismo Checkout solo si la operación propia sigue abierta; en otro caso null. |
-| `preparacion` | Null para una cuota automática sin operación de navegador; en otro caso { claveSolicitud, reanudarHasta, requiereRevision }. Fecha ISO derivada de creado_en + 23 horas; requiereRevision solo si no hay Session conocida y venció el plazo. No amplía permisos. |
+| Campo                                          | Contenido                                                                                                                                                                                                                                                        |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `referencia`, `estado`, `modalidad`, `importe` | Identidad pública, estado local y modalidad de dominio; importe normalizado.                                                                                                                                                                                     |
+| `fechaCobro`                                   | Instante ISO o null si no confirmada.                                                                                                                                                                                                                            |
+| `destino`                                      | Nombre del proyecto o «fondo general».                                                                                                                                                                                                                           |
+| `motivo`                                       | Motivo genérico de rechazo/cancelación o null, sin detalles internos.                                                                                                                                                                                            |
+| `resumenConfirmacion`                          | Proyección inmutable del resumen enviado o null; no contiene NIF ni tarjeta.                                                                                                                                                                                     |
+| `correo`                                       | `{ estado, puedeReintentar }`; estado `noPrevisto` antes de confirmarse o pendiente/enviando/enviado/fallido después.                                                                                                                                            |
+| `suscripcion`                                  | Null para puntual; para socio, `{ estado, periodicidad, fechaProximoCobro }`.                                                                                                                                                                                    |
+| `urlPago`                                      | URL del mismo Checkout solo si la operación propia sigue abierta; en otro caso null.                                                                                                                                                                             |
+| `preparacion`                                  | Null para una cuota automática sin operación de navegador; en otro caso { claveSolicitud, reanudarHasta, requiereRevision }. Fecha ISO derivada de creado_en + 23 horas; requiereRevision solo si no hay Session conocida y venció el plazo. No amplía permisos. |
 
 Fecha futura desconocida o ya pasada se devuelve null y se muestra «Pendiente de
 confirmación»; nunca se presenta una fecha pasada como próxima. Las fechas del resumen
