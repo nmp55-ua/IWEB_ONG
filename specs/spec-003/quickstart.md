@@ -21,9 +21,17 @@ Las fechas se mueven con `AHORA_SIMULADO` en `.env` (reiniciar el back-end tras 
 generación se lanza a mano con `npm run certificados -- --ejercicio 2025` en `backend/` (es la misma
 función que ejecuta la tarea horaria). Contraseña de las cuentas: `CONTRASENA_SEMILLAS`.
 
-Pruebas automáticas, en `backend/` y siempre contra una base de pruebas:
-`DATABASE_URL=<url de ong_test> TEST_DATABASE_URL=<url de ong_test> npm test`
-(`certificados-informes/certificados.test.js` y `textos.test.js`); en `frontend/`, `npm test`.
+Pruebas automáticas, en `backend/` y siempre contra bases de pruebas (nunca la de desarrollo):
+
+```bash
+# todo salvo HU-01, en una base ong_test con las migraciones aplicadas
+DATABASE_URL=<url de ong_test> TEST_DATABASE_URL=<url de ong_test> npx vitest run --exclude 'src/modulos/donaciones/**'
+# HU-01 exige su base exclusiva ong_test_hu01 (crea y borra sus esquemas)
+DATABASE_URL=<url de ong_test_hu01> TEST_DATABASE_URL=<url de ong_test_hu01> npx vitest run src/modulos/donaciones
+```
+
+Las de HU-03 son `certificados-informes/certificados.test.js` y `textos.test.js`. En `frontend/`,
+`npm test` y `npm run build`.
 
 ## Historia 1 — Descargar mi certificado fiscal
 
@@ -37,7 +45,7 @@ Hacer los pasos en este orden.
 | 1.4 | En «Consultar un ejercicio», elegir 2023 | «No tienes aportaciones confirmadas en 2023, así que no hay certificado de ese ejercicio.» |
 | 1.5 | `AHORA_SIMULADO=2026-10-15T12:00:00+02:00`, reiniciar; elegir 2026 | «El certificado de 2026 se generará a partir del 01/01/2027.» y no hay botón de descarga. `GET /api/yo/certificados/2026/pdf` da 409 |
 | 1.6 | En la tabla | Se pueden descargar 2024 (25,00 €) y 2025 (80,00 €) |
-| 1.7 | Como `donante2@ong.test`: `GET /api/yo/certificados/2024/pdf` (Ana tiene uno de 2024, Pablo no) | 404 «No hay certificado de 2024…». No hay ninguna ruta con el identificador de otro Donante |
+| 1.7 | Como `donante2@ong.test`: `GET /api/yo/certificados/2024/pdf` (Ana tiene uno de 2024, Pablo no) | 404 «No tienes aportaciones confirmadas en 2024, así que no hay certificado de ese ejercicio.». No hay ninguna ruta con el identificador de otro Donante |
 | 1.8 | Apuntar el código de 2025. `AHORA_SIMULADO=2026-01-02T10:00:00+01:00`. Simular la confirmación tardía de HU-01: `UPDATE aportaciones SET estado='confirmada', fecha_cobro='2025-12-31T23:59:00+01:00' WHERE referencia='HU03-QS-0007';` y `npm run certificados -- --ejercicio 2025` | La consola indica 1 regenerado. En `/mis-certificados`, un único 2025 por **100,00 €**, fecha 02/01/2026 y código distinto (el 31/12 a las 23:59 cuenta en 2025) |
 | 1.9 | Mailpit | Correos «Tu certificado fiscal de 2024/2025 está disponible» para `voluntario2@ong.test` (paso 1.1) y «… se ha actualizado» (paso 1.8), con enlace a `/mis-certificados` y sin adjunto ni NIF/NIE |
 | 1.10 | Sin sesión, abrir `/verificar-certificado` e introducir el código nuevo de 2025 | «Certificado válido», ejercicio 2025, 100,00 €, 02/01/2026 y NIF/NIE `***1111*`. No sale el nombre, correo ni dirección |
@@ -50,7 +58,7 @@ Hacer los pasos en este orden.
 |---|---|---|
 | Pendientes, rechazadas o canceladas | Paso 1.1 | 15 € y 12 € (y los 20 € pendientes antes de 1.8) no suman |
 | Varias descargas | Descargar dos veces el PDF de 2025 | Mismo código y mismos datos |
-| Confirmación tardía sin certificado previo | Con `AHORA_SIMULADO` en 2026, insertar una aportación confirmada de 2025 para un Donante sin certificado de 2025 y lanzar la orden | Se emite y se envía el correo de «disponible» |
+| Confirmación tardía sin certificado previo | Con `AHORA_SIMULADO` en 2026, insertar una aportación confirmada de 2025 para un Donante sin certificado de 2025 y lanzar la orden | Se emite y se envía el correo de «disponible». Sin la orden manual, lo hace la tarea horaria en menos de una hora (research R3) |
 | Rechazada o cancelada | Una aportación de 2025 pasa a rechazada o cancelada sin haber estado confirmada; lanzar la orden | La consola da 0 emitidos y 0 regenerados; no hay correo |
 | Falla el correo | Parar Mailpit (`docker compose stop mailpit`), forzar una emisión y lanzar la orden; después `docker compose start mailpit` | El certificado está en `/mis-certificados`; la consola y el registro indican el correo fallido |
 | 31/12 a las 23:59 | Paso 1.8 | Cuenta en 2025 |

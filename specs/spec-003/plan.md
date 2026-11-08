@@ -145,8 +145,9 @@ Se proponen al grupo y se muestran a Rubén antes de hacerlos (principio XII):
 4. `backend/package.json`: el script `certificados` reservado pasa a ejecutar `generar.js`.
 5. `specs/plan-comun.md` §4 y §6 y «Preguntas abiertas»: ruta pública de verificación, tarea
    horaria en lugar de solo el 1 de enero, PA3.1/PA3.2 resueltas.
-6. `specs/modelo-datos.md` y `backend/src/db/migraciones/LEEME.md`: el tratamiento de la
-   regeneración (ya no «pendiente de PA3.1») y el estado de `008`.
+6. `specs/modelo-datos.md`, `backend/src/db/migraciones/LEEME.md` y `backend/src/modulos/LEEME.md`:
+   el tratamiento de la regeneración (ya no «pendiente de PA3.1»), el estado de `008` y las rutas del
+   módulo.
 
 No se tocan `servicios-comunes/`, las semillas ni las migraciones 004 y 009.
 

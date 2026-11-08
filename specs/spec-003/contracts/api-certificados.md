@@ -30,8 +30,9 @@ Rol `donante`. `:ejercicio` de 4 dígitos.
 - 400 `DATOS_INVALIDOS` si `:ejercicio` no es un año de 4 dígitos.
 - 409 `EJERCICIO_NO_CERRADO`: «El certificado de 2026 se generará a partir del 01/01/2027.» si
   `ejercicio >= ejercicioEnCurso`.
-- 404 `CERTIFICADO_NO_DISPONIBLE`: «No hay certificado de 2025: no tienes aportaciones confirmadas en
-  ese ejercicio.» si la cuenta no tiene Donante vinculado o este no tiene certificado de ese ejercicio.
+- 404 `CERTIFICADO_NO_DISPONIBLE`: «No tienes aportaciones confirmadas en 2025, así que no hay
+  certificado de ese ejercicio.» si la cuenta no tiene Donante vinculado o este no tiene certificado de
+  ese ejercicio. La interfaz muestra el mismo texto al consultar un ejercicio cerrado sin certificado.
   No se distingue de un certificado ajeno.
 
 Contenido (FR-003): nombre y CIF de la ONG, nombre, apellidos y NIF/NIE del Donante, ejercicio,

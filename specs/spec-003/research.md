@@ -53,6 +53,9 @@ verificado) se dan por cerradas.
   lo que obliga a cambiar el código de HU-01 (Nada) y acopla los dos módulos. Comparar totales cada
   hora es una consulta agregada barata y no necesita nada de HU-01. Se cambia la frase de plan-comun
   §6 («cada 1 de enero a las 00:05») con acuerdo del grupo.
+- **Plazo**: «se emite en ese momento» (caso límite de confirmación tardía) se cumple en la siguiente
+  ejecución horaria, como máximo una hora después de la confirmación, o al instante con la orden
+  manual. Lo que la spec descarta es esperar al 1 de enero siguiente; FR-008 no fija otro plazo.
 - **Alternatives considered**: solo el 1 de enero (no cumple FR-008); llamada desde el webhook de
   donaciones (cambia HU-01); cada minuto (innecesario para un documento anual).
 
@@ -118,6 +121,9 @@ verificado) se dan por cerradas.
 - **Rationale**: FR-007, FR-012 y el resumen de HU-01 («la coincidencia de correo no concede acceso»;
   el permiso invitado de ocho horas no autoriza certificados). La ruta no lleva identificadores de
   Donante ni de certificado, así que no hay forma de pedir el de otro (escenario 7).
+- **Ventana de la tarea horaria**: entre una confirmación tardía de un ejercicio sin certificado y la
+  siguiente ejecución (≤ 1 h, R3), consultar ese ejercicio da el mensaje de «sin aportaciones». Se
+  acepta en v1; al cabo de esa hora aparece el certificado y llega el correo.
 
 ## R10. Verificación pública
 
