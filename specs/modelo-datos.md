@@ -330,7 +330,10 @@ del resultado permite duplicar un mensaje físico, nunca una aportación o un ca
 | `codigo_verificacion` | TEXT | único |
 
 Único: `(donante_id, ejercicio)`. El PDF **no** se guarda: se genera al descargar con estos
-datos, así que siempre sale igual. Cómo se tratan las rectificaciones queda pendiente de PA3.1.
+datos, así que siempre sale igual. Si después de emitirlo se confirma tarde una aportación de ese
+ejercicio, se regenera la misma fila con el nuevo total, nueva `fecha_emision` y un
+`codigo_verificacion` nuevo; el anterior deja de ser válido (PA3.1, spec-003). Migración
+`008_certificados.sql`.
 
 ## actividades (spec-007)
 

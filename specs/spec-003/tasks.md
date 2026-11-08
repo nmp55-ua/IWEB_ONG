@@ -102,10 +102,10 @@ anterior a una regeneración da «no válido».
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T021 Programar la tarea en `backend/src/servidor.js` con `programarCertificados()` tras `listen` (cambio común aprobado, plan «Cambios comunes» 2)
-- [ ] T022 [P] Documentación común aprobada (plan «Cambios comunes» 5–6): `specs/plan-comun.md` §4 (ruta pública de verificación), §6 (tarea horaria y regeneración) y «Preguntas abiertas» (PA3.1/PA3.2 resueltas en spec-003); `specs/modelo-datos.md` (regeneración en `certificados_fiscales` en vez de «pendiente de PA3.1»); `backend/src/db/migraciones/LEEME.md` (008 creada) y `backend/src/modulos/LEEME.md` (sección de certificados con sus rutas)
-- [ ] T023 Ejecutar todas las pruebas en un PostgreSQL 16 desechable con dos bases: (a) `ong_test`, migrada con `npm run migrar`, para todo el backend salvo `src/modulos/donaciones/` (`npx vitest run --exclude 'src/modulos/donaciones/**'`); (b) `ong_test_hu01`, vacía, para `src/modulos/donaciones/` (sus pruebas exigen esa base y crean esquemas temporales), en ambos casos con `DATABASE_URL` = `TEST_DATABASE_URL` en la propia orden. Frontend: `npm test` y `npm run build`. Registrar resultados en `specs/spec-003/refinamiento/validacion-01.md`
-- [ ] T024 Revisar el [quickstart](quickstart.md) contra lo implementado (textos, rutas, `datos-prueba.sql` cargable sobre las semillas) y anotar en `specs/spec-003/refinamiento/validacion-01.md` que SC-001 queda pendiente de HU-02
+- [X] T021 Programar la tarea en `backend/src/servidor.js` con `programarCertificados()` tras `listen` (cambio común aprobado, plan «Cambios comunes» 2)
+- [X] T022 [P] Documentación común aprobada (plan «Cambios comunes» 5–6): `specs/plan-comun.md` §4 (ruta pública de verificación), §6 (tarea horaria y regeneración) y «Preguntas abiertas» (PA3.1/PA3.2 resueltas en spec-003); `specs/modelo-datos.md` (regeneración en `certificados_fiscales` en vez de «pendiente de PA3.1»); `backend/src/db/migraciones/LEEME.md` (008 creada) y `backend/src/modulos/LEEME.md` (sección de certificados con sus rutas)
+- [X] T023 Ejecutar todas las pruebas en un PostgreSQL 16 desechable con dos bases: (a) `ong_test`, migrada con `npm run migrar`, para todo el backend salvo `src/modulos/donaciones/` (`npx vitest run --exclude 'src/modulos/donaciones/**'`); (b) `ong_test_hu01`, vacía, para `src/modulos/donaciones/` (sus pruebas exigen esa base y crean esquemas temporales), en ambos casos con `DATABASE_URL` = `TEST_DATABASE_URL` en la propia orden. Frontend: `npm test` y `npm run build`. Registrar resultados en `specs/spec-003/refinamiento/validacion-01.md`
+- [X] T024 Revisar el [quickstart](quickstart.md) contra lo implementado (textos, rutas, `datos-prueba.sql` cargable sobre las semillas) y anotar en `specs/spec-003/refinamiento/validacion-01.md` que SC-001 queda pendiente de HU-02
 
 ---
 

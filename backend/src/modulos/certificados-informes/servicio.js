@@ -20,11 +20,13 @@ const RESTRICCION_CODIGO = 'certificados_fiscales_codigo_verificacion_key';
 const diaMadrid = (fecha) =>
   new Intl.DateTimeFormat('en-CA', { timeZone: ZONA, year: 'numeric', month: '2-digit', day: '2-digit' }).format(fecha);
 
+// Las dependencias comunes por defecto se resuelven al usarlas, no al crear el servicio: así importar
+// app.js no exige que un módulo simulado en otras pruebas (p. ej. db/pool.js) exporte todo.
 export function crearServicio({
   repositorio = repositorioComun,
-  transaccion = transaccionComun,
-  enviarCorreo = enviarCorreoComun,
-  ahora = ahoraComun,
+  transaccion = (fn) => transaccionComun(fn),
+  enviarCorreo = (...args) => enviarCorreoComun(...args),
+  ahora = () => ahoraComun(),
   generarCodigo = generarCodigoComun,
   config = configComun,
 } = {}) {

@@ -188,7 +188,7 @@ Se aplica lo de CONVENCIONES.md §5:
 | proyectos | `GET /api/proyectos` | público |
 | donaciones (001) | `POST /api/aportaciones` → URL de pago · `GET /api/aportaciones/referencia/:ref` (confirmación) · `POST /api/pasarela/webhook` | creación sin cuenta / confirmación autorizada por operación / pasarela |
 | donaciones (002) | `GET /api/yo/aportaciones?anio=2025` | donante |
-| certificados-informes (003) | `GET /api/yo/certificados` · `GET /api/yo/certificados/:ejercicio/pdf` | donante |
+| certificados-informes (003) | `GET /api/yo/certificados` · `GET /api/yo/certificados/:ejercicio/pdf` · `GET /api/certificados/verificacion?codigo` | donante / público |
 | certificados-informes (004) | `GET /api/informes?desde&hasta&proyectoId&agrupacion` · `…/csv` · `…/pdf` | administrador |
 | voluntariado (005) | `GET /api/actividades/disponibles?proyectoId&desde&hasta` · `POST /api/actividades/:id/inscripciones` · `PATCH /api/yo/inscripciones/:id` (cancelar) · `PUT /api/yo/perfil-voluntario` | público / voluntario |
 | voluntariado (006) | `GET /api/yo/calendario?desde&hasta` | voluntario |
@@ -288,6 +288,7 @@ preparación del entorno antes de las pruebas reales, no una decisión abierta d
 - **Correo** (`correo.js`, con nodemailer por SMTP; Mailpit en desarrollo, en
   `http://localhost:8025`). Correos de texto en español:
   - confirmación de aportación (001);
+  - certificado disponible o actualizado (003);
   - plaza confirmada desde la lista de espera, actividad cancelada y cambio de fecha, hora o
     lugar de una actividad publicada (007).
   Si falla el envío, se registra el error y la operación **no** se deshace.
@@ -312,10 +313,13 @@ preparación del entorno antes de las pruebas reales, no una decisión abierta d
   No hay trabajador o reintento automático programado; sin permiso para reintentar, un correo
   fallido puede seguir pendiente y SC-002 no se considera cumplido. Las reglas de los demás
   módulos de correo no cambian.
-- **Certificados (003)**: una tarea `node-cron` cada 1 de enero a las 00:05 (`Europe/Madrid`)
-  genera los certificados del ejercicio anterior. El mismo código se lanza a mano con
-  `npm run certificados -- --ejercicio 2025`, que es lo que se usa para probarlo. La generación es
-  idempotente gracias al único `(donante_id, ejercicio)`.
+- **Certificados (003)**: una tarea `node-cron` cada hora en el minuto 5 (`Europe/Madrid`; la
+  primera del año, el 1 de enero a las 00:05) emite los certificados de los ejercicios cerrados que
+  falten y regenera los que hayan cambiado de total por una confirmación tardía (PA3.1). El mismo
+  código se lanza a mano con `npm run certificados -- --ejercicio 2025`, que es lo que se usa para
+  probarlo. Es idempotente gracias al único `(donante_id, ejercicio)`. Al emitir o regenerar se
+  envía un correo de aviso sin el PDF adjunto (PA3.2); si falla, se registra y el certificado se
+  mantiene. Detalle en [spec-003/research.md](spec-003/research.md).
 
 ## 7. Dependencias entre specs y orden de construcción
 
@@ -425,9 +429,10 @@ PA1.1–PA1.8 están resueltas funcionalmente en `specs/spec-001/spec.md` y refl
 ajustes de HU-01 preparados para revisión. Sus mecanismos técnicos están definidos en el
 plan de esa historia y alineados en esta rama con el modelo común. Las preguntas de las demás specs se conservan a continuación.
 
+PA3.1 y PA3.2 están resueltas en `specs/spec-003/spec.md` (clarify de 2026-11-04 y 2026-11-08).
+
 El plan no las resuelve (principio II); se deciden en `/speckit-clarify` de cada spec y, si
 cambian el modelo, se hace con una migración nueva acordada:
-PA2.1 y PA3.1 (correcciones de aportaciones), PA3.2 (correo de
-certificado), PA4.1 (el plan ya asume solo cifras agregadas, por el principio V), PA5.1 (edad),
+PA2.1 (correcciones de aportaciones), PA4.1 (el plan ya asume solo cifras agregadas, por el principio V), PA5.1 (edad),
 PA5.2 (solapes), PA6.1 (.ics), PA7.1 (coordinador por proyecto), PA7.2 (plazo de aceptación),
 PA8.1 (plazo de registro) y PA8.2 (asistencias parciales).
