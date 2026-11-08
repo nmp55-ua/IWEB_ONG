@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MisCertificados from '../components/certificados-informes/MisCertificados.jsx';
+// spec-003. Solo para donantes con cuenta vinculada: quien decide el acceso es el servidor (GET /api/yo/certificados).
+---
+
+<Layout titulo="Mis certificados fiscales">
+  <MisCertificados client:load />
+</Layout>

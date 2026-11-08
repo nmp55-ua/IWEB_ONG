@@ -6,7 +6,7 @@ import { enviarCorreo as enviarCorreoComun } from '../../servicios-comunes/corre
 import { ZONA, ahora as ahoraComun, anioEnMadrid, rangoAnio } from '../../servicios-comunes/fechas.js';
 import { config as configComun } from '../../config.js';
 import * as repositorioComun from './repositorio.js';
-import { generarCodigo as generarCodigoComun, textoCorreo } from './textos.js';
+import { definicionPdf, generarCodigo as generarCodigoComun, textoCorreo } from './textos.js';
 
 const RESTRICCION_CODIGO = 'certificados_fiscales_codigo_verificacion_key';
 
@@ -108,7 +108,33 @@ export function crearServicio({
     return resultados;
   }
 
-  return { reconciliarEjercicio, reconciliarCerrados, ejercicioEnCurso };
+  // FR-005, FR-007 y FR-012: solo los del Donante vinculado a la cuenta (donantes.usuario_id).
+  // Coincidir en el correo no da acceso.
+  async function listarPropios(usuario) {
+    const enCurso = ejercicioEnCurso();
+    const donante = await repositorio.donanteDeUsuario(usuario.id);
+    if (!donante) return { datos: [], total: 0, ejercicioEnCurso: enCurso, vinculado: false };
+    const datos = await repositorio.certificadosDeDonante(donante.id);
+    return { datos, total: datos.length, ejercicioEnCurso: enCurso, vinculado: true };
+  }
+
+  // FR-004 y FR-006: definición del PDF del certificado propio de un ejercicio cerrado.
+  // Sin vínculo, sin certificado o de otro Donante: el mismo 404 (plan-comun §3).
+  async function pdfPropio(usuario, ejercicio) {
+    exigirCerrado(ejercicio);
+    const donante = await repositorio.donanteDeUsuario(usuario.id);
+    const certificado = donante ? await repositorio.certificadoDeDonante(donante.id, ejercicio) : null;
+    if (!certificado) {
+      throw new ErrorApi(
+        404,
+        'CERTIFICADO_NO_DISPONIBLE',
+        `No tienes aportaciones confirmadas en ${ejercicio}, así que no hay certificado de ese ejercicio.`,
+      );
+    }
+    return definicionPdf({ ong: config.ong, donante, certificado, urlFrontend: config.urlFrontend });
+  }
+
+  return { reconciliarEjercicio, reconciliarCerrados, ejercicioEnCurso, listarPropios, pdfPropio };
 }
 
 export const servicio = crearServicio();

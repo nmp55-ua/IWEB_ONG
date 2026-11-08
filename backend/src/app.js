@@ -10,6 +10,7 @@ import { rutasProyectos } from './modulos/proyectos/rutas.js';
 import { rutasVoluntariado } from './modulos/voluntariado/rutas.js';
 import { rutasActividades } from './modulos/actividades/rutas.js';
 import { rutasDonaciones, webhookDonaciones } from './modulos/donaciones/rutas.js';
+import { rutasCertificadosInformes } from './modulos/certificados-informes/rutas.js';
 
 // Cada módulo registra aquí su router cuando lo tenga (ver modulos/LEEME.md).
 
@@ -45,7 +46,7 @@ export function crearApp({ almacenSesiones } = {}) {
   api.use(rutasAuth);
   api.use(rutasProyectos);
   api.use(rutasDonaciones);
-  // api.use(rutasCertificadosInformes);  ← Rubén (spec-003, spec-004)
+  api.use(rutasCertificadosInformes); // Rubén (spec-003, spec-004)
   api.use(rutasVoluntariado); // Javi (spec-005, spec-006)
   api.use(rutasActividades); // Nicole (spec-007, spec-008)
   app.use('/api', api);

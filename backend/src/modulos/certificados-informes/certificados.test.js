@@ -356,4 +356,127 @@ describe.skipIf(!URL_PRUEBAS)('HU-03 · certificado fiscal', () => {
       error.mockRestore();
     });
   });
+
+  describe('área personal y PDF (FR-004–FR-007, FR-012)', () => {
+    let ana;
+
+    async function entrar(nombre) {
+      const agente = request.agent(app);
+      await agente
+        .post('/api/auth/sesion')
+        .send({ correo: `cert-${nombre}@prueba.test`, contrasena: CONTRASENA })
+        .expect(200);
+      return agente;
+    }
+
+    const binario = (res, fin) => {
+      const trozos = [];
+      res.on('data', (t) => trozos.push(t));
+      res.on('end', () => fin(null, Buffer.concat(trozos)));
+    };
+
+    // Ana (cuenta «ana») con certificados de 2024 y 2025; otro Donante vinculado a «otro» sin ellos.
+    beforeEach(async () => {
+      reloj = '2026-01-01T00:05:00+01:00';
+      ana = await donante({ cuenta: 'ana' });
+      await aportacion(ana.id, '25.00', '2024-05-20T12:00:00+02:00');
+      await aportacion(ana.id, '50.00', '2025-03-15T10:00:00+01:00');
+      await aportacion(ana.id, '30.00', '2025-11-10T18:30:00+01:00');
+      await servicio.reconciliarEjercicio(2024);
+      await servicio.reconciliarEjercicio(2025);
+      await donante({ cuenta: 'otro', nombre: 'Pablo' });
+    });
+
+    it('401 sin sesión y 403 sin el rol de donante', async () => {
+      expect((await request(app).get('/api/yo/certificados').expect(401)).body.error.codigo).toBe('NO_IDENTIFICADO');
+      await request(app).get('/api/yo/certificados/2025/pdf').expect(401);
+      const coordinador = await entrar('coordinador');
+      expect((await coordinador.get('/api/yo/certificados').expect(403)).body.error.codigo).toBe('SIN_PERMISO');
+      await coordinador.get('/api/yo/certificados/2025/pdf').expect(403);
+    });
+
+    it('escenarios 1 y 6: la cuenta vinculada ve sus certificados de 2024 y 2025', async () => {
+      const res = await (await entrar('ana')).get('/api/yo/certificados').expect(200);
+      expect(res.body).toEqual({
+        datos: [
+          { ejercicio: 2025, importeTotal: '80.00', fechaEmision: '2026-01-01', codigoVerificacion: expect.any(String) },
+          { ejercicio: 2024, importeTotal: '25.00', fechaEmision: '2026-01-01', codigoVerificacion: expect.any(String) },
+        ],
+        total: 2,
+        ejercicioEnCurso: 2026,
+        vinculado: true,
+      });
+    });
+
+    it('otra cuenta vinculada no ve los de Ana', async () => {
+      const res = await (await entrar('otro')).get('/api/yo/certificados').expect(200);
+      expect(res.body).toMatchObject({ datos: [], total: 0, vinculado: true });
+    });
+
+    it('FR-012: una cuenta donante sin vínculo no ve nada aunque coincida el correo', async () => {
+      const sinVinculo = await donante({ correoDonante: 'cert-sinvinculo@prueba.test' });
+      await aportacion(sinVinculo.id, '45.00', '2025-06-01T09:00:00+02:00');
+      await servicio.reconciliarEjercicio(2025);
+      const agente = await entrar('sinvinculo');
+
+      const res = await agente.get('/api/yo/certificados').expect(200);
+      expect(res.body).toEqual({ datos: [], total: 0, ejercicioEnCurso: 2026, vinculado: false });
+      await agente.get('/api/yo/certificados/2025/pdf').expect(404);
+
+      // Escenario 12: tras el vínculo verificado de HU-01 (donantes.usuario_id), ve los ya generados.
+      await pool.query('UPDATE donantes SET usuario_id = $1 WHERE id = $2', [usuarios.sinvinculo, sinVinculo.id]);
+      const despues = await agente.get('/api/yo/certificados').expect(200);
+      expect(despues.body).toMatchObject({ total: 1, vinculado: true, datos: [{ ejercicio: 2025, importeTotal: '45.00' }] });
+      await agente.get('/api/yo/certificados/2025/pdf').expect(200);
+    });
+
+    it('FR-004: descarga el PDF propio', async () => {
+      const res = await (await entrar('ana'))
+        .get('/api/yo/certificados/2025/pdf')
+        .buffer(true)
+        .parse(binario)
+        .expect(200);
+      expect(res.headers['content-type']).toBe('application/pdf');
+      expect(res.headers['content-disposition']).toBe('attachment; filename="certificado-2025.pdf"');
+      expect(res.body.subarray(0, 5).toString()).toBe('%PDF-');
+    });
+
+    it('FR-003 y caso límite: el PDF lleva siempre los mismos datos y el mismo código', async () => {
+      const primera = await servicio.pdfPropio({ id: usuarios.ana }, 2025);
+      const segunda = await servicio.pdfPropio({ id: usuarios.ana }, 2025);
+      expect(segunda).toEqual(primera);
+      const texto = JSON.stringify(primera);
+      const [c] = (await certificados(ana.id)).filter((x) => x.ejercicio === 2025);
+      expect(texto).toContain(ana.nif_nie);
+      expect(texto).toContain('Prueba Certificado');
+      expect(texto).toContain(c.codigo);
+    });
+
+    it('escenario 7: otra cuenta no puede descargar el certificado de Ana (404)', async () => {
+      const res = await (await entrar('otro')).get('/api/yo/certificados/2025/pdf').expect(404);
+      expect(res.body.error.codigo).toBe('CERTIFICADO_NO_DISPONIBLE');
+    });
+
+    it('escenario 4: ejercicio sin aportaciones → 404 con su mensaje', async () => {
+      const res = await (await entrar('ana')).get('/api/yo/certificados/2023/pdf').expect(404);
+      expect(res.body.error).toEqual({
+        codigo: 'CERTIFICADO_NO_DISPONIBLE',
+        mensaje: 'No tienes aportaciones confirmadas en 2023, así que no hay certificado de ese ejercicio.',
+      });
+    });
+
+    it('escenario 5 y FR-006: el ejercicio en curso no se ofrece (409)', async () => {
+      const res = await (await entrar('ana')).get('/api/yo/certificados/2026/pdf').expect(409);
+      expect(res.body.error).toEqual({
+        codigo: 'EJERCICIO_NO_CERRADO',
+        mensaje: 'El certificado de 2026 se generará a partir del 01/01/2027.',
+      });
+    });
+
+    it('un ejercicio mal escrito da 400', async () => {
+      const agente = await entrar('ana');
+      expect((await agente.get('/api/yo/certificados/abc/pdf').expect(400)).body.error.codigo).toBe('DATOS_INVALIDOS');
+      await agente.get('/api/yo/certificados/20251/pdf').expect(400);
+    });
+  });
 });
