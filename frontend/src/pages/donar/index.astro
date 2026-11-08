@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FormDonacion from '../../components/donaciones/FormDonacion.jsx';
+// spec-001 (Nada). Página pública: se puede donar sin cuenta. El servidor valida y decide.
+---
+
+<Layout titulo="Haz una donación">
+  <FormDonacion client:load />
+</Layout>

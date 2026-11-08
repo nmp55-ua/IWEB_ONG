@@ -31,4 +31,5 @@
 
 ## Notes
 
-- Las preguntas abiertas PAn.m se conservan en la sección "Open Questions" como pendientes de `/speckit-clarify`; no son marcadores [NEEDS CLARIFICATION].
+- PA5.1 y PA5.2 se resolvieron en `/speckit-clarify` el 04/11/2026 (ver Clarifications).
+- La sección Dependencies nombra las funciones acordadas con spec-007 y spec-008 (`promoverListaEspera`, `avisarPlazaConfirmada`…), como hace spec-007: es la forma que tiene el grupo de dejar escritos los acuerdos entre specs.
