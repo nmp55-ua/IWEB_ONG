@@ -10,7 +10,7 @@ se concreta la migración `008_certificados.sql` y las reglas que aplica el serv
 | `id` | BIGSERIAL | PK |
 | `donante_id` | BIGINT → donantes | obligatorio, `ON DELETE RESTRICT` |
 | `ejercicio` | INTEGER | obligatorio, `CHECK (ejercicio BETWEEN 2000 AND 9999)`; menor que el año en curso (lo comprueba el servicio, no es una restricción inmutable) |
-| `importe_total` | NUMERIC(10,2) | obligatorio, `CHECK (importe_total > 0)` |
+| `importe_total` | NUMERIC(15,2) | obligatorio, `CHECK (importe_total > 0)`; es la suma de un año, así que es más ancho que un importe suelto (`NUMERIC(10,2)`): con 101 aportaciones de 999.999,99 € el total ya no cabría en 10 cifras |
 | `fecha_emision` | DATE | obligatoria; día de Madrid de la emisión o de la última regeneración |
 | `codigo_verificacion` | TEXT | obligatorio, `UNIQUE`, `CHECK` de formato `^[0-9A-HJKMNP-TV-Z]{4}(-[0-9A-HJKMNP-TV-Z]{4}){3}$` |
 | `creado_en` | TIMESTAMPTZ | `DEFAULT now()` |

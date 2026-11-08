@@ -15,7 +15,7 @@ alineada en esta rama; no acredita acuerdo colectivo, revisión de Rubén ni imp
 - Tablas en plural y `snake_case`; columnas en `snake_case`; clave primaria `id` (`BIGSERIAL`);
   claves foráneas `<entidad>_id`.
 - Todas las tablas tienen `creado_en` y `actualizado_en` (`TIMESTAMPTZ`, por defecto `now()`).
-- Importes en `NUMERIC(10,2)`; horas en `NUMERIC(5,2)`. Nunca coma flotante.
+- Importes en `NUMERIC(10,2)` (los totales acumulados, más anchos: `certificados_fiscales.importe_total` es `NUMERIC(15,2)`); horas en `NUMERIC(5,2)`. Nunca coma flotante.
 - Fechas con hora en `TIMESTAMPTZ`. Los cortes por día, mes, trimestre o año se calculan en la
   zona `Europe/Madrid`.
 - **Nada se borra** (principio VI): no hay `DELETE` sobre aportaciones, suscripciones,
@@ -325,7 +325,7 @@ del resultado permite duplicar un mensaje físico, nunca una aportación o un ca
 | `id` | BIGSERIAL | PK |
 | `donante_id` | BIGINT → donantes | obligatorio |
 | `ejercicio` | INTEGER | año; menor que el año en curso |
-| `importe_total` | NUMERIC(10,2) | > 0 |
+| `importe_total` | NUMERIC(15,2) | > 0; suma de un año, por eso más ancho que un importe suelto |
 | `fecha_emision` | DATE | obligatoria |
 | `codigo_verificacion` | TEXT | único |
 

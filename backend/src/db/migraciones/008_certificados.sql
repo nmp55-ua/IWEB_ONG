@@ -2,11 +2,13 @@
 -- Un certificado por Donante y ejercicio. Al regenerarse (confirmación tardía) se actualiza la
 -- misma fila: total, fecha de emisión y código; el código anterior deja de ser válido.
 -- El PDF no se guarda: se genera al descargar con estos datos.
+-- importe_total es la suma de un año: más ancho que un importe suelto (NUMERIC(10,2), hasta
+-- 999.999,99 €) para que nunca desborde. 15 cifras caben además exactas en un Number de JS.
 CREATE TABLE certificados_fiscales (
   id                   BIGSERIAL PRIMARY KEY,
   donante_id           BIGINT NOT NULL REFERENCES donantes(id) ON DELETE RESTRICT,
   ejercicio            INTEGER NOT NULL CHECK (ejercicio BETWEEN 2000 AND 9999),
-  importe_total        NUMERIC(10,2) NOT NULL CHECK (importe_total > 0),
+  importe_total        NUMERIC(15,2) NOT NULL CHECK (importe_total > 0),
   fecha_emision        DATE NOT NULL,
   codigo_verificacion  TEXT NOT NULL UNIQUE CHECK (
                          codigo_verificacion ~ '^[0-9A-HJKMNP-TV-Z]{4}(-[0-9A-HJKMNP-TV-Z]{4}){3}$'

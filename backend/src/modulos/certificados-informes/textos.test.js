@@ -60,6 +60,9 @@ describe('formato', () => {
   it('importes en euros con 2 decimales y coma', () => {
     expect(sinEspaciosRaros(formatearEuros('80.00'))).toBe('80,00 €');
     expect(sinEspaciosRaros(formatearEuros('100.50'))).toBe('100,50 €');
+    // Total anual por encima de lo que cabe en NUMERIC(10,2): se muestra exacto.
+    expect(sinEspaciosRaros(formatearEuros('100999999.99'))).toBe('100.999.999,99 €');
+    expect(sinEspaciosRaros(formatearEuros('9999999999999.99'))).toBe('9.999.999.999.999,99 €');
   });
 
   it('fechas dd/mm/aaaa', () => {

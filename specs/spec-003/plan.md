@@ -56,7 +56,7 @@ obligatorio, la confirmación tardía y el vínculo verificado; el resto se deci
 | IV. Español | Importes `80,00 €`, fechas dd/mm/aaaa, año de Madrid con `rangoAnio`; textos de PDF, correo e interfaz en español. |
 | V. Seguridad y datos | `requiereRol('donante')` y `donantes.usuario_id = req.usuario.id` en el servicio; rutas `/yo/...` sin identificadores ajenos; la verificación pública solo muestra ejercicio, importe, fecha y NIF/NIE enmascarado; el correo no lleva el PDF ni el NIF/NIE. |
 | VI. Nada se borra | No hay `DELETE`. Regenerar actualiza la misma fila, como fijó el clarify (un certificado por Donante y ejercicio). |
-| VII–IX. Pila y convenciones | Módulo `certificados-informes` con sus cuatro capas; tabla en plural y `snake_case`, `NUMERIC(10,2)`, `creado_en`/`actualizado_en`; API camelCase, importes como texto. |
+| VII–IX. Pila y convenciones | Módulo `certificados-informes` con sus cuatro capas; tabla en plural y `snake_case`, `NUMERIC` (el total anual en `NUMERIC(15,2)` para que la suma no desborde), `creado_en`/`actualizado_en`; API camelCase, importes como texto. |
 | X–XII. Colaboración | Las tablas de HU-01 solo se **leen** con SQL propio, sin tocar su repositorio ni su servicio. Los cambios en ficheros comunes se limitan a los huecos reservados para spec-003 y se listan en «Cambios comunes» para acordarlos antes de hacerlos. |
 
 ## Project Structure

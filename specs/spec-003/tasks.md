@@ -142,3 +142,9 @@ aprobado por Rubén antes (principio XII).
 ## Phase 7: Convergence
 
 - [X] T025 Poner la dirección de verificación del PDF en su propio bloque de texto, en una sola línea, separada de la frase que la introduce, en `backend/src/modulos/certificados-informes/textos.js` (`definicionPdf`), y ajustar `textos.test.js`, per plan: research R7 / FR-011 (partial)
+
+---
+
+## Phase 8: Revisión de la PR (Nada)
+
+- [X] T026 Ampliar `certificados_fiscales.importe_total` a `NUMERIC(15,2)` en `backend/src/db/migraciones/008_certificados.sql` (con `NUMERIC(10,2)`, 101 aportaciones confirmadas de 999.999,99 € desbordaban y se deshacía la generación de todo el ejercicio, también la de otros Donantes) y añadir la regresión en `certificados.test.js` y `textos.test.js`, per FR-001 / FR-002 (partial)

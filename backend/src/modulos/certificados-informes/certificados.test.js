@@ -146,6 +146,26 @@ describe.skipIf(!URL_PRUEBAS)('HU-03 · certificado fiscal', () => {
       expect((await certificados(ana.id))[0].total).toBe('2000002.28');
     });
 
+    it('revisión de la PR: 101 aportaciones de 999.999,99 € no desbordan ni tumban a otros Donantes', async () => {
+      const grande = await donante();
+      const pequeno = await donante();
+      await pool.query(
+        `INSERT INTO aportaciones (donante_id, modalidad, importe, estado, fecha_cobro, referencia)
+         SELECT $1, 'puntual', 999999.99, 'confirmada', '2025-06-01T12:00:00+02:00', 'HU03-GRANDE-' || n
+           FROM generate_series(1, 101) AS n`,
+        [grande.id],
+      );
+      await aportacion(grande.id, '1.00', '2025-06-02T12:00:00+02:00');
+      await aportacion(pequeno.id, '1.00', '2025-06-01T12:00:00+02:00');
+
+      const r = await servicio.reconciliarEjercicio(2025);
+
+      expect(r).toMatchObject({ emitidos: 2, regenerados: 0 });
+      // 101 × 999.999,99 + 1,00, exacto al céntimo.
+      expect((await certificados(grande.id))[0].total).toBe('100999999.99');
+      expect((await certificados(pequeno.id))[0].total).toBe('1.00');
+    });
+
     it('sin aportaciones confirmadas no hay certificado', async () => {
       const ana = await donante();
       await aportacion(ana.id, '15.00', null, 'pendiente');
