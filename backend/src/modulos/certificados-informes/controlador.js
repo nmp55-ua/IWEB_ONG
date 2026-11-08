@@ -22,5 +22,11 @@ export function crearControlador(servicio = servicioComun) {
       });
       generarPdf(definicion).pipe(res);
     },
+
+    // Cualquier entrada (vacía, repetida o no textual) se trata como un código no válido.
+    async verificar(req, res) {
+      const codigo = typeof req.query.codigo === 'string' ? req.query.codigo : '';
+      res.json(await servicio.verificar(codigo));
+    },
   };
 }

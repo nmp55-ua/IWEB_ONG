@@ -479,4 +479,70 @@ describe.skipIf(!URL_PRUEBAS)('HU-03 · certificado fiscal', () => {
       await agente.get('/api/yo/certificados/20251/pdf').expect(400);
     });
   });
+
+  describe('verificación pública (FR-011)', () => {
+    const verificar = (codigo) =>
+      request(app).get('/api/certificados/verificacion').query(codigo === undefined ? {} : { codigo });
+
+    it('escenario 10: un código vigente es válido, sin sesión, con el NIF/NIE enmascarado y nada más', async () => {
+      const ana = await donante({ correoDonante: 'ana.verif@prueba.test' });
+      await aportacion(ana.id, '80.00', '2025-03-15T10:00:00+01:00');
+      await servicio.reconciliarEjercicio(2025);
+      const [c] = await certificados(ana.id);
+
+      const res = await verificar(c.codigo).expect(200);
+
+      expect(res.body).toEqual({
+        valido: true,
+        ejercicio: 2025,
+        importeTotal: '80.00',
+        fechaEmision: '2026-01-01',
+        nifNieEnmascarado: `***${ana.nif_nie.slice(4, 8)}*`,
+      });
+      const cuerpo = JSON.stringify(res.body);
+      for (const dato of ['Ana', 'Prueba Certificado', 'ana.verif@prueba.test', 'Calle de Prueba', ana.nif_nie]) {
+        expect(cuerpo).not.toContain(dato);
+      }
+    });
+
+    it('acepta el código en minúsculas, con espacios o sin guiones', async () => {
+      const ana = await donante();
+      await aportacion(ana.id, '80.00', '2025-03-15T10:00:00+01:00');
+      await servicio.reconciliarEjercicio(2025);
+      const [c] = await certificados(ana.id);
+
+      expect((await verificar(c.codigo.toLowerCase().replaceAll('-', '')).expect(200)).body.valido).toBe(true);
+      expect((await verificar(` ${c.codigo.replaceAll('-', ' ')} `).expect(200)).body.valido).toBe(true);
+    });
+
+    it('escenario 11: el código anterior a una regeneración ya no es válido; el nuevo sí', async () => {
+      const ana = await donante();
+      await aportacion(ana.id, '80.00', '2025-03-15T10:00:00+01:00');
+      const tardia = await aportacion(ana.id, '20.00', null, 'pendiente');
+      await servicio.reconciliarEjercicio(2025);
+      const [antes] = await certificados(ana.id);
+      reloj = '2026-01-02T10:00:00+01:00';
+      await pool.query(
+        "UPDATE aportaciones SET estado = 'confirmada', fecha_cobro = '2025-12-31T23:59:00+01:00' WHERE id = $1",
+        [tardia],
+      );
+      await servicio.reconciliarEjercicio(2025);
+      const [despues] = await certificados(ana.id);
+
+      expect((await verificar(antes.codigo).expect(200)).body).toEqual({ valido: false });
+      expect((await verificar(despues.codigo).expect(200)).body).toMatchObject({
+        valido: true,
+        importeTotal: '100.00',
+        fechaEmision: '2026-01-02',
+      });
+    });
+
+    it('un código inexistente, vacío, mal formado o repetido no es válido y no da datos', async () => {
+      for (const codigo of ['AAAA-BBBB-CCCC-DDDD', '', 'hola', "' OR 1=1 --", undefined]) {
+        expect((await verificar(codigo).expect(200)).body).toEqual({ valido: false });
+      }
+      const repetido = await request(app).get('/api/certificados/verificacion?codigo=a&codigo=b').expect(200);
+      expect(repetido.body).toEqual({ valido: false });
+    });
+  });
 });

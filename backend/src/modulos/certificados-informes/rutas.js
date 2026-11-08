@@ -11,3 +11,5 @@ export const rutasCertificadosInformes = Router();
 
 rutasCertificadosInformes.get('/yo/certificados', requiereRol('donante'), asincrono(c.listar));
 rutasCertificadosInformes.get('/yo/certificados/:ejercicio/pdf', requiereRol('donante'), asincrono(c.pdf));
+// Pública, sin sesión (FR-011).
+rutasCertificadosInformes.get('/certificados/verificacion', asincrono(c.verificar));

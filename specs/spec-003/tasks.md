@@ -92,9 +92,9 @@ descarga el PDF; otra cuenta recibe 404 para ese ejercicio.
 **Independent Test**: el código actual da «válido» con ejercicio, importe, fecha y `***4567*`; el
 anterior a una regeneración da «no válido».
 
-- [ ] T018 [US1] Añadir `verificar(codigo)` a `backend/src/modulos/certificados-informes/servicio.js` (`normalizarCodigo`; `{ valido: false }` si es `null` o no existe; si existe, `{ valido: true, ejercicio, importeTotal, fechaEmision, nifNieEnmascarado }`), su controlador y `GET /certificados/verificacion` pública en `backend/src/modulos/certificados-informes/rutas.js`
-- [ ] T019 [US1] Ampliar `backend/src/modulos/certificados-informes/certificados.test.js`: escenario 10 (válido sin sesión, con NIF/NIE enmascarado y sin nombre, correo ni dirección en el cuerpo); escenario 11 (código anterior tras regenerar, inexistente, vacío y mal formado → `{ valido: false }`); código en minúsculas y sin guiones → válido
-- [ ] T020 [US1] Crear `frontend/src/components/certificados-informes/VerificarCertificado.jsx` (campo «Código de verificación», botón «Comprobar»; si la URL trae `?codigo=` lo comprueba al abrir; «Certificado válido» con ejercicio, importe, fecha de emisión y NIF/NIE enmascarado, o «Código no válido» sin datos) y `frontend/src/pages/verificar-certificado.astro` con `Layout` titulado «Verificar un certificado fiscal»
+- [X] T018 [US1] Añadir `verificar(codigo)` a `backend/src/modulos/certificados-informes/servicio.js` (`normalizarCodigo`; `{ valido: false }` si es `null` o no existe; si existe, `{ valido: true, ejercicio, importeTotal, fechaEmision, nifNieEnmascarado }`), su controlador y `GET /certificados/verificacion` pública en `backend/src/modulos/certificados-informes/rutas.js`
+- [X] T019 [US1] Ampliar `backend/src/modulos/certificados-informes/certificados.test.js`: escenario 10 (válido sin sesión, con NIF/NIE enmascarado y sin nombre, correo ni dirección en el cuerpo); escenario 11 (código anterior tras regenerar, inexistente, vacío y mal formado → `{ valido: false }`); código en minúsculas y sin guiones → válido
+- [X] T020 [US1] Crear `frontend/src/components/certificados-informes/VerificarCertificado.jsx` (campo «Código de verificación», botón «Comprobar»; si la URL trae `?codigo=` lo comprueba al abrir; «Certificado válido» con ejercicio, importe, fecha de emisión y NIF/NIE enmascarado, o «Código no válido» sin datos) y `frontend/src/pages/verificar-certificado.astro` con `Layout` titulado «Verificar un certificado fiscal»
 
 **Checkpoint**: T019 pasa; la página compila.
 

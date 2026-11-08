@@ -6,7 +6,13 @@ import { enviarCorreo as enviarCorreoComun } from '../../servicios-comunes/corre
 import { ZONA, ahora as ahoraComun, anioEnMadrid, rangoAnio } from '../../servicios-comunes/fechas.js';
 import { config as configComun } from '../../config.js';
 import * as repositorioComun from './repositorio.js';
-import { definicionPdf, generarCodigo as generarCodigoComun, textoCorreo } from './textos.js';
+import {
+  definicionPdf,
+  enmascararNifNie,
+  generarCodigo as generarCodigoComun,
+  normalizarCodigo,
+  textoCorreo,
+} from './textos.js';
 
 const RESTRICCION_CODIGO = 'certificados_fiscales_codigo_verificacion_key';
 
@@ -134,7 +140,21 @@ export function crearServicio({
     return definicionPdf({ ong: config.ong, donante, certificado, urlFrontend: config.urlFrontend });
   }
 
-  return { reconciliarEjercicio, reconciliarCerrados, ejercicioEnCurso, listarPropios, pdfPropio };
+  // FR-011: pública. Solo un código vigente es válido; nunca devuelve nombre, correo ni dirección.
+  async function verificar(texto) {
+    const codigo = normalizarCodigo(texto);
+    const certificado = codigo ? await repositorio.certificadoPorCodigo(codigo) : null;
+    if (!certificado) return { valido: false };
+    return {
+      valido: true,
+      ejercicio: certificado.ejercicio,
+      importeTotal: certificado.importeTotal,
+      fechaEmision: certificado.fechaEmision,
+      nifNieEnmascarado: enmascararNifNie(certificado.nifNie),
+    };
+  }
+
+  return { reconciliarEjercicio, reconciliarCerrados, ejercicioEnCurso, listarPropios, pdfPropio, verificar };
 }
 
 export const servicio = crearServicio();
