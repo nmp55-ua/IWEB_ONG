@@ -12,7 +12,7 @@ checkout; no acredita publicación o integración en otras ramas:
 | `005_actividades.sql`                                              | Nicole · spec-007 | hecha                                                              |
 | `006_voluntariado.sql` (voluntarios, inscripciones)                | Javi · spec-005   | incorporada desde main; validación integrada en su informe         |
 | `007_asistencias.sql`                                              | Nicole · spec-008 | pendiente                                                          |
-| `008_certificados.sql`                                             | Rubén · spec-003  | pendiente                                                          |
+| `008_certificados.sql` (certificados_fiscales)                     | Rubén · spec-003  | creada en spec-003; pendiente de PR                                |
 
 Nunca se edita una migración ya subida a `main`. Los cambios posteriores usan `009` en adelante,
 pidiendo el número al grupo.

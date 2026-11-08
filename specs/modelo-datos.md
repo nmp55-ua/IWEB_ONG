@@ -15,7 +15,7 @@ alineada en esta rama; no acredita acuerdo colectivo, revisión de Rubén ni imp
 - Tablas en plural y `snake_case`; columnas en `snake_case`; clave primaria `id` (`BIGSERIAL`);
   claves foráneas `<entidad>_id`.
 - Todas las tablas tienen `creado_en` y `actualizado_en` (`TIMESTAMPTZ`, por defecto `now()`).
-- Importes en `NUMERIC(10,2)`; horas en `NUMERIC(5,2)`. Nunca coma flotante.
+- Importes en `NUMERIC(10,2)` (los totales acumulados, más anchos: `certificados_fiscales.importe_total` es `NUMERIC(15,2)`); horas en `NUMERIC(5,2)`. Nunca coma flotante.
 - Fechas con hora en `TIMESTAMPTZ`. Los cortes por día, mes, trimestre o año se calculan en la
   zona `Europe/Madrid`.
 - **Nada se borra** (principio VI): no hay `DELETE` sobre aportaciones, suscripciones,
@@ -325,12 +325,15 @@ del resultado permite duplicar un mensaje físico, nunca una aportación o un ca
 | `id` | BIGSERIAL | PK |
 | `donante_id` | BIGINT → donantes | obligatorio |
 | `ejercicio` | INTEGER | año; menor que el año en curso |
-| `importe_total` | NUMERIC(10,2) | > 0 |
+| `importe_total` | NUMERIC(15,2) | > 0; suma de un año, por eso más ancho que un importe suelto |
 | `fecha_emision` | DATE | obligatoria |
 | `codigo_verificacion` | TEXT | único |
 
 Único: `(donante_id, ejercicio)`. El PDF **no** se guarda: se genera al descargar con estos
-datos, así que siempre sale igual. Cómo se tratan las rectificaciones queda pendiente de PA3.1.
+datos, así que siempre sale igual. Si después de emitirlo se confirma tarde una aportación de ese
+ejercicio, se regenera la misma fila con el nuevo total, nueva `fecha_emision` y un
+`codigo_verificacion` nuevo; el anterior deja de ser válido (PA3.1, spec-003). Migración
+`008_certificados.sql`.
 
 ## actividades (spec-007)
 

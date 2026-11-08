@@ -57,3 +57,19 @@ solo para quien las indique. Fuente y límites en los [contratos](../../../specs
 El [quickstart](../../../specs/spec-001/quickstart.md) define pruebas aisladas y preparación
 de Stripe; la [matriz](../../../specs/spec-001/refinamiento/matriz-validacion-01.md) recoge resultados.
 Este estado en rama no equivale a aprobación o incorporación compartida.
+
+## Certificados — HU-03 en spec-003
+
+Certificado fiscal anual: emisión, regeneración por confirmación tardía, descarga en PDF y
+verificación pública. Contrato: [api-certificados.md](../../../specs/spec-003/contracts/api-certificados.md).
+
+| Método y ruta                                | Uso                                                              |
+| -------------------------------------------- | ---------------------------------------------------------------- |
+| GET `/api/yo/certificados`                   | Certificados del Donante vinculado a la cuenta (rol donante).    |
+| GET `/api/yo/certificados/:ejercicio/pdf`    | PDF propio de un ejercicio cerrado; 404 si no es propio o falta. |
+| GET `/api/certificados/verificacion?codigo=` | Pública: válido con datos mínimos o `{ valido: false }`.         |
+
+Lee `donantes` y `aportaciones` con SQL propio (solo confirmadas, por `fecha_cobro` y
+`rangoAnio`), sin usar el repositorio de donaciones. `tarea.js` (programada en `servidor.js`)
+reconcilia cada hora los ejercicios cerrados; `npm run certificados -- --ejercicio 2025` hace lo
+mismo a mano. Tabla `certificados_fiscales` en `008_certificados.sql`.
