@@ -136,3 +136,9 @@ anterior a una regeneración da «no válido».
 
 Los cambios en ficheros comunes (T009, T012, T017, T021, T022) se hacen solo con el cambio exacto
 aprobado por Rubén antes (principio XII).
+
+---
+
+## Phase 7: Convergence
+
+- [ ] T025 Poner la dirección de verificación del PDF en su propio bloque de texto, en una sola línea, separada de la frase que la introduce, en `backend/src/modulos/certificados-informes/textos.js` (`definicionPdf`), y ajustar `textos.test.js`, per plan: research R7 / FR-011 (partial)
