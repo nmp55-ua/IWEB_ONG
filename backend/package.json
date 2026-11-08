@@ -9,7 +9,7 @@
     "migrar": "node --env-file-if-exists=../.env src/db/migrar.js",
     "semillas": "node --env-file-if-exists=../.env src/db/semillas/index.js",
     "test": "vitest run",
-    "certificados": "echo \"Lo implementa spec-003\""
+    "certificados": "node --env-file-if-exists=../.env src/modulos/certificados-informes/generar.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
