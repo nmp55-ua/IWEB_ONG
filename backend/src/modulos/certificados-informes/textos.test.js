@@ -130,7 +130,11 @@ describe('definición del PDF', () => {
     }
   });
 
-  it('indica dónde verificarlo', () => {
-    expect(todo).toContain('http://ong.test/verificar-certificado?codigo=7K2M-9QXR-4D8T-1HZP');
+  it('indica dónde verificarlo, con la dirección sola en su bloque', () => {
+    const ultimo = definicion.bloques.at(-1);
+    expect(ultimo).toEqual({
+      tipo: 'texto',
+      texto: 'http://ong.test/verificar-certificado?codigo=7K2M-9QXR-4D8T-1HZP',
+    });
   });
 });

@@ -141,4 +141,4 @@ aprobado por Rubén antes (principio XII).
 
 ## Phase 7: Convergence
 
-- [ ] T025 Poner la dirección de verificación del PDF en su propio bloque de texto, en una sola línea, separada de la frase que la introduce, en `backend/src/modulos/certificados-informes/textos.js` (`definicionPdf`), y ajustar `textos.test.js`, per plan: research R7 / FR-011 (partial)
+- [X] T025 Poner la dirección de verificación del PDF en su propio bloque de texto, en una sola línea, separada de la frase que la introduce, en `backend/src/modulos/certificados-informes/textos.js` (`definicionPdf`), y ajustar `textos.test.js`, per plan: research R7 / FR-011 (partial)

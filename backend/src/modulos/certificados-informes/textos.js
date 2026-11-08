@@ -99,12 +99,9 @@ export function definicionPdf({ ong, donante, certificado, urlFrontend }) {
           ['Código de verificación', certificado.codigoVerificacion],
         ],
       },
-      {
-        tipo: 'texto',
-        texto:
-          'Puede comprobarse la autenticidad de este certificado en ' +
-          `${urlFrontend}/verificar-certificado?codigo=${certificado.codigoVerificacion}`,
-      },
+      // La dirección va sola en su línea para que no se parta y se pueda teclear desde el papel.
+      { tipo: 'texto', texto: 'Puede comprobarse la autenticidad de este certificado en esta dirección:' },
+      { tipo: 'texto', texto: `${urlFrontend}/verificar-certificado?codigo=${certificado.codigoVerificacion}` },
     ],
   };
 }
