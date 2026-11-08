@@ -30,7 +30,7 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 
 ## Phase 1: Setup
 
-- [X] T001 Crear `backend/src/db/migraciones/008_certificados.sql` con `certificados_fiscales` exactamente como [data-model.md](data-model.md) (FK `ON DELETE RESTRICT` a `donantes`, `CHECK` de ejercicio, importe > 0 y formato de código, `UNIQUE (donante_id, ejercicio)` y `UNIQUE (codigo_verificacion)`, `creado_en`/`actualizado_en`). No tocar 004 ni 009
+- [X] T001 Crear `backend/src/db/migraciones/008_certificados.sql` con `certificados_fiscales` exactamente como [data-model.md](data-model.md) (FK `ON DELETE RESTRICT` a `donantes`, `CHECK` de ejercicio, importe > 0 y formato de código, `UNIQUE (donante_id, ejercicio)` y `UNIQUE (codigo_verificacion)`, `creado_en`/`actualizado_en`). No tocar 004 ni 009. *Hecho: además, con aprobación de Rubén, se añade `008_certificados.sql` a la lista exacta de migraciones que espera `backend/src/modulos/donaciones/migraciones.test.js` (2 pruebas de HU-01 fallaban por la migración nueva); se avisa a Nada en la PR.*
 
 **Checkpoint**: `npm run migrar` sobre una base vacía aplica 001–006, 008 y 009 sin errores.
 
