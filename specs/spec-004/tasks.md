@@ -36,7 +36,7 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 
 - [ ] T001 Crear `backend/src/modulos/certificados-informes/informes.test.js` con la preparación común de las pruebas con base de datos (patrón de `certificados.test.js`):
   - `describe.skipIf(!TEST_DATABASE_URL)`;
-  - antes de cada prueba, `TRUNCATE` de `certificados_fiscales`, `inscripciones`, `actividades`, `aportaciones`, `suscripciones_socio`, `donantes`, `voluntarios`, `proyectos` y de los usuarios de prueba, con `CASCADE`;
+  - antes de cada prueba, `TRUNCATE certificados_fiscales, inscripciones, actividades, aportaciones, suscripciones_socio, donantes, voluntarios RESTART IDENTITY CASCADE`. No se vacían `proyectos` ni `usuarios`, que son comunes: cada prueba crea los suyos con nombres y correos únicos, y los proyectos sobrantes no salen en el informe porque no tienen datos;
   - ayudantes `proyecto(nombre, activo)`, `donante()`, `aportacion({ donanteId, proyectoId, modalidad, importe, estado, fechaCobro })` (crea la suscripción si es `cuota_socio`), `actividad({ proyectoId, inicio, fin, estado })`, `voluntario()` e `inscripcion(voluntarioId, actividadId)`;
   - servicio creado con `crearServicio({ ahora })`;
   - usuarios `admin` (rol `administrador`) y `donante`, y la función `entrar(nombre)` para Supertest con sesión.
@@ -160,7 +160,7 @@ filas y cifras que `GET /api/informes`.
   - frontend con `npm test` y `npm run build`.
   
   Guardar el resultado en `specs/spec-004/refinamiento/validacion-01.md`.
-- [ ] T017 Recorrer [quickstart.md](quickstart.md) contra el servidor real con `datos-prueba.sql`: pasos 2.1–2.4 y 2.6–2.11, sin las columnas de voluntariado. Anotar el resultado en `validacion-01.md`.
+- [ ] T017 Recorrer [quickstart.md](quickstart.md) contra el servidor real con `datos-prueba.sql`: pasos 2.1–2.4 y 2.6–2.11, sin las columnas de voluntariado, y cronometrar el 2.12 (SC-002) con el informe anual sin voluntariado. Anotar el resultado en `validacion-01.md`.
 
 ---
 
