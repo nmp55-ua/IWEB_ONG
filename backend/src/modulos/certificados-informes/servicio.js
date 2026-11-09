@@ -1,20 +1,35 @@
 // HU-03: reglas del certificado fiscal anual (specs/spec-003/plan.md, «Reglas de servicio.js»).
+// HU-04: informe de recaudación y voluntariado (specs/spec-004/plan.md, «Reglas de servicio.js»).
 // Las dependencias se pueden inyectar para probar con otro «ahora» o con un correo simulado.
 import { ErrorApi } from '../../middleware/errores.js';
 import { transaccion as transaccionComun } from '../../db/pool.js';
 import { enviarCorreo as enviarCorreoComun } from '../../servicios-comunes/correo.js';
-import { ZONA, ahora as ahoraComun, anioEnMadrid, rangoAnio } from '../../servicios-comunes/fechas.js';
+import { ZONA, ahora as ahoraComun, anioEnMadrid, inicioDia, rangoAnio } from '../../servicios-comunes/fechas.js';
 import { config as configComun } from '../../config.js';
 import * as repositorioComun from './repositorio.js';
 import {
   definicionPdf,
   enmascararNifNie,
+  etiquetaPeriodo,
   generarCodigo as generarCodigoComun,
   normalizarCodigo,
   textoCorreo,
 } from './textos.js';
 
 const RESTRICCION_CODIGO = 'certificados_fiscales_codigo_verificacion_key';
+
+// ── Utilidades del informe (HU-04) sobre fechas «aaaa-mm-dd» ──
+const MESES_PERIODO = { mes: 1, trimestre: 3, anio: 12 };
+const partesDia = (dia) => dia.split('-').map(Number);
+const diaIso = (fechaUtc) => fechaUtc.toISOString().slice(0, 10);
+// Último día del periodo que empieza en `inicio`.
+const finPeriodo = (agrupacion, inicio) => {
+  const [anio, mes] = partesDia(inicio);
+  return diaIso(new Date(Date.UTC(anio, mes - 1 + MESES_PERIODO[agrupacion], 0)));
+};
+const CERO_DINERO = { recaudadoPuntual: '0.00', recaudadoCuotas: '0.00', recaudadoTotal: '0.00', aportaciones: 0 };
+const CERO_VOLUNTARIADO = { actividades: 0, voluntarios: 0, horas: '0.00' };
+const ORDEN_TIPO = { proyecto: 0, fondoGeneral: 1, subtotal: 2 };
 
 // Día de Madrid de un instante como «aaaa-mm-dd».
 const diaMadrid = (fecha) =>
@@ -156,7 +171,101 @@ export function crearServicio({
     };
   }
 
-  return { reconciliarEjercicio, reconciliarCerrados, ejercicioEnCurso, listarPropios, pdfPropio, verificar };
+  // HU-04 (FR-001–FR-005, FR-007): una sola función para pantalla, CSV y PDF (research R2).
+  async function generarInforme({ desde, hasta, proyectoId = null, agrupacion = null }) {
+    if (hasta < desde) {
+      throw new ErrorApi(400, 'PERIODO_NO_VALIDO', 'La fecha de fin no puede ser anterior a la de inicio.', {
+        hasta: 'La fecha de fin no puede ser anterior a la de inicio.',
+      });
+    }
+    let proyecto = null;
+    if (proyectoId) {
+      proyecto = await repositorio.proyectoPorId(proyectoId);
+      if (!proyecto) throw new ErrorApi(404, 'PROYECTO_NO_ENCONTRADO', 'No existe ese proyecto.');
+    }
+
+    // Días completos de Madrid: [00:00 de «desde», 00:00 del día siguiente a «hasta»).
+    const [ad, md, dd] = partesDia(desde);
+    const [ah, mh, dh] = partesDia(hasta);
+    const rango = { desde: inicioDia(ad, md, dd), hasta: inicioDia(ah, mh, dh + 1), proyectoId, agrupacion };
+
+    const [dinero, voluntariado, proyectos] = await Promise.all([
+      repositorio.recaudacionInforme(rango),
+      repositorio.voluntariadoInforme({ ...rango, ahora: ahora() }),
+      repositorio.todosLosProyectos(),
+    ]);
+    const nombres = new Map(proyectos.map((p) => [p.id, p.nombre]));
+
+    // Une las dos consultas por nivel, periodo y proyecto; lo que falte en una, a cero.
+    const filasPorClave = new Map();
+    for (const [lista, ceros] of [
+      [dinero, CERO_VOLUNTARIADO],
+      [voluntariado, CERO_DINERO],
+    ]) {
+      for (const { nivel, periodo, proyectoId: id, ...cifras } of lista) {
+        const clave = `${nivel}|${periodo ?? ''}|${id ?? ''}`;
+        const fila = filasPorClave.get(clave) ?? { nivel, periodo, proyectoId: id, ...ceros };
+        filasPorClave.set(clave, Object.assign(fila, cifras));
+      }
+    }
+
+    const periodo = (inicio) =>
+      inicio && agrupacion
+        ? {
+            etiqueta: etiquetaPeriodo(agrupacion, inicio),
+            desde: inicio < desde ? desde : inicio,
+            hasta: finPeriodo(agrupacion, inicio) > hasta ? hasta : finPeriodo(agrupacion, inicio),
+          }
+        : null;
+    const aFila = ({ nivel, periodo: inicio, proyectoId: id, ...cifras }) => {
+      const tipo = nivel === 3 ? 'total' : nivel === 1 ? 'subtotal' : id ? 'proyecto' : 'fondoGeneral';
+      return {
+        tipo,
+        periodo: tipo === 'total' ? null : periodo(inicio),
+        proyecto: tipo === 'proyecto' ? { id, nombre: nombres.get(id) } : null,
+        ...cifras,
+      };
+    };
+
+    const todas = [...filasPorClave.values()];
+    const detalle = todas.filter((f) => f.nivel === 0).map(aFila);
+    const subtotales = agrupacion ? todas.filter((f) => f.nivel === 1).map(aFila) : [];
+    const total = aFila(todas.find((f) => f.nivel === 3));
+
+    const filtros = {
+      desde,
+      hasta,
+      proyecto: proyecto ? { id: proyecto.id, nombre: proyecto.nombre } : null,
+      agrupacion: agrupacion ?? null,
+    };
+    if (detalle.length === 0) return { filtros, vacio: true, filas: [] };
+
+    // Periodo ascendente; dentro, proyectos por nombre, «Fondo general» y el subtotal (R6).
+    const ordenadas = [...detalle, ...subtotales].sort(
+      (a, b) =>
+        (a.periodo?.desde ?? '').localeCompare(b.periodo?.desde ?? '') ||
+        ORDEN_TIPO[a.tipo] - ORDEN_TIPO[b.tipo] ||
+        (a.proyecto?.nombre ?? '').localeCompare(b.proyecto?.nombre ?? '', 'es'),
+    );
+    return { filtros, vacio: false, filas: [...ordenadas, total] };
+  }
+
+  // Para el filtro: todos los proyectos, también los inactivos (research R7).
+  async function listarProyectosInforme() {
+    const datos = await repositorio.todosLosProyectos();
+    return { datos, total: datos.length };
+  }
+
+  return {
+    reconciliarEjercicio,
+    reconciliarCerrados,
+    ejercicioEnCurso,
+    listarPropios,
+    pdfPropio,
+    verificar,
+    generarInforme,
+    listarProyectosInforme,
+  };
 }
 
 export const servicio = crearServicio();

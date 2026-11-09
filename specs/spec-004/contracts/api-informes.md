@@ -22,7 +22,7 @@ Errores:
 
 | HTTP | Código | Cuándo |
 |---|---|---|
-| 400 | `VALIDACION` | falta `desde` o `hasta`, no son fechas reales, `proyectoId` no es entero o `agrupacion` no es válida (`campos` con el mensaje de cada uno) |
+| 400 | `DATOS_INVALIDOS` | falta `desde` o `hasta`, no son fechas reales, `proyectoId` no es entero o `agrupacion` no es válida (`campos` con el mensaje de cada uno) |
 | 400 | `PERIODO_NO_VALIDO` | `hasta` anterior a `desde`: «La fecha de fin no puede ser anterior a la de inicio.» (`campos.hasta`) |
 | 404 | `PROYECTO_NO_ENCONTRADO` | `proyectoId` no existe: «No existe ese proyecto.» |
 

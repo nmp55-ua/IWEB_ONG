@@ -75,7 +75,7 @@ actividades celebradas, con subtotales y totales.
 **Independent Test**: con `datos-prueba.sql`, el informe de 2023 sin agrupar da las cifras de
 dinero, aportaciones y actividades de [quickstart.md](quickstart.md) §1.
 
-- [ ] T005 [US1] Añadir a `crearServicio` de `backend/src/modulos/certificados-informes/servicio.js` (plan, «Reglas de servicio.js»):
+- [X] T005 [US1] Añadir a `crearServicio` de `backend/src/modulos/certificados-informes/servicio.js` (plan, «Reglas de servicio.js»):
   - `generarInforme({ desde, hasta, proyectoId, agrupacion })`:
     - si `hasta < desde`, 400 `PERIODO_NO_VALIDO` con `campos.hasta`;
     - si hay `proyectoId` y `proyectoPorId` no existe, 404 `PROYECTO_NO_ENCONTRADO`;
@@ -88,15 +88,15 @@ dinero, aportaciones y actividades de [quickstart.md](quickstart.md) §1.
     - devuelve `{ filtros: { desde, hasta, proyecto, agrupacion }, filas, vacio }`.
   - `listarProyectosInforme()` → `{ datos, total }`.
   - Las dependencias por defecto se siguen resolviendo al usarse, para no romper otras pruebas que importan `app.js`.
-- [ ] T006 [US1] Añadir a `backend/src/modulos/certificados-informes/controlador.js` el esquema `zod` de los filtros: `desde` y `hasta` `AAAA-MM-DD` y fechas reales, `proyectoId` entero positivo opcional, `agrupacion` en `mes|trimestre|anio` opcional; si falla, 400 `VALIDACION` con `campos` (research R9). Añadir los manejadores `informe` (JSON) y `proyectosInforme`. En `backend/src/modulos/certificados-informes/rutas.js`, añadir `GET /informes` y `GET /informes/proyectos`, ambas con `requiereRol('administrador')`.
-- [ ] T007 [US1] Pruebas con base de datos en `backend/src/modulos/certificados-informes/informes.test.js`:
+- [X] T006 [US1] Añadir a `backend/src/modulos/certificados-informes/controlador.js` el esquema `zod` de los filtros: `desde` y `hasta` `AAAA-MM-DD` y fechas reales, `proyectoId` entero positivo opcional, `agrupacion` en `mes|trimestre|anio` opcional; si falla, 400 `DATOS_INVALIDOS` con `campos` (research R9). Añadir los manejadores `informe` (JSON) y `proyectosInforme`. En `backend/src/modulos/certificados-informes/rutas.js`, añadir `GET /informes` y `GET /informes/proyectos`, ambas con `requiereRol('administrador')`.
+- [X] T007 [US1] Pruebas con base de datos en `backend/src/modulos/certificados-informes/informes.test.js`:
   - escenario 1: proyectos A y B y fondo general en 2026, con una fila por cada uno más totales, en orden;
   - escenario 2: puntuales, cuotas, total y número de aportaciones por fila, exactos al céntimo, con sumas que en coma flotante no cuadran (`1.10 + 1.20`) y totales por encima de 999.999,99 €;
   - escenario 3: el filtro de A deja solo A y el total;
   - escenario 4: agrupado por trimestre, filas por trimestre y proyecto, subtotales y total, y periodos recortados (del 15/02 al 31/03 por meses);
   - escenario 5: pendientes, rechazadas, canceladas y fuera de rango (31/12 23:59 y 01/01 00:00 de Madrid) no cuentan;
   - escenario 7: periodo vacío, `vacio: true` y 200;
-  - escenario 8: `hasta < desde` da 400 `PERIODO_NO_VALIDO`, y entradas mal formadas dan 400 `VALIDACION`;
+  - escenario 8: `hasta < desde` da 400 `PERIODO_NO_VALIDO`, y entradas mal formadas dan 400 `DATOS_INVALIDOS`;
   - escenario 9: 401 sin sesión y 403 con rol donante en `GET /api/informes` y `/proyectos`;
   - casos límite:
     - proyecto inactivo con datos aparece y sin datos no;
@@ -107,8 +107,8 @@ dinero, aportaciones y actividades de [quickstart.md](quickstart.md) §1.
   - FR-009: el JSON no contiene el nombre, correo ni NIF/NIE de los donantes de prueba;
   - `proyectoId` inexistente da 404;
   - `/informes/proyectos` incluye los inactivos.
-- [ ] T008 [P] [US1] Crear `frontend/src/components/certificados-informes/informes.js` (funciones puras): `validarPeriodo({ desde, hasta })` → errores por campo (obligatorias; fin no anterior a inicio, con el mismo texto que el servidor); `consultaInforme(filtros)` → `URLSearchParams` sin vacíos; `urlExportacion(filtros, 'csv'|'pdf')`; `filasParaTabla(informe)` → filas con `nombre` (nombre, `Fondo general`, `Subtotal …`, `Total`) y `clave` única. Y sus pruebas en `frontend/src/components/certificados-informes/informes.test.js`.
-- [ ] T009 [US1] Crear `frontend/src/components/certificados-informes/Informes.jsx` (isla React, componentes comunes `Campo`, `Boton`, `Tabla`, `Aviso`, `EstadoVacio`, `formatearEuros` y `formatearHoras` de `lib/formato.js`):
+- [X] T008 [P] [US1] Crear `frontend/src/components/certificados-informes/informes.js` (funciones puras): `validarPeriodo({ desde, hasta })` → errores por campo (obligatorias; fin no anterior a inicio, con el mismo texto que el servidor); `consultaInforme(filtros)` → `URLSearchParams` sin vacíos; `urlExportacion(filtros, 'csv'|'pdf')`; `filasParaTabla(informe)` → filas con `nombre` (nombre, `Fondo general`, `Subtotal …`, `Total`) y `clave` única. Y sus pruebas en `frontend/src/components/certificados-informes/informes.test.js`.
+- [X] T009 [US1] Crear `frontend/src/components/certificados-informes/Informes.jsx` (isla React, componentes comunes `Campo`, `Boton`, `Tabla`, `Aviso`, `EstadoVacio`, `formatearEuros` y `formatearHoras` de `lib/formato.js`):
   - formulario con «Desde», «Hasta», «Proyecto» (de `GET /api/informes/proyectos`, con «Todos» e indicación «(inactivo)») y «Agrupación» («Sin agrupar», «Por mes», «Por trimestre», «Por año»);
   - «Generar» valida con `validarPeriodo` y muestra los errores del servidor junto a su campo;
   - tabla con las columnas del contrato, con subtotales y total en negrita;
@@ -116,7 +116,7 @@ dinero, aportaciones y actividades de [quickstart.md](quickstart.md) §1.
   - con 401 o 403, un `Aviso` de acceso denegado.
   
   Crear también `frontend/src/pages/informes.astro` con `Layout` y la isla.
-- [ ] T010 [US1] **Cambio común (mostrar antes a Rubén)**: descomentar en `frontend/src/components/comunes/Menu.jsx` el enlace reservado `{ rol: 'administrador', href: '/informes', texto: 'Informes' }`.
+- [X] T010 [US1] **Cambio común (mostrar antes a Rubén)**: descomentar en `frontend/src/components/comunes/Menu.jsx` el enlace reservado `{ rol: 'administrador', href: '/informes', texto: 'Informes' }`.
 
 **Checkpoint**: `npx vitest run src/modulos/certificados-informes` y `npm test` del frontend pasan; el paso 2.1 del quickstart (sin las columnas de voluntariado) se ve en `/informes`.
 

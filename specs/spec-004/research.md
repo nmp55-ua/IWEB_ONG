@@ -124,7 +124,7 @@ Decisiones técnicas de [plan.md](plan.md). Las reglas funcionales están en [sp
   - `proyectoId` opcional, entero positivo;
   - `agrupacion` opcional, `mes`, `trimestre` o `anio`.
   
-  Si falla, 400 `VALIDACION` con `campos`. Si `hasta < desde`, 400 `PERIODO_NO_VALIDO` con
+  Si falla, 400 `DATOS_INVALIDOS` con `campos`. Si `hasta < desde`, 400 `PERIODO_NO_VALIDO` con
   «La fecha de fin no puede ser anterior a la de inicio.» y `campos.hasta` (FR-002). No hay
   límite de duración: un informe de muchos años por meses es grande, pero correcto (principio I).
 - **Rationale**: formato común de errores (plan-comun §4).

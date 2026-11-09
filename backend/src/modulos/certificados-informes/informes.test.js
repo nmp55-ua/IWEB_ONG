@@ -154,4 +154,259 @@ describe.skipIf(!URL_PRUEBAS)('HU-04 · informes', () => {
       ]);
     });
   });
+
+  // Cifras de una fila sin tipo, periodo ni proyecto, para comparar.
+  const cifras = ({ tipo, periodo, proyecto, ...resto }) => resto;
+  const ceros = { recaudadoPuntual: '0.00', recaudadoCuotas: '0.00', recaudadoTotal: '0.00', aportaciones: 0, actividades: 0, voluntarios: 0, horas: '0.00' };
+  const AÑO_2026 = { desde: '2026-01-01', hasta: '2026-12-31' };
+
+  describe('informe por proyecto y periodo (US1)', () => {
+    let a;
+    let b;
+    let donanteA;
+
+    // Proyectos A y B y fondo general con aportaciones y actividades en 2026.
+    beforeEach(async () => {
+      a = await proyecto('A Agua');
+      b = await proyecto('B Comedor');
+      donanteA = await donante();
+      const d2 = await donante();
+      await aportacion({ donanteId: donanteA.id, proyectoId: a.id, importe: '50.00', fechaCobro: '2026-02-15T10:00:00+01:00' });
+      await aportacion({ donanteId: d2.id, proyectoId: a.id, modalidad: 'cuota_socio', importe: '10.00', fechaCobro: '2026-03-01T08:00:00+01:00' });
+      await aportacion({ donanteId: d2.id, proyectoId: a.id, importe: '25.50', fechaCobro: '2026-05-10T12:00:00+02:00' });
+      await aportacion({ donanteId: d2.id, proyectoId: b.id, importe: '100.00', fechaCobro: '2026-12-31T23:30:00+01:00' });
+      await aportacion({ donanteId: donanteA.id, importe: '30.00', fechaCobro: '2026-07-01T11:00:00+02:00' });
+      await actividad({ proyectoId: a.id, inicio: '2026-03-18T10:00:00+01:00' });
+      await actividad({ proyectoId: b.id, inicio: '2026-09-15T10:00:00+02:00' });
+    });
+
+    it('escenarios 1 y 2: una fila por proyecto, otra de fondo general y la de totales, con todas las cifras', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026 });
+
+      expect(informe.vacio).toBe(false);
+      expect(informe.filtros).toEqual({ ...AÑO_2026, proyecto: null, agrupacion: null });
+      expect(informe.filas.map((f) => [f.tipo, f.proyecto?.nombre ?? null])).toEqual([
+        ['proyecto', a.nombre],
+        ['proyecto', b.nombre],
+        ['fondoGeneral', null],
+        ['total', null],
+      ]);
+      const [filaA, filaB, fondo, total] = informe.filas;
+      expect(filaA).toMatchObject({ periodo: null, proyecto: { id: a.id, nombre: a.nombre } });
+      expect(cifras(filaA)).toEqual({ ...ceros, recaudadoPuntual: '75.50', recaudadoCuotas: '10.00', recaudadoTotal: '85.50', aportaciones: 3, actividades: 1 });
+      expect(cifras(filaB)).toEqual({ ...ceros, recaudadoPuntual: '100.00', recaudadoTotal: '100.00', aportaciones: 1, actividades: 1 });
+      expect(cifras(fondo)).toEqual({ ...ceros, recaudadoPuntual: '30.00', recaudadoTotal: '30.00', aportaciones: 1 });
+      expect(cifras(total)).toEqual({ ...ceros, recaudadoPuntual: '205.50', recaudadoCuotas: '10.00', recaudadoTotal: '215.50', aportaciones: 5, actividades: 2 });
+    });
+
+    it('escenario 3: con el filtro de A solo aparecen sus cifras', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026, proyectoId: a.id });
+      expect(informe.filtros.proyecto).toEqual({ id: a.id, nombre: a.nombre });
+      expect(informe.filas.map((f) => f.tipo)).toEqual(['proyecto', 'total']);
+      expect(informe.filas[0].proyecto.id).toBe(a.id);
+      expect(cifras(informe.filas[1])).toEqual(cifras(informe.filas[0]));
+    });
+
+    it('escenario 4: por trimestre, filas por trimestre y proyecto, subtotales y total', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026, agrupacion: 'trimestre' });
+      const resumen = informe.filas.map((f) => [f.periodo?.etiqueta ?? null, f.tipo, f.proyecto?.nombre ?? null, f.recaudadoTotal, f.actividades]);
+      expect(resumen).toEqual([
+        ['T1 2026', 'proyecto', a.nombre, '60.00', 1],
+        ['T1 2026', 'subtotal', null, '60.00', 1],
+        ['T2 2026', 'proyecto', a.nombre, '25.50', 0],
+        ['T2 2026', 'subtotal', null, '25.50', 0],
+        ['T3 2026', 'proyecto', b.nombre, '0.00', 1],
+        ['T3 2026', 'fondoGeneral', null, '30.00', 0],
+        ['T3 2026', 'subtotal', null, '30.00', 1],
+        ['T4 2026', 'proyecto', b.nombre, '100.00', 0],
+        ['T4 2026', 'subtotal', null, '100.00', 0],
+        [null, 'total', null, '215.50', 2],
+      ]);
+      expect(informe.filas[0].periodo).toEqual({ etiqueta: 'T1 2026', desde: '2026-01-01', hasta: '2026-03-31' });
+      expect(informe.filas[7].periodo).toEqual({ etiqueta: 'T4 2026', desde: '2026-10-01', hasta: '2026-12-31' });
+    });
+
+    it('por mes y por año; los periodos se recortan al rango pedido', async () => {
+      const meses = await servicio.generarInforme({ desde: '2026-02-15', hasta: '2026-03-20', agrupacion: 'mes' });
+      expect(meses.filas.map((f) => f.periodo)).toEqual([
+        { etiqueta: '02/2026', desde: '2026-02-15', hasta: '2026-02-28' },
+        { etiqueta: '02/2026', desde: '2026-02-15', hasta: '2026-02-28' },
+        { etiqueta: '03/2026', desde: '2026-03-01', hasta: '2026-03-20' },
+        { etiqueta: '03/2026', desde: '2026-03-01', hasta: '2026-03-20' },
+        null,
+      ]);
+      const anios = await servicio.generarInforme({ desde: '2025-06-01', hasta: '2026-12-31', agrupacion: 'anio' });
+      expect(anios.filas.filter((f) => f.tipo === 'subtotal').map((f) => [f.periodo.etiqueta, f.periodo.desde, f.recaudadoTotal])).toEqual([
+        ['2026', '2026-01-01', '215.50'],
+      ]);
+    });
+
+    it('escenario 5 y caso límite: no cuentan las no confirmadas ni las de fuera del periodo (hora de Madrid)', async () => {
+      const c = await proyecto('C Límites');
+      for (const estado of ['pendiente', 'rechazada', 'cancelada']) {
+        await aportacion({ donanteId: donanteA.id, proyectoId: c.id, importe: '40.00', estado });
+      }
+      await aportacion({ donanteId: donanteA.id, proyectoId: c.id, importe: '20.00', fechaCobro: '2027-01-01T00:00:00+01:00' });
+      await aportacion({ donanteId: donanteA.id, proyectoId: c.id, importe: '60.00', fechaCobro: '2025-12-31T23:59:59+01:00' });
+      await aportacion({ donanteId: donanteA.id, proyectoId: c.id, importe: '7.00', fechaCobro: '2026-01-01T00:00:00+01:00' });
+
+      const informe = await servicio.generarInforme({ ...AÑO_2026, proyectoId: c.id });
+
+      expect(cifras(informe.filas[0])).toEqual({ ...ceros, recaudadoPuntual: '7.00', recaudadoTotal: '7.00', aportaciones: 1 });
+    });
+
+    it('suma al céntimo, también por encima del máximo de una aportación', async () => {
+      const c = await proyecto('C Céntimos');
+      for (const importe of ['1.10', '1.20', '999999.99', '999999.99']) {
+        await aportacion({ donanteId: donanteA.id, proyectoId: c.id, importe, fechaCobro: '2026-06-01T12:00:00+02:00' });
+      }
+      const informe = await servicio.generarInforme({ ...AÑO_2026, proyectoId: c.id });
+      expect(informe.filas[0].recaudadoTotal).toBe('2000002.28');
+    });
+
+    it('SC-001: cada subtotal y el total cuadran con sus filas', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026, agrupacion: 'mes' });
+      const centimos = (t) => Math.round(Number(t) * 100);
+      const sumar = (filas, clave) => filas.reduce((s, f) => s + (typeof f[clave] === 'number' ? f[clave] : centimos(f[clave])), 0);
+      const detalle = informe.filas.filter((f) => f.tipo === 'proyecto' || f.tipo === 'fondoGeneral');
+      const total = informe.filas.at(-1);
+      for (const clave of ['recaudadoPuntual', 'recaudadoCuotas', 'recaudadoTotal', 'aportaciones', 'actividades', 'horas']) {
+        const valor = typeof total[clave] === 'number' ? total[clave] : centimos(total[clave]);
+        expect(sumar(detalle, clave)).toBe(valor);
+        for (const sub of informe.filas.filter((f) => f.tipo === 'subtotal')) {
+          const delPeriodo = detalle.filter((f) => f.periodo.etiqueta === sub.periodo.etiqueta);
+          expect(sumar(delPeriodo, clave)).toBe(typeof sub[clave] === 'number' ? sub[clave] : centimos(sub[clave]));
+        }
+      }
+    });
+
+    it('escenario 7: un periodo sin datos da un informe vacío, no un error', async () => {
+      expect(await servicio.generarInforme({ desde: '2019-01-01', hasta: '2019-12-31', agrupacion: 'mes' })).toEqual({
+        filtros: { desde: '2019-01-01', hasta: '2019-12-31', proyecto: null, agrupacion: 'mes' },
+        vacio: true,
+        filas: [],
+      });
+    });
+
+    it('casos límite de proyectos: el inactivo con datos aparece; el activo sin datos, no', async () => {
+      const inactivo = await proyecto('Campaña vieja', false);
+      await proyecto('Sin datos');
+      await aportacion({ donanteId: donanteA.id, proyectoId: inactivo.id, importe: '70.00', fechaCobro: '2026-11-20T09:00:00+01:00' });
+
+      const nombres = (await servicio.generarInforme({ ...AÑO_2026 })).filas.map((f) => f.proyecto?.nombre).filter(Boolean);
+
+      expect(nombres).toEqual([a.nombre, b.nombre, inactivo.nombre]);
+    });
+
+    it('casos límite de actividades: solo cuentan las celebradas, en el periodo de su inicio', async () => {
+      const c = await proyecto('C Actividades');
+      await actividad({ proyectoId: c.id, inicio: '2026-04-01T10:00:00+02:00' }); // celebrada sin asistencias
+      await actividad({ proyectoId: c.id, inicio: '2026-04-02T10:00:00+02:00', estado: 'cancelada' });
+      await actividad({ proyectoId: c.id, inicio: '2026-04-03T10:00:00+02:00', estado: 'borrador' });
+      await actividad({ proyectoId: c.id, inicio: '2026-12-31T22:00:00+01:00', fin: '2027-01-01T02:00:00+01:00' });
+      await actividad({ proyectoId: c.id, inicio: '2027-01-01T00:30:00+01:00' }); // otro año
+
+      const anual = await servicio.generarInforme({ ...AÑO_2026, proyectoId: c.id });
+      expect(cifras(anual.filas[0])).toEqual({ ...ceros, actividades: 2 });
+
+      // Con «ahora» antes de la cena del 31/12, aún no está celebrada.
+      const antes = crearServicio({ ahora: () => new Date('2026-12-31T12:00:00+01:00') });
+      expect((await antes.generarInforme({ ...AÑO_2026, proyectoId: c.id })).filas[0].actividades).toBe(1);
+    });
+
+    it('errores: fin anterior al inicio y proyecto inexistente', async () => {
+      await expect(servicio.generarInforme({ desde: '2026-12-31', hasta: '2026-01-01' })).rejects.toMatchObject({
+        estado: 400,
+        codigo: 'PERIODO_NO_VALIDO',
+        message: 'La fecha de fin no puede ser anterior a la de inicio.',
+        campos: { hasta: 'La fecha de fin no puede ser anterior a la de inicio.' },
+      });
+      await expect(servicio.generarInforme({ ...AÑO_2026, proyectoId: '999999' })).rejects.toMatchObject({
+        estado: 404,
+        codigo: 'PROYECTO_NO_ENCONTRADO',
+      });
+    });
+
+    it('un solo día cuenta completo (desde y hasta iguales)', async () => {
+      const informe = await servicio.generarInforme({ desde: '2026-12-31', hasta: '2026-12-31' });
+      expect(informe.filas.at(-1).recaudadoTotal).toBe('100.00');
+    });
+  });
+
+  describe('API (FR-008, FR-009)', () => {
+    it('escenario 9: 401 sin sesión y 403 sin rol de administrador', async () => {
+      for (const ruta of ['/api/informes?desde=2026-01-01&hasta=2026-12-31', '/api/informes/proyectos']) {
+        expect((await request(app).get(ruta)).status).toBe(401);
+        const donanteSesion = await entrar('donante');
+        const res = await donanteSesion.get(ruta);
+        expect(res.status).toBe(403);
+        expect(res.body.error.codigo).toBe('SIN_PERMISO');
+      }
+    });
+
+    it('el administrador obtiene el informe y nunca datos personales', async () => {
+      const p = await proyecto('API');
+      const d = await donante();
+      await aportacion({ donanteId: d.id, proyectoId: p.id, importe: '12.00', fechaCobro: '2026-03-01T10:00:00+01:00' });
+      const act = await actividad({ proyectoId: p.id, inicio: '2026-03-02T10:00:00+01:00' });
+      await inscripcion((await voluntario()).id, act.id);
+
+      const admin = await entrar('admin');
+      const res = await admin.get('/api/informes').query({ ...AÑO_2026, agrupacion: 'trimestre' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.filas.at(-1)).toMatchObject({ tipo: 'total', recaudadoTotal: '12.00', aportaciones: 1, actividades: 1 });
+      const texto = JSON.stringify(res.body);
+      for (const dato of [d.nifNie, d.correo, 'Donante Informe', 'Calle Privada', 'Secreta Informe', 'vol-secreta@prueba.test', '600 000 000']) {
+        expect(texto).not.toContain(dato);
+      }
+    });
+
+    it('escenario 8 y validación: 400 con el mensaje junto a su campo', async () => {
+      const admin = await entrar('admin');
+      const fin = await admin.get('/api/informes').query({ desde: '2026-12-31', hasta: '2026-01-01' });
+      expect(fin.status).toBe(400);
+      expect(fin.body.error).toEqual({
+        codigo: 'PERIODO_NO_VALIDO',
+        mensaje: 'La fecha de fin no puede ser anterior a la de inicio.',
+        campos: { hasta: 'La fecha de fin no puede ser anterior a la de inicio.' },
+      });
+
+      const casos = [
+        [{ hasta: '2026-12-31' }, 'desde'],
+        [{ desde: '2026-01-01' }, 'hasta'],
+        [{ desde: '01/01/2026', hasta: '2026-12-31' }, 'desde'],
+        [{ desde: '2026-02-30', hasta: '2026-12-31' }, 'desde'],
+        [{ ...AÑO_2026, proyectoId: 'abc' }, 'proyectoId'],
+        [{ ...AÑO_2026, agrupacion: 'semana' }, 'agrupacion'],
+      ];
+      for (const [consulta, campo] of casos) {
+        const res = await admin.get('/api/informes').query(consulta);
+        expect(res.status, JSON.stringify(consulta)).toBe(400);
+        expect(res.body.error.codigo).toBe('DATOS_INVALIDOS');
+        expect(Object.keys(res.body.error.campos)).toContain(campo);
+      }
+
+      const vacios = await admin.get('/api/informes').query({ ...AÑO_2026, proyectoId: '', agrupacion: '' });
+      expect(vacios.status).toBe(200);
+      const inexistente = await admin.get('/api/informes').query({ ...AÑO_2026, proyectoId: '999999' });
+      expect(inexistente.status).toBe(404);
+    });
+
+    it('la lista de proyectos del filtro incluye los inactivos', async () => {
+      const activo = await proyecto('Lista activo');
+      const inactivo = await proyecto('Lista inactivo', false);
+      const admin = await entrar('admin');
+      const res = await admin.get('/api/informes/proyectos');
+      expect(res.status).toBe(200);
+      expect(res.body.total).toBe(res.body.datos.length);
+      expect(res.body.datos).toEqual(
+        expect.arrayContaining([
+          { id: activo.id, nombre: activo.nombre, activo: true },
+          { id: inactivo.id, nombre: inactivo.nombre, activo: false },
+        ]),
+      );
+    });
+  });
+
 });

@@ -1,4 +1,5 @@
 // HU-03: valida la entrada y da forma a la respuesta (contrato: specs/spec-003/contracts/api-certificados.md).
+// HU-04: filtros del informe (contrato: specs/spec-004/contracts/api-informes.md).
 import { z } from 'zod';
 import { generarPdf } from '../../servicios-comunes/pdf.js';
 import { servicio as servicioComun } from './servicio.js';
@@ -6,6 +7,38 @@ import { servicio as servicioComun } from './servicio.js';
 const esquemaEjercicio = z.object({
   ejercicio: z.string().regex(/^\d{4}$/, 'Indica un ejercicio de 4 cifras.'),
 });
+
+// «aaaa-mm-dd» que además es una fecha real (no 2026-02-30).
+const esFechaReal = (texto) => {
+  const [anio, mes, dia] = texto.split('-').map(Number);
+  const fecha = new Date(Date.UTC(anio, mes - 1, dia));
+  return fecha.getUTCFullYear() === anio && fecha.getUTCMonth() === mes - 1 && fecha.getUTCDate() === dia;
+};
+const fechaDia = (nombre) =>
+  z
+    .string({ required_error: `Indica la fecha ${nombre}.` })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, `Indica la fecha ${nombre} como aaaa-mm-dd.`)
+    .refine(esFechaReal, `La fecha ${nombre} no existe.`);
+
+const esquemaInforme = z.object({
+  desde: fechaDia('de inicio'),
+  hasta: fechaDia('de fin'),
+  proyectoId: z
+    .string()
+    .regex(/^[1-9]\d{0,17}$/, 'Elige un proyecto de la lista.')
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
+  agrupacion: z
+    .enum(['mes', 'trimestre', 'anio'], { errorMap: () => ({ message: 'Elige mes, trimestre o año.' }) })
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
+});
+
+// Solo los parámetros del informe, como texto (Express puede dar arrays si se repiten).
+export function filtrosInforme(query) {
+  const { desde, hasta, proyectoId, agrupacion } = esquemaInforme.parse(query);
+  return { desde, hasta, proyectoId: proyectoId ?? null, agrupacion: agrupacion ?? null };
+}
 
 export function crearControlador(servicio = servicioComun) {
   return {
@@ -27,6 +60,15 @@ export function crearControlador(servicio = servicioComun) {
     async verificar(req, res) {
       const codigo = typeof req.query.codigo === 'string' ? req.query.codigo : '';
       res.json(await servicio.verificar(codigo));
+    },
+
+    // HU-04: el JSON de la pantalla.
+    async informe(req, res) {
+      res.json(await servicio.generarInforme(filtrosInforme(req.query)));
+    },
+
+    async proyectosInforme(req, res) {
+      res.json(await servicio.listarProyectosInforme());
     },
   };
 }

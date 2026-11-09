@@ -115,7 +115,7 @@ fichero propio, para no mezclarlas con las del certificado.
 | `generarInforme({ desde, hasta, proyectoId, agrupacion })` | `hasta < desde` → error. Si hay `proyectoId`, el proyecto debe existir. Rango `[inicioDia(desde), inicioDia(hasta+1))`. Dinero: confirmadas por `fecha_cobro`; voluntariado: celebradas (`publicada`, `inicio <= ahora()`) por `inicio`. Cada consulta con `GROUPING SETS ((periodo, proyecto), (periodo), ())`. Une ambas por nivel, periodo y proyecto, rellena ceros, omite filas sin datos, quita subtotales si no se agrupa, ordena (R6) y pone etiquetas y límites de periodo (R4). Devuelve `{ filtros, filas, vacio }`. | 400 `PERIODO_NO_VALIDO` · 404 `PROYECTO_NO_ENCONTRADO` |
 | `listarProyectosInforme()` | Todos los proyectos, activos e inactivos, por nombre (R7). | — |
 
-El controlador valida el formato (400 `VALIDACION`) y, para `/csv` y `/pdf`, pasa la salida de
+El controlador valida el formato (400 `DATOS_INVALIDOS`) y, para `/csv` y `/pdf`, pasa la salida de
 `generarInforme` a `csvInforme` o `definicionPdfInforme` de `textos.js`. Las 4 rutas llevan
 `requiereRol('administrador')` (401 · 403).
 
