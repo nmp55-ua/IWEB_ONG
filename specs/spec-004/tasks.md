@@ -133,6 +133,8 @@ filas y cifras que `GET /api/informes`.
   - `csvInforme` usa `generarCsv` con las columnas de `COLUMNAS_INFORME`, importes `1234,50`, horas con un decimal y «Proyecto» según `nombreFilaInforme`; un informe vacío solo lleva la cabecera;
   - `definicionPdfInforme` lleva el título, el bloque «Periodo: dd/mm/aaaa – dd/mm/aaaa · Proyecto: … · Agrupación: …» y la tabla con `formatearEuros` y `formatearHorasInforme`; un informe vacío lleva el mensaje de FR-007 en lugar de la tabla.
   
+  *Hecho: con aprobación de Rubén, en `servicios-comunes/pdf.js` cada fila de tabla ocupa lo que su celda más alta y pasa de página si no cabe (con 9 columnas se solapaban), y se añade `tamanoLetra` opcional (el informe usa 7,5). Prueba en `comunes.test.js`; el certificado de HU-03 no cambia.*
+  
   Pruebas en `textos.test.js`:
   - mismas filas y cifras en las dos salidas;
   - BOM, `;` y comillas en un nombre de proyecto con `;`;
@@ -151,7 +153,7 @@ filas y cifras que `GET /api/informes`.
 
 ## Phase 5: Polish y documentación común
 
-- [ ] T015 **Cambio común (mostrar antes a Rubén)**:
+- [X] T015 **Cambio común (mostrar antes a Rubén)**:
   - `specs/plan-comun.md` §4: añadir `GET /api/informes/proyectos` a la fila de certificados-informes (004); en «Preguntas abiertas», quitar PA4.1 de la lista pendiente y anotarla como resuelta en `specs/spec-004/spec.md`;
   - `backend/src/modulos/LEEME.md`: sección de HU-04 con sus 4 rutas.
 - [ ] T016 Ejecutar todas las pruebas sobre un PostgreSQL desechable:

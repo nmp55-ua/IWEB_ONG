@@ -143,7 +143,13 @@ Se proponen al grupo y se muestran a Rubén antes de hacerlos (principio XII):
    `GET /api/informes/proyectos`; y en «Preguntas abiertas», PA4.1 pasa a resuelta.
 3. `backend/src/modulos/LEEME.md`: sección de HU-04 con las rutas del módulo.
 
-No se tocan `app.js`, `servicios-comunes/`, las semillas ni ninguna migración.
+4. `backend/src/servicios-comunes/pdf.js` (aprobado por Rubén el 2026-11-09, durante la
+   implementación): cada fila de una tabla ocupa lo que su celda más alta y pasa de página si no
+   cabe (antes, una celda en dos líneas se solapaba con la fila siguiente). Además, `tamanoLetra`
+   opcional por tabla, por defecto 11; el informe usa 7,5 para sus 9 columnas. El PDF del
+   certificado (HU-03) no cambia de aspecto. Con prueba en `servicios-comunes/comunes.test.js`.
+
+No se tocan `app.js`, las semillas ni ninguna migración.
 
 ## Complexity Tracking
 
