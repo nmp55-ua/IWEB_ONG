@@ -2,6 +2,7 @@
 // HU-04: filtros del informe (contrato: specs/spec-004/contracts/api-informes.md).
 import { z } from 'zod';
 import { generarPdf } from '../../servicios-comunes/pdf.js';
+import { csvInforme, definicionPdfInforme, nombreFicheroInforme } from './textos.js';
 import { servicio as servicioComun } from './servicio.js';
 
 const esquemaEjercicio = z.object({
@@ -65,6 +66,27 @@ export function crearControlador(servicio = servicioComun) {
     // HU-04: el JSON de la pantalla.
     async informe(req, res) {
       res.json(await servicio.generarInforme(filtrosInforme(req.query)));
+    },
+
+    // CSV y PDF salen de la MISMA llamada al servicio que la pantalla (FR-006, research R2).
+    async csv(req, res) {
+      const filtros = filtrosInforme(req.query);
+      const informe = await servicio.generarInforme(filtros);
+      res.set({
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="${nombreFicheroInforme(filtros, 'csv')}"`,
+      });
+      res.send(csvInforme(informe));
+    },
+
+    async pdfInforme(req, res) {
+      const filtros = filtrosInforme(req.query);
+      const informe = await servicio.generarInforme(filtros);
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${nombreFicheroInforme(filtros, 'pdf')}"`,
+      });
+      generarPdf(definicionPdfInforme(informe)).pipe(res);
     },
 
     async proyectosInforme(req, res) {

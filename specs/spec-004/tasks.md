@@ -129,7 +129,7 @@ dinero, aportaciones y actividades de [quickstart.md](quickstart.md) §1.
 **Independent Test**: el informe de 2023 por trimestres exportado en CSV y PDF tiene las mismas
 filas y cifras que `GET /api/informes`.
 
-- [ ] T011 [US2] Añadir a `backend/src/modulos/certificados-informes/textos.js` las funciones `csvInforme(informe)` y `definicionPdfInforme(informe)` (research R8):
+- [X] T011 [US2] Añadir a `backend/src/modulos/certificados-informes/textos.js` las funciones `csvInforme(informe)` y `definicionPdfInforme(informe)` (research R8):
   - `csvInforme` usa `generarCsv` con las columnas de `COLUMNAS_INFORME`, importes `1234,50`, horas con un decimal y «Proyecto» según `nombreFilaInforme`; un informe vacío solo lleva la cabecera;
   - `definicionPdfInforme` lleva el título, el bloque «Periodo: dd/mm/aaaa – dd/mm/aaaa · Proyecto: … · Agrupación: …» y la tabla con `formatearEuros` y `formatearHorasInforme`; un informe vacío lleva el mensaje de FR-007 en lugar de la tabla.
   
@@ -137,13 +137,13 @@ filas y cifras que `GET /api/informes`.
   - mismas filas y cifras en las dos salidas;
   - BOM, `;` y comillas en un nombre de proyecto con `;`;
   - ningún dato personal.
-- [ ] T012 [US2] Añadir a `controlador.js` los manejadores `csv` y `pdf`. Los dos llaman a la misma `servicio.generarInforme(filtros)` que `informe`, con `Content-Type` y `Content-Disposition: attachment; filename="informe-<desde>-<hasta>.csv|pdf"`. El PDF se escribe con `generarPdf(definicion).pipe(res)`. Añadir a `rutas.js` las rutas `GET /informes/csv` y `GET /informes/pdf` con `requiereRol('administrador')`.
-- [ ] T013 [US2] Pruebas con base de datos en `informes.test.js`:
+- [X] T012 [US2] Añadir a `controlador.js` los manejadores `csv` y `pdf`. Los dos llaman a la misma `servicio.generarInforme(filtros)` que `informe`, con `Content-Type` y `Content-Disposition: attachment; filename="informe-<desde>-<hasta>.csv|pdf"`. El PDF se escribe con `generarPdf(definicion).pipe(res)`. Añadir a `rutas.js` las rutas `GET /informes/csv` y `GET /informes/pdf` con `requiereRol('administrador')`.
+- [X] T013 [US2] Pruebas con base de datos en `informes.test.js`:
   - SC-003: para el mismo informe agrupado, el CSV (decodificado, sin BOM) tiene una línea por fila del JSON más la cabecera, con las mismas cifras;
   - el PDF responde 200 `application/pdf` con `%PDF`, y su definición (`definicionPdfInforme` sobre el JSON) tiene las mismas filas;
   - errores de validación y 401/403 también en `/csv` y `/pdf`;
   - nombre del fichero correcto.
-- [ ] T014 [US2] Añadir a `Informes.jsx` los botones «Exportar CSV» y «Exportar PDF», visibles con un informe generado y no vacío. Son enlaces de descarga a `urlExportacion(filtros, …)` con los **mismos** filtros del informe en pantalla, no con los del formulario si se han cambiado después.
+- [X] T014 [US2] Añadir a `Informes.jsx` los botones «Exportar CSV» y «Exportar PDF», visibles con un informe generado y no vacío. Son enlaces de descarga a `urlExportacion(filtros, …)` con los **mismos** filtros del informe en pantalla, no con los del formulario si se han cambiado después.
 
 **Checkpoint**: pasos 2.9 y 2.10 del quickstart.
 

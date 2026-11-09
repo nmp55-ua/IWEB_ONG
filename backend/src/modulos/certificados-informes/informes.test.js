@@ -409,4 +409,93 @@ describe.skipIf(!URL_PRUEBAS)('HU-04 · informes', () => {
     });
   });
 
+  describe('exportación (US2, FR-006, SC-003)', () => {
+    let filtros;
+    let datosPersonales;
+
+    const binario = (res, fin) => {
+      const trozos = [];
+      res.on('data', (t) => trozos.push(t));
+      res.on('end', () => fin(null, Buffer.concat(trozos)));
+    };
+
+    beforeEach(async () => {
+      const p = await proyecto('Export; "A"');
+      const q = await proyecto('Export B');
+      const d = await donante();
+      await aportacion({ donanteId: d.id, proyectoId: p.id, importe: '1234.50', fechaCobro: '2026-02-01T10:00:00+01:00' });
+      await aportacion({ donanteId: d.id, proyectoId: q.id, modalidad: 'cuota_socio', importe: '10.00', fechaCobro: '2026-05-01T10:00:00+02:00' });
+      await aportacion({ donanteId: d.id, importe: '30.00', fechaCobro: '2026-08-01T10:00:00+02:00' });
+      await actividad({ proyectoId: q.id, inicio: '2026-05-02T10:00:00+02:00' });
+      filtros = { ...AÑO_2026, agrupacion: 'trimestre' };
+      datosPersonales = [d.nifNie, d.correo, 'Donante Informe', 'Calle Privada'];
+    });
+
+    it('SC-003: el CSV tiene las mismas filas y cifras que la pantalla', async () => {
+      const admin = await entrar('admin');
+      const pantalla = (await admin.get('/api/informes').query(filtros)).body;
+      const res = await admin.get('/api/informes/csv').query(filtros);
+
+      expect(res.status).toBe(200);
+      expect(res.headers['content-type']).toBe('text/csv; charset=utf-8');
+      expect(res.headers['content-disposition']).toBe('attachment; filename="informe-2026-01-01-2026-12-31.csv"');
+      expect(res.text.startsWith('﻿')).toBe(true);
+      const lineas = res.text.slice(1).split('\r\n').filter(Boolean);
+      expect(lineas).toHaveLength(pantalla.filas.length + 1);
+      const coma = (t) => t.replace('.', ',');
+      pantalla.filas.forEach((fila, i) => {
+        const celdas = lineas[i + 1].match(/("([^"]|"")*"|[^;]*)(;|$)/g).map((c) => c.replace(/;$/, ''));
+        expect(celdas.slice(2, 8)).toEqual([
+          coma(fila.recaudadoPuntual),
+          coma(fila.recaudadoCuotas),
+          coma(fila.recaudadoTotal),
+          String(fila.aportaciones),
+          String(fila.actividades),
+          String(fila.voluntarios),
+        ]);
+        expect(celdas[0]).toBe(fila.periodo?.etiqueta ?? '');
+      });
+      expect(lineas[1]).toContain('"Export; ""A""');
+      for (const dato of datosPersonales) expect(res.text).not.toContain(dato);
+    });
+
+    it('SC-003: el PDF es un PDF y su tabla tiene las mismas filas que la pantalla', async () => {
+      const { definicionPdfInforme } = await import('./textos.js');
+      const admin = await entrar('admin');
+      const pantalla = (await admin.get('/api/informes').query(filtros)).body;
+      const res = await admin.get('/api/informes/pdf').query(filtros).buffer(true).parse(binario);
+
+      expect(res.status).toBe(200);
+      expect(res.headers['content-type']).toBe('application/pdf');
+      expect(res.headers['content-disposition']).toBe('attachment; filename="informe-2026-01-01-2026-12-31.pdf"');
+      expect(res.body.subarray(0, 4).toString()).toBe('%PDF');
+      const tabla = definicionPdfInforme(pantalla).bloques[1];
+      expect(tabla.filas).toHaveLength(pantalla.filas.length);
+      expect(JSON.stringify(definicionPdfInforme(pantalla))).not.toMatch(new RegExp(datosPersonales.join('|')));
+    });
+
+    it('un informe vacío también se exporta (CSV con la cabecera, PDF con el mensaje)', async () => {
+      const admin = await entrar('admin');
+      const vacio = { desde: '2019-01-01', hasta: '2019-12-31' };
+      const csv = await admin.get('/api/informes/csv').query(vacio);
+      expect(csv.status).toBe(200);
+      expect(csv.text.slice(1).split('\r\n').filter(Boolean)).toHaveLength(1);
+      const pdf = await admin.get('/api/informes/pdf').query(vacio).buffer(true).parse(binario);
+      expect(pdf.status).toBe(200);
+    });
+
+    it('/csv y /pdf: 401, 403 y los mismos errores de validación', async () => {
+      const admin = await entrar('admin');
+      const donanteSesion = await entrar('donante');
+      for (const formato of ['csv', 'pdf']) {
+        const ruta = `/api/informes/${formato}`;
+        expect((await request(app).get(ruta).query(filtros)).status).toBe(401);
+        expect((await donanteSesion.get(ruta).query(filtros)).status).toBe(403);
+        const fin = await admin.get(ruta).query({ desde: '2026-12-31', hasta: '2026-01-01' });
+        expect(fin.status).toBe(400);
+        expect(fin.body.error.codigo).toBe('PERIODO_NO_VALIDO');
+        expect((await admin.get(ruta).query({ desde: '2026-01-01' })).body.error.codigo).toBe('DATOS_INVALIDOS');
+      }
+    });
+  });
 });

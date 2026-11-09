@@ -4,6 +4,8 @@ import {
   ALFABETO_CODIGO,
   MENSAJE_INFORME_VACIO,
   columnasInforme,
+  csvInforme,
+  definicionPdfInforme,
   definicionPdf,
   enmascararNifNie,
   etiquetaPeriodo,
@@ -11,6 +13,7 @@ import {
   formatearFechaDia,
   formatearHorasInforme,
   generarCodigo,
+  nombreFicheroInforme,
   nombreFilaInforme,
   normalizarCodigo,
   textoAgrupacion,
@@ -193,5 +196,82 @@ describe('informe (HU-04)', () => {
     expect(textoAgrupacion('trimestre')).toBe('Por trimestre');
     expect(textoAgrupacion(null)).toBe('Sin agrupar');
     expect(MENSAJE_INFORME_VACIO).toBe('No hay aportaciones confirmadas ni actividades celebradas en este periodo.');
+  });
+});
+
+describe('exportación del informe (HU-04, FR-006)', () => {
+  const periodo = { etiqueta: 'T1 2026', desde: '2026-01-01', hasta: '2026-03-31' };
+  const cifras = (total, extra = {}) => ({
+    recaudadoPuntual: total,
+    recaudadoCuotas: '0.00',
+    recaudadoTotal: total,
+    aportaciones: 2,
+    actividades: 1,
+    voluntarios: 3,
+    horas: '3.50',
+    ...extra,
+  });
+  const informe = {
+    filtros: { desde: '2026-01-01', hasta: '2026-12-31', proyecto: null, agrupacion: 'trimestre' },
+    vacio: false,
+    filas: [
+      { tipo: 'proyecto', periodo, proyecto: { id: '1', nombre: 'Agua; potable "norte"' }, ...cifras('1234.50', { recaudadoCuotas: '10.00' }) },
+      { tipo: 'fondoGeneral', periodo, proyecto: null, ...cifras('30.00') },
+      { tipo: 'subtotal', periodo, proyecto: null, ...cifras('1264.50') },
+      { tipo: 'total', periodo: null, proyecto: null, ...cifras('1264.50') },
+    ],
+  };
+  const CABECERA =
+    'Periodo;Proyecto;Donaciones puntuales;Cuotas de socio;Total recaudado;Aportaciones;Actividades celebradas;Voluntarios;Horas';
+
+  it('CSV: cabecera, una línea por fila, «;», BOM, coma decimal y comillas cuando hace falta', () => {
+    const csv = csvInforme(informe);
+    expect(csv.startsWith('﻿')).toBe(true);
+    expect(csv.slice(1).split('\r\n').filter(Boolean)).toEqual([
+      CABECERA,
+      'T1 2026;"Agua; potable ""norte""";1234,50;10,00;1234,50;2;1;3;3,5',
+      'T1 2026;Fondo general;30,00;0,00;30,00;2;1;3;3,5',
+      'T1 2026;Subtotal T1 2026;1264,50;0,00;1264,50;2;1;3;3,5',
+      ';Total;1264,50;0,00;1264,50;2;1;3;3,5',
+    ]);
+  });
+
+  it('CSV sin agrupar no lleva la columna Periodo; vacío, solo la cabecera', () => {
+    const sinAgrupar = { ...informe, filtros: { ...informe.filtros, agrupacion: null }, filas: [informe.filas[3]] };
+    expect(csvInforme(sinAgrupar).split('\r\n')[1]).toBe('Total;1264,50;0,00;1264,50;2;1;3;3,5');
+    expect(csvInforme({ ...informe, vacio: true, filas: [] }).slice(1)).toBe(`${CABECERA}\r\n`);
+  });
+
+  it('PDF: periodo y filtros, y la misma tabla que el CSV con euros y horas', () => {
+    const { titulo, bloques } = definicionPdfInforme({
+      ...informe,
+      filtros: { ...informe.filtros, proyecto: { id: '1', nombre: 'Agua' } },
+    });
+    expect(titulo).toBe('Informe de recaudación y voluntariado');
+    expect(bloques[0].texto).toBe('Periodo: 01/01/2026 – 31/12/2026 · Proyecto: Agua · Agrupación: Por trimestre');
+    const tabla = bloques[1];
+    expect(tabla.columnas).toEqual(columnasInforme('trimestre').map((c) => c.titulo));
+    expect(tabla.filas.map((f) => sinEspaciosRaros(f.join('|')))).toEqual([
+      'T1 2026|Agua; potable "norte"|1234,50 €|10,00 €|1234,50 €|2|1|3|3,5 h',
+      'T1 2026|Fondo general|30,00 €|0,00 €|30,00 €|2|1|3|3,5 h',
+      'T1 2026|Subtotal T1 2026|1264,50 €|0,00 €|1264,50 €|2|1|3|3,5 h',
+      '|Total|1264,50 €|0,00 €|1264,50 €|2|1|3|3,5 h',
+    ]);
+  });
+
+  it('PDF de un informe vacío: el mensaje en lugar de la tabla; sin filtros, «Todos» y «Sin agrupar»', () => {
+    const { bloques } = definicionPdfInforme({
+      filtros: { desde: '2019-01-01', hasta: '2019-12-31', proyecto: null, agrupacion: null },
+      vacio: true,
+      filas: [],
+    });
+    expect(bloques).toEqual([
+      { tipo: 'texto', texto: 'Periodo: 01/01/2019 – 31/12/2019 · Proyecto: Todos · Agrupación: Sin agrupar' },
+      { tipo: 'texto', texto: MENSAJE_INFORME_VACIO },
+    ]);
+  });
+
+  it('nombre de los ficheros', () => {
+    expect(nombreFicheroInforme({ desde: '2026-01-01', hasta: '2026-12-31' }, 'csv')).toBe('informe-2026-01-01-2026-12-31.csv');
   });
 });

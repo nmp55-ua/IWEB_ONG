@@ -6,7 +6,7 @@ import Boton from '../comunes/Boton.jsx';
 import Campo from '../comunes/Campo.jsx';
 import EstadoVacio from '../comunes/EstadoVacio.jsx';
 import Tabla from '../comunes/Tabla.jsx';
-import { MENSAJE_VACIO, filasParaTabla, rutaInforme, validarPeriodo } from './informes.js';
+import { MENSAJE_VACIO, filasParaTabla, filtrosDeInforme, rutaInforme, urlExportacion, validarPeriodo } from './informes.js';
 
 // HU-04: informe de recaudación y voluntariado para la junta. Solo administración: quien decide
 // el acceso es el servidor (FR-008). Solo muestra cifras agregadas (FR-009).
@@ -144,7 +144,18 @@ export default function Informes() {
           {informe.vacio ? (
             <EstadoVacio mensaje={MENSAJE_VACIO} />
           ) : (
-            <Tabla columnas={columnas(Boolean(informe.filtros.agrupacion))} filas={filasParaTabla(informe)} claveFila="clave" />
+            <>
+              <Tabla columnas={columnas(Boolean(informe.filtros.agrupacion))} filas={filasParaTabla(informe)} claveFila="clave" />
+              {/* FR-006: se exporta exactamente el informe en pantalla (sus filtros, no los del formulario). */}
+              <div className="flex flex-wrap gap-3">
+                <Boton variante="secundario" href={urlExportacion(filtrosDeInforme(informe), 'csv')} download>
+                  Exportar CSV
+                </Boton>
+                <Boton variante="secundario" href={urlExportacion(filtrosDeInforme(informe), 'pdf')} download>
+                  Exportar PDF
+                </Boton>
+              </div>
+            </>
           )}
         </section>
       )}

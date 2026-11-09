@@ -17,4 +17,6 @@ rutasCertificadosInformes.get('/certificados/verificacion', asincrono(c.verifica
 // HU-04: solo administración (FR-008).
 const administrador = requiereRol('administrador');
 rutasCertificadosInformes.get('/informes', administrador, asincrono(c.informe));
+rutasCertificadosInformes.get('/informes/csv', administrador, asincrono(c.csv));
+rutasCertificadosInformes.get('/informes/pdf', administrador, asincrono(c.pdfInforme));
 rutasCertificadosInformes.get('/informes/proyectos', administrador, asincrono(c.proyectosInforme));

@@ -17,19 +17,24 @@ export function generarPdf(definicion) {
     if (bloque.tipo === 'texto') {
       doc.text(bloque.texto).moveDown();
     } else if (bloque.tipo === 'tabla') {
+      // Letra opcional para tablas con muchas columnas (p. ej. el informe de HU-04); por defecto, 11.
+      doc.fontSize(bloque.tamanoLetra ?? 11);
       const ancho = (doc.page.width - 100) / bloque.columnas.length;
+      // La fila ocupa lo que su celda más alta; si no cabe en la página, pasa a la siguiente.
       const escribirFila = (celdas, negrita) => {
-        const y = doc.y;
         doc.font(negrita ? 'Helvetica-Bold' : 'Helvetica');
-        celdas.forEach((valor, i) => {
-          doc.text(String(valor ?? ''), 50 + i * ancho, y, { width: ancho - 6 });
-        });
+        const textos = celdas.map((valor) => String(valor ?? ''));
+        const alto = Math.max(...textos.map((t) => doc.heightOfString(t, { width: ancho - 6 })));
+        if (doc.y + alto > doc.page.height - doc.page.margins.bottom) doc.addPage();
+        const y = doc.y;
+        textos.forEach((texto, i) => doc.text(texto, 50 + i * ancho, y, { width: ancho - 6 }));
         doc.x = 50;
+        doc.y = y + alto;
         doc.moveDown(0.5);
       };
       escribirFila(bloque.columnas, true);
       bloque.filas.forEach((fila) => escribirFila(fila, false));
-      doc.font('Helvetica').moveDown();
+      doc.font('Helvetica').fontSize(11).moveDown();
     }
   }
 
