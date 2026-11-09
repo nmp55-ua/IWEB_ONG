@@ -156,13 +156,13 @@ filas y cifras que `GET /api/informes`.
 - [X] T015 **Cambio común (mostrar antes a Rubén)**:
   - `specs/plan-comun.md` §4: añadir `GET /api/informes/proyectos` a la fila de certificados-informes (004); en «Preguntas abiertas», quitar PA4.1 de la lista pendiente y anotarla como resuelta en `specs/spec-004/spec.md`;
   - `backend/src/modulos/LEEME.md`: sección de HU-04 con sus 4 rutas.
-- [ ] T016 Ejecutar todas las pruebas sobre un PostgreSQL desechable:
+- [X] T016 Ejecutar todas las pruebas sobre un PostgreSQL desechable:
   - backend salvo donaciones sobre `ong_test`;
   - donaciones sobre `ong_test_hu01`;
   - frontend con `npm test` y `npm run build`.
   
   Guardar el resultado en `specs/spec-004/refinamiento/validacion-01.md`.
-- [ ] T017 Recorrer [quickstart.md](quickstart.md) contra el servidor real con `datos-prueba.sql`: pasos 2.1–2.4 y 2.6–2.11, sin las columnas de voluntariado, y cronometrar el 2.12 (SC-002) con el informe anual sin voluntariado. Anotar el resultado en `validacion-01.md`.
+- [X] T017 Recorrer [quickstart.md](quickstart.md) contra el servidor real con `datos-prueba.sql`: pasos 2.1–2.4 y 2.6–2.11, sin las columnas de voluntariado, y cronometrar el 2.12 (SC-002) con el informe anual sin voluntariado. Anotar el resultado en `validacion-01.md`.
 
 ---
 
