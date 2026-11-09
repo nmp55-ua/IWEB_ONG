@@ -91,3 +91,71 @@ export async function certificadoPorCodigo(codigo) {
   );
   return rows[0] ?? null;
 }
+
+// ── HU-04: informe (specs/spec-004/research.md R1, R3–R5) ──
+// Solo LEE aportaciones (spec-001), actividades (spec-007) y proyectos (común), y nunca columnas
+// personales de donantes o voluntarios (FR-009). Cada consulta devuelve, con GROUPING SETS, las
+// filas (nivel 0), los subtotales por periodo (nivel 1) y el total (nivel 3); en NUMERIC.
+
+const TRUNCADO = { mes: 'month', trimestre: 'quarter', anio: 'year' };
+
+// date_trunc(NULL, …) es NULL: sin agrupación, todas las filas tienen periodo NULL.
+const periodoSql = (columna) => `date_trunc($4::text, ${columna} AT TIME ZONE 'Europe/Madrid')`;
+
+const COLUMNAS_NIVEL = `GROUPING(periodo, proyecto_id) AS nivel,
+            to_char(periodo, 'YYYY-MM-DD') AS periodo,
+            proyecto_id::text AS "proyectoId"`;
+
+const AGRUPACION_SQL = 'GROUP BY GROUPING SETS ((periodo, proyecto_id), (periodo), ())';
+
+export async function recaudacionInforme({ desde, hasta, proyectoId = null, agrupacion = null }) {
+  const { rows } = await consulta(
+    `WITH base AS (
+       SELECT ${periodoSql('fecha_cobro')} AS periodo, proyecto_id, modalidad, importe
+         FROM aportaciones
+        WHERE estado = 'confirmada' AND fecha_cobro >= $1 AND fecha_cobro < $2
+          AND ($3::bigint IS NULL OR proyecto_id = $3)
+     )
+     SELECT ${COLUMNAS_NIVEL},
+            round(coalesce(sum(importe) FILTER (WHERE modalidad = 'puntual'), 0), 2)::text AS "recaudadoPuntual",
+            round(coalesce(sum(importe) FILTER (WHERE modalidad = 'cuota_socio'), 0), 2)::text AS "recaudadoCuotas",
+            round(coalesce(sum(importe), 0), 2)::text AS "recaudadoTotal",
+            count(*)::int AS aportaciones
+       FROM base
+      ${AGRUPACION_SQL}`,
+    [desde, hasta, proyectoId, TRUNCADO[agrupacion] ?? null],
+  );
+  return rows;
+}
+
+// Actividades celebradas (publicadas y ya empezadas según «ahora»), en el periodo de su inicio.
+// Voluntarios y horas necesitan la tabla asistencias de HU-08 (tasks.md, fase 6): hasta entonces, 0.
+export async function voluntariadoInforme({ desde, hasta, proyectoId = null, agrupacion = null, ahora }) {
+  const { rows } = await consulta(
+    `WITH base AS (
+       SELECT ${periodoSql('inicio')} AS periodo, proyecto_id, id
+         FROM actividades
+        WHERE estado = 'publicada' AND inicio <= $5 AND inicio >= $1 AND inicio < $2
+          AND ($3::bigint IS NULL OR proyecto_id = $3)
+     )
+     SELECT ${COLUMNAS_NIVEL},
+            count(*)::int AS actividades,
+            0 AS voluntarios,
+            '0.00' AS horas
+       FROM base
+      ${AGRUPACION_SQL}`,
+    [desde, hasta, proyectoId, TRUNCADO[agrupacion] ?? null, ahora],
+  );
+  return rows;
+}
+
+export async function proyectoPorId(id) {
+  const { rows } = await consulta('SELECT id::text, nombre, activo FROM proyectos WHERE id = $1', [id]);
+  return rows[0] ?? null;
+}
+
+// Todos, también los inactivos: siguen apareciendo si tienen datos (research R7).
+export async function todosLosProyectos() {
+  const { rows } = await consulta('SELECT id::text, nombre, activo FROM proyectos ORDER BY nombre');
+  return rows;
+}

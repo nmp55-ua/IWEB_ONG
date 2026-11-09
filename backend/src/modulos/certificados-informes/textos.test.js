@@ -2,12 +2,18 @@
 import { describe, expect, it } from 'vitest';
 import {
   ALFABETO_CODIGO,
+  MENSAJE_INFORME_VACIO,
+  columnasInforme,
   definicionPdf,
   enmascararNifNie,
+  etiquetaPeriodo,
   formatearEuros,
   formatearFechaDia,
+  formatearHorasInforme,
   generarCodigo,
+  nombreFilaInforme,
   normalizarCodigo,
+  textoAgrupacion,
   textoCorreo,
 } from './textos.js';
 
@@ -139,5 +145,53 @@ describe('definición del PDF', () => {
       tipo: 'texto',
       texto: 'http://ong.test/verificar-certificado?codigo=7K2M-9QXR-4D8T-1HZP',
     });
+  });
+});
+
+describe('informe (HU-04)', () => {
+  it('etiqueta los periodos por mes, trimestre y año', () => {
+    expect(etiquetaPeriodo('mes', '2026-01-01')).toBe('01/2026');
+    expect(etiquetaPeriodo('mes', '2026-12-01')).toBe('12/2026');
+    expect(etiquetaPeriodo('trimestre', '2026-01-01')).toBe('T1 2026');
+    expect(etiquetaPeriodo('trimestre', '2026-04-01')).toBe('T2 2026');
+    expect(etiquetaPeriodo('trimestre', '2026-10-01')).toBe('T4 2026');
+    expect(etiquetaPeriodo('anio', '2026-01-01')).toBe('2026');
+  });
+
+  it('pone la columna Periodo solo si se agrupa', () => {
+    const titulos = (a) => columnasInforme(a).map((c) => c.titulo);
+    expect(titulos(null)).toEqual([
+      'Proyecto',
+      'Donaciones puntuales',
+      'Cuotas de socio',
+      'Total recaudado',
+      'Aportaciones',
+      'Actividades celebradas',
+      'Voluntarios',
+      'Horas',
+    ]);
+    expect(titulos('trimestre')[0]).toBe('Periodo');
+    expect(titulos('trimestre')).toHaveLength(9);
+  });
+
+  it('nombra cada tipo de fila', () => {
+    const periodo = { etiqueta: 'T1 2026' };
+    expect(nombreFilaInforme({ tipo: 'proyecto', proyecto: { nombre: 'Agua potable' } })).toBe('Agua potable');
+    expect(nombreFilaInforme({ tipo: 'fondoGeneral', proyecto: null })).toBe('Fondo general');
+    expect(nombreFilaInforme({ tipo: 'subtotal', periodo })).toBe('Subtotal T1 2026');
+    expect(nombreFilaInforme({ tipo: 'total' })).toBe('Total');
+  });
+
+  it('horas con un decimal y coma', () => {
+    expect(formatearHorasInforme('3.50')).toBe('3,5 h');
+    expect(formatearHorasInforme('0.00')).toBe('0 h');
+    expect(formatearHorasInforme('13.00')).toBe('13 h');
+    expect(formatearHorasInforme('1234.25')).toBe('1234,3 h');
+  });
+
+  it('textos de agrupación y del informe vacío', () => {
+    expect(textoAgrupacion('trimestre')).toBe('Por trimestre');
+    expect(textoAgrupacion(null)).toBe('Sin agrupar');
+    expect(MENSAJE_INFORME_VACIO).toBe('No hay aportaciones confirmadas ni actividades celebradas en este periodo.');
   });
 });

@@ -34,7 +34,7 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 
 ## Phase 1: Setup
 
-- [ ] T001 Crear `backend/src/modulos/certificados-informes/informes.test.js` con la preparación común de las pruebas con base de datos (patrón de `certificados.test.js`):
+- [X] T001 Crear `backend/src/modulos/certificados-informes/informes.test.js` con la preparación común de las pruebas con base de datos (patrón de `certificados.test.js`):
   - `describe.skipIf(!TEST_DATABASE_URL)`;
   - antes de cada prueba, `TRUNCATE certificados_fiscales, inscripciones, actividades, aportaciones, suscripciones_socio, donantes, voluntarios RESTART IDENTITY CASCADE`. No se vacían `proyectos` ni `usuarios`, que son comunes: cada prueba crea los suyos con nombres y correos únicos, y los proyectos sobrantes no salen en el informe porque no tienen datos;
   - ayudantes `proyecto(nombre, activo)`, `donante()`, `aportacion({ donanteId, proyectoId, modalidad, importe, estado, fechaCobro })` (crea la suscripción si es `cuota_socio`), `actividad({ proyectoId, inicio, fin, estado })`, `voluntario()` e `inscripcion(voluntarioId, actividadId)`;
@@ -45,14 +45,14 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 
 ## Phase 2: Foundational (bloquea las fases 3 y 4)
 
-- [ ] T002 [P] Añadir a `backend/src/modulos/certificados-informes/textos.js` (funciones puras; research R4, R6 y R8):
+- [X] T002 [P] Añadir a `backend/src/modulos/certificados-informes/textos.js` (funciones puras; research R4, R6 y R8):
   - `etiquetaPeriodo(agrupacion, inicioPeriodo)`: `'mes'` → `01/2026`, `'trimestre'` → `T1 2026`, `'anio'` → `2026`;
   - `COLUMNAS_INFORME(agrupacion)`: las columnas del contrato, con «Periodo» solo si hay agrupación;
   - `nombreFilaInforme(fila)`: el nombre del proyecto, `Fondo general`, `Subtotal <etiqueta>` o `Total`;
   - `formatearHorasInforme('3.50')` → `3,5 h`;
   - `MENSAJE_INFORME_VACIO`: «No hay aportaciones confirmadas ni actividades celebradas en este periodo.»
-- [ ] T003 [P] Pruebas sin base de datos de T002 en `backend/src/modulos/certificados-informes/textos.test.js` (bloque `describe('informe')`): las etiquetas de los tres tipos de periodo, incluido el T4 y el mes 12; las columnas con y sin agrupación; el nombre de cada `tipo` de fila; y las horas `3,5 h`, `0 h` y `13 h`.
-- [ ] T004 Añadir a `backend/src/modulos/certificados-informes/repositorio.js` (SQL parametrizado; research R1, R3–R5; sin importar otros módulos):
+- [X] T003 [P] Pruebas sin base de datos de T002 en `backend/src/modulos/certificados-informes/textos.test.js` (bloque `describe('informe')`): las etiquetas de los tres tipos de periodo, incluido el T4 y el mes 12; las columnas con y sin agrupación; el nombre de cada `tipo` de fila; y las horas `3,5 h`, `0 h` y `13 h`.
+- [X] T004 Añadir a `backend/src/modulos/certificados-informes/repositorio.js` (SQL parametrizado; research R1, R3–R5; sin importar otros módulos):
   - `recaudacionInforme({ desde, hasta, proyectoId, agrupacion })`:
     - aportaciones `confirmada` con `fecha_cobro >= desde AND fecha_cobro < hasta`, más el filtro opcional de proyecto;
     - `periodo` = `date_trunc(agrupacion_sql, fecha_cobro AT TIME ZONE 'Europe/Madrid')`, o `NULL` sin agrupación;

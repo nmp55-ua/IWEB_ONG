@@ -105,3 +105,53 @@ export function definicionPdf({ ong, donante, certificado, urlFrontend }) {
     ],
   };
 }
+
+// ── HU-04: informe de recaudación y voluntariado (specs/spec-004/research.md R4, R6 y R8) ──
+
+export const MENSAJE_INFORME_VACIO = 'No hay aportaciones confirmadas ni actividades celebradas en este periodo.';
+
+const TEXTO_AGRUPACION = { mes: 'Por mes', trimestre: 'Por trimestre', anio: 'Por año' };
+
+// Primer día del periodo («2026-04-01») → «04/2026», «T2 2026» o «2026».
+export function etiquetaPeriodo(agrupacion, inicioPeriodo) {
+  const [anio, mes] = String(inicioPeriodo).split('-');
+  if (agrupacion === 'mes') return `${mes}/${anio}`;
+  if (agrupacion === 'trimestre') return `T${Math.floor((Number(mes) - 1) / 3) + 1} ${anio}`;
+  return anio;
+}
+
+// Las mismas columnas en pantalla, CSV y PDF. «Periodo» solo si se agrupa.
+export function columnasInforme(agrupacion) {
+  return [
+    ...(agrupacion ? [{ clave: 'periodo', titulo: 'Periodo' }] : []),
+    { clave: 'nombre', titulo: 'Proyecto' },
+    { clave: 'recaudadoPuntual', titulo: 'Donaciones puntuales', tipo: 'importe' },
+    { clave: 'recaudadoCuotas', titulo: 'Cuotas de socio', tipo: 'importe' },
+    { clave: 'recaudadoTotal', titulo: 'Total recaudado', tipo: 'importe' },
+    { clave: 'aportaciones', titulo: 'Aportaciones' },
+    { clave: 'actividades', titulo: 'Actividades celebradas' },
+    { clave: 'voluntarios', titulo: 'Voluntarios' },
+    { clave: 'horas', titulo: 'Horas', tipo: 'horas' },
+  ];
+}
+
+// Lo que va en la columna «Proyecto» según el tipo de fila.
+export function nombreFilaInforme(fila) {
+  if (fila.tipo === 'proyecto') return fila.proyecto.nombre;
+  if (fila.tipo === 'fondoGeneral') return 'Fondo general';
+  if (fila.tipo === 'subtotal') return `Subtotal ${fila.periodo.etiqueta}`;
+  return 'Total';
+}
+
+// Horas con un decimal, como en la interfaz (plan-comun §4): «3.50» → «3,5».
+export function horasUnDecimal(horas) {
+  return new Intl.NumberFormat('es-ES', { maximumFractionDigits: 1, useGrouping: false }).format(Number(horas));
+}
+
+export function formatearHorasInforme(horas) {
+  return `${horasUnDecimal(horas)} h`;
+}
+
+export function textoAgrupacion(agrupacion) {
+  return TEXTO_AGRUPACION[agrupacion] ?? 'Sin agrupar';
+}
