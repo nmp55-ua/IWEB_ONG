@@ -128,7 +128,8 @@ export async function guardarAsistencias(filas, cliente) {
       `INSERT INTO asistencias (inscripcion_id, asistio, horas, registrada_por, fecha_registro)
        VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (inscripcion_id) DO UPDATE SET asistio = EXCLUDED.asistio, horas = EXCLUDED.horas,
-         registrada_por = EXCLUDED.registrada_por, fecha_registro = EXCLUDED.fecha_registro`,
+         registrada_por = EXCLUDED.registrada_por, fecha_registro = EXCLUDED.fecha_registro,
+         actualizado_en = now()`,
       [fila.inscripcionId, fila.asistio, fila.horas, fila.registradaPor, fila.fechaRegistro],
     );
   }

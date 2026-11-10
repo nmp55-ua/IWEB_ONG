@@ -49,10 +49,13 @@ const esquemaAsistencias = z
       .array(
         z
           .object({
-            inscripcionId: z.number({ message: 'Inscripción no válida.' }).int().positive(),
+            inscripcionId: z
+              .number({ message: 'Inscripción no válida.' })
+              .int('Inscripción no válida.')
+              .positive('Inscripción no válida.'),
             asistio: z.boolean({ message: 'Indica si asistió o no.' }),
           })
-          .strict(),
+          .strict({ message: 'Cada fila solo admite inscripcionId y asistio.' }),
         { message: 'Indica la asistencia.' },
       )
       .min(1, 'Marca al menos una persona.')
@@ -61,7 +64,7 @@ const esquemaAsistencias = z
         message: 'Hay inscripciones repetidas.',
       }),
   })
-  .strict();
+  .strict({ message: 'El cuerpo solo admite asistencias.' });
 
 const idDe = (req) => Number(req.params.id);
 

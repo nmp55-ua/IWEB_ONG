@@ -7,5 +7,7 @@ CREATE TABLE asistencias (
   asistio         BOOLEAN NOT NULL,
   horas           NUMERIC(5,2) NOT NULL CHECK (horas > 0),
   registrada_por  BIGINT NOT NULL REFERENCES usuarios(id) ON DELETE RESTRICT,
-  fecha_registro  TIMESTAMPTZ NOT NULL
+  fecha_registro  TIMESTAMPTZ NOT NULL,
+  creado_en       TIMESTAMPTZ NOT NULL DEFAULT now(),
+  actualizado_en  TIMESTAMPTZ NOT NULL DEFAULT now()
 );

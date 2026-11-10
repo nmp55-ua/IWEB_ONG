@@ -13,6 +13,8 @@ se concreta la migración y las reglas de HU-08.
 | `horas` | NUMERIC(5,2) | `NOT NULL`, `CHECK (horas > 0)`; `fin − inicio` de la actividad al guardar (FR-003) |
 | `registrada_por` | BIGINT → usuarios | `NOT NULL`, `ON DELETE RESTRICT`; coordinador que guardó por última vez |
 | `fecha_registro` | TIMESTAMPTZ | `NOT NULL`; última modificación (`ahora()`) |
+| `creado_en` | TIMESTAMPTZ | `NOT NULL DEFAULT now()` (modelo-datos, «Reglas generales») |
+| `actualizado_en` | TIMESTAMPTZ | `NOT NULL DEFAULT now()`; el upsert lo pone a `now()` al corregir |
 
 No hay `actividad_id`: se obtiene de la inscripción. Índice: el `UNIQUE` de `inscripcion_id`
 basta para el upsert y para filtrar por los ids de un voluntario.
