@@ -27,7 +27,11 @@ const comunes = {
 // Puntual no admite periodicidad; socio la exige (mensual, trimestral o anual).
 const puntual = z.object({ ...comunes, modalidad: z.literal('puntual') }).strict();
 const socio = z
-  .object({ ...comunes, modalidad: z.literal('socio'), periodicidad: z.enum(['mensual', 'trimestral', 'anual']) })
+  .object({
+    ...comunes,
+    modalidad: z.literal('socio'),
+    periodicidad: z.enum(['mensual', 'trimestral', 'anual']),
+  })
   .strict();
 const corta = z.object({ tokenCsrf: csrf, claveSolicitud: clave }).strict();
 const soloCsrf = z.object({ tokenCsrf: csrf }).strict();
@@ -38,6 +42,9 @@ export function crearControlador(servicio) {
     return esquema.parse(req.body);
   };
   return {
+    historial: async (req, res) => {
+      res.json(await servicio.historial(req, req.query));
+    },
     contexto: async (req, res) => {
       res.set('Cache-Control', 'no-store').json(await servicio.contexto(req));
     },

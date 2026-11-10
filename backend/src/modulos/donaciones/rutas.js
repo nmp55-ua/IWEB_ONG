@@ -11,6 +11,15 @@ const servicio = crearServicio({ pool, pasarela, enviarCorreo });
 export function crearRutasDonaciones(servicioDonaciones) {
   const r = Router(),
     c = crearControlador(servicioDonaciones);
+  r.get(
+    '/yo/aportaciones',
+    (req, res, next) => {
+      res.set('Cache-Control', 'private, no-store').vary('Cookie');
+      next();
+    },
+    requiereRol('donante'),
+    asincrono(c.historial),
+  );
   r.get('/donaciones/contexto', asincrono(c.contexto));
   r.post('/aportaciones', asincrono(c.crear));
   r.get('/aportaciones/referencia/:referencia', asincrono(c.resultado));

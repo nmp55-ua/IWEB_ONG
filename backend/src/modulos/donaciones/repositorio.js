@@ -54,6 +54,37 @@ export async function enTransaccion(pool, trabajo) {
 export function crearRepositorio(pool) {
   return {
     pool,
+    async historialDeUsuario(usuarioId, rango) {
+      return enTransaccion(pool, async (c) => {
+        await c.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY');
+        const donante = (
+          await c.query('SELECT id::text AS id FROM donantes WHERE usuario_id=$1', [usuarioId])
+        ).rows[0];
+        if (!donante) return { vinculado: false, resumenes: [], aportaciones: [] };
+        const resumenes = (
+          await c.query(
+            `SELECT EXTRACT(YEAR FROM fecha_cobro AT TIME ZONE 'Europe/Madrid')::int AS anio,
+                  sum(importe)::text AS "importeTotal"
+             FROM aportaciones WHERE donante_id=$1 AND estado='confirmada'
+            GROUP BY 1 ORDER BY 1 DESC`,
+            [donante.id],
+          )
+        ).rows;
+        const aportaciones = (
+          await c.query(
+            `SELECT a.id::text AS id,a.fecha_cobro AS "fechaCobro",a.importe::text AS importe,
+                  a.modalidad,COALESCE(p.nombre,'fondo general') AS destino,
+                  EXTRACT(YEAR FROM a.fecha_cobro AT TIME ZONE 'Europe/Madrid')::int AS anio
+             FROM aportaciones a LEFT JOIN proyectos p ON p.id=a.proyecto_id
+            WHERE a.donante_id=$1 AND a.estado='confirmada'
+              ${rango ? 'AND a.fecha_cobro >= $2 AND a.fecha_cobro < $3' : ''}
+            ORDER BY a.fecha_cobro DESC,a.id DESC`,
+            rango ? [donante.id, rango.desde, rango.hasta] : [donante.id],
+          )
+        ).rows;
+        return { vinculado: true, resumenes, aportaciones };
+      });
+    },
     async operacion(cliente, solicitudId) {
       return (
         await cliente.query(
