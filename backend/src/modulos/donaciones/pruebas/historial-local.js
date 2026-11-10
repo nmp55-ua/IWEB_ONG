@@ -12,6 +12,7 @@ import { fork, spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { fileURLToPath } from 'node:url';
 import { resolve, join } from 'node:path';
+import { exportarTrazaReal } from './traza-navegador.js';
 
 export async function insertarAportacionHistorial(pool, donanteId, datos = {}) {
   const {
@@ -327,6 +328,8 @@ async function esperarBackend(hijo) {
 
 export async function crearBancoHistorial({
   entradaAstro = new URL('../../../../../frontend/dist/server/entry.mjs', import.meta.url),
+  puertoProxy = 44322,
+  trazaNavegador = false,
 } = {}) {
   if (
     process.env.NODE_ENV !== 'test' ||
@@ -357,7 +360,7 @@ export async function crearBancoHistorial({
         throw new AggregateError(errores, 'No se pudieron cerrar todos los recursos propios.');
     })());
   const proxy = createServer((req, res) => {
-    const url = new URL(req.url, 'http://127.0.0.1:44322');
+    const url = new URL(req.url, `http://127.0.0.1:${puertoProxy}`);
     const api = url.pathname.startsWith('/api/');
     const permitida =
       (req.method === 'GET' &&
@@ -402,7 +405,10 @@ export async function crearBancoHistorial({
         respuesta.on('end', () => {
           const html = Buffer.concat(partes)
             .toString('utf8')
-            .replace('</head>', `<script>(${observarHistorialEnNavegador.toString()})();</script></head>`);
+            .replace(
+              '</head>',
+              `<script>(${observarHistorialEnNavegador.toString()})();${trazaNavegador ? `(${exportarTrazaReal.toString()})();` : ''}</script></head>`,
+            );
           const cabeceras = { ...respuesta.headers, 'cache-control': 'no-store' };
           delete cabeceras['content-length'];
           delete cabeceras['content-encoding'];
@@ -420,7 +426,7 @@ export async function crearBancoHistorial({
   });
   recursos.push(() => cerrarServidor(proxy));
   try {
-    await escuchar(proxy, 44322);
+    await escuchar(proxy, puertoProxy);
     const reserva = createServer();
     recursos.push(() => cerrarServidor(reserva));
     await escuchar(reserva, 44323);
@@ -433,7 +439,7 @@ export async function crearBancoHistorial({
       DATABASE_URL: entorno.urlConexion,
       TEST_DATABASE_URL: entorno.urlConexion,
       HU02_ESQUEMA: entorno.esquema,
-      FRONTEND_URL: 'http://127.0.0.1:44322',
+      FRONTEND_URL: `http://127.0.0.1:${puertoProxy}`,
     };
     const backend = fork(archivoBanco, ['--backend'], {
       env,
@@ -475,12 +481,29 @@ export async function crearBancoHistorial({
       });
     }
     return {
-      url: 'http://127.0.0.1:44322',
+      url: `http://127.0.0.1:${puertoProxy}`,
       entorno,
       cuentas: Object.fromEntries(Object.entries(fixtures.cuentas).map(([k, v]) => [k, v.usuario.correo])),
       cerrar,
       recursosCerrados: () =>
         !proxy.listening && [backend, astro].every((h) => h.exitCode !== null || h.signalCode !== null),
+      permitirInvitado: (referencia) =>
+        new Promise((resolver, rechazar) => {
+          const id = randomUUID();
+          const fin = (msg) => {
+            if (msg.tipo === 'permiso_invitado' && msg.id === id) {
+              clearTimeout(limite);
+              backend.off('message', fin);
+              resolver(msg.autorizadoOperacion);
+            }
+          };
+          const limite = setTimeout(() => {
+            backend.off('message', fin);
+            rechazar(new Error('Sin respuesta del backend de pruebas.'));
+          }, 2000);
+          backend.on('message', fin);
+          backend.send({ tipo: 'permiso_invitado', id, referencia });
+        }),
       llamadas: () =>
         new Promise((resolver, rechazar) => {
           const id = randomUUID();
@@ -560,6 +583,36 @@ async function backendAislado() {
   process.on('message', (msg) => {
     if (msg.tipo === 'cerrar') void apagar();
     else if (msg.tipo === 'llamadas') process.send({ tipo: 'llamadas', id: msg.id, contadores });
+    else if (msg.tipo === 'permiso_invitado')
+      void (async () => {
+        // Solo IPC del padre del banco: no hay una ruta HTTP que conceda permisos.
+        const sesiones = await new Promise((resolve, reject) =>
+          almacen.all((e, s) => (e ? reject(e) : resolve(s))),
+        );
+        const invitados = Object.entries(sesiones).filter(([, s]) => !s.usuarioId);
+        if (invitados.length !== 1 || !msg.referencia?.startsWith('DON-HU02-'))
+          throw new Error('Invitado de pruebas no unico.');
+        const aportacion = (
+          await pool.query('SELECT referencia FROM aportaciones WHERE referencia=$1', [msg.referencia])
+        ).rows[0];
+        if (!aportacion) throw new Error('Aportacion sintetica inexistente.');
+        const [sid, datos] = invitados[0],
+          creadoEn = Date.now();
+        datos.donaciones = {
+          ...datos.donaciones,
+          permisos: {
+            ...datos.donaciones?.permisos,
+            [msg.referencia]: { creadoEn, venceEn: creadoEn + 8 * 3600000 },
+          },
+        };
+        await new Promise((resolve, reject) => almacen.set(sid, datos, (e) => (e ? reject(e) : resolve())));
+        const { autorizarAportacion } = await import('../autorizacion.js');
+        process.send({
+          tipo: 'permiso_invitado',
+          id: msg.id,
+          autorizadoOperacion: autorizarAportacion({ session: datos }, msg.referencia, aportacion),
+        });
+      })().catch(() => process.send({ tipo: 'permiso_invitado', id: msg.id, autorizadoOperacion: false }));
   });
   process.once('disconnect', () => {
     void apagar();
