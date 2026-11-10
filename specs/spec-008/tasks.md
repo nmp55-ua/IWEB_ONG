@@ -145,4 +145,4 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 ## Phase 7: Convergence
 
-- [ ] T025 Dar mensaje en español al tipo del cuerpo de `esquemaAsistencias` (`z.object({...}, { message: 'El cuerpo debe ser un objeto con asistencias.' })`) en `backend/src/modulos/actividades/controlador.js`: si el cuerpo del `PUT` no es un objeto (por ejemplo, un array JSON), hoy devuelve en `campos` el texto de zod «Expected object, received array» per Constitution IV / T024 (partial)
+- [X] T025 Dar mensaje en español al tipo del cuerpo de `esquemaAsistencias` (`z.object({...}, { message: 'El cuerpo debe ser un objeto con asistencias.' })`) en `backend/src/modulos/actividades/controlador.js`: si el cuerpo del `PUT` no es un objeto (por ejemplo, un array JSON), hoy devuelve en `campos` el texto de zod «Expected object, received array» per Constitution IV / T024 (partial)

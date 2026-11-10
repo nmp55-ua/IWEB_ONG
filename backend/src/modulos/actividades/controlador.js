@@ -63,7 +63,7 @@ const esquemaAsistencias = z
       .refine((filas) => new Set(filas.map((f) => f.inscripcionId)).size === filas.length, {
         message: 'Hay inscripciones repetidas.',
       }),
-  })
+  }, { invalid_type_error: 'El cuerpo debe ser un objeto con asistencias.' })
   .strict({ message: 'El cuerpo solo admite asistencias.' });
 
 const idDe = (req) => Number(req.params.id);
