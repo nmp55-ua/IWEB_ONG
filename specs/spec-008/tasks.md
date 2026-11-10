@@ -97,7 +97,7 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 ## Phase 5: Polish & Cross-Cutting Concerns
 
 - [X] T021 Aplicar `007_asistencias.sql` también a la base de pruebas (`ong_test`, con `npm run migrar` y esa URL), ejecutar `npm test` en `backend/` con `TEST_DATABASE_URL` apuntando a ella y corregir los fallos en `backend/src/modulos/actividades/`
-- [ ] T022 Recorrer [quickstart.md](quickstart.md) a mano en la aplicación, incluidos SC-001, SC-002 cronometrado con 20 confirmados (actividad celebrada preparada con la inserción temporal del quickstart, solo en la base de desarrollo y sin añadirla a las semillas) y la comprobación de que un voluntario no puede cancelar una inscripción de una actividad ya iniciada (FR-009, spec-005), y anotar el resultado en `specs/spec-008/quickstart.md`
+- [X] T022 Recorrer [quickstart.md](quickstart.md) a mano en la aplicación, incluidos SC-001, SC-002 cronometrado con 20 confirmados (actividad celebrada preparada con la inserción temporal del quickstart, solo en la base de desarrollo y sin añadirla a las semillas) y la comprobación de que un voluntario no puede cancelar una inscripción de una actividad ya iniciada (FR-009, spec-005), y anotar el resultado en `specs/spec-008/quickstart.md`
 
 ---
 

@@ -63,4 +63,4 @@ Las semillas no traen una actividad celebrada con 20 confirmados y la aplicació
 | 2.1, 2.2, SC-001 | Correcto | Pantalla: 5,5 h con el desglose (3,5 h y 2 h); `voluntario3` ve 0 h y el mensaje |
 | 2.3 | Correcto | Pruebas automáticas: un parámetro con otro usuario se ignora |
 | FR-009 | Correcto | API: 409 `INSCRIPCION_NO_CANCELABLE` |
-| SC-002 | **Pendiente** | Cronometrado manual a cargo de Nicole; «Marcar todos» tampoco se ha pulsado en pantalla |
+| SC-002 | ✅ **40 s** (< 2 min) | Cronometrado por Nicole el 10/11/2026 en la pantalla de asistencia de una actividad temporal con 20 confirmados: «Marcar todos», 3 cambiados a «no asistió» y Guardar. Se guardaron 17 «asistió» y 3 «no asistió». Datos temporales borrados después, solo en la base de desarrollo |
