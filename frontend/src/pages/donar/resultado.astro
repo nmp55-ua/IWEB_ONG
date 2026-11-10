@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ResultadoDonacion from '../../components/donaciones/ResultadoDonacion.jsx';
+// spec-001 (Nada). La referencia de la URL solo identifica la aportación; el acceso lo
+// decide el servidor según el permiso de la operación o la cuenta vinculada.
+---
+
+<Layout titulo="Resultado de tu donación">
+  <ResultadoDonacion client:load />
+</Layout>

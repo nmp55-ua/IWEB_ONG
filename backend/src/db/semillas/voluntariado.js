@@ -2,6 +2,8 @@
 // Usa las actividades de prueba de spec-007, buscándolas por título. Si al repetirse las inscripciones
 // activas de esas actividades no son las de abajo, las pasa a «cancelada» y vuelve a crear las de prueba,
 // así se puede repetir el quickstart desde cero (nunca se borra nada).
+// Para HU-06 crea además 4 actividades publicadas más (specs/spec-006/research.md, R7).
+import { aIsoMadrid, inicioDia, ZONA } from '../../servicios-comunes/fechas.js';
 
 // voluntario3 … voluntario11: los 9 inscritos de «Limpieza de playa».
 const NOMBRES = [
@@ -29,6 +31,100 @@ const perfiles = [
   ...extra,
 ];
 
+// HU-06: 4 actividades publicadas más, para que voluntario@ tenga 3 confirmadas y 1 en lista de espera
+// por delante. Son filas de la tabla de spec-007, pero se crean aquí para no tocar
+// semillas/actividades.js; se buscan por título y se actualizan, igual que allí. Todas son de
+// «Agua potable» y a partir de dentro de 11 días, para no cambiar el paso 1.3 del quickstart de spec-005.
+// inicio y fin: [días desde hoy, hora, minutos] en Madrid.
+const ACTIVIDADES_CALENDARIO = [
+  {
+    titulo: 'Charla sobre el agua en el instituto',
+    inicio: [11, 10],
+    fin: [11, 12],
+    lugar: 'IES Miguel Hernández',
+    plazas: 20,
+    requisitos: '',
+  },
+  {
+    titulo: 'Análisis de fuentes',
+    inicio: [11, 17],
+    fin: [11, 19, 30],
+    lugar: 'Fuente del parque',
+    plazas: 8,
+    requisitos: 'Mayor de edad.',
+  },
+  {
+    titulo: 'Visita a la depuradora',
+    inicio: [12, 11],
+    fin: [12, 13],
+    lugar: 'Depuradora municipal',
+    plazas: 2,
+    requisitos: 'Calzado cerrado.',
+  },
+  {
+    titulo: 'Jornadas de reforestación',
+    inicio: [15, 9],
+    fin: [17, 14],
+    lugar: 'Sierra de Aitana',
+    plazas: 12,
+    requisitos: 'Calzado de montaña y agua.',
+  },
+];
+
+// Desfase de Madrid en minutos (+60 en invierno, +120 en verano), a partir de «…+01:00».
+function desfase(fecha) {
+  const [, signo, hh, mm] = aIsoMadrid(fecha).match(/([+-])(\d{2}):(\d{2})$/);
+  return (signo === '-' ? -1 : 1) * (Number(hh) * 60 + Number(mm));
+}
+
+// Instante de «hoy + dias» a las hh:mm de Madrid. Si entre la medianoche y esa hora cambia la hora
+// (último domingo de marzo u octubre), se corrige la diferencia para que las 10:00 sean las 10:00.
+function enMadrid(dias, hh, mm = 0) {
+  const partes = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', { timeZone: ZONA, year: 'numeric', month: 'numeric', day: 'numeric' })
+      .formatToParts(new Date())
+      .map((p) => [p.type, Number(p.value)]),
+  );
+  const medianoche = inicioDia(partes.year, partes.month, partes.day + dias);
+  const aproximado = new Date(medianoche.getTime() + (hh * 60 + mm) * 60_000);
+  return new Date(aproximado.getTime() - (desfase(aproximado) - desfase(medianoche)) * 60_000);
+}
+
+async function sembrarActividadesCalendario(pool) {
+  const {
+    rows: [coordinador],
+  } = await pool.query("SELECT id FROM usuarios WHERE correo = 'coordinador@ong.test'");
+  const {
+    rows: [proyecto],
+  } = await pool.query("SELECT id FROM proyectos WHERE nombre = 'Agua potable'");
+  for (const a of ACTIVIDADES_CALENDARIO) {
+    const valores = [
+      proyecto.id,
+      a.titulo,
+      `Actividad de prueba: ${a.titulo.toLowerCase()}.`,
+      enMadrid(...a.inicio),
+      enMadrid(...a.fin),
+      a.lugar,
+      a.plazas,
+      a.requisitos,
+      coordinador.id,
+    ];
+    const { rowCount } = await pool.query(
+      `UPDATE actividades SET proyecto_id = $1, descripcion = $3, inicio = $4, fin = $5, lugar = $6,
+         plazas = $7, requisitos = $8, estado = 'publicada', creada_por = $9, actualizado_en = now()
+       WHERE titulo = $2`,
+      valores,
+    );
+    if (rowCount === 0) {
+      await pool.query(
+        `INSERT INTO actividades (proyecto_id, titulo, descripcion, inicio, fin, lugar, plazas, requisitos, estado, creada_por)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'publicada', $9)`,
+        valores,
+      );
+    }
+  }
+}
+
 // Por actividad, las inscripciones activas en orden de llegada.
 const inscripciones = {
   'Limpieza de playa': extra.map((v) => [v.correo, 'confirmada']),
@@ -42,6 +138,15 @@ const inscripciones = {
     ['voluntario@ong.test', 'confirmada'],
     ['voluntario2@ong.test', 'confirmada'],
   ],
+  // HU-06: el calendario de voluntario@ (Independent Test y quickstart de spec-006).
+  'Charla sobre el agua en el instituto': [['voluntario@ong.test', 'confirmada']],
+  'Análisis de fuentes': [['voluntario@ong.test', 'confirmada']],
+  'Visita a la depuradora': [
+    ['voluntario6@ong.test', 'confirmada'],
+    ['voluntario7@ong.test', 'confirmada'],
+    ['voluntario@ong.test', 'en_espera'],
+  ],
+  'Jornadas de reforestación': [['voluntario@ong.test', 'confirmada']],
 };
 
 export async function sembrarVoluntariado(pool, hash) {
@@ -62,6 +167,8 @@ export async function sembrarVoluntariado(pool, hash) {
       [p.correo, p.nombre, p.apellidos, p.telefono],
     );
   }
+
+  await sembrarActividadesCalendario(pool);
 
   let total = 0;
   for (const [titulo, previstas] of Object.entries(inscripciones)) {
@@ -99,7 +206,10 @@ export async function sembrarVoluntariado(pool, hash) {
     }
     total += previstas.length;
   }
-  console.log(`Semillas de voluntariado: ${perfiles.length} voluntarios y ${total} inscripciones activas.`);
+  console.log(
+    `Semillas de voluntariado: ${perfiles.length} voluntarios, ${ACTIVIDADES_CALENDARIO.length} actividades ` +
+      `de HU-06 y ${total} inscripciones activas.`,
+  );
 
   // Ids para los bordes del quickstart de spec-005 (cancelar tras el inicio, inscripción de otro).
   const { rows: celebrada } = await pool.query(

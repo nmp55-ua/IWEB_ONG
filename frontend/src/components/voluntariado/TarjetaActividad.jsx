@@ -1,16 +1,8 @@
 import { useState } from 'react';
-import { formatearFecha, formatearHora } from '../../lib/formato.js';
 import Boton from '../comunes/Boton.jsx';
 import CancelarInscripcion from './CancelarInscripcion.jsx';
+import { horario } from './fechas.js';
 import FormInscripcion from './FormInscripcion.jsx';
-
-// «18/11/2026, de 10:00 a 13:00» (o con las dos fechas si acaba otro día).
-function horario({ inicio, fin }) {
-  if (formatearFecha(inicio) === formatearFecha(fin)) {
-    return `${formatearFecha(inicio)}, de ${formatearHora(inicio)} a ${formatearHora(fin)}`;
-  }
-  return `del ${formatearFecha(inicio)} a las ${formatearHora(inicio)} al ${formatearFecha(fin)} a las ${formatearHora(fin)}`;
-}
 
 const textoPlazas = ({ plazasLibres, plazas }) =>
   `${plazasLibres} ${plazasLibres === 1 ? 'plaza libre' : 'plazas libres'} de ${plazas}`;

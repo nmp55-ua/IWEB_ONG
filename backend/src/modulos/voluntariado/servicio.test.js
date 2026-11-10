@@ -547,8 +547,14 @@ describe.skipIf(!URL_PRUEBAS)('HU-05 · voluntariado', () => {
           coordinador.patch(`/api/actividades/${id}`).send({ plazas: 2 }),
           v1.post(`/api/actividades/${id}/inscripciones`).send({ aceptaRequisitos: true }),
         ]);
-        // Gana la primera que bloquea la actividad; la otra se rechaza con su motivo.
-        expect([bajar.status, inscribir.status].sort()).toEqual([200, 409].sort());
+        // Gana la primera que bloquea la actividad; la otra se rechaza con su motivo. Valen los dos órdenes.
+        if (bajar.status === 200) {
+          expect(inscribir.status).toBe(409);
+          expect(inscribir.body.error.codigo).toBe('PLAZAS_AGOTADAS');
+        } else {
+          expect([bajar.status, bajar.body.error.codigo]).toEqual([409, 'PLAZAS_MENOR_QUE_INSCRITOS']);
+          expect(inscribir.status).toBe(201);
+        }
         const { rows } = await pool.query('SELECT plazas FROM actividades WHERE id = $1', [id]);
         expect(await servicio.contarConfirmadas(id)).toBeLessThanOrEqual(rows[0].plazas);
       }

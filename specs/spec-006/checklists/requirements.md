@@ -31,4 +31,4 @@
 
 ## Notes
 
-- Las preguntas abiertas PAn.m se conservan en la sección "Open Questions" como pendientes de `/speckit-clarify`; no son marcadores [NEEDS CLARIFICATION].
+- PA6.1 y las otras tres preguntas se resolvieron en `/speckit-clarify` el 06/11/2026 (ver Clarifications y `refinamiento/clarify-1.md`).

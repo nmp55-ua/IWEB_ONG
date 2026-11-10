@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VerificarCertificado from '../components/certificados-informes/VerificarCertificado.jsx';
+// spec-003 (FR-011). Pública: no exige iniciar sesión.
+---
+
+<Layout titulo="Verificar un certificado fiscal">
+  <VerificarCertificado client:load />
+</Layout>
