@@ -76,3 +76,59 @@ T001–T014 quedan acreditadas por las comprobaciones anteriores y el informe fi
 Prettier aprueba los nueve archivos del bloque con la configuración existente; `git diff --check` no detecta errores. Los avisos de conversión LF/CRLF de Git son informativos y no se modifica su configuración. Los enlaces locales de tareas e informes son válidos.
 
 La comparación SHA-256 de 353 archivos iniciales detecta cambios únicamente en controlador, rutas, servicio, repositorio de donaciones y tasks.md. El resto, incluidos `.env`, `.claude/launch.json`, `.specify/feature.json`, migraciones, módulos ajenos y todos los históricos, permanece intacto. La rama/HEAD siguen en `spec-002`/`24282d5`; el índice está vacío y no se hacen commits.
+
+## Preparación de interfaz y banco — T015–T024
+
+Nueva entrega sobre `ca172ffecca737df6d96567bc2904f8cfe9b053c`, en `spec-002`; T001–T014 están registradas y no se repiten. Al inicio solo `.claude/launch.json` está sin seguimiento, el índice está vacío y el checklist conserva 16/16. Se aplica el procedimiento local de implementación dentro del bloque autorizado, selección temporal sin persistencia y sin hooks opcionales de commit. La evidencia de los bloques anteriores se conserva íntegra.
+
+T015: se escriben primero los casos del formato anual. Desde frontend se ejecuta `npm test -- src/components/donaciones/historial.test.js`. Primera ejecución: código 1, un archivo fallido por `ERR_MODULE_NOT_FOUND` de `historial.js`, aún no implementado; cero casos aprobados. Es la fase roja inicial de este bloque, sin instalación ni conexión de base. Se implementa después el formateador mediante dígitos del texto, sin Number, parseFloat, redondeo o límite individual.
+
+Segunda ejecución: **20/20 aprobadas**, código 0. Incluye 80,00 €, 1.999.999,98 € y textos decimales mayores que el rango seguro de Number; las entradas incorrectas provocan error, sin convertirse en cero.
+
+Se añaden seis regresiones puras para la coordinación que utilizará la isla. Antes de implementarla, el comando devuelve **20 aprobadas y 6 fallidas**, código 1: faltan `crearConsultasHistorial` y `validarRespuestaHistorial`. Tras implementar esos ayudantes y conectarlos a React, devuelve **26/26 aprobadas**, código 0. Se comprueban respuesta antigua y error antiguo después de una petición nueva, invalidación al desmontar, reintento del mismo filtro y rechazo de respuestas monetarias o DTO incorrectos. Estas pruebas son de lógica pura, no recorridos de navegador.
+
+### Interfaz implementada — T017–T020
+
+La página `/mis-aportaciones` usa Layout e isla React, componentes comunes y el cliente api.get. Incluye carga, permisos, tres estados sin datos, enlaces existentes, filtro con validación junto al campo, retirada y reintento. Al cambiar la consulta desaparecen los datos anteriores; el filtro permanece disponible para una cuenta vinculada. El gestor invalida las respuestas antiguas y las que llegan después del desmontaje. La suma anual se presenta mediante texto exacto; las fechas e importes individuales reutilizan los servicios comunes.
+
+La única modificación compartida es descomentar la entrada reservada de donante «Mis aportaciones» en Menu.jsx; el diff conserva el resto de enlaces y permisos. No se modifica autenticación, cookies, cliente HTTP, formateador común o módulos ajenos.
+
+Desde frontend se ejecuta `npm run build` con ASTRO_TELEMETRY_DISABLED limitado al proceso: código **0**. El build inicial termina en **11,97 s** según Astro; después de los últimos ajustes de la isla se repiten las 26 pruebas puras y el build, ambos con código **0**, build final **7,19 s** según Astro. Las duraciones de build no miden la presentación del historial.
+
+### Banco integrado — T021–T024
+
+Se amplía `backend/src/modulos/donaciones/pruebas/historial-local.js` sin cambiar sus fixtures de T003. Importarlo sigue sin abrir conexiones ni arrancar servicios. La ejecución de banco exige NODE_ENV=test y DATABASE_URL/TEST_DATABASE_URL iguales para ong_test_hu01; usa el soporte existente para su esquema aleatorio. Arranca un backend hijo con configuración sintética antes de importar los pools, `crearApp`, MemoryStore y login/middleware reales. No simula identidad mediante cabeceras.
+
+Los adaptadores se sustituyen únicamente en ese hijo con `node:test.mock.module`, activado con `--experimental-test-module-mocks`, comprobado sobre Node 22.20.0. Se ha contrastado la interfaz `namedExports` y su carácter experimental en la [documentación oficial de Node 22.20.0](https://nodejs.org/download/release/v22.20.0/docs/api/test.html#mockmodulespecifier-options). No se añaden dependencias ni se cambia app.js. Los contadores verifican cero invocaciones a Stripe/SMTP; el proxy bloquea operaciones fuera de la consulta y autenticación del banco.
+
+El banco sirve el build standalone de Astro en 127.0.0.1:44323 y el proxy en 44322, con API al backend propio. Reserva y comprueba los puertos, se niega a usar uno ocupado y no detiene procesos por número de puerto. Los hijos se crean ocultos en Windows. Su cierre detiene exclusivamente hijos y conexiones propios, elimina solo su esquema y libera puertos; la limpieza también se comprueba ante fallo al arrancar Astro.
+
+El observador se inyecta antes de terminar el head únicamente al abrir `/mis-aportaciones?medir=1` en el banco. El producto no incluye esa instrumentación. Espera 60 filas únicas, cinco grupos 2025–2021, doce fechas mensuales por grupo, importes de 10,00 €, modalidad/destino y totales de 120,00 € correctos y no ocultos. Usa el inicio de navegación y dos requestAnimationFrame antes del fin; conserva intentos inválidos, falta de contenido, pestaña oculta o umbral no cumplido. `window.__hu02Medicion` conserva los datos y señala la revisión visual pendiente. Ninguna prueba simulada de ese observador se considera una medición real.
+
+Se añade `backend/src/modulos/donaciones/historial-banco.test.js`, acotado al soporte propio. Primera ejecución desde backend:
+
+```powershell
+npm test -- src/modulos/donaciones/historial-banco.test.js --no-file-parallelism
+```
+
+Resultado inicial: **4/4 fallidas**, código 1, por `crearBancoHistorial is not a function`, antes de implementar el banco. Después: **4/4 aprobadas**, código 0, duración Vitest **12,44 s**. Se amplía la regresión para comprobar expresamente la desaparición del esquema tras fallo y probar el observador con un DOM y reloj ficticios: resultado final **9/9 aprobadas**, código **0**, duración Vitest **11,82 s**.
+
+La prueba de ciclo completo verifica HTTP 200 de la página SSR y un asset construido, instrumento solo bajo el parámetro de pruebas, 401 sin sesión, login real y consulta de tres aportaciones con sumas 20.00/80.00. Comprueba bloqueo de POST de pago, contadores Stripe/SMTP a cero, procesos terminados, esquema eliminado, puertos reutilizables y cierre repetido sin efectos. Los casos de puertos ocupados conservan el servidor de prueba previo. Las comprobaciones HTTP/SSR no acreditan hidratación o avisos visibles en navegador.
+
+### Formato y límites de esta entrega
+
+Se ejecuta Prettier con la configuración existente sobre las rutas explícitas. El primer comando devuelve código 1 únicamente porque no puede inferir parser para `mis-aportaciones.astro`; sí procesa los archivos JS/JSX. La plantilla Astro se revisa manualmente respecto a las páginas existentes y se compila en el build final. No se instala un plugin ni se modifica configuración por ese motivo. La comprobación final de Prettier se limita a los formatos compatibles y la página Astro conserva esta limitación explícita.
+
+No se realizan pagos, altas reales, envíos o reenvíos ni se ejecutan suites antiguas ya acreditadas sin necesidad. AHORA_SIMULADO no se transmite a los procesos hijos del banco; para las pruebas con reloj real se retira únicamente de su proceso de ejecución, siguiendo la precisión del bloque anterior. Los recorridos visibles T025–T028 y la preparación/medición T029–T030 permanecen pendientes. El build, HTTP y el DOM ficticio no sustituyen esas evidencias.
+
+Comprobación adicional del comando de banco desde backend:
+
+```powershell
+node src/modulos/donaciones/pruebas/historial-local.js --comprobar
+```
+
+Resultado real: código **0**, mensaje `Banco preparado: build, proxy, login y consulta aislada correctos.` El comando termina cerrando sus recursos; no abre navegador ni toma una medición. Para el siguiente bloque, el comando sin `--comprobar` mantiene el banco activo y muestra únicamente URL local y cuentas/contraseña sintéticas de fixtures. Se usa la misma preparación de conexión exclusiva; no se imprimen claves o secretos de `.env`.
+
+T015–T024 quedan completadas con ese alcance: formato y coordinación puros, interfaz implementada/compilada y banco integrado comprobado por HTTP. T025 y siguientes permanecen pendientes, incluida toda observación visible o aceptación del límite de dos segundos. Los commits anteriores y los informes históricos permanecen intactos; esta sección amplía la evidencia local sin reemplazar resultados anteriores.
+
+Comprobación final: Prettier aprueba los ocho archivos JS/JSX/Markdown del bloque, con la limitación Astro anterior; `git diff --check` no detecta errores y los enlaces locales son válidos. La comparación de 357 archivos iniciales detecta únicamente cuatro modificaciones previstas: banco existente, Menu.jsx, tasks.md y este informe. Los cinco archivos nuevos son la isla, sus funciones y pruebas puras, la página Astro y la suite del banco. El contenido de este informe anterior a la nueva sección se conserva íntegramente. `.env`, `.claude/launch.json`, selección de funcionalidad, migraciones, documentos de diseño, módulos ajenos y demás históricos permanecen intactos. Rama/HEAD: `spec-002`/`ca172ff`; índice vacío, sin acciones Git de escritura.
