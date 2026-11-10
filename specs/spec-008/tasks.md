@@ -140,3 +140,9 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 
 - [X] T023 Añadir a `asistencias` las columnas `creado_en` y `actualizado_en` (`TIMESTAMPTZ NOT NULL DEFAULT now()`) editando `backend/src/db/migraciones/007_asistencias.sql` (aún no está en `main`, así que se puede editar según `LEEME.md`), hacer que el upsert de `guardarAsistencias` en `backend/src/modulos/actividades/repositorio.js` ponga `actualizado_en = now()` al corregir, recrear las bases locales de desarrollo y de pruebas (`ong`, `ong_test`) para volver a aplicar `007`, y añadir las dos columnas a la tabla de `specs/spec-008/data-model.md` per modelo-datos.md «Reglas generales» / CONVENCIONES.md (contradicts)
 - [X] T024 Dar mensajes en español a las validaciones de `inscripcionId` (`.int()`, `.positive()`) y a las claves no reconocidas (`.strict()`) de `esquemaAsistencias` en `backend/src/modulos/actividades/controlador.js`, que hoy devuelven en `campos` los mensajes por defecto de zod en inglés per Constitution IV (partial)
+
+---
+
+## Phase 7: Convergence
+
+- [ ] T025 Dar mensaje en español al tipo del cuerpo de `esquemaAsistencias` (`z.object({...}, { message: 'El cuerpo debe ser un objeto con asistencias.' })`) en `backend/src/modulos/actividades/controlador.js`: si el cuerpo del `PUT` no es un objeto (por ejemplo, un array JSON), hoy devuelve en `campos` el texto de zod «Expected object, received array» per Constitution IV / T024 (partial)
