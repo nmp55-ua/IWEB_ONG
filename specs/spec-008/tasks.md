@@ -133,3 +133,10 @@ reexporta `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`.
 - No hay rutas `DELETE`; corregir solo cambia `asistio` (principio VI).
 - El total nunca se guarda: siempre `SUM(horas)` con `asistio = true`.
 - «Ahora» siempre de `servicios-comunes/fechas.js`, nunca `new Date()` directo.
+
+---
+
+## Phase 6: Convergence
+
+- [ ] T023 Añadir a `asistencias` las columnas `creado_en` y `actualizado_en` (`TIMESTAMPTZ NOT NULL DEFAULT now()`) editando `backend/src/db/migraciones/007_asistencias.sql` (aún no está en `main`, así que se puede editar según `LEEME.md`), hacer que el upsert de `guardarAsistencias` en `backend/src/modulos/actividades/repositorio.js` ponga `actualizado_en = now()` al corregir, recrear las bases locales de desarrollo y de pruebas (`ong`, `ong_test`) para volver a aplicar `007`, y añadir las dos columnas a la tabla de `specs/spec-008/data-model.md` per modelo-datos.md «Reglas generales» / CONVENCIONES.md (contradicts)
+- [ ] T024 Dar mensajes en español a las validaciones de `inscripcionId` (`.int()`, `.positive()`) y a las claves no reconocidas (`.strict()`) de `esquemaAsistencias` en `backend/src/modulos/actividades/controlador.js`, que hoy devuelven en `campos` los mensajes por defecto de zod en inglés per Constitution IV (partial)
