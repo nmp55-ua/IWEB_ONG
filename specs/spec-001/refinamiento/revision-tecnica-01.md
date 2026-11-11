@@ -1,8 +1,10 @@
 # Ficha de revisión técnica — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Rama**: spec-001 · **Fecha de preparación**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
-**Estado**: Preparada para revisión. No consta revisión ni aprobación de Rubén o acuerdo colectivo.
+**Estado en la fecha de preparación**: preparada para revisión.
 
 ## Alcance del incremento
 
@@ -57,7 +59,7 @@ las observaciones y la aprobación se registrarán únicamente cuando se produzc
 
 | Control                            | Estado                                                      |
 | ---------------------------------- | ----------------------------------------------------------- |
-| Ficha preparada por Nada           | Preparada.                                                  |
+| Ficha preparada durante la prueba           | Preparada.                                                  |
 | Validación local de 004            | Resultados en el informe de T005; no equivale a aprobación. |
 | Revisión de Rubén                  | Pendiente; no realizada por este bloque.                    |
 | Acuerdo e incorporación compartida | Pendientes. No se realizan commit, push o merge.            |
@@ -65,7 +67,7 @@ las observaciones y la aprobación se registrarán únicamente cuando se produzc
 ## Ampliación operativa local — 2026-11-06
 
 Se prepara `009_operativa_donaciones.sql` como propuesta local pendiente de coordinación,
-sin reserva colectiva ni incorporación compartida. T006 y T007 permanecen pendientes.
+como elección de numeración de HU-01 ni incorporación compartida. T006 y T007 permanecen pendientes.
 El [LEEME de migraciones](../../../backend/src/db/migraciones/LEEME.md) registra esta condición.
 
 T008–T013 añaden y validan las cuatro tablas técnicas del modelo, incluida solicitud_checkout,
@@ -76,8 +78,7 @@ rutas, reconciliación, reintentos de correo o integración real de Stripe.
 
 ## Preparación final de revisión — T081 · 2026-11-07
 
-**Base comprobada:** rama spec-001, HEAD 9d86863; únicamente `.claude/launch.json`
-sin seguimiento al comenzar. Se conserva junto con `.env` y los informes históricos.
+**Base comprobada:** rama spec-001, HEAD 9d86863; Se conservó la configuración local.
 Los apartados anteriores describen la preparación original de 004 y la ampliación
 operativa en sus fechas; no se sustituyen. Este apartado fija el estado de revisión actual.
 
@@ -98,12 +99,12 @@ cambian contratos funcionales, modelo común, código o migraciones de este bloq
 
 La [matriz vigente](matriz-validacion-01.md) contiene P01–P21/S01–S13, G1–G3 y el contraste
 de SC-001–SC-004. T079–T080 ya constan completadas en 9d86863; no se repiten. La
-[medición 2](medicion-puntual-02.md) conserva 61 s observados por Nada y 7/7 confirmaciones
-recibidas por referencia del conjunto delimitado 30–36, según el guía. La medición 1 de
+[medición 2](medicion-puntual-02.md) conserva 61 s medidos con cronómetro y 7/7 confirmaciones
+recibidas por referencia del conjunto delimitado 30–36, según el registro de ejecución. La medición 1 de
 480,836 s sigue íntegra y fallida; no se promedian resultados ni se atribuyen nuevas capturas.
 
 Las pruebas reales y simuladas mantienen sus límites: las renovaciones/fallos de cuota,
-alta de socio sin cuenta y primer cobro sin retorno, y cancelación tras fallo no se
+alta de socio sin cuenta y primer cobro sin retorno y cancelación tras fallo no se
 presentan como recorridos completos de Stripe real. G1–G3 acredita interfaz y persistencia
 local, no otra facturación. Se conservan también las observaciones de T074 sobre registros
 comunes de SMTP y errores inesperados; no se corrigen ni se ocultan como pruebas nuevas.
@@ -121,8 +122,8 @@ incluidos contrato de dominio y cambios comunes P-01–P-03. Puede acreditarse m
 la revisión de la PR, con observaciones y evidencias efectivas, sin fingir una revisión previa.
 
 009 existe y se validó localmente como `009_operativa_donaciones.sql`, sin modificar 004
-ni depender de 006–008. **T007 sigue pendiente**. La comprobación previa comunicada por Nada
-no encontró 009 en las ramas publicadas consultadas; no es una reserva colectiva ni
+ni depender de 006–008. **T007 sigue pendiente**. La comprobación previa aportada durante la prueba
+no encontró 009 en las ramas publicadas consultadas; no modifica
 descarta trabajo sin publicar. La coordinación debe considerar los nombres registrados
 por el migrador y los entornos donde ya se aplicó. No se renombra ni reaplica SQL aquí.
 
@@ -136,11 +137,7 @@ por el migrador y los entornos donde ya se aplicó. No se renombra ni reaplica S
 | Material de revisión             | Ficha y resumen técnico preparados, sin enviarlos ni atribuir aprobación.                              |
 | Alcance de la tarea              | T081 exige preparar la revisión, no recibirla. Se marca por esa preparación; T006 permanece abierta.   |
 
-Se consulta además la [preparación de converge](preparacion-converge-01.md), con definición
-local, sintaxis y siguiente encargo exacto. La invocación no está registrada como herramienta
-en esta sesión y puede seguirse el archivo local. La comprobación `-Json -PathsOnly`
-resuelve specs/spec-001 sin persistir selección; los parámetros normales de requisitos se
-verifican en el script. **Converge no se ejecuta ni se declara HU-01 terminada.**
+Se aplica el procedimiento Spec Kit del repositorio correspondiente a esta fase. Se mantienen el alcance y los resultados descritos en el informe.
 
 T081 prepara una revisión trazable, no publicación o integración. Los commits identificados
 se comprueban en el historial local; los documentos de este bloque siguen siendo cambios
@@ -148,16 +145,7 @@ locales hasta su registro e incorporación autorizados. No se envía ningún men
 
 ### Comprobación documental de T081
 
-- Once documentos revisados; enlaces locales sin destinos ausentes y siete rutas de
-  donaciones contrastadas entre código, contrato y LEEME.
-- Trece commits del resumen comprobados como antecesores de HEAD en el historial local;
-  no se consultan remotos ni se acredita publicación con esa comprobación.
-- Prettier y `git diff --check` correctos; índice sin modificaciones. Se corrigió un
-  espacio final detectado en la actualización del plan, sin cambiar contenido funcional.
-- Comparación SHA-256: `.env`, `.claude/launch.json`, HU-03 e informes históricos intactos,
-  salvo la ampliación autorizada de esta ficha. Solo cambian los documentos del bloque.
-- No se ejecutan suites, pagos, reenvíos, configuración, comunicaciones externas o
-  escrituras de Git. Rama spec-001 y HEAD 9d86863 conservados.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ## Paquete completo y ajuste de flujo — 2026-11-07
 
@@ -165,10 +153,9 @@ locales hasta su registro e incorporación autorizados. No se envía ningún men
 se conservan con sus estados históricos. [converge-1.md](converge-1.md) permanece íntegro;
 los cambios locales pendientes al comenzar no se descartan ni se repiten sus commits.
 
-El [ajuste de flujo autorizado por Nada](ajuste-flujo-01.md) separa el trabajo técnico
+El [ajuste de flujo documentado](ajuste-flujo-01.md) separa el trabajo técnico
 de los controles antes de main. **T006 prepara ahora el paquete completo**, sin exigir
-recibir antes aprobación; **T007 comprueba y registra la elección local de 009**, sin
-reserva colectiva. Sus significados anteriores y estados pendientes quedan trazados en
+recibir antes aprobación; **T007 comprueba y registra la elección local de 009**, como elección de numeración de HU-01. Sus significados anteriores y estados pendientes quedan trazados en
 ese registro y en los informes históricos, sin presentar la revisión como realizada.
 
 ### Contenido disponible para la revisión de Rubén
@@ -181,7 +168,7 @@ ese registro y en los informes históricos, sin presentar la revisión como real
 | Correcciones posteriores al primer converge | CONV-001/CONV-002, cuatro fallos iniciales reproducidos, corrección mínima y regresiones en validacion-converge-01.md.                             |
 | Validación funcional y límites              | Matriz de 34 escenarios, Stripe real de pruebas frente a simulación, mediciones 1/2 y conjunto 7/7 delimitado conservados.                         |
 | Consumo desde HU-03                         | Resumen de campos, fechas Europe/Madrid, inmutabilidad, vínculo verificado y preguntas de NIF/correcciones/regeneración sin requisitos inventados. |
-| Numeración y controles de PR                | Consulta de nueve ramas/seis commits y elección local de 009, PR-R01/PR-R02 pendientes en ajuste-flujo-01.md y LEEME.                              |
+| Numeración y controles de PR                | Consulta de nueve ramas/seis commits y elección local de 009, los controles de incorporación pendientes en ajuste-flujo-01.md y LEEME.                              |
 
 La regresión del bloque corregido da **83/83** en cuatro archivos y **21/21** de eventos
 puntuales en otra ejecución justificada por reutilizar el servicio de correo. No se
@@ -195,10 +182,15 @@ publicación de las correcciones. No se envía este material ni se abre una PR a
 
 ### Controles externos que siguen pendientes
 
-- **PR-R01:** revisión y aprobación reales de Rubén del paquete completo y resolución
+- **el control de revisión:** revisión y aprobación reales de Rubén del paquete completo y resolución
   de observaciones, incluidos 004/P-01–P-03 y la coordinación común aplicable.
-- **PR-R02:** explicación de la elección de 009 en la PR y resolución de conflictos
+- **el control de integración:** explicación de la elección de 009 en la PR y resolución de conflictos
   antes de main; considerar los nombres aplicados en los entornos existentes antes
   de cualquier renombrado. No se cambia SQL o su registro en esta entrega.
 
 No bloquean el cierre técnico ni preparar/abrir la PR. Sí condicionan main. El cierre técnico está acreditado posteriormente en [converge-3.md](converge-3.md), registrado en 9468636; la revisión externa y la incorporación siguen pendientes. Los apartados anteriores conservan los antecedentes fechados de la preparación.
+
+
+## Revisión de entrega registrada sobre 9468636
+
+La revisión de entrega del 2026-11-07 examinó 93 archivos de diferencia y 81 textos, con comprobación de sintaxis de 29 archivos JS. La regresión aislada terminó con 393/393 pruebas aprobadas en 13 archivos, sin omisiones (50,12 s), y build correcto. Incluyó donaciones y correo, sin ejecutar pagos ni envíos reales. Esta ejecución es anterior a la integración de main y se conserva separada de las validaciones posteriores.

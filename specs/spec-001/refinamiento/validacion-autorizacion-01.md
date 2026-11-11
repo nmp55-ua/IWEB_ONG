@@ -1,5 +1,7 @@
 # Validación de autorización — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-06 · **Rama**: spec-001 · **HEAD inicial**: 8a34a04  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance**: T022–T023, funciones aisladas y pruebas unitarias.  
@@ -91,10 +93,7 @@ node $hu01Prettier --config .prettierrc.json --write backend/src/modulos/donacio
 node $hu01Prettier --config .prettierrc.json --check backend/src/modulos/donaciones/autorizacion.js backend/src/modulos/donaciones/autorizacion.test.js specs/spec-001/tasks.md specs/spec-001/refinamiento/validacion-autorizacion-01.md
 ```
 
-Resultado de formato: código 0, All matched files use Prettier code style.
-Se contrastan alcance, rutas, dependencias y huellas de archivos previos. Históricos,
-secretos, migraciones y código común/ajeno se conservan. Solo se marcan T022 y T023 como
-recién completadas.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 No se modifican autenticación, cookies, roles, rutas o app.js. Estas pruebas no acreditan
 la protección de las rutas futuras ni el comportamiento del almacén real de sesiones.

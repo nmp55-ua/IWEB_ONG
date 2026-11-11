@@ -23,7 +23,7 @@ manifiesto demuestra instalación. El lockfile y los contratos del SDK son evide
 
 Se define una fila de aportación por PaymentIntent puntual y por Invoice de socio.
 Los identificadores de notificación solo deduplican entregas; no identifican el dinero.
-Stripe permite entregas duplicadas y sin orden garantizado; se recuperan objetos actuales
+Stripe permite entregas duplicadas y sin orden garantizado; Se recuperan objetos actuales
 para reconciliar. No se usa `event.created` como número de versión, pues varios eventos
 pueden compartir instante. [Documentación oficial de webhooks](https://docs.stripe.com/webhooks#event-ordering).
 
@@ -32,7 +32,7 @@ añade otra primera cuota. El recurso actual debe confirmar pago real y su corre
 con importe y moneda, no basta recibir el nombre del evento. El [objeto Invoice de Acacia](https://docs.stripe.com/api/invoices/object?api-version=2025-02-24.acacia)
 incluye `subscription`, `payment_intent`, `billing_reason`, `paid`, `paid_out_of_band`,
 `amount_paid` y `status_transitions.paid_at`. Un pago manual marcado fuera de Stripe no se
-acepta como cobro por pasarela; se registra incidencia sin convertirlo en aportación confirmada.
+acepta como cobro por pasarela; Se registra incidencia sin convertirlo en aportación confirmada.
 
 **Decisión P-01**: el modelo común queda alineado para permitir que una aportación no confirmada
 pase a confirmada cuando el recurso actual pruebe el cobro, conservando la misma fila,
@@ -43,7 +43,7 @@ común. La revisión de Rubén sigue pendiente antes de incorporar los cambios c
 edita un importe ya confirmado.
 
 Para el primer cobro fallido de un alta se conserva la suscripción pendiente,
-sin activarla; se cancela si la pasarela confirma un cierre definitivo. Evita cancelar
+sin activarla; Se cancela si la pasarela confirma un cierre definitivo. Evita cancelar
 irreversiblemente el alta por un rechazo recuperable. Sustituye la transición anterior
 del primer rechazo, ahora alineada en P-01. Un cobro tardío no reactiva una suscripción
 que la pasarela mantiene cancelada.
@@ -209,4 +209,4 @@ objetos de pago. El catálogo de eventos se contrastó con el [SDK 17.7.0](https
 Las decisiones P-01–P-04 y la preparación de entorno P-05 están desarrolladas en [cambios comunes](contracts/cambios-comunes.md).
 La documentación común queda alineada y la revisión de Rubén sigue pendiente. No se ha
 validado una cuenta Stripe, una migración o una prueba funcional. P-05 no impide diseñar
-ni desglosar HU-01; se completa antes de las pruebas reales de Stripe.
+ni desglosar HU-01; Se completa antes de las pruebas reales de Stripe.

@@ -1,5 +1,7 @@
 # Feature Specification: HU-01 — Donación puntual o alta como socio
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Feature Branch**: `spec-001`
 
 **Created**: 2026-10-28
@@ -18,7 +20,7 @@ la alineación documental actual de esta rama.
 
 ### Session 2026-11-04
 
-- Q: ¿Debe un socio poder modificar el importe de su cuota o darse de baja desde la aplicación en esta primera versión? (PA1.1) → A: No. Ambas operaciones quedan fuera de alcance en v1; se mantienen el alta como socio y el registro de los cobros periódicos previstos en HU-01.
+- Q: ¿Debe un socio poder modificar el importe de su cuota o darse de baja desde la aplicación en esta primera versión? (PA1.1) → A: No. Ambas operaciones quedan fuera de alcance en v1; Se mantienen el alta como socio y el registro de los cobros periódicos previstos en HU-01.
 - Q: ¿Debe ser obligatorio tener una cuenta para hacer una donación puntual o darse de alta como socio? (PA1.2) → A: No. Ambas modalidades pueden completarse sin cuenta. Para consultar el historial es necesario iniciar sesión con una cuenta del mismo correo utilizado al donar; la coincidencia de correos no acredita por sí sola su titularidad. La comprobación previa a la vinculación se concreta en PA1.3.
 - Q: ¿Cómo debe demostrar una persona que controla el correo utilizado al donar antes de vincular las aportaciones a su cuenta? (PA1.3) → A: Antes de vincular las aportaciones a una cuenta, debe abrirse un enlace de verificación enviado al correo utilizado al donar. La comprobación se limita al módulo de donaciones y a esa vinculación, sin cambiar el registro ni el inicio de sesión generales. Los ajustes comunes quedan identificados y sin realizar.
 - Q: ¿Qué debe ocurrir si el cobro está confirmado pero falla el envío del correo de confirmación? (PA1.4) → A: Se conserva la aportación confirmada, se muestra el resumen y se avisa del fallo. Se permite reintentar únicamente el envío del correo, sin iniciar otro cobro ni crear otra aportación. El aviso no equivale a un envío satisfactorio.
@@ -26,9 +28,9 @@ la alineación documental actual de esta rama.
 
 ### Session 2026-11-04 — Ronda 2
 
-- Q: ¿Qué debe hacerse si una nueva aportación usa un NIF/NIE ya registrado, pero otro correo o datos fiscales distintos? (PA1.6) → A: En v1, HU-01 no permite modificar el correo, nombre, apellidos ni dirección de un Donante existente. Si el mismo NIF/NIE se presenta con cambios reales, se detiene la operación antes del pago y se pide revisar los datos, sin mostrar los guardados, sobrescribirlos ni crear otro Donante. Las correcciones quedan fuera de v1; se acepta que no puedan usarse datos nuevos mediante este flujo. Las diferencias meramente de formato deben distinguirse de los cambios reales; su tratamiento se concretará en plan.
+- Q: ¿Qué debe hacerse si una nueva aportación usa un NIF/NIE ya registrado, pero otro correo o datos fiscales distintos? (PA1.6) → A: En v1, HU-01 no permite modificar el correo, nombre, apellidos ni dirección de un Donante existente. Si el mismo NIF/NIE se presenta con cambios reales, se detiene la operación antes del pago y se pide revisar los datos, sin mostrar los guardados, sobrescribirlos ni crear otro Donante. Las correcciones quedan fuera de v1; Se acepta que no puedan usarse datos nuevos mediante este flujo. Las diferencias meramente de formato deben distinguirse de los cambios reales; su tratamiento se concretará en plan.
 - Q: ¿Cómo debe acceder una persona sin cuenta al resultado de su pago y al reintento del correo de confirmación? (PA1.7) → A: Únicamente desde la sesión vigente de la operación iniciada en ese navegador. La autorización se limita a esa operación y no permite consultar otras aportaciones ni el historial; conocer la referencia por sí solo no da acceso. Si se pierde o caduca esa sesión, recuperar el acceso directo sin cuenta queda fuera de v1. Esto no cancela el pago ni elimina la aportación: las notificaciones válidas de la pasarela siguen procesándose aunque se cierre el navegador o no se vuelva a la aplicación. Los mecanismos técnicos se concretarán en plan.
-- Q: ¿Qué debe ocurrir con la suscripción y la información del próximo cobro si falla una cuota posterior al alta como socio? (PA1.8) → A: Se registra el fallo sin considerar pagada la cuota ni incrementar el total aportado. El fallo por sí solo no cancela la suscripción ni altera las aportaciones anteriores; se informa del fallo. Debe procesarse una cancelación que comunique posteriormente la pasarela. Solo se muestra una fecha futura de cobro comunicada por ella; si no existe, se muestra «Pendiente de confirmación». La aplicación no inicia cobros adicionales por su cuenta. Los eventos concretos y su tratamiento técnico corresponden a plan.
+- Q: ¿Qué debe ocurrir con la suscripción y la información del próximo cobro si falla una cuota posterior al alta como socio? (PA1.8) → A: Se registra el fallo sin considerar pagada la cuota ni incrementar el total aportado. El fallo por sí solo no cancela la suscripción ni altera las aportaciones anteriores; Se informa del fallo. Debe procesarse una cancelación que comunique posteriormente la pasarela. Solo se muestra una fecha futura de cobro comunicada por ella; si no existe, se muestra «Pendiente de confirmación». La aplicación no inicia cobros adicionales por su cuenta. Los eventos concretos y su tratamiento técnico corresponden a plan.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -62,7 +64,7 @@ El donante indica el importe y, si quiere, un proyecto de destino; introduce sus
 16. **Given** un Donante existente, incluso con una cuenta identificada y vinculada, **When** se intenta una nueva donación puntual con el mismo NIF/NIE y cambios reales en nombre, apellidos o dirección, **Then** se detiene la operación antes del pago y se pide revisar los datos, sin mostrar los guardados, sobrescribirlos ni crear otro Donante; tener una cuenta vinculada no habilita la edición de esos datos desde HU-01.
 17. **Given** datos válidos de un Donante existente que solo presentan diferencias de formato y son equivalentes tras distinguirlas de cambios reales, **When** se solicita otra donación, **Then** esas diferencias de formato no se consideran modificaciones de datos fiscales y se reutiliza al Donante sin sobrescribirlo ni duplicarlo; las reglas concretas para determinar esa equivalencia se definirán en plan.
 18. **Given** una persona sin cuenta que conserva la sesión vigente de la operación iniciada en ese navegador, **When** consulta el resultado de esa operación, **Then** puede ver su estado y, si está confirmada, su resumen; si ha fallado el correo, puede reintentar únicamente su envío conforme a FR-012.
-19. **Given** una persona que conoce la referencia de una aportación pero no conserva una sesión vigente autorizada para esa operación, **When** intenta consultar el resultado o reintentar su correo, **Then** se deniega el acceso sin mostrar datos ni enviar el correo, y no se ofrece recuperación de ese acceso directo sin cuenta en v1.
+19. **Given** una persona que conoce la referencia de una aportación pero no conserva una sesión vigente autorizada para esa operación, **When** intenta consultar el resultado o reintentar su correo, **Then** se deniega el acceso sin mostrar datos ni enviar el correo y no se ofrece recuperación de ese acceso directo sin cuenta en v1.
 20. **Given** una sesión vigente autorizada para una operación, **When** se intenta usarla para consultar otra aportación, reintentar el correo de otra operación o acceder al historial sin una cuenta identificada y vinculada, **Then** esa autorización no concede acceso a dichos recursos ni permite enviar el correo de otra operación.
 21. **Given** una aportación iniciada cuyo pago todavía no se ha confirmado, **When** se cierra el navegador o se pierde o caduca la sesión y después llega una notificación válida de cobro de la pasarela, **Then** se procesa y confirma la aportación una sola vez sin exigir que el donante vuelva a la aplicación; la pérdida de sesión por sí sola no cancela el pago ni elimina la aportación.
 
@@ -82,7 +84,7 @@ Como donante, quiero hacerme socio con una aportación mensual, trimestral o anu
 2. **Given** un socio dado de alta, **When** la pasarela notifica un cobro periódico posterior, **Then** se registra como una nueva aportación confirmada de modalidad «cuota de socio».
 3. **Given** un alta como socio, **When** la pasarela rechaza el primer cobro, **Then** no queda ninguna suscripción activa ni aportación confirmada.
 4. **Given** una persona sin cuenta ni sesión iniciada, **When** completa los datos válidos del alta como socio y la pasarela confirma el primer cobro, **Then** puede finalizar el alta y recibir su confirmación sin registrarse.
-5. **Given** un alta como socio con el primer cobro confirmado, **When** falla el envío del correo de confirmación, **Then** se mantienen la suscripción activa y la aportación confirmada, se muestran el resumen, la periodicidad y el próximo cobro, y se avisa del correo pendiente con la opción de reintentar exclusivamente su envío.
+5. **Given** un alta como socio con el primer cobro confirmado, **When** falla el envío del correo de confirmación, **Then** se mantienen la suscripción activa y la aportación confirmada, se muestran el resumen, la periodicidad y el próximo cobro y se avisa del correo pendiente con la opción de reintentar exclusivamente su envío.
 6. **Given** una cuota de socio confirmada cuyo correo ha fallado y una autorización vigente para esa operación, **When** se reintenta su envío, **Then** se informa de su resultado real y se conserva la cuota ya registrada, sin crear otra aportación ni suscripción ni iniciar otro cobro; si falla de nuevo, el correo sigue pendiente. La autorización sin cuenta del alta no concede por sí sola acceso a cuotas posteriores, que son otras operaciones.
 7. **Given** un correo ya utilizado por un Donante, **When** se solicita un alta de socio con ese correo y otro NIF/NIE, **Then** el sistema detiene la operación antes del pago y pide revisar los datos, sin mostrar datos del Donante existente, modificarlo ni mezclar sus aportaciones.
 8. **Given** un Donante existente, **When** se solicita un alta de socio con el mismo NIF/NIE y cambios reales en correo, nombre, apellidos o dirección, **Then** se detiene la operación antes del pago y se pide revisar los datos, sin mostrar los guardados, sobrescribirlos ni crear otro Donante; las correcciones quedan fuera de v1.
@@ -96,7 +98,7 @@ Como donante, quiero hacerme socio con una aportación mensual, trimestral o anu
 
 ### Edge Cases
 
-- El donante cierra la ventana durante el pago o pierde la sesión: esto no cancela el pago ni elimina la aportación. La aportación queda «pendiente» hasta que la pasarela comunique un resultado válido; se procesa esa notificación aunque el donante no vuelva a la aplicación. Perder la sesión impide recuperar el acceso directo sin cuenta en v1, pero no detiene ese procesamiento.
+- El donante cierra la ventana durante el pago o pierde la sesión: esto no cancela el pago ni elimina la aportación. La aportación queda «pendiente» hasta que la pasarela comunique un resultado válido; Se procesa esa notificación aunque el donante no vuelva a la aplicación. Perder la sesión impide recuperar el acceso directo sin cuenta en v1, pero no detiene ese procesamiento.
 - La pasarela notifica dos veces el mismo pago: la aportación se registra una sola vez.
 - El proyecto elegido deja de estar activo mientras el donante rellena el formulario: se le avisa y se le ofrece el fondo general.
 - Un Donante existente vuelve a aportar: se reutiliza si sus datos coinciden, distinguiendo diferencias meramente de formato de cambios reales, sin sobrescribirlos ni duplicarlo. Si el correo corresponde a otro NIF/NIE, se aplica FR-014; si el mismo NIF/NIE se presenta con cambios reales de correo o datos fiscales, se aplica FR-015. En v1 no existe autorización para corregir esos datos desde HU-01, tampoco por tener una cuenta vinculada.
@@ -110,11 +112,11 @@ Como donante, quiero hacerme socio con una aportación mensual, trimestral o anu
 - **FR-001**: El sistema MUST ofrecer dos modalidades: donación puntual y socio con periodicidad mensual, trimestral o anual.
 - **FR-002**: El sistema MUST exigir un importe en EUR entre 1,00 € y 999.999,99 €, ambos incluidos, con un máximo de 2 decimales. Este máximo es un límite elegido para la aplicación.
 - **FR-003**: El sistema MUST permitir elegir opcionalmente un Proyecto activo como destino; si no se elige, el destino es «fondo general».
-- **FR-004**: El sistema MUST pedir nombre y apellidos, NIF/NIE, correo electrónico y dirección postal (solo estos datos), y MUST validar el formato del NIF/NIE (incluida la letra de control) y del correo.
+- **FR-004**: El sistema MUST pedir nombre y apellidos, NIF/NIE, correo electrónico y dirección postal (solo estos datos) y MUST validar el formato del NIF/NIE (incluida la letra de control) y del correo.
 - **FR-005**: El pago MUST realizarse exclusivamente con tarjeta mediante Stripe Checkout alojado, en EUR; el sistema MUST NOT recibir ni almacenar datos de tarjeta.
 - **FR-006**: Una Aportación MUST quedar «confirmada» solo cuando la pasarela confirma el cobro; en otro caso queda «pendiente», «rechazada» o «cancelada». Las aportaciones cambian de estado, nunca se eliminan.
 - **FR-007**: Tras la confirmación del cobro, el sistema MUST mostrar y enviar por correo un resumen con importe, fecha, modalidad, destino y un número de referencia único. Si falla el envío, MUST conservar la aportación confirmada y mostrar el resumen y un aviso de correo pendiente. Para una persona sin cuenta, la consulta del resumen y del aviso requiere la autorización de FR-016; el procesamiento del pago y el envío de confirmación no dependen de conservar esa sesión. Mostrar el resumen o el aviso MUST NOT considerarse un envío satisfactorio ni dar por cumplida la obligación de enviar el correo.
-- **FR-008**: Para socios, el sistema MUST registrar una SuscripcionSocio con importe y periodicidad, y MUST mostrar la fecha del próximo cobro conforme a FR-019 cuando haya fallado una cuota posterior al alta. Modificar el importe de la cuota y darse de baja desde la aplicación quedan fuera de alcance en v1; se mantienen el alta y el registro de los cobros periódicos de FR-009. Excluir la baja desde la aplicación MUST NOT impedir procesar una cancelación válida comunicada por la pasarela.
+- **FR-008**: Para socios, el sistema MUST registrar una SuscripcionSocio con importe y periodicidad y MUST mostrar la fecha del próximo cobro conforme a FR-019 cuando haya fallado una cuota posterior al alta. Modificar el importe de la cuota y darse de baja desde la aplicación quedan fuera de alcance en v1; Se mantienen el alta y el registro de los cobros periódicos de FR-009. Excluir la baja desde la aplicación MUST NOT impedir procesar una cancelación válida comunicada por la pasarela.
 - **FR-009**: Cada cobro periódico confirmado por la pasarela MUST registrarse como una nueva Aportación de modalidad «cuota de socio».
 - **FR-010**: Una misma notificación de pago MUST NOT registrar dos aportaciones.
 - **FR-011**: El sistema MUST permitir completar tanto una donación puntual como un alta de socio sin crear una cuenta ni iniciar sesión. La consulta del historial (HU-02) requiere iniciar sesión con una cuenta del mismo correo utilizado al donar; la coincidencia de correos por sí sola MUST NOT considerarse prueba de titularidad para vincular aportaciones.
@@ -157,7 +159,7 @@ Como donante, quiero hacerme socio con una aportación mensual, trimestral o anu
   sin atribuirlo como máximo universal de la pasarela.
 - **HU-02, HU-03 y HU-04** consumen los datos comunes. La alineación documental se prepara
   en spec-001 con Nada responsable y Rubén revisor. Revisión e incorporación compartida
-  pendientes; no se atribuye acuerdo colectivo. La estrategia conserva 004 como entrega
+  pendientes; Se conserva la decisión incorporada en PR #4. La estrategia conserva 004 como entrega
   temprana y coordina después el número de la ampliación técnica, sin reservar 009.
 
 ## Success Criteria *(mandatory)*
@@ -184,6 +186,6 @@ medio de pago de v1 quedan fijados en FR-002 y FR-005. La normalización, seguri
 correo y eventos se definen en el [plan](plan.md) y sus contratos, alineados con los documentos
 comunes. La implementación local y la validación realizada constan en la
 [matriz vigente](refinamiento/matriz-validacion-01.md), con sus fuentes y límites.
-El [ajuste de flujo](refinamiento/ajuste-flujo-01.md) mantiene PR-R01/PR-R02 pendientes
+El [ajuste de flujo](refinamiento/ajuste-flujo-01.md) mantiene los controles de incorporación pendientes
 antes de main: revisión/aprobación de Rubén y control actualizado de la elección local de
 009. Las evidencias de esta rama no acreditan publicación ni incorporación compartida.

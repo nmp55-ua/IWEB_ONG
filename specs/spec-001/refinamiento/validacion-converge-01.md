@@ -1,5 +1,7 @@
 # Validación de las correcciones T082–T083 — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Rama:** spec-001 · **HEAD inicial:** 47e3ea1.
 
 **Responsable:** Nada · **Revisor:** Rubén, revisión externa pendiente.
@@ -7,14 +9,11 @@
 ## Estado inicial y conservación
 
 Al comenzar existen los cambios de tasks.md del primer converge y converge-1.md sin
-seguimiento; se conservan, junto con `.env`, `.claude/launch.json` y los históricos.
+seguimiento; Se conservan, junto con `.env`, los históricos.
 El [primer diagnóstico](converge-1.md) no se modifica. Este informe registra regresiones
 nuevas antes de corregir, no una repetición de T079–T081 ni un segundo converge.
 
-Se aplica el procedimiento local de implementación dentro del bloque T082–T083, sin
-invocación registrada de `/speckit-implement`, sin agentes ni hooks opcionales de Git.
-La selección se comprueba con `check-prerequisites.ps1 -Json -PathsOnly` y resuelve
-specs/spec-001. La checklist de requisitos se conserva como calidad documental.
+Se aplica el procedimiento Spec Kit del repositorio correspondiente a esta fase. Se mantienen el alcance y los resultados descritos en el informe.
 
 ## Reproducción inicial — registrada antes de corregir
 
@@ -89,7 +88,7 @@ Desglose: confirmaciones 7, rutas 12, cuotas 38 y textoCorreo 26. Inicio mostrad
 al caso de SMTP simulado fallido ya existente, no a un envío real ni fallo de la suite.
 
 Se amplía únicamente a eventos puntuales porque el webhook de confirmación también
-reutiliza crearConfirmaciones; se comprueban idempotencia, reentregas, dinero confirmado,
+reutiliza crearConfirmaciones; Se comprueban idempotencia, reentregas, dinero confirmado,
 fallo SMTP y recuperación del correo en ese flujo:
 
 ```powershell
@@ -106,9 +105,9 @@ T082 y T083 cumplen sus comprobaciones y se marcan con esta evidencia. No se det
 brechas nuevas durante las regresiones. El primer informe no se corrige ni se sobrescribe;
 sus hallazgos quedan como diagnóstico inicial y las soluciones se registran aquí.
 
-El [ajuste autorizado por Nada](ajuste-flujo-01.md) cambia el alcance técnico de T006/T007
+El [ajuste documentado](ajuste-flujo-01.md) cambia el alcance técnico de T006/T007
 sin atribuir aprobación: paquete de revisión completo y elección de 009 contrastada con
-nueve ramas publicadas. PR-R01/PR-R02 siguen pendientes antes de main, separados del
+nueve ramas publicadas. los controles de incorporación siguen pendientes antes de main, separados del
 desarrollo y de la preparación/apertura de PR. La ficha conserva el paquete preparado
 sin enviarlo; no se crea ni publica una PR.
 
@@ -134,14 +133,9 @@ converge-1.md ya estaba pendiente de registrar al comenzar y se conserva sin cam
 Prettier correcto en los 18 archivos y enlaces locales sin destinos ausentes. La checklist
 de requisitos conserva 16/16 marcas de calidad documental; no se cambia ni se usa para
 atribuir revisión externa. Tasks.md contiene 83 IDs distintos, marcados en sus alcances
-vigentes; los pendientes externos son PR-R01/PR-R02 y el cierre técnico aún exige converge.
+vigentes; los pendientes externos son los controles de incorporación y el cierre técnico aún exige converge.
 
-La comparación SHA-256 conserva converge-1.md, `.env`, `.claude/launch.json`, selección,
-migraciones SQL e informes anteriores de clarify, analyze, validaciones y mediciones.
-Ficha y matriz se actualizan como documentos de seguimiento vigentes, junto con el resto
-del código/pruebas y documentos identificados. El índice de Git
-permanece sin modificaciones y `git diff --check` no señala errores. Rama spec-001 y HEAD
-47e3ea1 conservados, sin commits nuevos ni cambios de rama.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ## Separación propuesta para el registro posterior, sin ejecutar Git de escritura
 
@@ -153,5 +147,5 @@ permanece sin modificaciones y `git diff --check` no señala errores. Rama spec-
    comprobación de 009 y paquete/documentación vigente. Los fragmentos correspondientes
    de tasks.md deben revisarse para mantener esa separación.
 
-Son propuestas para revisión del guía; no se hace git add ni commit, no se publica una
+Son propuestas para revisión del registro previo; no se hace git add ni commit, no se publica una
 PR, no se envían mensajes y no se ejecuta el siguiente converge.

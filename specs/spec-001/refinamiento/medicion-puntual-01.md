@@ -1,6 +1,8 @@
 # Medición puntual de T079 — ejecución 1
 
-**Fecha:** 2026-11-07. **Historia:** HU-01. **Ejecución:** chat guía, mediante navegador integrado y consultas de solo lectura. Cuenta de pruebas vinculada existente.
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
+**Fecha:** 2026-11-07. **Historia:** HU-01. **Ejecución:** registro de ejecución, mediante navegador de pruebas y consultas de solo lectura. Cuenta de pruebas vinculada existente.
 
 ## Medición observada
 
@@ -13,7 +15,7 @@
 
 El primer envío del formulario mostró «Ha ocurrido un error inesperado». La consulta posterior encontró la aportación 35 pendiente y la operación incierta, sin Checkout registrado. Se recuperó la misma solicitud, sin generar otra operación; no se acredita la causa técnica del error inicial.
 
-En Checkout, un intento de automatización agotó el tiempo de espera. Las consultas posteriores a Stripe mostraron open/unpaid, sin PaymentIntent. La revisión automática bloqueó un segundo envío por tratarse de un reintento tras timeout. Nada autorizó expresamente reenviar el mismo Checkout, previa comprobación de que seguía sin pagar. Se volvió a comprobar open/unpaid, sin PaymentIntent y en modo de pruebas. Hubo además una pérdida de acceso de la herramienta al navegador, recuperada reiniciando únicamente su sesión de control, sin crear otra pestaña ni reiniciar la medición.
+En Checkout, un intento de automatización agotó el tiempo de espera. Las consultas posteriores a Stripe mostraron open/unpaid, sin PaymentIntent. El reintento se detuvo hasta comprobar que no se había pagado. Se autorizó expresamente reenviar el mismo Checkout, previa comprobación de que seguía sin pagar. Se volvió a comprobar open/unpaid, sin PaymentIntent y en modo de pruebas. Una interrupción del control del navegador se recuperó sin crear otra pestaña ni reiniciar la medición.
 
 Después del envío autorizado se observó el retorno y la confirmación en pantalla: 20,00 €, donación puntual, fondo general, referencia original y correo aceptado. El cronómetro conservó todas las esperas, incluida la autorización entre mensajes.
 

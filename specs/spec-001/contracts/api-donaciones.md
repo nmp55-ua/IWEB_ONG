@@ -1,5 +1,7 @@
 # Contrato HTTP de HU-01
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
 **Estado**: Rutas implementadas en spec-001 y evidencias identificadas en la
 [matriz de validación](../refinamiento/matriz-validacion-01.md). Preparado para revisión

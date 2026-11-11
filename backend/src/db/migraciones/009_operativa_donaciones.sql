@@ -1,4 +1,4 @@
--- HU-01 (Nada). Numeración provisional local: no acredita reserva colectiva.
+-- HU-01 (Nada). Ampliación operativa de donaciones.
 -- Depende únicamente de 004 y de su base común 001–003. Ver modelo-datos.md.
 CREATE TABLE operaciones_pago (
   id BIGSERIAL PRIMARY KEY,

@@ -1,5 +1,7 @@
 # Resumen técnico de HU-01 para revisión y consumo desde HU-03
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Rama:** spec-001 · **Base revisada:** 9468636.
 
 **Responsable HU-01:** Nada · **Revisor HU-01:** Rubén.
@@ -18,7 +20,7 @@ recuperable. No incluye historial, certificados, reembolsos o edición de datos 
 | Commit local comprobado | Contenido relevante                                                                |
 | ----------------------- | ---------------------------------------------------------------------------------- |
 | 5291d31                 | 004, pruebas de dominio y evidencia de sus dos secuencias de incorporación.        |
-| edc621c                 | Cuatro tablas técnicas en 009 provisional y soporte de integración aislado.        |
+| edc621c                 | Cuatro tablas técnicas en 009 definitiva y soporte de integración aislado.        |
 | e124375                 | Backend puntual y vínculo verificado.                                              |
 | c7e4e9b                 | Interfaz de donación puntual, resultado privado y vínculo.                         |
 | 1ade2a7 / 65e6b07       | Backend de altas/cuotas y presentación de suscripción.                             |
@@ -33,7 +35,7 @@ recuperable. No incluye historial, certificados, reembolsos o edición de datos 
 
 Definición única en [modelo-datos.md](../../modelo-datos.md), con implementación de dominio
 en [004_donaciones.sql](../../../backend/src/db/migraciones/004_donaciones.sql).
-La tabla siguiente es una guía de consumo, no una redefinición de entidades.
+La tabla siguiente es una referencia de consumo, no una redefinición de entidades.
 
 | Tabla               | Campos relevantes y reglas                                                                                                                                                                                                                                        |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -106,24 +108,24 @@ no se presentan como una nueva ejecución acumulada.
 
 Stripe de pruebas acredita puntuales, primera confirmación tras cerrar las páginas,
 reentregas sin duplicados, tres altas/primeras facturas y cancelación anual sin reembolso.
-La [medición 2](medicion-puntual-02.md) recoge 61 s observados por Nada y 7/7 confirmaciones
-recibidas por referencia en el conjunto delimitado 30–36, según el guía. La medición 1
+La [medición 2](medicion-puntual-02.md) recoge 61 s medidos con cronómetro y 7/7 confirmaciones
+recibidas por referencia en el conjunto delimitado 30–36, según el registro de ejecución. La medición 1
 fallida de 480,836 s se conserva íntegra. No es una garantía universal ni auditoría global.
 
 Renovaciones, primer fallo, fallos posteriores, alta sin cuenta y primer cobro de socio
-sin retorno, y cancelación después de un fallo no cuentan con recorrido real completo
-de Stripe; se conservan sus pruebas locales/simuladas. Las semillas no prueban cobros
+sin retorno y cancelación después de un fallo no cuentan con recorrido real completo
+de Stripe; Se conservan sus pruebas locales/simuladas. Las semillas no prueban cobros
 o recepción. Los avisos SMTP y registros de errores comunes observados en T074 quedan
 para revisión; no se ocultan como una auditoría nueva.
 
-004 está creada y validada. El [flujo autorizado por Nada](ajuste-flujo-01.md) distingue
+004 está creada y validada. El [flujo documentado](ajuste-flujo-01.md) distingue
 **T006: paquete completo preparado** y **T007: comprobación actual y elección local de 009**
 de los controles de incorporación. Nueve cabezas publicadas y sus seis commits distintos
-se comprobaron en lectura, sin 009 en la carpeta canónica y sin ramas de esa enumeración
-pendientes de verificar. No es reserva colectiva ni descarta trabajo sin publicar.
+Se comprobaron en lectura, sin 009 en la carpeta canónica y sin ramas de esa enumeración
+pendientes de verificar. No modifica descarta trabajo sin publicar.
 
-**PR-R01 sigue pendiente de revisión y aprobación reales de Rubén** del paquete completo.
-**PR-R02 sigue pendiente de resolver numeración/conflictos antes de main**, considerando
+**el control de revisión sigue pendiente de revisión y aprobación reales de Rubén** del paquete completo.
+**el control de integración sigue pendiente de resolver numeración/conflictos antes de main**, considerando
 el registro por nombres y los entornos donde 009 ya está aplicada. Se explicará la
 elección en la PR. Esos controles no bloquean terminar el desarrollo o preparar/abrir
 la PR; no se renombra ni reaplica SQL aquí. Las correcciones de correo y sus regresiones
@@ -147,5 +149,5 @@ PA3.1/PA3.2. Las preguntas siguientes no se presentan como nuevos requisitos apr
    descargas anteriores? Se necesita la decisión de HU-03; no se presupone ninguna opción.
 
 T081 y T006 preparan la revisión; no acreditan aprobación. T007 acredita una elección
-local contrastada, no reserva colectiva. Este material sigue sin enviarse; el cierre
+local contrastada, numeración definitiva. Este material sigue sin enviarse; el cierre
 técnico requiere el converge posterior y no elimina los controles externos antes de main.

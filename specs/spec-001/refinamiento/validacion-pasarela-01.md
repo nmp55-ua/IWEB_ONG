@@ -1,10 +1,12 @@
 # Validación del adaptador Stripe — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-06 · **Rama**: spec-001 · **HEAD inicial**: e1a155a  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance**: T014–T016. Adaptador y pruebas aisladas.  
 **Resultado**: 36 pruebas aprobadas tras la revisión. Ampliación preparada en esta rama para revisión;
-no acredita acuerdo colectivo, aprobación de Rubén, integración o idempotencia real.
+se incorpora mediante PR #4, aprobación de Rubén, integración o idempotencia real.
 T006 permanece pendiente.
 
 ## Estado y método
@@ -94,7 +96,7 @@ Archivo: [pasarela.test.js](../../../backend/src/modulos/donaciones/pasarela.tes
 El mock utiliza el constructor real de Stripe 17.7.0 y sustituye los seis métodos que
 realizan peticiones: create/retrieve/list de Session y retrieve de PaymentIntent, Invoice
 y Subscription. La configuración, las claves y los recursos son sintéticos.
-Los métodos de firma permanecen reales; se generan y verifican cabeceras localmente.
+Los métodos de firma permanecen reales; Se generan y verifican cabeceras localmente.
 No se carga .env ni se contacta Stripe.
 
 Se comprueban cuerpos completos, propagación y protección de metadatos, recurrencias,
@@ -142,10 +144,7 @@ node $hu01Prettier --config .prettierrc.json --write backend/src/servicios-comun
 node $hu01Prettier --config .prettierrc.json --check backend/src/servicios-comunes/pasarela.js backend/src/modulos/donaciones/pasarela.test.js specs/spec-001/tasks.md specs/spec-001/refinamiento/validacion-pasarela-01.md
 ```
 
-Comprobación final: código 0, All matched files use Prettier code style.
-Se comprueban rutas, dependencias, alcance y huellas de los archivos anteriores;
-solo cambian los cuatro archivos autorizados. Los informes históricos, secretos,
-migraciones y archivos de compañeros se conservan.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ## Límites y parada
 

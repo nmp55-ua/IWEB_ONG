@@ -1,5 +1,7 @@
 # Uso del modelo común en HU-01
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
 **Estado**: Modelo implementado y validado localmente en `spec-001`; revisión de Rubén
 e incorporación a main pendientes.
@@ -68,13 +70,9 @@ El algoritmo y las permutaciones están en [pasarela-stripe.md](contracts/pasare
 ## Incorporación de datos
 
 `004_donaciones.sql` contiene las tres entidades de dominio, sus restricciones e índice
-financiero, y está validada como entrega independiente. El paquete preparado permite a
+financiero y está validada como entrega independiente. El paquete preparado permite a
 Rubén revisar el consumo de aportaciones sin depender de la interfaz o persistencia técnica.
 
 Las cuatro tablas de soporte están implementadas y validadas en
 `009_operativa_donaciones.sql`, dependiente de 004 y su base común, sin requerir 006–008.
-Es la elección local documentada en [ajuste-flujo-01.md](refinamiento/ajuste-flujo-01.md);
-**009 no está reservado colectivamente**. PR-R01 mantiene pendiente la revisión/aprobación
-de Rubén y PR-R02 exige comprobar y resolver conflictos antes de main, considerando los
-entornos donde 009 ya está aplicada. No se modifica 004 una vez incorporada. El detalle
-de integración y revisión se conserva en [cambios-comunes.md](contracts/cambios-comunes.md).
+HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. No se renombran migraciones ya aplicadas. El detalle de integración se conserva en [cambios-comunes.md](contracts/cambios-comunes.md).

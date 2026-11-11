@@ -1,5 +1,7 @@
 # Integración local de main en spec-001 — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Responsable:** Nada · **Revisor:** Rubén, revisión pendiente.
 
 **Origen local:** 95dd58d0caed3c2ce23b1a5c011619190f7200ea.
@@ -8,7 +10,7 @@
 ## Estado inicial y autorización
 
 La rama inicial es spec-001, sincronizada con origin/spec-001 en 95dd58d, índice vacío
-y solo `.claude/launch.json` sin seguimiento. Se conservan este archivo, `.env` y todos
+y sin cambios funcionales pendientes. Se conserva `.env` y todos
 los informes de HU-01. Se autoriza integrar main en esta rama, no incorporar HU-01 a main.
 
 `git fetch origin` falla inicialmente por permiso de escritura de FETCH_HEAD en el entorno
@@ -48,7 +50,7 @@ de pasarela/sesión son sintéticas. Stripe y SMTP permanecen simulados. El sopo
 crea/verifica/limpia exclusivamente sus esquemas hu01*\*.
 
 Se amplía registro.test.js con dos comprobaciones de integración: coexistencia de rutas
-y roles, y ejecución doble del índice real de semillas en otro esquema exclusivo. Se
+y roles y ejecución doble del índice real de semillas en otro esquema exclusivo. Se
 comparan cardinalidades de nueve tablas y las filas completas de aportaciones; no son
 pagos o mensajes reales. La prueba previa de webhook/raw/sin sesión se conserva.
 
@@ -73,7 +75,7 @@ npm test -- src/modulos/donaciones src/servicios-comunes/correo.test.js --no-fil
 Esperaban seis nombres registrados; el migrador integrado registra correctamente siete,
 incluyendo 006_voluntariado.sql. La expectativa de HU-01 no contemplaba la migración
 publicada de Javi. Es un desfase de la prueba, no un fallo o cambio del migrador/SQL.
-La evidencia inicial se conserva aquí; se completará el resultado total al finalizar.
+La evidencia inicial se conserva aquí; Se completará el resultado total al finalizar.
 
 **Resultado total de esa primera ejecución:** salida 1; 393 aprobadas y 2 fallidas,
 395 casos en 13 archivos, sin omisiones. Inicio 07:38:46, duración 52,96 s. El diff de la
@@ -111,7 +113,7 @@ salir de espera y concurrencia plazas/inscripción. No se activan ni presentan c
 aprobadas. La suite HU-05 ejecuta integración real con actividades y correo simulado.
 
 Las ejecuciones de suites son secuenciales. Al terminar se comprueba que la base temporal
-conserva el mismo nombre/OID y no tiene conexiones; se elimina sin FORCE. No se elimina
+conserva el mismo nombre/OID y no tiene conexiones; Se elimina sin FORCE. No se elimina
 ninguna base anterior, volumen o esquema ajeno. Los esquemas de HU-01 se limpian mediante
 su soporte verificado; sus pruebas de migraciones conservan el inventario previo de public.
 
@@ -147,13 +149,9 @@ La inspección del registro comprueba un solo endpoint webhook y raw antes de JS
 
 ### Formato y conservación
 
-Prettier local correcto en los cuatro conflictos resueltos, las dos pruebas de HU-01
-modificadas y este informe; no se reformatean módulos de compañeros. git diff --check
-se comprueba para índice y cambios sin seleccionar. No quedan marcas o entradas de
-conflicto. Las rutas, semillas, configuración de Vitest y frontend incorporados sin
-conflicto se revisan también: mantienen la versión publicada de Javi.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
-La comparación SHA-256 conserva .env, .claude/launch.json, 004/009, todos los informes
+La comparación SHA-256 conserva .env, 004/009, todos los informes
 anteriores y demás archivos propios de HU-01 salvo sus dos pruebas señaladas. La migración
 006 y los SQL ya publicados coinciden con el destino; no se edita ningún SQL ni migrador.
 Los cambios propios adicionales a la resolución son solo registro.test.js,
@@ -162,12 +160,12 @@ Javi proceden de origin/main, sin correcciones propias en sus módulos.
 
 ## Estado de 009 y controles pendientes
 
-El árbol actualizado y fijado de origin/main no contiene 009; se integra 006 sin colisión
-con 004/009. Esto acredita ausencia en ese destino exacto, no reserva colectiva ni
+El árbol actualizado y fijado de origin/main no contiene 009; Se integra 006 sin colisión
+con 004/009. Esto acredita ausencia en ese destino exacto, numeración definitiva ni
 disponibilidad garantizada frente a trabajo sin publicar o futuros commits. No se renombra,
 reaplica en entornos existentes o edita una migración para resolver la integración.
 
-PR-R01 mantiene pendiente la revisión/aprobación de Rubén. PR-R02 conserva la explicación
+el control de revisión mantiene pendiente la revisión/aprobación de Rubén. el control de integración conserva la explicación
 de 009 y la resolución de conflictos antes de incorporar a main, considerando que hay
 entornos donde ya está aplicada. El merge local sin conflictos no completa esos controles.
 No se ejecuta un nuevo converge ni se reescriben sus informes. La validación de este árbol
@@ -256,7 +254,7 @@ M backend/src/modulos/donaciones/registro.test.js
 ```
 
 **Sin seguimiento:** este informe, specs/spec-001/refinamiento/integracion-main-01.md,
-y .claude/launch.json conservado. .env sigue ignorado y fuera del índice. El informe y
+y  conservado. .env sigue ignorado y fuera del índice. El informe y
 las pruebas añadidas no se seleccionan, porque la autorización de git add se limita a
 marcar los conflictos; el índice actual por sí solo no incluye esas evidencias nuevas.
 

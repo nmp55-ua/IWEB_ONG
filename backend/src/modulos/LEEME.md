@@ -46,7 +46,7 @@ La autorización de navegador dura ocho horas absolutas por operación; la refer
 sola no concede acceso. El webhook no necesita sesión, origen ni CSRF del navegador.
 El vínculo verificado se conserva en `donantes.usuario_id`; no se deduce del correo.
 
-Dominio en 004; soporte técnico en 009 provisional. El servicio evita duplicados por
+Dominio en 004; soporte técnico en 009 definitiva. El servicio evita duplicados por
 pago/factura, conserva aportaciones confirmadas y procesa la cancelación comunicada por
 Stripe sin borrar cuotas anteriores. No hay edición fiscal, reembolso, cambio de cuota
 o baja desde la aplicación. SMTP fallido no revierte un cobro; su reintento está separado.
@@ -56,7 +56,7 @@ pura, instantánea e idempotencia y consultas canónicas; correo admite opciones
 solo para quien las indique. Fuente y límites en los [contratos](../../../specs/spec-001/contracts/cambios-comunes.md).
 El [quickstart](../../../specs/spec-001/quickstart.md) define pruebas aisladas y preparación
 de Stripe; la [matriz](../../../specs/spec-001/refinamiento/matriz-validacion-01.md) recoge resultados.
-Este estado en rama no equivale a aprobación o incorporación compartida.
+HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
 
 ## Historial — HU-02
 

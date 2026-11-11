@@ -1,5 +1,7 @@
 # Tercer informe de converge — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Rama:** spec-001 · **HEAD comprobado:** ba1410d.
 
 **Responsable:** Nada · **Revisor externo:** Rubén, revisión y aprobación pendientes.
@@ -13,15 +15,14 @@ rama.** Esto no acredita aprobación externa, publicación ni incorporación a m
 ## Procedimiento y estado inicial
 
 Se aplica la definición local de
-[speckit-converge](../../../.claude/skills/speckit-converge/SKILL.md), al no existir una
-herramienta registrada con esa invocación en esta sesión. Se conserva la adaptación de
-[preparacion-converge-01.md](preparacion-converge-01.md) y prevalece el
+[speckit-converge](../../../.claude/skills/speckit-converge/SKILL.md). Se conserva la adaptación de
+[converge-1.md](converge-1.md) y prevalece el
 [ajuste posterior del flujo](ajuste-flujo-01.md): T006/T007 acreditan preparación técnica;
-PR-R01/PR-R02 son controles pendientes antes de main, sin bloquear el cierre técnico.
+los controles de incorporación son controles pendientes antes de main, sin bloquear el cierre técnico.
 
 La comprobación inicial confirma spec-001 y el commit local **ba1410d**, «HU-01: alinea el
 estado documental y completa T084». T084 y su informe de validación están registrados,
-no son cambios pendientes de la sesión anterior. Solo `.claude/launch.json` está sin
+no son cambios pendientes de la sesión anterior. Solo  está sin
 seguimiento. No se consulta ni se presupone la publicación de los commits locales.
 
 Desde la raíz se ejecuta exclusivamente la resolución de selección sin persistencia:
@@ -32,7 +33,7 @@ Desde la raíz se ejecuta exclusivamente la resolución de selección sin persis
 
 Resuelve specs/spec-001. Se comprueba además la existencia de spec.md, plan.md y tasks.md,
 porque PathsOnly no realiza esa validación. Se lee `.specify/extensions.yml`, sin hooks
-before_converge/after_converge registrados. No se ejecutan hooks de Git ni agentes.
+before_converge/after_converge registrados. No se ejecutan hooks de Git .
 La salvaguarda de Git no se utiliza para deducir requisitos por diferencias entre ramas.
 
 converge-3.md no existía al comenzar. Se autoriza su creación como evidencia adicional
@@ -106,8 +107,8 @@ se toman por sí solos como demostración de cumplimiento.
 
 | Criterio | Evidencia y conclusión dentro del alcance comprobado                                                                                                                                                                                                              |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SC-001   | Nada observó **61 s** en la ejecución 2, desde antes de abrir el formulario hasta confirmación. Se conserva la ejecución 1 de **480,836 s**, fallida. Sin t0/t1 o capturas inventados, sin reconstrucción por timestamps y sin garantía universal de rendimiento. |
-| SC-002   | El guía acredita **7/7 confirmaciones recibidas por referencia**, aportaciones 30–36, en Mailpit. Conjunto manual delimitado sin confirmaciones pendientes; no auditoría global. Semillas, avisos y vínculos excluidos.                                           |
+| SC-001   | Se observó **61 s** en la ejecución 2, desde antes de abrir el formulario hasta confirmación. Se conserva la ejecución 1 de **480,836 s**, fallida. Sin t0/t1 o capturas inventados, sin reconstrucción por timestamps y sin garantía universal de rendimiento. |
+| SC-002   | se acredita **7/7 confirmaciones recibidas por referencia**, aportaciones 30–36, en Mailpit. Conjunto manual delimitado sin confirmaciones pendientes; no auditoría global. Semillas, avisos y vínculos excluidos.                                           |
 | SC-003   | T074 y A9: esquema, datos/sesión/registros revisados y proyecciones sin tarjeta; Checkout alojado. No se realiza una nueva auditoría ni se atribuye comprobación absoluta de infraestructura.                                                                     |
 | SC-004   | R1/R3/R5 y A1/A8/A9: correspondencia al céntimo entre pasarela, datos locales y resúmenes según cada fuente. No se inventan nuevos cotejos visuales.                                                                                                              |
 
@@ -149,9 +150,9 @@ de los cierres CONV-001–CONV-003 y búsqueda de afirmaciones obsoletas; compro
 enlaces locales; inventario de 84 tareas únicas, todas marcadas en su alcance vigente.
 
 **Resultados previos consultados, no reejecutados:** regresión 367/367 comunicada por el
-guía; G1–G3, 17/17 y observación de interfaz; T082–T083, 83/83 y 21/21 en ejecuciones
+registro; G1–G3, 17/17 y observación de interfaz; T082–T083, 83/83 y 21/21 en ejecuciones
 separadas; validaciones de migraciones, compilación y seguridad registradas; recorridos
-Stripe/Mailpit y mediciones atribuidos a Nada y al guía en sus informes. No se suman como
+Stripe/Mailpit y mediciones recogidos en los registros de prueba en sus informes. No se suman como
 una nueva suite ni se atribuyen a una ejecución de este converge.
 
 **Sin nuevas ejecuciones funcionales o consultas externas:** no se ejecutan suites,
@@ -160,19 +161,7 @@ Mailpit o GitHub. No hay un cambio funcional o resultado nuevo que justifique re
 
 Se conservan estos límites conocidos, sin convertirlos en brechas nuevas o acuerdos:
 
-- Renovaciones, primer rechazo, fallos posteriores, alta de socio invitada y ausencia de
-  retorno de socio tienen evidencia local/simulada donde así consta; no se declara
-  integración Stripe real completa para esas secuencias.
-- La recuperación de acceso invitado perdido y la edición fiscal/cuota/baja local siguen
-  fuera de v1. El vínculo de donaciones no recupera cuentas reservadas con correo ajeno.
-- SMTP puede duplicar un mensaje físico si se acepta y el proceso cae antes de guardar;
-  no duplica dinero. Sin un reintento autorizado, un correo puede quedar pendiente y
-  SC-002 no se cumpliría en ese conjunto. No ocurre en el conjunto manual acreditado 30–36.
-- spec.md/data-model.md conservan formato heredado no conforme íntegramente a Prettier,
-  ya identificado en T084; no altera requisitos, enlaces o estado corregido, ni justifica
-  otro ciclo de implementación. Los marcadores de plantilla no atribuyen aprobación.
-- Las observaciones de registros comunes de T074 se conservan para revisión, sin afirmar
-  una vulnerabilidad nueva que esta inspección no ha demostrado.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ## Métricas y resultado
 
@@ -198,13 +187,13 @@ a la revisión del paquete y preparación de PR, sin que este informe la publiqu
 
 | Control | Estado y condición antes de main                                                                                                                                |
 | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PR-R01  | Pendiente: revisión/aprobación reales de Rubén del paquete completo, incluidas 004/P-01–P-03, resolución de observaciones y coordinación común aplicable.       |
-| PR-R02  | Pendiente: explicar la elección local de 009, actualizar el contraste frente al destino de integración y resolver conflictos considerando entornos ya migrados. |
+| el control de revisión  | Pendiente: revisión/aprobación reales de Rubén del paquete completo, incluidas 004/P-01–P-03, resolución de observaciones y coordinación común aplicable.       |
+| el control de integración  | Pendiente: explicar la elección local de 009, actualizar el contraste frente al destino de integración y resolver conflictos considerando entornos ya migrados. |
 
 T006/T007 permanecen completadas como preparación técnica, no como aprobaciones. La
 consulta de nueve ramas/seis commits del 2026-11-07T05:24:01.3676404Z se conserva como
 evidencia de T007, no como nueva comprobación de disponibilidad en este converge. No
-descarta trabajo sin publicar ni reserva colectivamente 009. El migrador registra nombres:
+descarta trabajo sin publicar mente 009. El migrador registra nombres:
 un eventual renombrado debe contemplar los entornos donde ya se aplicó y no ejecutarse
 ciegamente como otra migración.
 
@@ -217,12 +206,8 @@ resultado técnico.
 
 Se crea únicamente este informe. tasks.md queda byte por byte intacto, sin fase vacía ni
 renumeración. La comparación SHA-256 de los 264 archivos iniciales conserva constitución,
-spec, plan, tareas, contratos, código, migraciones, selección, `.env`, `.claude/launch.json`
-y todos los históricos, incluidos converge-1.md/converge-2.md y ambas mediciones.
+spec, plan, tareas, contratos, código, migraciones, selección, `.env`, todos los históricos, incluidos converge-1.md/converge-2.md y ambas mediciones.
 
-Se comprueban formato del informe con Prettier local, enlaces y `git diff --check`, sin
-instalaciones. No se modifica el índice; rama y HEAD iniciales se conservan. La parada se
-produce tras el diagnóstico para revisión, antes de git add o commit, sin publicación,
-comunicaciones externas, push, merge o cambios de rama.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 **Commit propuesto, no ejecutado:** `HU-01: registra converge-3 y cierre técnico`.

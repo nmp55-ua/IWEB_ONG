@@ -1,5 +1,7 @@
 # Primer informe de analyze — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Identificador**: analyze-1 · **Fecha**: 2026-11-06  
 **Rama y funcionalidad**: `spec-001` · `specs/spec-001`  
 **Referencia Git observada**: `bdd6476`, con documentación local pendiente de commit.  
@@ -26,8 +28,8 @@ futuro explícito, no como defectos por no haberse ejecutado todavía.
 
 ## Alcance y adaptación del procedimiento
 
-Se siguió la definición local de [speckit-analyze](../../../.claude/skills/speckit-analyze/SKILL.md)
-al no estar registrado el comando en esta sesión. Se aplicaron inventario semántico,
+Se siguió la definición local de [speckit-analyze](../../../.claude/skills/speckit-analyze/SKILL.md).
+ Se aplicaron inventario semántico,
 detección de duplicaciones/ambigüedad/inconsistencia, revisión constitucional, cobertura
 y dependencias. La autorización de esta fase limita la escritura a este informe; la
 especificación, plan, tareas y fuentes comunes se conservan intactos.
@@ -136,7 +138,7 @@ protocolo local de recuperación y de su resultado comprobable, no una nueva dec
 funcional sobre permitir otro cobro.
 
 **Recomendación**: documentar el mecanismo de exclusión por solicitud y sus momentos de
-adquisición/liberación, y cómo se vuelve a intentar tras error o reinicio dentro del plazo
+adquisición/liberación y cómo se vuelve a intentar tras error o reinicio dentro del plazo
 permitido. No se presupone que haga falta otra tabla o columna. Completar T029/T035 con
 casos que demuestren 409 durante una creación activa, reanudación de la interrumpida y
 una sola operación/Checkout con la misma clave. Todo cambio de estructura, si resultara
@@ -170,7 +172,7 @@ necesario, requeriría su propuesta explícita y la revisión común correspondi
 | FR-011 | Prevista completa en control de acceso | T023, T035–T036, T043, T059 | T022, T029, T031, T054 | Ambas modalidades sin cuenta; correo coincidente no vincula. El recorrido web de solicitud se contabiliza en FR-013. |
 | FR-012 | Prevista completa | T026, T041, T047, T070 | T024, T031, T057, T079 | Reintento autorizado del mismo mensaje, lease e intento; sin pagos, altas o aportaciones nuevas. |
 | FR-013 | Parcial en recorrido web | T042–T044, T049 | T022, T031, T074 | Emisión/consumo y controles de servidor definidos; falta concretar el estado UI que solicita el enlace: COV-001. |
-| FR-014 | Prevista completa | T032–T033, T059 | T028, T054 | Correo con otro NIF se rechaza antes de Stripe sin mostrar ni mezclar datos; se contempla concurrencia. |
+| FR-014 | Prevista completa | T032–T033, T059 | T028, T054 | Correo con otro NIF se rechaza antes de Stripe sin mostrar ni mezclar datos; Se contempla concurrencia. |
 | FR-015 | Prevista completa | T021, T032–T033, T059 | T020, T028, T054 | Datos reales distintos se rechazan aun con cuenta vinculada; formato equivalente reutiliza sin sobrescribir. |
 | FR-016 | Prevista completa | T023, T040–T041, T068 | T022, T031, T057 | Permiso por operación, ocho horas, 404 genérico y denegación de otras operaciones/cuotas; cuenta vinculada como vía separada. |
 | FR-017 | Prevista completa | T037–T039, T061–T062 | T030, T055, T077 | Webhook firmado sin cookie, rollback/reentrega y procesamiento sin retorno de navegador. |

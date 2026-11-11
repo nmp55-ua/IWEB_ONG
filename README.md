@@ -98,6 +98,17 @@ misma clave de `.env` y comprobación de secreto sin mostrar valores está en el
 No basta con arrancar el frontend para recibir notificaciones; el backend y el listener
 deben estar disponibles. No introducir ni guardar tarjetas en la aplicación de la ONG.
 
+La aplicación puede arrancar sin claves de Stripe: el pago mostrará «El pago no está
+disponible» y no realizará cobros. Las pruebas automáticas utilizan simulaciones y no
+necesitan una cuenta de Stripe. Para probar pagos, utiliza tu propia cuenta en modo de
+prueba y guarda sus claves únicamente en `.env`, nunca en el repositorio ni en mensajes.
+Tarjeta de prueba: `4242 4242 4242 4242`, con fecha futura y CVC de prueba.
+
+El cliente fija la API `2025-02-24.acacia`. En el entorno de pruebas validado, los avisos
+usan `2026-10-28.endive`; ambas versiones están contempladas en el
+[contrato de Stripe](specs/spec-001/contracts/pasarela-stripe.md). Comprueba la versión
+que utiliza tu cuenta al configurar el listener.
+
 HU-01 no incluye la consulta del historial ni la emisión de certificados; esas funciones
 corresponden a HU-02 y HU-03, respectivamente.
 
