@@ -1,7 +1,7 @@
 // Pruebas de HU-04 (informes) contra una base de pruebas (plan-comun.md §8).
 // Se ejecutan solo si TEST_DATABASE_URL apunta a una base con las migraciones aplicadas, p. ej.:
 //   DATABASE_URL=<ong_test> TEST_DATABASE_URL=<ong_test> npx vitest run src/modulos/certificados-informes
-// Vacían aportaciones, donantes, actividades, inscripciones y voluntarios de esa base: nunca uses la
+// Vacían aportaciones, donantes, actividades, inscripciones, asistencias y voluntarios de esa base: nunca uses la
 // de desarrollo. Proyectos y usuarios no se vacían (son comunes): se crean con nombres únicos.
 // «Ahora» se inyecta en el servicio; la API usa AHORA_SIMULADO.
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
@@ -13,7 +13,7 @@ const URL_PRUEBAS = process.env.TEST_DATABASE_URL;
 const AHORA = '2027-01-15T10:00:00+01:00';
 const CONTRASENA = 'clave-de-pruebas-004';
 const VACIAR =
-  'TRUNCATE certificados_fiscales, inscripciones, actividades, aportaciones, suscripciones_socio, donantes, voluntarios RESTART IDENTITY CASCADE';
+  'TRUNCATE certificados_fiscales, asistencias, inscripciones, actividades, aportaciones, suscripciones_socio, donantes, voluntarios RESTART IDENTITY CASCADE';
 
 // NIF válido a partir de un número de 8 cifras.
 const nif = (numero) => `${String(numero).padStart(8, '0')}${'TRWAGMYFPDXBNJZSQVHLCKE'[numero % 23]}`;
@@ -93,6 +93,14 @@ describe.skipIf(!URL_PRUEBAS)('HU-04 · informes', () => {
       [voluntarioId, actividadId],
     );
     return rows[0];
+  }
+
+  async function asistencia(inscripcionId, { asistio = true, horas }) {
+    await pool.query(
+      `INSERT INTO asistencias (inscripcion_id, asistio, horas, registrada_por, fecha_registro)
+       VALUES ($1, $2, $3::numeric, $4, now())`,
+      [inscripcionId, asistio, horas, usuarios.coordinador],
+    );
   }
 
   async function entrar(nombre) {
@@ -495,6 +503,115 @@ describe.skipIf(!URL_PRUEBAS)('HU-04 · informes', () => {
         expect(fin.status).toBe(400);
         expect(fin.body.error.codigo).toBe('PERIODO_NO_VALIDO');
         expect((await admin.get(ruta).query({ desde: '2026-01-01' })).body.error.codigo).toBe('DATOS_INVALIDOS');
+      }
+    });
+  });
+
+  // Fase 6: voluntarios distintos y horas con las asistencias de HU-08 (research R3 y R5).
+  describe('voluntariado (escenario 6, FR-004, SC-001, FR-009)', () => {
+    let a;
+    let b;
+    let v1;
+    let v2;
+    let v3;
+    let actA1;
+    let actA2;
+    let actB;
+
+    // A: dos actividades en T1 y T2; B: una en T1. v1 va a las tres (A y B), v2 solo a A1 y
+    // v3 tiene la asistencia corregida a «no asistió» en B.
+    beforeEach(async () => {
+      a = await proyecto('A Agua');
+      b = await proyecto('B Comedor');
+      [v1, v2, v3] = [await voluntario(), await voluntario(), await voluntario()];
+      actA1 = await actividad({ proyectoId: a.id, inicio: '2026-02-10T10:00:00+01:00' });
+      actA2 = await actividad({ proyectoId: a.id, inicio: '2026-05-10T10:00:00+02:00' });
+      actB = await actividad({ proyectoId: b.id, inicio: '2026-03-20T10:00:00+01:00' });
+      await asistencia((await inscripcion(v1.id, actA1.id)).id, { horas: '2.25' });
+      await asistencia((await inscripcion(v2.id, actA1.id)).id, { horas: '1.50' });
+      await asistencia((await inscripcion(v1.id, actA2.id)).id, { horas: '3.00' });
+      await asistencia((await inscripcion(v1.id, actB.id)).id, { horas: '0.75' });
+      await asistencia((await inscripcion(v3.id, actB.id)).id, { asistio: false, horas: '4.00' });
+    });
+
+    it('escenario 6 y SC-001: las horas son la suma exacta de las asistencias, a la centésima', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026 });
+      const [filaA, filaB, total] = informe.filas;
+
+      expect(filaA).toMatchObject({ tipo: 'proyecto', proyecto: { id: a.id }, actividades: 2, voluntarios: 2, horas: '6.75' });
+      expect(filaB).toMatchObject({ tipo: 'proyecto', proyecto: { id: b.id }, actividades: 1, voluntarios: 1, horas: '0.75' });
+      expect(total).toMatchObject({ tipo: 'total', actividades: 3, horas: '7.50' });
+      const { rows } = await pool.query('SELECT sum(horas)::text AS horas FROM asistencias WHERE asistio');
+      expect(total.horas).toBe(rows[0].horas);
+    });
+
+    it('caso límite: una asistencia corregida a «no asistió» no cuenta horas ni voluntario', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026, proyectoId: b.id });
+      expect(cifras(informe.filas[0])).toEqual({ ...ceros, actividades: 1, voluntarios: 1, horas: '0.75' });
+
+      await pool.query('UPDATE asistencias SET asistio = false WHERE inscripcion_id IN (SELECT id FROM inscripciones WHERE actividad_id = $1)', [actB.id]);
+      const corregido = await servicio.generarInforme({ ...AÑO_2026, proyectoId: b.id });
+      expect(cifras(corregido.filas[0])).toEqual({ ...ceros, actividades: 1 });
+    });
+
+    it('clarify 3: un voluntario en dos proyectos cuenta 1 en cada fila y 1 en el subtotal y el total', async () => {
+      const informe = await servicio.generarInforme({ ...AÑO_2026, agrupacion: 'trimestre' });
+      const resumen = informe.filas.map((f) => [f.tipo, f.periodo?.etiqueta ?? null, f.proyecto?.id ?? null, f.voluntarios, f.horas]);
+
+      expect(resumen).toEqual([
+        ['proyecto', 'T1 2026', a.id, 2, '3.75'],
+        ['proyecto', 'T1 2026', b.id, 1, '0.75'],
+        ['subtotal', 'T1 2026', null, 2, '4.50'],
+        ['proyecto', 'T2 2026', a.id, 1, '3.00'],
+        ['subtotal', 'T2 2026', null, 1, '3.00'],
+        ['total', null, null, 2, '7.50'],
+      ]);
+    });
+
+    it('caso límite: una actividad celebrada sin asistencias cuenta 1 actividad, 0 voluntarios y 0.00 h', async () => {
+      const c = await proyecto('C Sin asistencias');
+      const act = await actividad({ proyectoId: c.id, inicio: '2026-06-01T10:00:00+02:00' });
+      await inscripcion(v2.id, act.id);
+
+      const informe = await servicio.generarInforme({ ...AÑO_2026, proyectoId: c.id });
+      expect(cifras(informe.filas[0])).toEqual({ ...ceros, actividades: 1 });
+      expect(cifras(informe.filas.at(-1))).toEqual({ ...ceros, actividades: 1 });
+    });
+
+    it('no cuentan las asistencias de actividades canceladas, futuras o fuera del periodo', async () => {
+      const c = await proyecto('C Fuera');
+      for (const datos of [
+        { proyectoId: c.id, inicio: '2026-04-01T10:00:00+02:00', estado: 'cancelada' },
+        { proyectoId: c.id, inicio: '2025-12-31T22:00:00+01:00' },
+        { proyectoId: c.id, inicio: '2027-01-20T10:00:00+01:00' },
+      ]) {
+        const act = await actividad(datos);
+        await asistencia((await inscripcion(v2.id, act.id)).id, { horas: '5.00' });
+      }
+      const informe = await servicio.generarInforme({ ...AÑO_2026 });
+      expect(informe.filas.map((f) => f.proyecto?.id ?? null)).not.toContain(c.id);
+      expect(informe.filas.at(-1)).toMatchObject({ actividades: 3, voluntarios: 2, horas: '7.50' });
+    });
+
+    it('FR-009: el JSON, el CSV y el PDF no contienen datos de los voluntarios; el CSV lleva las horas con un decimal', async () => {
+      const { definicionPdfInforme } = await import('./textos.js');
+      const admin = await entrar('admin');
+      const filtros = { ...AÑO_2026, agrupacion: 'trimestre' };
+      const pantalla = (await admin.get('/api/informes').query(filtros)).body;
+      const csv = (await admin.get('/api/informes/csv').query(filtros)).text;
+      const pdf = JSON.stringify(definicionPdfInforme(pantalla));
+
+      expect(pantalla.filas.at(-1)).toMatchObject({ voluntarios: 2, horas: '7.50' });
+      const lineas = csv.slice(1).split('\r\n').filter(Boolean);
+      expect(lineas.at(-1).split(';').slice(-2)).toEqual(['2', '7,5']);
+      expect(pdf).toContain('7,5 h');
+      const { rows } = await pool.query(
+        `SELECT u.correo AS cuenta FROM voluntarios v JOIN usuarios u ON u.id = v.usuario_id WHERE v.id = ANY($1::bigint[])`,
+        [[v1.id, v2.id, v3.id]],
+      );
+      const datos = ['Voluntaria', 'Secreta Informe', 'vol-secreta@prueba.test', '600 000 000', ...rows.map((r) => r.cuenta)];
+      for (const salida of [JSON.stringify(pantalla), csv, pdf]) {
+        for (const dato of datos) expect(salida).not.toContain(dato);
       }
     });
   });

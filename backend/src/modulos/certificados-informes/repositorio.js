@@ -93,7 +93,8 @@ export async function certificadoPorCodigo(codigo) {
 }
 
 // ── HU-04: informe (specs/spec-004/research.md R1, R3–R5) ──
-// Solo LEE aportaciones (spec-001), actividades (spec-007) y proyectos (común), y nunca columnas
+// Solo LEE aportaciones (spec-001), actividades (spec-007), inscripciones (spec-005),
+// asistencias (spec-008) y proyectos (común), y nunca columnas
 // personales de donantes o voluntarios (FR-009). Cada consulta devuelve, con GROUPING SETS, las
 // filas (nivel 0), los subtotales por periodo (nivel 1) y el total (nivel 3); en NUMERIC.
 
@@ -128,20 +129,24 @@ export async function recaudacionInforme({ desde, hasta, proyectoId = null, agru
   return rows;
 }
 
-// Actividades celebradas (publicadas y ya empezadas según «ahora»), en el periodo de su inicio.
-// Voluntarios y horas necesitan la tabla asistencias de HU-08 (tasks.md, fase 6): hasta entonces, 0.
+// Actividades celebradas (publicadas y ya empezadas según «ahora»), en el periodo de su inicio,
+// con sus asistencias (spec-008). Solo cuentan las de asistio = true: una corregida a «no asistió»
+// no suma horas ni voluntario. count(DISTINCT) en cada nivel: personas distintas por ámbito (R3, R5).
 export async function voluntariadoInforme({ desde, hasta, proyectoId = null, agrupacion = null, ahora }) {
   const { rows } = await consulta(
     `WITH base AS (
-       SELECT ${periodoSql('inicio')} AS periodo, proyecto_id, id
-         FROM actividades
-        WHERE estado = 'publicada' AND inicio <= $5 AND inicio >= $1 AND inicio < $2
-          AND ($3::bigint IS NULL OR proyecto_id = $3)
+       SELECT ${periodoSql('a.inicio')} AS periodo, a.proyecto_id, a.id,
+              i.voluntario_id, s.asistio, s.horas
+         FROM actividades a
+         LEFT JOIN inscripciones i ON i.actividad_id = a.id
+         LEFT JOIN asistencias s ON s.inscripcion_id = i.id
+        WHERE a.estado = 'publicada' AND a.inicio <= $5 AND a.inicio >= $1 AND a.inicio < $2
+          AND ($3::bigint IS NULL OR a.proyecto_id = $3)
      )
      SELECT ${COLUMNAS_NIVEL},
-            count(*)::int AS actividades,
-            0 AS voluntarios,
-            '0.00' AS horas
+            count(DISTINCT id)::int AS actividades,
+            count(DISTINCT voluntario_id) FILTER (WHERE asistio)::int AS voluntarios,
+            round(coalesce(sum(horas) FILTER (WHERE asistio), 0), 2)::text AS horas
        FROM base
       ${AGRUPACION_SQL}`,
     [desde, hasta, proyectoId, TRUNCADO[agrupacion] ?? null, ahora],

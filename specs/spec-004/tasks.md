@@ -166,16 +166,16 @@ filas y cifras que `GET /api/informes`.
 
 ---
 
-## Phase 6: Voluntariado completo (BLOQUEADA hasta que HU-08 esté en `main`)
+## Phase 6: Voluntariado completo (HU-08 integrada en `main` el 11/11/2026)
 
-- [ ] T018 Cuando la PR de HU-08 esté fusionada, hacer `git merge origin/main` en `spec-004` y comprobar que `007_asistencias.sql` se aplica.
-- [ ] T019 En `voluntariadoInforme` de `repositorio.js`, unir `inscripciones` y `asistencias` (`LEFT JOIN`) y calcular:
+- [X] T018 Cuando la PR de HU-08 esté fusionada, hacer `git merge origin/main` en `spec-004` y comprobar que `007_asistencias.sql` se aplica.
+- [X] T019 En `voluntariadoInforme` de `repositorio.js`, unir `inscripciones` y `asistencias` (`LEFT JOIN`) y calcular:
   - `count(DISTINCT actividad)`;
   - `count(DISTINCT inscripciones.voluntario_id) FILTER (WHERE asistio)`;
   - `coalesce(sum(asistencias.horas) FILTER (WHERE asistio), 0)::text`.
   
   Se mantienen los mismos `GROUPING SETS`, de modo que los voluntarios distintos se cuentan por ámbito (research R3 y R5).
-- [ ] T020 Pruebas en `informes.test.js`:
+- [X] T020 Pruebas en `informes.test.js`:
   - escenario 6: las horas coinciden con la suma de las asistencias;
   - una asistencia corregida a `asistio = false` no cuenta horas ni voluntario;
   - un voluntario en dos proyectos cuenta 1 en cada fila y 1 en el total y en el subtotal del periodo;
