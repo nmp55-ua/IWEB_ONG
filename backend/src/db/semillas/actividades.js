@@ -72,6 +72,17 @@ export async function sembrarActividades(pool) {
       estado: 'publicada',
       requisitos: '',
     },
+    {
+      // spec-008: la asistencia de 2 h de voluntario@ong.test (semillas/asistencias.js).
+      titulo: 'Banco de alimentos',
+      proyecto: 'Comedor social',
+      inicio: enMadrid(-10, 17),
+      fin: enMadrid(-10, 19),
+      lugar: 'Calle Mayor 3',
+      plazas: 10,
+      estado: 'publicada',
+      requisitos: '',
+    },
   ];
 
   for (const a of actividades) {

@@ -1,0 +1,11 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import ListaAsistencia from '../../../../components/actividades/ListaAsistencia.jsx';
+// spec-008. El acceso lo decide el servidor (solo coordinadores).
+const { id } = Astro.params;
+if (!/^\d+$/.test(id ?? '')) return Astro.redirect('/coordinacion/actividades');
+---
+
+<Layout titulo="Registrar asistencia">
+  <ListaAsistencia client:load id={Number(id)} />
+</Layout>

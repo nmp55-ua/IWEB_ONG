@@ -19,3 +19,14 @@ rutasActividades.get(
   soloCoordinador,
   asincrono(controlador.inscripciones),
 );
+// HU-08: cualquier coordinador, en cualquier actividad (FR-008).
+rutasActividades.get(
+  '/actividades/:id(\\d+)/asistencias',
+  soloCoordinador,
+  asincrono(controlador.obtenerAsistencias),
+);
+rutasActividades.put(
+  '/actividades/:id(\\d+)/asistencias',
+  soloCoordinador,
+  asincrono(controlador.guardarAsistencias),
+);

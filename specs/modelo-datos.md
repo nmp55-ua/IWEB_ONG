@@ -404,6 +404,8 @@ La **posición** en la lista de espera se calcula (orden de `fecha_inscripcion` 
 | `horas` | NUMERIC(5,2) | horas de la actividad al registrar |
 | `registrada_por` | BIGINT → usuarios | coordinador |
 | `fecha_registro` | TIMESTAMPTZ | última modificación |
+| `creado_en` | TIMESTAMPTZ | por defecto `now()` |
+| `actualizado_en` | TIMESTAMPTZ | por defecto `now()`; se actualiza al corregir |
 
 Una inscripción tiene como mucho una asistencia; corregir cambia `asistio`, no crea otra fila.
 El **total de horas** de un voluntario no se guarda: es `SUM(horas) WHERE asistio = true`. Así

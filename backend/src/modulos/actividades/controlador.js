@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ErrorApi } from '../../middleware/errores.js';
+import * as asistencias from './asistencias.js';
 import * as servicio from './servicio.js';
 
 const texto = (mensaje) =>
@@ -42,6 +43,32 @@ const esquemaFiltros = z.object({
   proyectoId: z.coerce.number().int().positive().optional(),
 });
 
+const esquemaAsistencias = z
+  .object(
+    {
+      asistencias: z
+        .array(
+          z
+            .object({
+              inscripcionId: z
+                .number({ message: 'Inscripción no válida.' })
+                .int('Inscripción no válida.')
+                .positive('Inscripción no válida.'),
+              asistio: z.boolean({ message: 'Indica si asistió o no.' }),
+            })
+            .strict({ message: 'Cada fila solo admite inscripcionId y asistio.' }),
+          { message: 'Indica la asistencia.' },
+        )
+        .min(1, 'Marca al menos una persona.')
+        .max(500, 'Demasiadas filas.')
+        .refine((filas) => new Set(filas.map((f) => f.inscripcionId)).size === filas.length, {
+          message: 'Hay inscripciones repetidas.',
+        }),
+    },
+    { invalid_type_error: 'El cuerpo debe ser un objeto con asistencias.' },
+  )
+  .strict({ message: 'El cuerpo solo admite asistencias.' });
+
 const idDe = (req) => Number(req.params.id);
 
 export async function listar(req, res) {
@@ -73,4 +100,17 @@ export async function modificar(req, res) {
 
 export async function inscripciones(req, res) {
   res.json(await servicio.listarInscripciones(idDe(req)));
+}
+
+export async function obtenerAsistencias(req, res) {
+  res.json(await asistencias.obtenerAsistencia(idDe(req)));
+}
+
+export async function guardarAsistencias(req, res) {
+  const { asistencias: filas } = esquemaAsistencias.parse(req.body ?? {});
+  res.json(await asistencias.guardarAsistencia(idDe(req), filas, req.usuario));
+}
+
+export async function misHoras(req, res) {
+  res.json(await asistencias.horasDeUsuario(req.usuario.id));
 }

@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MisHoras from '../components/actividades/MisHoras.jsx';
+// spec-008. Cada voluntario ve solo sus horas: lo decide el servidor con la sesión.
+---
+
+<Layout titulo="Mis horas">
+  <MisHoras client:load />
+</Layout>
