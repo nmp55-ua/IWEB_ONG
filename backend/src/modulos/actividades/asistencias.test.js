@@ -183,12 +183,21 @@ describe.skipIf(!URL_PRUEBAS)('HU-08 · asistencias', () => {
       const { actividadId, a } = await preparar();
       const agente = await entrar('coordinador@prueba.test');
       const ruta = `/api/actividades/${actividadId}/asistencias`;
-      await agente.put(ruta).send({ asistencias: [{ inscripcionId: a, asistio: true }] }).expect(200);
-      await agente.put(ruta).send({ asistencias: [{ inscripcionId: a, asistio: true }] }).expect(200);
+      await agente
+        .put(ruta)
+        .send({ asistencias: [{ inscripcionId: a, asistio: true }] })
+        .expect(200);
+      await agente
+        .put(ruta)
+        .send({ asistencias: [{ inscripcionId: a, asistio: true }] })
+        .expect(200);
       const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM asistencias');
       expect(rows[0].n).toBe(1);
 
-      await agente.put(ruta).send({ asistencias: [{ inscripcionId: a, asistio: false }] }).expect(200);
+      await agente
+        .put(ruta)
+        .send({ asistencias: [{ inscripcionId: a, asistio: false }] })
+        .expect(200);
       expect((await filaDe(a)).asistio).toBe(false);
     });
 
@@ -196,8 +205,14 @@ describe.skipIf(!URL_PRUEBAS)('HU-08 · asistencias', () => {
       const { actividadId, a, b } = await preparar();
       const agente = await entrar('coordinador@prueba.test');
       const ruta = `/api/actividades/${actividadId}/asistencias`;
-      await agente.put(ruta).send({ asistencias: [{ inscripcionId: a, asistio: true }] }).expect(200);
-      await agente.put(ruta).send({ asistencias: [{ inscripcionId: b, asistio: false }] }).expect(200);
+      await agente
+        .put(ruta)
+        .send({ asistencias: [{ inscripcionId: a, asistio: true }] })
+        .expect(200);
+      await agente
+        .put(ruta)
+        .send({ asistencias: [{ inscripcionId: b, asistio: false }] })
+        .expect(200);
       expect((await filaDe(a)).asistio).toBe(true);
     });
   });
@@ -222,7 +237,10 @@ describe.skipIf(!URL_PRUEBAS)('HU-08 · asistencias', () => {
 
     it.each([
       ['en curso', { inicio: '2026-11-01T11:00:00+01:00', fin: '2026-11-01T13:00:00+01:00' }],
-      ['mucho después (sin plazo)', { inicio: '2020-01-10T10:00:00+01:00', fin: '2020-01-10T12:00:00+01:00' }],
+      [
+        'mucho después (sin plazo)',
+        { inicio: '2020-01-10T10:00:00+01:00', fin: '2020-01-10T12:00:00+01:00' },
+      ],
     ])('%s → se admite', async (_nombre, opciones) => {
       const { actividadId, a } = await preparar(opciones);
       const agente = await entrar('coordinador@prueba.test');
@@ -255,7 +273,15 @@ describe.skipIf(!URL_PRUEBAS)('HU-08 · asistencias', () => {
 
     it.each([
       ['lista vacía', { asistencias: [] }],
-      ['repetidos', { asistencias: [{ inscripcionId: 1, asistio: true }, { inscripcionId: 1, asistio: false }] }],
+      [
+        'repetidos',
+        {
+          asistencias: [
+            { inscripcionId: 1, asistio: true },
+            { inscripcionId: 1, asistio: false },
+          ],
+        },
+      ],
       ['asistio no booleano', { asistencias: [{ inscripcionId: 1, asistio: 'sí' }] }],
     ])('%s → 400', async (_nombre, cuerpo) => {
       const { actividadId } = await preparar();
@@ -269,7 +295,10 @@ describe.skipIf(!URL_PRUEBAS)('HU-08 · asistencias', () => {
       const { actividadId, a, b } = await preparar();
       const agente = await entrar('coordinador@prueba.test');
       const ruta = `/api/actividades/${actividadId}/asistencias`;
-      await agente.put(ruta).send({ asistencias: [{ inscripcionId: a, asistio: false }] }).expect(200);
+      await agente
+        .put(ruta)
+        .send({ asistencias: [{ inscripcionId: a, asistio: false }] })
+        .expect(200);
       const res = await agente.get(ruta).expect(200);
       expect(res.body.total).toBe(2);
       expect(res.body.datos.map((f) => [f.inscripcionId, f.asistio])).toEqual([
