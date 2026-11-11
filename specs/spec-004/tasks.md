@@ -13,7 +13,8 @@ con Vitest (las de base de datos se saltan sin `TEST_DATABASE_URL`); frontend co
 
 **Commits**: en español y empezando por `HU-04:` (CONVENCIONES §9). Sin `push`.
 
-**Dependencia de HU-08**: la tabla `asistencias` (migración `007`) aún no está en `main`. Las fases
+**Dependencia de HU-08** (resuelta: HU-08 integrada en `main` el 11/11/2026 y fase 6 completada):
+la tabla `asistencias` (migración `007`) aún no estaba en `main` al crear estas tareas. Las fases
 1–5 no la leen. Mientras tanto, la consulta de voluntariado devuelve `voluntarios = 0` y
 `horas = '0.00'` para las actividades celebradas. La fase 6 lo completa cuando HU-08 llegue a
 `main`, y la PR de HU-04 no se abre antes (research R10).

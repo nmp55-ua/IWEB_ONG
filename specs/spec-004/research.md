@@ -141,6 +141,8 @@ Decisiones técnicas de [plan.md](plan.md). Las reglas funcionales están en [sp
   Al llegar HU-08 a `main`, se hace `merge` de `main` en `spec-004` y se completan esas tareas.
 - **Rationale**: decisión de Rubén del 2026-11-09 (opción A); evita fusionar `spec-008` sin
   revisar.
+- **Estado**: resuelta el 2026-11-11. HU-08 entró en `main` (PR #7), se hizo `merge` en
+  `spec-004` y la fase 6 está completada (T018–T021).
 - **Alternatives considered**: fusionar `origin/spec-008` en `spec-004` (conflictos en ficheros
   ajenos y la PR arrastraría HU-08); crear `asistencias` solo en las pruebas (duplicaría la
   migración de Nicole).
