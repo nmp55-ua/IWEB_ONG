@@ -1,6 +1,6 @@
 # Contrato de interfaz de HU-02
 
-**Estado**: diseño para implementación · **Responsable**: Nada · **Revisor**: Javi
+**Estado**: implementado y validado en spec-002; converge y revisión externa pendientes · **Responsable**: Nada · **Revisor**: Javi
 
 ## Entrada y estructura
 
@@ -8,7 +8,7 @@ Página `/mis-aportaciones`, accesible desde «Mis aportaciones» en el menú de
 
 Se utiliza `Layout.astro` y una isla `HistorialAportaciones` con `client:load`. Las llamadas pasan por el cliente común `api.get('/yo/aportaciones')`. Se reutilizan Tabla, Campo, Boton, Aviso y EstadoVacio según sus interfaces vigentes.
 
-El título será «Mis aportaciones». Con resultados se muestran grupos anuales descendentes, cada uno con su total en euros y una tabla de fecha, importe, modalidad y destino. Las filas siguen el orden recibido; su clave es el ID textual. «Cuota de socio» presenta `cuota_socio`. No se añaden datos personales, enlaces de pago, edición o descarga de certificados a este alcance.
+El título es «Mis aportaciones». Con resultados se muestran grupos anuales descendentes, cada uno con su total en euros y una tabla de fecha, importe, modalidad y destino. Las filas siguen el orden recibido; su clave es el ID textual. «Cuota de socio» presenta `cuota_socio`. No se añaden datos personales, enlaces de pago, edición o descarga de certificados a este alcance.
 
 Los grupos usan encabezados accesibles. La tabla y sus avisos pueden recorrerse con teclado; las filas de la historia completa permanecen en el documento y pueden verse mediante desplazamiento, sin páginas ocultas ni carga diferida para el caso de 60 cuotas.
 
@@ -45,6 +45,6 @@ El filtro se mantiene en el estado de la página; no requiere cambiar el cliente
 
 ## Observación de aceptación
 
-Se comprobarán en navegador los tres estados vacíos, filtro, errores, campos, orden, menú y ausencia de efectos al abrir sin vínculo. Las pruebas de API acreditan propiedad y exactitud; no sustituyen estos recorridos visibles.
+Se comprueban en navegador los tres estados vacíos, filtro, errores, campos, orden, menú y ausencia de efectos al abrir sin vínculo. Las pruebas de API acreditan propiedad y exactitud; no sustituyen estos recorridos visibles.
 
-Para SC-002 se usará el [procedimiento del quickstart](../quickstart.md): inicio en la navegación al historial, cuenta previamente identificada y vinculada; fin con 60 filas, cinco grupos y totales correctos presentados. La isla expondrá marcadores estables de la región y filas para observación de prueba, sin añadir telemetría, temporizadores de aceptación ni datos personales al producto.
+Para SC-002 se aplica el [procedimiento del quickstart](../quickstart.md): inicio en la navegación al historial, cuenta previamente identificada y vinculada; fin con 60 filas, cinco grupos y totales correctos presentados. La isla expone marcadores estables de la región y filas para observación de prueba, sin añadir telemetría, temporizadores de aceptación ni datos personales al producto.

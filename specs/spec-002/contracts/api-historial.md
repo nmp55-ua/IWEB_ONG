@@ -1,6 +1,6 @@
 # Contrato HTTP de HU-02
 
-**Estado**: diseño para implementación · **Responsable**: Nada · **Revisor**: Javi
+**Estado**: implementado y validado en spec-002; converge y revisión externa pendientes · **Responsable**: Nada · **Revisor**: Javi
 
 Se aplica el formato común de [CONVENCIONES.md](../../../CONVENCIONES.md) y [plan-comun.md](../../plan-comun.md). Se reutiliza el router de donaciones y el middleware común. Este endpoint no modifica los contratos de HU-01 ni HU-03.
 

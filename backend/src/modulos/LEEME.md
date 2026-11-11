@@ -23,13 +23,13 @@ Lo común está en `middleware/` (`requiereRol`, `ErrorApi`) y en `servicios-com
 (`fechas`, `importes`, `csv`, `pdf`, `correo`, `pasarela`). No se duplica: si falta algo, se
 propone al grupo y se añade ahí.
 
-Express 4 no captura por sí solo los errores de funciones `async`: envolved los controladores
+Express 4 no captura por sí solo los errores de funciones `async`: los controladores se envuelven
 con `asincrono(...)` de `middleware/asincrono.js`.
 
 ## Donaciones — HU-01 en spec-001
 
-Implementa donación puntual y alta/cuotas de socio. No incluye historial HU-02 ni
-certificados HU-03. Contrato de rutas y permisos:
+Implementa donación puntual y alta/cuotas de socio. La consulta del historial se describe
+en el apartado HU-02; los certificados corresponden al módulo HU-03. Contrato de pagos y permisos:
 [api-donaciones.md](../../../specs/spec-001/contracts/api-donaciones.md).
 
 | Método y ruta                                          | Uso                                                                        |
@@ -57,6 +57,17 @@ solo para quien las indique. Fuente y límites en los [contratos](../../../specs
 El [quickstart](../../../specs/spec-001/quickstart.md) define pruebas aisladas y preparación
 de Stripe; la [matriz](../../../specs/spec-001/refinamiento/matriz-validacion-01.md) recoge resultados.
 Este estado en rama no equivale a aprobación o incorporación compartida.
+
+## Historial — HU-02
+
+`GET /api/yo/aportaciones`, con filtro opcional `anio` (1000–9999), requiere sesión,
+rol donante y vínculo por `donantes.usuario_id`. Devuelve solo aportaciones confirmadas,
+agrupadas por año de cobro en Europe/Madrid, con totales exactos y lectura consistente.
+No genera cobros, correos, vínculos ni certificados.
+
+Página: `/mis-aportaciones`. Se reutilizan las entidades y migraciones existentes.
+Detalles en el [contrato HTTP](../../../specs/spec-002/contracts/api-historial.md)
+y el [quickstart](../../../specs/spec-002/quickstart.md).
 
 ## Certificados — HU-03 en spec-003
 

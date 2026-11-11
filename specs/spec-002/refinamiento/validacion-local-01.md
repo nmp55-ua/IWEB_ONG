@@ -132,3 +132,64 @@ Resultado real: código **0**, mensaje `Banco preparado: build, proxy, login y c
 T015–T024 quedan completadas con ese alcance: formato y coordinación puros, interfaz implementada/compilada y banco integrado comprobado por HTTP. T025 y siguientes permanecen pendientes, incluida toda observación visible o aceptación del límite de dos segundos. Los commits anteriores y los informes históricos permanecen intactos; esta sección amplía la evidencia local sin reemplazar resultados anteriores.
 
 Comprobación final: Prettier aprueba los ocho archivos JS/JSX/Markdown del bloque, con la limitación Astro anterior; `git diff --check` no detecta errores y los enlaces locales son válidos. La comparación de 357 archivos iniciales detecta únicamente cuatro modificaciones previstas: banco existente, Menu.jsx, tasks.md y este informe. Los cinco archivos nuevos son la isla, sus funciones y pruebas puras, la página Astro y la suite del banco. El contenido de este informe anterior a la nueva sección se conserva íntegramente. `.env`, `.claude/launch.json`, selección de funcionalidad, migraciones, documentos de diseño, módulos ajenos y demás históricos permanecen intactos. Rama/HEAD: `spec-002`/`ca172ff`; índice vacío, sin acciones Git de escritura.
+
+## Validación final y preparación de revisión — T031–T035 · 2026-11-10
+
+Base de esta entrega: **0cc28b1e44a1d932cf1da61cdc869883652693c4**, rama spec-002, con T001–T030 registradas. El árbol seguido estaba limpio; se conservan .claude/launch.json, output/ y tmp/ sin seguimiento. No se repiten sus bloques, commits o navegaciones. La selección temporal mediante SPECIFY_FEATURE_DIRECTORY/SPECIFY_FEATURE y `check-prerequisites.ps1 -Json -PathsOnly` resuelve specs/spec-002 sin persistir configuración. Checklist requirements: 16 marcadas, cero pendientes.
+
+Se aplica el procedimiento local de implementación limitado a estas cinco tareas. El comando no está registrado como herramienta; se usa directamente su SKILL.md. La comprobación se adapta con PathsOnly y validación directa de spec, plan y tasks para evitar la escritura de selección del modo general. Los hooks de Git antes/después son opcionales y no se ejecutan. El alcance no incluye converge ni revisión externa.
+
+### T031 — regresión backend nueva
+
+Se revisan las protecciones del soporte y de migraciones antes de ejecutar: DATABASE_URL y TEST_DATABASE_URL iguales, destino ong_test_hu01 y esquema propio. Las suites de donaciones usan esquemas aleatorios, procesos y adaptadores de pruebas. La de migraciones comprueba además el inventario de public antes/después; no se ejecuta una suite ajena contra tablas compartidas. No se activa cron fiscal ni se ejecuta la CLI de certificados.
+
+Desde backend, con conexión exclusiva y secretos sintéticos seleccionados según quickstart, se ejecuta:
+
+```powershell
+Remove-Item Env:AHORA_SIMULADO -ErrorAction SilentlyContinue
+npm test -- src/modulos/donaciones src/servicios-comunes/correo.test.js --no-file-parallelism
+```
+
+Resultado nuevo: **442/442 pruebas aprobadas, 15 archivos, código 0, duración Vitest 71,91 s**. [Salida completa](evidencias-finales-01/regresion-backend.txt). Desglose: migraciones 68, cuotas 38, servicio 24, rutas 12, historial 38, pasarela 37, eventos 21, autorización 35, texto de correo 26, banco de historial 9, correo común 16, registro 3, confirmaciones 7, normalización 102 y validación local 6.
+
+No hay ejecución funcional fallida nueva en este bloque. El mensaje de rechazo de correo de verificación es stderr del caso SMTP simulado de rutas, que termina aprobado. Las fases rojas y el primer fallo de preparación del reloj de entregas anteriores se conservan arriba; no se presentan como fallos nuevos ni se borran. AHORA_SIMULADO se retira solo de este proceso para las previsiones construidas con Date.now; el contraste fiscal inyecta su propio reloj de 2026. .env y el reloj del sistema permanecen intactos.
+
+Los 38 casos de historial incluyen privacidad, ocho FR, 60 cuotas y un conjunto mayor sin truncar, fechas Madrid, orden BIGINT, sumas exactas, instantánea concurrente, errores/liberación y ausencia de efectos. El contraste de servicios reales de HU-03 vuelve a acreditar igualdad posterior a reconciliación, incluida una confirmación tardía; no se modifica ese módulo. Esta ejecución no prueba pagos de Stripe, recepción SMTP real o un cron desplegado.
+
+### T032 — frontend, build y formato
+
+Desde frontend:
+
+```powershell
+npm test -- src/components/donaciones/historial.test.js
+$env:ASTRO_TELEMETRY_DISABLED = '1'
+npm run build
+```
+
+Pruebas: **26/26 aprobadas**, código 0, duración del ejecutor **210,10 ms**; [salida](evidencias-finales-01/pruebas-frontend.txt). Son funciones puras: formato exacto sin flotantes, DTO inválido, filtros/reintentos y respuestas desordenadas/desmontaje. No se presentan como DOM de navegador.
+
+Build: código **0**, Astro **11,08 s**; [salida](evidencias-finales-01/build-frontend.txt). Se reconstruye con el código de 0cc28b1, sin cambios funcionales posteriores. La medición de T030 conserva su build y traza propios; los hashes se contrastan sin repetir la navegación. El build incluye páginas de la aplicación completa, pero no acredita casos de aceptación de otras historias.
+
+El nuevo entry.mjs tiene SHA-256 `9DD2042E7E2D1F330ED7D09F2A6372ED83BB19C440B4D5EB52480EBBA6EEE58C`, distinto del artefacto medido en T030 (`40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`). No se afirma identidad binaria ni se atribuye a este build una medición no ejecutada. La isla fuente conserva SHA-256 `79AFE5C1C27EB655736CA40008EA69CB3C7353DF47EDBC78F279B0631F094030`; se reutiliza aceptación del mismo código de 0cc28b1, con el artefacto original identificado en su informe.
+
+Prettier se ejecuta desde el binario ya instalado en la caché local, con .prettierrc.json y rutas explícitas, sin instalaciones o cambios de configuración. Se comprueban archivos JS/JSX de HU-02 y la documentación actualizada. La página Astro se verifica mediante build y lectura; se mantiene la limitación documentada del parser sin instalar un plugin. El resultado de formato y enlaces se registra al finalizar este apartado.
+
+### T033–T035 — documentación y balance
+
+README, LEEME de módulos y quickstart reflejan la consulta implementada, rutas, estados, comandos reales y aislamiento. El quickstart retira el reloj global, explica banco/medición actuales y referencia resultados conservados. Plan, investigación y encabezados de contratos expresan el estado en rama y mantienen decisiones, datos y procedencia metodológica. No se realiza una limpieza general de otras historias ni se cambian requisitos funcionales.
+
+La [matriz](matriz-validacion-01.md) contrasta **8/8 FR, 9/9 escenarios y 3/3 SC**. Se reutilizan exclusivamente las evidencias visibles y de duración de 0cc28b1, con código funcional y observador sin cambios: [interfaz](validacion-interfaz-01.md), [contraste fiscal](validacion-fiscal-01.md) y [T030](cierre-t030-01.md). SC-002: **638,20 ms**, 60 cuotas y cinco grupos correctos en su entorno; también se mantienen 2.745,30 ms, el intento inválido y 4.258,90 ms. No se hace una media ni se atribuye causalidad única de la mejora a memoria, SQL o render.
+
+El [paquete para Javi](revision-tecnica-01.md) reúne alcance, commits reales, cambios mínimos de menú, comandos y límites. Identifica propuestas editoriales sobre referencias operativas de los informes históricos **sin aplicarlas**; el texto anterior de este informe se conserva íntegro. Preparar la revisión no acredita que Javi la haya realizado ni que estos ajustes estén publicados.
+
+Converge, revisión externa e integración permanecen pendientes. T031–T035 solo se marcan por sus comprobaciones técnicas/documentales; no se declara HU-02 terminada. Sin pagos, reenvíos, mensajes, instalaciones, git add, commits, push, merge o cambios de rama.
+
+### Comprobaciones finales del bloque
+
+Prettier aprueba **26 archivos JS/JSX/Markdown** de rutas explícitas, con la configuración común y sin instalación: [salida de formato](evidencias-finales-01/formato.txt). La página Astro se mantiene fuera de ese parser y está compilada correctamente en el build. Los enlaces locales comprobados de los once documentos de cierre tienen destino existente; las referencias a archivos de evidencia se contrastan además con sus resultados, sin hacer nuevas consultas externas.
+
+Una consulta de solo lectura verifica PostgreSQL 16.15, base ong*test_hu01 y cero esquemas hu01*\* restantes. Las pruebas de migraciones comprueban conservación del inventario de public; los tests de GET y los balances visibles anteriores acreditan ausencia de efectos con su alcance, sin afirmar una auditoría global de bases.
+
+Se comprueba que el texto anterior de este informe es prefijo íntegro del nuevo, normalizando únicamente CRLF para la comparación. La revisión de huellas iniciales/finales y el diff delimitan los cambios a documentación autorizada, sin modificar código, migraciones, secretos o configuración. El índice permanece vacío. Los ficheros de output/, tmp/ y .claude/launch.json se mantienen fuera del bloque y no se seleccionan.
+
+Resultado de preservación: **411 archivos comparados**, con cambios solo en README, LEEME de módulos, plan, investigación, quickstart, dos contratos, tasks y el apartado nuevo de este informe. Se verifican **123 enlaces locales**, sin destinos ausentes. Los dos informes nuevos son matriz-validacion-01.md y revision-tecnica-01.md; las cuatro salidas nuevas están en evidencias-finales-01. T031–T035 quedan marcadas por su alcance, con converge y revisión externa expresamente pendientes.

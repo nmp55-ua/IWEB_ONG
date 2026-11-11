@@ -43,17 +43,8 @@ npm run semillas
 npm run dev
 ```
 
-Si Windows no encuentra `docker`, la instalación de Docker Desktop utilizada permite
-invocarlo sin modificar el PATH global:
-
-```powershell
-& "$env:LOCALAPPDATA\Programs\DockerDesktop\resources\bin\docker.exe" compose up -d
-```
-
-Ese comando se ejecuta desde la raíz, como alternativa a `docker compose up -d`.
-
 El migrador aplica todos los SQL pendientes presentes en esta rama, incluida la
-ampliación provisional 009 de HU-01, sobre `DATABASE_URL`. Revisar el destino antes de
+migración 009 de HU-01, sobre `DATABASE_URL`. Revisar el destino antes de
 ejecutarlo. Las semillas son sintéticas: no cobran ni sus estados de correo acreditan
 recepción. Para el frontend, en otra terminal desde la raíz:
 
@@ -77,7 +68,7 @@ Preparación y comandos completos en [quickstart de HU-01](specs/spec-001/quicks
 No ejecutar indiscriminadamente toda la suite contra esa base: las pruebas de actividades
 vacían tablas y la regresión común requiere su base separada, según esa guía.
 
-## Base común de este checkout
+## Base común
 
 - **Back-end:** inicio de sesión y registro (`/api/auth/...`), `requiereRol(...)`, formato
   común de errores (`ErrorApi`), `GET /api/proyectos`, migraciones `001`–`003` (usuarios,
@@ -89,10 +80,7 @@ vacían tablas y la regresión común requiere su base separada, según esa guí
 - Cada spec añade su migración de dominio (`backend/src/db/migraciones/LEEME.md`), su módulo,
   sus páginas y sus enlaces del menú (`components/comunes/Menu.jsx`).
 
-Esta descripción corresponde a los archivos de la rama consultada; no certifica el estado
-actual de `origin/main` ni incorpora automáticamente el trabajo de otras ramas.
-
-## HU-01 implementada en spec-001, pendiente de revisión
+## HU-01 — Donaciones y altas de socio
 
 - `/donar`: puntual o socio mensual, trimestral o anual, con o sin cuenta. Tarjeta mediante
   Stripe Checkout, EUR, entre 1,00 y 999.999,99 €, ambos incluidos. El máximo es de la aplicación.
@@ -110,15 +98,17 @@ misma clave de `.env` y comprobación de secreto sin mostrar valores está en el
 No basta con arrancar el frontend para recibir notificaciones; el backend y el listener
 deben estar disponibles. No introducir ni guardar tarjetas en la aplicación de la ONG.
 
-El historial HU-02 y los certificados HU-03 no están implementados por este incremento.
-La [matriz de validación](specs/spec-001/refinamiento/matriz-validacion-01.md) distingue
-pruebas automáticas, locales y Stripe real de pruebas. T079–T080 están documentadas;
-la [ficha técnica](specs/spec-001/refinamiento/revision-tecnica-01.md) prepara la revisión.
-El [flujo vigente](specs/spec-001/refinamiento/ajuste-flujo-01.md) separa T006 (paquete de
-revisión) y T007 (comprobación publicada/elección local de 009) de los controles externos
-PR-R01/PR-R02. La aprobación de Rubén y los conflictos de integración se resolverán antes
-de main; no bloquean terminar desarrollo o preparar/abrir la PR. El cierre técnico está acreditado en [converge-3](specs/spec-001/refinamiento/converge-3.md), con CONV-001–CONV-003 resueltos.
-La existencia de archivos o commits locales no acredita su publicación o integración compartida.
+HU-01 no incluye la consulta del historial ni la emisión de certificados; esas funciones
+corresponden a HU-02 y HU-03, respectivamente.
+
+## HU-02 — Historial de aportaciones
+
+Desde «Mis aportaciones», las cuentas de donante con vínculo verificado pueden consultar
+sus aportaciones confirmadas, agrupadas por año, con totales y filtro anual.
+La página distingue la falta de vínculo, el historial vacío y un año sin resultados.
+
+No requiere configuración, dependencias ni migraciones adicionales. Las pruebas aisladas
+y sus comandos están en el [quickstart de HU-02](specs/spec-002/quickstart.md).
 
 ## Documentos
 

@@ -1,0 +1,170 @@
+
+> ong-frontend@0.1.0 test
+> node --test src/components/donaciones/historial.test.js
+
+TAP version 13
+# Subtest: formato exacto del total 0.00
+ok 1 - formato exacto del total 0.00
+  ---
+  duration_ms: 1.549
+  type: 'test'
+  ...
+# Subtest: formato exacto del total 80.00
+ok 2 - formato exacto del total 80.00
+  ---
+  duration_ms: 0.2513
+  type: 'test'
+  ...
+# Subtest: formato exacto del total 1999999.98
+ok 3 - formato exacto del total 1999999.98
+  ---
+  duration_ms: 0.1142
+  type: 'test'
+  ...
+# Subtest: formato exacto del total 9007199254740993.01
+ok 4 - formato exacto del total 9007199254740993.01
+  ---
+  duration_ms: 0.1158
+  type: 'test'
+  ...
+# Subtest: formato exacto del total 123456789012345678901234567890.99
+ok 5 - formato exacto del total 123456789012345678901234567890.99
+  ---
+  duration_ms: 0.2132
+  type: 'test'
+  ...
+# Subtest: una respuesta anterior no sobrescribe el filtro mas reciente
+ok 6 - una respuesta anterior no sobrescribe el filtro mas reciente
+  ---
+  duration_ms: 7.3322
+  type: 'test'
+  ...
+# Subtest: desmontar impide actualizar estado o iniciar nuevas consultas
+ok 7 - desmontar impide actualizar estado o iniciar nuevas consultas
+  ---
+  duration_ms: 0.4717
+  type: 'test'
+  ...
+# Subtest: un error anterior tampoco sustituye una respuesta actual
+ok 8 - un error anterior tampoco sustituye una respuesta actual
+  ---
+  duration_ms: 0.3911
+  type: 'test'
+  ...
+# Subtest: fallo y reintento conservan la consulta sin mostrar datos anteriores
+ok 9 - fallo y reintento conservan la consulta sin mostrar datos anteriores
+  ---
+  duration_ms: 0.758
+  type: 'test'
+  ...
+# Subtest: una respuesta monetaria mal formada produce error, sin cero o exito falsos
+ok 10 - una respuesta monetaria mal formada produce error, sin cero o exito falsos
+  ---
+  duration_ms: 0.7741
+  type: 'test'
+  ...
+# Subtest: valida contrato, filtro y BIGINT textual sin convertirlo a Number
+ok 11 - valida contrato, filtro y BIGINT textual sin convertirlo a Number
+  ---
+  duration_ms: 1.5312
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico null
+ok 12 - rechaza total no canonico null
+  ---
+  duration_ms: 0.1482
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico undefined
+ok 13 - rechaza total no canonico undefined
+  ---
+  duration_ms: 0.0801
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico 20
+ok 14 - rechaza total no canonico 20
+  ---
+  duration_ms: 0.1158
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico ""
+ok 15 - rechaza total no canonico ""
+  ---
+  duration_ms: 0.0761
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "20"
+ok 16 - rechaza total no canonico "20"
+  ---
+  duration_ms: 0.0694
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "20.0"
+ok 17 - rechaza total no canonico "20.0"
+  ---
+  duration_ms: 0.0722
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "20.000"
+ok 18 - rechaza total no canonico "20.000"
+  ---
+  duration_ms: 0.0722
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "-1.00"
+ok 19 - rechaza total no canonico "-1.00"
+  ---
+  duration_ms: 0.0688
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "+1.00"
+ok 20 - rechaza total no canonico "+1.00"
+  ---
+  duration_ms: 0.0673
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "01.00"
+ok 21 - rechaza total no canonico "01.00"
+  ---
+  duration_ms: 0.0694
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "1,00"
+ok 22 - rechaza total no canonico "1,00"
+  ---
+  duration_ms: 0.0656
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "1e3"
+ok 23 - rechaza total no canonico "1e3"
+  ---
+  duration_ms: 0.1921
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "NaN"
+ok 24 - rechaza total no canonico "NaN"
+  ---
+  duration_ms: 0.074
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico " 1.00"
+ok 25 - rechaza total no canonico " 1.00"
+  ---
+  duration_ms: 0.0662
+  type: 'test'
+  ...
+# Subtest: rechaza total no canonico "1.00\\n"
+ok 26 - rechaza total no canonico "1.00\\n"
+  ---
+  duration_ms: 0.0656
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 210.0996

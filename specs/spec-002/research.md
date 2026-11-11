@@ -2,7 +2,7 @@
 
 **Fecha**: 2026-11-10 · **Base**: `453bfe8` · **Responsable**: Nada · **Revisor**: Javi
 
-Las decisiones siguientes definen el diseño de esta rama. No acreditan implementación, resultados de pruebas ni aprobación externa. Se mantienen las decisiones de [clarify](refinamiento/clarify-1.md), el [plan común](../plan-comun.md) y el [modelo común](../modelo-datos.md).
+Las decisiones siguientes definen el diseño de esta rama. Los resultados de implementación se acreditan en la [matriz de aceptación](refinamiento/matriz-validacion-01.md), separados de la revisión externa pendiente. Se mantienen las decisiones de [clarify](refinamiento/clarify-1.md), el [plan común](../plan-comun.md) y el [modelo común](../modelo-datos.md).
 
 ## R-01 — Autorización y vínculo existente
 
@@ -78,7 +78,7 @@ Las decisiones siguientes definen el diseño de esta rama. No acreditan implemen
 
 ## R-09 — Persistencia y soporte suficientes
 
-**Decisión.** Reutilizar las migraciones e índice existentes y el soporte de donaciones que exige `ong_test_hu01`, igualdad de DATABASE_URL/TEST_DATABASE_URL y esquemas exclusivos. Añadir en implementación un banco propio de HU-02 con fixtures y servicios aislados.
+**Decisión.** Reutilizar las migraciones e índice existentes y el soporte de donaciones que exige `ong_test_hu01`, igualdad de DATABASE_URL/TEST_DATABASE_URL y esquemas exclusivos. Se utiliza el banco propio de HU-02 con fixtures y servicios aislados.
 
 **Justificación.** El nombre de la base refleja el soporte heredado, no el alcance funcional de las pruebas. Debilitar sus guardas o usar la base de desarrollo no aporta valor. La ausencia de migración nueva evita coordinación de numeración innecesaria.
 
@@ -86,4 +86,4 @@ Las decisiones siguientes definen el diseño de esta rama. No acreditan implemen
 
 ## Resultado de investigación
 
-No quedan decisiones de diseño bloqueantes identificadas. La revisión de Javi, la implementación del banco, las pruebas de paridad y la medición de rendimiento son trabajo posterior, no resultados de esta investigación. Las fuentes oficiales fundamentan los mecanismos; la adecuación al proyecto se ha contrastado mediante lectura del código vigente.
+No quedan decisiones de diseño bloqueantes identificadas. El banco, el contraste fiscal y la medición están implementados y documentados en los informes de validación. El intento 04 acredita SC-002 con 638,20 ms; se conservan los intentos anteriores fallidos y sus límites. La propuesta de adelantar la consulta mediante SSR no se aplicó: se mantiene la isla y la consulta inicial previstas, sin atribuir causalmente toda la mejora al cambio de recursos. Converge y la revisión de Javi permanecen pendientes.
