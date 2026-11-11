@@ -6,13 +6,13 @@
 
 ## Alcance
 
-Se contrasta el GET/servicio de historial con el servicio y repositorio reales de HU-03, importados sin modificar sus archivos. Los datos son sintéticos y pertenecen a un esquema aleatorio creado mediante el soporte existente dentro de `ong_test_hu01`. El módulo común de conexión se redirige al pool aislado solo en Vitest; se inyectan transacción, reloj de 2026 y correo simulado. No se activa cron ni se ejecuta la CLI fiscal o la suite de certificados contra `public`.
+Se contrasta el GET/servicio de historial con el servicio y repositorio reales de HU-03, importados sin modificar sus archivos. Los datos son sintéticos y pertenecen a un esquema aleatorio creado mediante el soporte existente dentro de `ong_test_hu01`. El módulo común de conexión se redirige al pool aislado solo en Vitest; Se inyectan transacción, reloj de 2026 y correo simulado. No se activa cron ni se ejecuta la CLI fiscal o la suite de certificados contra `public`.
 
 La prueba se añade después de acreditar el backend y la consistencia de lectura en T011/T012. No cambia la regla fiscal ni atribuye aprobación de Rubén o Javi.
 
 ## Comprobación realizada
 
-El Donante sintético de límites anuales tiene una aportación de 1,00 € a `2025-12-31T22:59:59Z`, dentro de 2025 Madrid, y otra de 2,00 € a `2025-12-31T23:00:00Z`, que pertenece a 2026. Se reconcilia únicamente el ejercicio cerrado 2025 con `reconciliarEjercicio(2025)`.
+El Donante sintético de límites anuales tiene una aportación de 1,00 € a `2025-12-31T22:59:59Z`, dentro de 2025 Madrid y otra de 2,00 € a `2025-12-31T23:00:00Z`, que pertenece a 2026. Se reconcilia únicamente el ejercicio cerrado 2025 con `reconciliarEjercicio(2025)`.
 
 Se comparan tres resultados sobre el mismo conjunto, sin escrituras entre las lecturas:
 

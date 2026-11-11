@@ -59,7 +59,7 @@ El índice existente `(donante_id, estado, fecha_cobro)` permite restringir pers
 - El límite individual de HU-01 permanece en su dominio. No se reutiliza la validación de importe individual para sumas anuales.
 - PostgreSQL acumula con `SUM(NUMERIC)` sin cast a `NUMERIC(10,2)`. El DTO conserva dos decimales, incluyendo `"1999999.98"` para dos aportaciones de `"999999.99"`.
 - No se usa `parseFloat`, Number ni conversión a céntimos Number para agregar o presentar el total anual. El formato local opera sobre dígitos del texto canónico.
-- Los BIGINT se conservan como texto fuera de PostgreSQL; se ordenan numéricamente en SQL. El ID `9007199254740993` no debe confundirse con el anterior.
+- Los BIGINT se conservan como texto fuera de PostgreSQL; Se ordenan numéricamente en SQL. El ID `9007199254740993` no debe confundirse con el anterior.
 - El formato individual puede reutilizar `formatearEuros` dentro del rango acotado de HU-01; el formato anual exacto es propio de HU-02.
 
 ## Estados de presentación

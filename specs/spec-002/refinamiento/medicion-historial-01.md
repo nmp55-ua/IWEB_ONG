@@ -10,7 +10,7 @@ Se reutiliza el banco aislado de T025–T028: base `ong_test_hu01`, esquema `hu0
 
 La consulta de solo lectura guardada en [contraste-persistencia.json](evidencias-interfaz-01/contraste-persistencia.json) acredita cuenta activa con rol donante, Usuario 11 y Donante 11 vinculados. Hay exactamente 60 cuotas confirmadas, correspondientes a 60 meses distintos, doce por año entre 2021 y 2025. Cada cuota es de 10.00, cada grupo suma 120.00 y el control global suma 600.00.
 
-El navegador integrado se identifica con la cuenta `periodico@historial.example.test` mediante el formulario común. El retorno del login es `/`, no el historial; la captura [previa](evidencias-medicion-01/t029-cuenta-identificada-previa.png) muestra «Hola, periodico» en la portada. No se abre ni se precarga su historial para preparar el cronómetro.
+El navegador de pruebas se identifica con la cuenta `periodico@historial.example.test` mediante el formulario común. El retorno del login es `/`, no el historial; la captura [previa](evidencias-medicion-01/t029-cuenta-identificada-previa.png) muestra «Hola, periodico» en la portada. No se abre ni se precarga su historial para preparar el cronómetro.
 
 Se conserva el build existente de Astro, sin repetir T001–T024: SHA-256 de `frontend/dist/server/entry.mjs`: `40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`. La isla fuente tiene SHA-256 `79AFE5C1C27EB655736CA40008EA69CB3C7353DF47EDBC78F279B0631F094030`.
 
@@ -39,7 +39,7 @@ La traza principal registra respuesta HTML a 733,40 ms, fin de load a 1.734,20 m
 
 ## Entorno y revisión
 
-Windows 11 Pro 10.0.26300 x64; Intel Core i5-8350U a 1,70 GHz, ocho procesadores lógicos y 8.441.491.456 bytes de memoria; Node 22.20.0 y PostgreSQL 16.15. Navegador integrado Chrome/156.0.0.0, viewport 1280×720, pixelRatio 1,5. La traza contiene userAgent, visibilidad y timeOrigin originales. La hora de captura principal es 2026-11-10T14:54:33.457Z; no se reconstruye la duración con horas de servidor.
+Windows 11 Pro 10.0.26300 x64; Intel Core i5-8350U a 1,70 GHz, ocho procesadores lógicos y 8.441.491.456 bytes de memoria; Node 22.20.0 y PostgreSQL 16.15. Navegador de pruebas Chrome/156.0.0.0, viewport 1280×720, pixelRatio 1,5. La traza contiene userAgent, visibilidad y timeOrigin originales. La hora de captura principal es 2026-11-10T14:54:33.457Z; no se reconstruye la duración con horas de servidor.
 
 Se revisaron el contenido accesible de los cinco grupos y la captura real. Las 60 filas están renderizadas en tablas desplazables; no se afirma que quepan simultáneamente en 720 píxeles. La captura de la primera pantalla muestra los encabezados, total y filas de 2025; la captura completa conserva el resto. No se realiza una auditoría visual exhaustiva de cada píxel.
 
@@ -51,12 +51,12 @@ Para continuar: preparar el mismo banco aislado con el build identificado, volve
 
 ## Seguimiento de T030: intento 03 · 2026-11-10
 
-Se conserva íntegro el balance anterior como estado de los intentos 01–02. Se ejecuta una única nueva navegación principal sobre un origen nuevo, con cuenta identificada y vinculada, build idéntico y sin precarga del historial. La exportación de traza se integra en el banco, eliminando el proxy adicional; se registran presión de memoria y cambio de viewport. El observador original no cambia y no se descuenta tiempo alguno.
+Se conserva íntegro el balance anterior como estado de los intentos 01–02. Se ejecuta una única nueva navegación principal sobre un origen nuevo, con cuenta identificada y vinculada, build idéntico y sin precarga del historial. La exportación de traza se integra en el banco, eliminando el proxy adicional; Se registran presión de memoria y cambio de viewport. El observador original no cambia y no se descuenta tiempo alguno.
 
 Resultado: **4.258,90 ms**, 60 cuotas y cinco grupos correctos, fuera del umbral. [Traza](evidencias-medicion-01/intento-03-traza.json), [captura visible](evidencias-medicion-01/intento-03-visible.png) y [diagnóstico completo](diagnostico-rendimiento-01.md). El intento de captura completa falló y se conserva esa limitación; no se repite la navegación. **T030 continúa pendiente**, sin cambiar los resultados anteriores ni avanzar a T031. La propuesta de corrección queda para revisión antes de modificar el producto.
 
 ## Intento 04 · 2026-11-10 — cierre de T030
 
-Tras la liberación de recursos comunicada por Nada se comprueba memoria y se prepara una nueva sesión en 127.0.0.1:44327, con el mismo build, cuenta identificada/vinculada y sin historial precargado. Viewport efectivo 1280×720. Una única navegación completa registra **638,20 ms**, 60 cuotas, cinco grupos de doce, totales 120,00 € por año y control 600,00 €. Se conservan [traza](evidencias-medicion-01/intento-04-traza.json), [captura completa](evidencias-medicion-01/intento-04-completa.png) y [captura visible](evidencias-medicion-01/intento-04-visible.png).
+Tras la liberación de recursos comunicada durante la prueba se comprueba memoria y se prepara una nueva sesión en 127.0.0.1:44327, con el mismo build, cuenta identificada/vinculada y sin historial precargado. Viewport efectivo 1280×720. Una única navegación completa registra **638,20 ms**, 60 cuotas, cinco grupos de doce, totales 120,00 € por año y control 600,00 €. Se conservan [traza](evidencias-medicion-01/intento-04-traza.json), [captura completa](evidencias-medicion-01/intento-04-completa.png) y [captura visible](evidencias-medicion-01/intento-04-visible.png).
 
 **T030 completada**: se cumple el umbral estricto en esta ejecución. Recursos, escala, caché, etapas, revisión visual y límites constan en [cierre-t030-01.md](cierre-t030-01.md). Los intentos anteriores siguen acreditando sus propios resultados; no se usa una media ni se descuentan tiempos. No se implementa SSR ni se avanza a T031.

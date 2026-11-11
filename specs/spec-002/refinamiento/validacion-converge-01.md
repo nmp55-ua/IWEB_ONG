@@ -4,7 +4,7 @@
 
 ## Alcance y estado inicial
 
-Se corrigen exclusivamente CONV-001/T036 y CONV-002/T037 del [primer converge](converge-1.md). Ese informe no se sobrescribe. Se conservan todos los cambios locales de T031–T035, incluida la simplificación posterior de README y LEEME, y las evidencias e informes anteriores. El índice estaba vacío; no se ejecutan operaciones Git de escritura.
+Se corrigen exclusivamente CONV-001/T036 y CONV-002/T037 del [primer converge](converge-1.md). Ese informe no se sobrescribe. Se conservan todos los cambios locales de T031–T035, incluida la simplificación posterior de README y LEEME y las evidencias e informes anteriores. El índice estaba vacío; no se ejecutan operaciones Git de escritura.
 
 Las correcciones afectan al controlador de pruebas y al plan, no al producto, al observador ni a los criterios de aceptación. No se repiten build, suites funcionales completas, pagos, envíos, reentregas o mediciones. El resultado técnico general queda sujeto al siguiente converge; la aprobación de Javi sigue pendiente.
 
@@ -12,7 +12,7 @@ Las correcciones afectan al controlador de pruebas y al plan, no al producto, al
 
 ### Reproducción antes de corregir
 
-Se añade primero `backend/src/modulos/donaciones/medicion-historial.test.js`. La prueba importa el controlador real, sustituye únicamente sus dependencias de banco y entrada estándar, y provoca el rechazo de `banco.llamadas()` con un error de timeout sintético. No arranca servicios ni espera un timeout real para reproducir el rechazo.
+Se añade primero `backend/src/modulos/donaciones/medicion-historial.test.js`. La prueba importa el controlador real, sustituye únicamente sus dependencias de banco y entrada estándar y provoca el rechazo de `banco.llamadas()` con un error de timeout sintético. No arranca servicios ni espera un timeout real para reproducir el rechazo.
 
 Desde backend:
 
@@ -68,6 +68,6 @@ Los demás cambios locales pertenecen a entregas anteriores y se conservan. T036
 
 ## Verificación de preservación y documentación
 
-La comparación de **418 huellas iniciales** detecta cambios únicamente en el controlador de medición, plan.md y tasks.md. README y LEEME conservan exactamente su simplificación local; converge-1.md, .env, .claude/launch.json, configuración de selección, producto, observador y evidencias anteriores mantienen sus huellas. Los archivos nuevos se enumeran arriba y no reemplazan informes existentes.
+Se comprobó que solo cambiaron los archivos indicados. README y LEEME conservan exactamente su simplificación local; converge-1.md, .env, configuración de selección, producto, observador y evidencias anteriores mantienen sus huellas. Los archivos nuevos se enumeran arriba y no reemplazan informes existentes.
 
-Se comprueban sintaxis de ambos archivos JavaScript, formato con la configuración común y destinos de enlaces locales. La primera comprobación de Prettier señala solo espaciado en tasks.md; se aplica formato a ese archivo y se repite la comprobación. No se instala ninguna dependencia ni se modifica configuración. El índice sigue vacío; los hallazgos corregidos quedan sujetos a comprobación en el siguiente converge.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.

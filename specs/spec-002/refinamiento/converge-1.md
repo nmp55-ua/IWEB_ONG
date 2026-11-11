@@ -14,7 +14,7 @@ Se aplica el procedimiento local `.claude/skills/speckit-converge/SKILL.md` sobr
 
 La selección se comprueba por la ubicación real de los documentos de spec-002; no se ejecutan scripts que persistan configuración. No hay hooks de converge registrados. Se conserva el contenido previo de tareas y se añaden únicamente las nuevas tareas al final. El informe se guarda por la petición de conservar el diagnóstico antes de corregir.
 
-Esta revisión es estática y documental: no repite las suites, el build ni los recorridos de navegador acreditados. Se contrastan sus registros existentes y la traza del intento 04; se inspecciona su captura visible. No supone una nueva inspección visual de todas las capturas ni una auditoría de seguridad exhaustiva.
+Esta revisión es estática y documental: no repite las suites, el build ni los recorridos de navegador acreditados. Se contrastan sus registros existentes y la traza del intento 04; Se inspecciona su captura visible. No supone una nueva inspección visual de todas las capturas ni una auditoría de seguridad exhaustiva.
 
 ## Hallazgos
 

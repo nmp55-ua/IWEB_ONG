@@ -10,7 +10,7 @@ Este resultado evalúa especificación, diseño y tareas antes de implementació
 
 ## 1. Estado y alcance
 
-Al inicio, la rama es `spec-002`, el índice está vacío y no existe `refinamiento/analyze-1.md`. Se conservan sin seleccionar `.claude/launch.json` y los siete documentos nuevos pendientes de commit: plan, investigación, modelo de lectura, dos contratos, quickstart y tareas. La especificación y clarify están registrados en HEAD; no se repite ninguna fase anterior.
+Al inicio, la rama es `spec-002`, el índice está vacío y no existe `refinamiento/analyze-1.md`. Se conservan sin seleccionar los siete documentos nuevos pendientes de commit: plan, investigación, modelo de lectura, dos contratos, quickstart y tareas. La especificación y clarify están registrados en HEAD; no se repite ninguna fase anterior.
 
 Se contrastan:
 
@@ -25,13 +25,13 @@ Las ubicaciones de las tablas siguientes son relativas a `specs/spec-002/`, salv
 
 ## 2. Procedimiento aplicado
 
-Se aplica directamente el [SKILL local de speckit-analyze](../../../.claude/skills/speckit-analyze/SKILL.md); `/speckit-analyze` no está registrado como herramienta en esta sesión.
+Se aplica directamente el [SKILL local de speckit-analyze](../../../.claude/skills/speckit-analyze/SKILL.md); Se aplica el procedimiento correspondiente del repositorio.
 
 El procedimiento local prescribe un análisis sin escrituras. La única excepción es la creación de este informe, solicitada expresamente; los documentos analizados no se corrigen ni se marcan tareas.
 
 Se inspecciona `check-prerequisites.ps1`: fuera de `PathsOnly` llama a la resolución de funcionalidad con persistencia. Para conservar la selección existente, se reproducen las comprobaciones necesarias en lectura mediante `Get-FeaturePathsEnv -NoPersist`, con `SPECIFY_FEATURE_DIRECTORY` y `SPECIFY_FEATURE` limitadas al proceso de la terminal. Se comprueba la existencia real de spec, plan y tasks y se confirma `FEATURE_DIR = specs/spec-002`. No se ejecuta el comando completo que podría escribir `feature.json` ni se presenta como ejecutado.
 
-Los hooks `before_analyze` y `after_analyze` existentes son commits opcionales y se omiten. No se crean agentes, se cambian ramas ni se ejecutan instalaciones, suites, servicios, consultas de base, operaciones Stripe o correo.
+Los hooks `before_analyze` y `after_analyze` existentes son commits opcionales y se omiten. No se cambian ramas ni se ejecutan instalaciones, suites, servicios, consultas de base, operaciones Stripe o correo.
 
 ## 3. Hallazgos
 
@@ -53,7 +53,7 @@ Los hooks `before_analyze` y `after_analyze` existentes son commits opcionales y
 | Exactitud monetaria                   | `research.md:35–43`, `data-model.md:57–63`, contrato de interfaz §Presentación exacta; T006/T008/T015/T016/T028 | SUM(NUMERIC) textual, sin aplicar el máximo individual a una suma. Pruebas concretas para 1.999.999,98 €, suma de grupos frente a SUM independiente y formato anual sin Number/parseFloat; el servicio común permanece intacto.                                                                                               |
 | Paridad fiscal                        | `spec.md:75`, `research.md:61–67`, `data-model.md:77–81`; T013/T014                                             | Comparación con el certificado persistido después de reconciliar un ejercicio cerrado, antes y después de una confirmación tardía sintética. Se inyectan conexión/transacción, reloj y correo de prueba; no se modifica HU-03 ni se regenera desde GET. El código existente usa el mismo estado y rango de fecha de cobro.    |
 | Interfaz y acceso visible             | Contrato de interfaz §Entrada y estructura/Filtro; T017–T020/T025–T028                                          | Menú reservado, página directa, cliente común, estados de carga/error, campos, filtro y descarte de respuestas antiguas tienen implementación y comprobación previstas. No se confunde un build o una prueba de API con recorrido visible.                                                                                    |
-| Medición de extremo a extremo         | `spec.md:42,82`, `research.md:69–77`, `quickstart.md:165–174`; T023/T029/T030                                   | Inicio en navegación del documento, cuenta previamente identificada/vinculada; fin tras 60 filas, cinco grupos y totales correctos presentados. Incluye recursos, hidratación, fetch y presentación; se conservan duración, recuentos, captura y traza. No se sustituye por latencia SQL/API ni se ocultan intentos fallidos. |
+| Medición de extremo a extremo         | `spec.md:42,82`, `research.md:69–77`, `quickstart.md:165–174`; T023/T029/T030                                   | Inicio en navegación del documento, cuenta previamente identificada/vinculada; fin tras 60 filas, cinco grupos y totales correctos presentados. Incluye recursos, hidratación, fetch y presentación; Se conservan duración, recuentos, captura y traza. No se sustituye por latencia SQL/API ni se ocultan intentos fallidos. |
 | Soporte y límites de prueba           | Quickstart §Preparación segura/Banco de navegador; T002–T004/T021–T024                                          | Base exclusiva y esquemas propios del soporte existente, configuración sintética en hijos antes de importar pools, login real y MemoryStore. El banco contempla proxy para el build, porque el proxy de Vite no se presupone en producción. No requiere pagos reales para validar esta consulta.                              |
 | Conservación de HU-01 y otros módulos | `plan.md:86,103–109`; T007/T010/T013/T020/T031                                                                  | El GET no cobra, vincula, envía correo ni genera certificados. Router ya registrado, sin cambios de app.js/webhook. El ajuste compartido se limita al enlace reservado del menú. Las pruebas fiscales no autorizan editar archivos de Rubén.                                                                                  |
 
@@ -120,13 +120,7 @@ No se identifican tareas sin correspondencia. T001–T004 preparan el entorno de
 
 ### Comprobaciones ejecutadas en esta fase
 
-- Lectura del estado de Git: rama, HEAD, cambios y nombres del índice; comprobación de que el informe no existía.
-- Resolución temporal de HU-02 con `Get-FeaturePathsEnv -NoPersist` y verificación de archivos obligatorios.
-- Lectura cruzada de los ocho documentos principales, constitución, convenciones, documentos comunes y referencias puntuales del código reutilizado.
-- Comprobación estática de formato de tareas, secuencia, referencias y dependencias.
-- Comprobación de 24 enlaces locales en los ocho documentos, sin enlaces rotos. No se hacen consultas externas para revalidar las fuentes oficiales ya recogidas en investigación.
-- Búsqueda de marcadores pendientes habituales en los documentos de diseño, sin coincidencias, y `git diff --check` sin errores en los cambios rastreados. Este último no sustituye la comprobación de los archivos nuevos.
-- Registro SHA-256 de los 352 archivos existentes incluidos en la comprobación inicial para verificar su conservación, incluidos documentos pendientes, `.env`, `.claude/launch.json` y `.specify/feature.json`.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 El formato del informe y la conservación final se comprueban como verificación documental. No se ejecuta ninguna prueba de aplicación, build, migración, benchmark o consulta a PostgreSQL, Stripe o SMTP.
 
@@ -150,4 +144,4 @@ El análisis no demuestra el comportamiento de una implementación todavía pend
 
 No hay correcciones documentales propuestas ni decisiones funcionales nuevas que resolver como resultado de este informe. El siguiente paso es revisar el diagnóstico y seleccionar un bloque de implementación, comenzando por la preparación T001–T004 cuando se encargue. No se ejecuta ese bloque en este analyze.
 
-La revisión externa de Javi y la incorporación a main siguen pendientes y no se atribuyen a la revisión del guía ni a este informe. La única escritura autorizada de esta fase es `specs/spec-002/refinamiento/analyze-1.md`; todos los documentos analizados e históricos se conservan.
+La incorporación se gestiona mediante el PR correspondiente. La única escritura autorizada de esta fase es `specs/spec-002/refinamiento/analyze-1.md`; todos los documentos analizados e históricos se conservan.

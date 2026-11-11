@@ -15,7 +15,7 @@
 ### Session 2026-11-10
 
 - Q: ¿Qué debe mostrar el historial cuando la cuenta de donante todavía no tiene un vínculo verificado con sus aportaciones? (PA2.2) → A: Mostrar una explicación y un enlace a `/donar/vincular`, sin mostrar aportaciones ni afirmar si existen. Para cuentas vinculadas, distinguir historial vacío de año sin resultados: en el primer caso, mensaje y enlace para donar; en el segundo, aviso del año sin aportaciones y opción de quitar el filtro.
-- Q: ¿Entre qué momentos debe medirse el límite de dos segundos para mostrar cinco años de cuotas mensuales? (PA2.3) → A: Desde que una cuenta ya identificada y vinculada abre el historial hasta que se muestran las 60 cuotas, los grupos anuales y sus totales. Se incluyen la obtención de datos y su presentación; se excluyen login y vinculación previos.
+- Q: ¿Entre qué momentos debe medirse el límite de dos segundos para mostrar cinco años de cuotas mensuales? (PA2.3) → A: Desde que una cuenta ya identificada y vinculada abre el historial hasta que se muestran las 60 cuotas, los grupos anuales y sus totales. Se incluyen la obtención de datos y su presentación; Se excluyen login y vinculación previos.
 
 ## User Scenarios & Testing *(mandatory)*
 

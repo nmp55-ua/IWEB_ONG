@@ -1,6 +1,6 @@
 # Contrato de interfaz de HU-02
 
-**Estado**: implementado y validado en spec-002; converge y revisión externa pendientes · **Responsable**: Nada · **Revisor**: Javi
+**Estado**: implementado y validado en spec-002; cierre técnico en converge-2 · **Responsable**: Nada · **Revisor**: Javi
 
 ## Entrada y estructura
 

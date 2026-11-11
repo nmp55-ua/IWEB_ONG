@@ -6,7 +6,7 @@
 
 ## Base y commits comprobados
 
-HEAD al iniciar T031–T035: **0cc28b1e44a1d932cf1da61cdc869883652693c4**. Al inicio el árbol seguido estaba limpio; .claude/launch.json, output/ y tmp/ permanecían sin seguimiento y se conservan. Los siguientes commits existen en el historial local consultado; no se deduce su publicación remota:
+HEAD al iniciar T031–T035: **0cc28b1e44a1d932cf1da61cdc869883652693c4**. Al inicio el árbol seguido estaba limpio; output/ y tmp/ permanecían sin seguimiento y se conservan. Los siguientes commits existen en el historial local consultado; no se deduce su publicación remota:
 
 | Commit  | Contenido                                                        |
 | ------- | ---------------------------------------------------------------- |
@@ -23,7 +23,7 @@ La documentación y evidencias nuevas de T031–T035 se preparan sobre esa base 
 
 ## Implementación a revisar
 
-- Página Astro `/mis-aportaciones`, isla React y funciones puras locales. La entrada reservada «Mis aportaciones» se activa solo para donante en Menu.jsx; se conservan Donar, Actividades, Mi calendario, Certificados y los enlaces/permisos existentes.
+- Página Astro `/mis-aportaciones`, isla React y funciones puras locales. La entrada reservada «Mis aportaciones» se activa solo para donante en Menu.jsx; Se conservan Donar, Actividades, Mi calendario, Certificados y los enlaces/permisos existentes.
 - GET privado `/api/yo/aportaciones`, filtro opcional `anio`; middleware de sesión/rol y resolución de Donante por usuario_id. Correo, IDs/referencias conocidos y permiso invitado no seleccionan propietario ni conceden historial.
 - Vínculo, resúmenes y detalle en una instantánea REPEATABLE READ, READ ONLY. Solo confirmadas, por fecha_cobro en Europe/Madrid; orden fecha/ID numérico descendente, ID textual en JSON.
 - Importes NUMERIC y totales en texto, con formato anual sin Number ni máximo individual. Estado de la suscripción o del correo no elimina cuotas confirmadas. Proyecto asociado, incluso inactivo, o fondo general.
@@ -52,7 +52,7 @@ El balance completo está en [matriz-validacion-01.md](matriz-validacion-01.md):
 
 ## Revisión documental y conservación de evidencias
 
-Se actualizan README, LEEME de módulos y quickstart con rutas, consulta privada, comandos existentes y aislamiento. Plan, investigación y encabezados de contratos reflejan implementación en rama, sin cambiar payloads ni decisiones funcionales. Se retiran referencias operativas a herramientas no registradas o generación futura que no describían el estado actual; se mantiene la procedencia de fases, responsables y evidencias metodológicas.
+Se actualizan README, LEEME de módulos y quickstart con rutas, consulta privada, comandos existentes y aislamiento. Plan, investigación y encabezados de contratos reflejan implementación en rama, sin cambiar payloads ni decisiones funcionales. Se retiran referencias operativas a generación futura que no describían el estado actual; Se mantiene la procedencia de fases, responsables y evidencias metodológicas.
 
 Los informes históricos no se reescriben. validacion-local-01.md se amplía mediante un apartado nuevo, conservando íntegro el texto anterior. Los estados «pendiente» de entregas previas son relatos fechados; la matriz y tareas expresan el balance vigente.
 

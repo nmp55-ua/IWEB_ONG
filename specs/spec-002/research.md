@@ -10,7 +10,7 @@ Las decisiones siguientes definen el diseño de esta rama. Los resultados de imp
 
 **Justificación.** HU-01 persiste el vínculo tras verificar el acceso al correo; HU-03 ya consulta el Donante por Usuario. La sesión invitada autoriza únicamente operaciones concretas y no concede historial.
 
-**Alternativas.** La búsqueda por correo, el ID de Donante enviado por el cliente y la reutilización de permisos invitados permitirían ampliar indebidamente el acceso; se descartan. No se añade una segunda verificación ni se cambia el login.
+**Alternativas.** La búsqueda por correo, el ID de Donante enviado por el cliente y la reutilización de permisos invitados permitirían ampliar indebidamente el acceso; Se descartan. No se añade una segunda verificación ni se cambia el login.
 
 **Evidencia local.** `backend/src/modulos/donaciones/autorizacion.js`, `rutas.js`, `servicio.js`; `backend/src/modulos/certificados-informes/repositorio.js`; middleware común de autenticación y roles.
 
@@ -68,7 +68,7 @@ Las decisiones siguientes definen el diseño de esta rama. Los resultados de imp
 
 ## R-08 — Medición completa de las 60 cuotas
 
-**Decisión.** Medir una navegación normal con la cuenta ya autenticada y vinculada, desde `PerformanceNavigationTiming.startTime` hasta la presentación de las 60 filas, cinco grupos y totales correctos. El banco de pruebas observará el DOM y esperará dos cuadros de animación tras su actualización, con pestaña visible; se conservarán duración, recuentos, captura y traza de navegador.
+**Decisión.** Medir una navegación normal con la cuenta ya autenticada y vinculada, desde `PerformanceNavigationTiming.startTime` hasta la presentación de las 60 filas, cinco grupos y totales correctos. El banco de pruebas observará el DOM y esperará dos cuadros de animación tras su actualización, con pestaña visible; Se conservarán duración, recuentos, captura y traza de navegador.
 
 **Justificación.** Navigation Timing proporciona la referencia de la navegación del documento. `requestAnimationFrame` se ejecuta antes del repintado y puede pausarse en segundo plano; dos callbacks son un margen conservador de presentación, no una prueba física de cada píxel. La inspección visual y la traza complementan el marcador. Fuentes: [PerformanceNavigationTiming](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceNavigationTiming) y [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame).
 
@@ -86,4 +86,4 @@ Las decisiones siguientes definen el diseño de esta rama. Los resultados de imp
 
 ## Resultado de investigación
 
-No quedan decisiones de diseño bloqueantes identificadas. El banco, el contraste fiscal y la medición están implementados y documentados en los informes de validación. El intento 04 acredita SC-002 con 638,20 ms; se conservan los intentos anteriores fallidos y sus límites. La propuesta de adelantar la consulta mediante SSR no se aplicó: se mantiene la isla y la consulta inicial previstas, sin atribuir causalmente toda la mejora al cambio de recursos. Converge y la revisión de Javi permanecen pendientes.
+No quedan decisiones de diseño bloqueantes identificadas. El banco, el contraste fiscal y la medición están implementados y documentados en los informes de validación. El intento 04 acredita SC-002 con 638,20 ms; Se conservan los intentos anteriores fallidos y sus límites. La propuesta de adelantar la consulta mediante SSR no se aplicó: se mantiene la isla y la consulta inicial previstas, sin atribuir causalmente toda la mejora al cambio de recursos. El cierre técnico consta en [converge-2.md](refinamiento/converge-2.md).

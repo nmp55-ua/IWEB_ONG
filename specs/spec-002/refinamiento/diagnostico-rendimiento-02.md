@@ -4,7 +4,7 @@
 
 ## Estado comprobado
 
-Se conserva el estado local del bloque anterior, incluido tasks.md modificado y los auxiliares/informes sin seguimiento. El índice está vacío. .env, .claude/launch.json, output/, tmp/, informes y evidencias anteriores no se editan. No se inicia T031.
+Se conserva el estado local del bloque anterior, incluido tasks.md modificado y los auxiliares/informes sin seguimiento. El índice está vacío. .env, output/, tmp/, informes y evidencias anteriores no se editan. No se inicia T031.
 
 SC-002 sigue pendiente: los intentos válidos de 2.745,30 y 4.258,90 ms no cumplen <2.000 ms. El intento 02 permanece inválido por recursos. Esta comprobación previa **no constituye un intento 04** y no modifica esas clasificaciones.
 
@@ -47,4 +47,4 @@ La página actual usa HistorialAportaciones con client:load y la primera consult
 
 **T030 y SC-002 permanecen pendientes.** No hay medición nueva, modificación de producto o instrumentación, rebuild ni pruebas funcionales repetidas. No se presenta ninguna ejecución anterior como resultado nuevo. Se realizan únicamente inspección estática y comprobaciones previas de entorno.
 
-Archivos nuevos: este informe y `specs/spec-002/refinamiento/evidencias-medicion-01/comprobacion-entorno-02.json`. tasks.md y los demás cambios existentes permanecen intactos en esta continuación. No se ejecuta Git de escritura ni T031.
+Archivos nuevos: este informe y `specs/spec-002/refinamiento/evidencias-medicion-01/comprobacion-entorno-02.json`. tasks.md y los demás cambios existentes permanecen intactos en esta ejecución. No se ejecuta Git de escritura ni T031.

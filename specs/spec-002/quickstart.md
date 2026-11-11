@@ -2,7 +2,7 @@
 
 **Responsable**: Nada · **Revisor**: Javi · **Fecha**: 2026-11-10
 
-La consulta está implementada en spec-002. Esta guía reproduce sus comprobaciones con los scripts y archivos existentes; los resultados se conservan en la [matriz de aceptación](refinamiento/matriz-validacion-01.md). Converge y la revisión de Javi permanecen pendientes. El historial de intentos y fallos se conserva separado del estado vigente.
+La consulta está implementada en spec-002. Esta guía reproduce sus comprobaciones con los scripts y archivos existentes; los resultados se conservan en la [matriz de aceptación](refinamiento/matriz-validacion-01.md). El cierre técnico consta en [converge-2.md](refinamiento/converge-2.md). El historial de intentos y fallos se conserva separado del estado vigente.
 
 En desarrollo, `/mis-aportaciones` usa la sesión común y la entrada «Mis aportaciones» del menú de donante. `GET /api/yo/aportaciones` consulta únicamente las confirmadas del Donante vinculado mediante usuario_id, sin autorización por correo ni permiso invitado. No requiere nuevas variables, dependencias o migraciones.
 
@@ -161,7 +161,7 @@ El banco permite:
 - Servir el build standalone de Astro mediante `node dist/server/entry.mjs`, con directorio `frontend`, HOST `127.0.0.1` y PORT `44323`. Exponer un proxy de prueba en `http://127.0.0.1:44322`, `/api` hacia el backend propio y el resto hacia Astro. El backend puede usar un puerto libre asignado por el sistema.
 - Usar credenciales exclusivamente sintéticas, sin cargar `.env` en los procesos hijos. La consulta no llama a Stripe ni SMTP; las pruebas dirigidas comprueban esos límites con espías. El proxy bloquea endpoints de pago.
 - Negarse a arrancar si sus puertos fijos están ocupados. Registrar solo URLs locales, usuarios sintéticos y resultados no sensibles; no mostrar cookies ni conexiones de base.
-- Conservar sus sesiones mientras se realizan los recorridos; al terminar, cerrar solo sus procesos y conexiones, y eliminar solo su esquema. Lanzar hijos ocultos en Windows y mantener la limpieza también ante error o interrupción.
+- Conservar sus sesiones mientras se realizan los recorridos; al terminar, cerrar solo sus procesos y conexiones y eliminar solo su esquema. Lanzar hijos ocultos en Windows y mantener la limpieza también ante error o interrupción.
 
 Recorridos visibles a registrar: menú y acceso directo; inicio de sesión; estados sin vínculo, vacío y año sin resultados; navegación al enlace de HU-01 sin solicitarlo automáticamente; filtro y eliminación; error y reintento; orden, campos y totales; cambio rápido de filtros sin respuestas antiguas. Las verificaciones de API se relacionan con estos recorridos, sin presentar una pantalla simulada como prueba de persistencia.
 

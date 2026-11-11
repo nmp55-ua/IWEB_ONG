@@ -10,7 +10,7 @@
 
 La especificación contiene una sola historia de usuario, **US1 — Consultar mi historial de aportaciones (P1)**. Todos los incrementos funcionales siguientes pertenecen a ella. «E1»–«E9» identifican exclusivamente, en este documento, los nueve escenarios numerados de `spec.md`, sin cambiar sus identificadores originales ni crear historias nuevas.
 
-T001–T037 están completadas dentro de sus alcances. Converge, revisión externa de Javi e incorporación a main permanecen pendientes; no se declara HU-02 terminada. Los recorridos visibles están acreditados; el intento 04 registra 638,20 ms y cumple SC-002 en el entorno documentado. Se conservan íntegros los intentos anteriores fuera de umbral o inválidos. Las matrices conservan la cobertura prevista y deben contrastarse con las evidencias de cada bloque. Cada tarea indica dependencias, origen y comprobación; las rutas se interpretan desde la raíz del repositorio. Los informes citados conservan sus resultados e históricos; las nuevas evidencias se añaden sin sobrescribir ejecuciones anteriores.
+T001–T037 están completadas dentro de sus alcances. El cierre técnico consta en [converge-2.md](refinamiento/converge-2.md). La incorporación se tramita mediante PR. Los recorridos visibles están acreditados; el intento 04 registra 638,20 ms y cumple SC-002 en el entorno documentado. Se conservan íntegros los intentos anteriores fuera de umbral o inválidos. Las matrices conservan la cobertura prevista y deben contrastarse con las evidencias de cada bloque. Cada tarea indica dependencias, origen y comprobación; las rutas se interpretan desde la raíz del repositorio. Los informes citados conservan sus resultados e históricos; las nuevas evidencias se añaden sin sobrescribir ejecuciones anteriores.
 
 Se reutiliza el módulo donaciones y el vínculo de HU-01. No se crean migraciones, entidades, permisos o servicios comunes nuevos; no se modifican certificados-informes ni otros módulos. El cambio compartido se limita a la activación de la entrada reservada del menú, conservando el resto. Las correcciones, cobros y envíos reales quedan fuera de HU-02.
 
@@ -58,7 +58,7 @@ Las pruebas T005–T007 se escriben antes de T008–T010. Se conservan los resul
 - [x] T013 [US1] Escribir el contraste fiscal en `backend/src/modulos/donaciones/historial.test.js`, importando el servicio y repositorio reales de certificados-informes con acceso a conexión aislado mediante dobles de prueba. **Depende de**: T012. **Origen**: FR-002/FR-003, SC-001 y dependencia HU-03; R-07. **Comprobación**: reloj sintético de 2026, ejercicio 2025 cerrado, correo simulado; reconciliar y comparar certificado persistido, SUM independiente e historial; añadir una confirmación tardía sintética, volver a reconciliar y repetir. No cambiar módulos de Rubén ni añadir efectos fiscales al GET.
 - [x] T014 [US1] Ejecutar el contraste de `backend/src/modulos/donaciones/historial.test.js` y registrar sus resultados en `specs/spec-002/refinamiento/validacion-fiscal-01.md`. **Depende de**: T013. **Origen**: SC-001 y dependencia HU-03. **Comprobación**: igualdad al céntimo antes y después de la confirmación tardía una vez reconciliada, con propietario/rango Madrid coincidentes y sin escrituras entre lecturas; sin activar cron, CLI fiscal, correo real o suite ajena con TRUNCATE sobre `public`.
 
-**Revisión de bloque**: contraste técnico local con HU-03; no acredita revisión de Rubén ni modifica su funcionalidad.
+**Revisión de bloque**: contraste técnico local con HU-03; no modifica la funcionalidad de HU-03.
 
 ## Fase 3 — US1: interfaz de consulta · Bloque E
 
@@ -134,7 +134,7 @@ Cada dependencia individual figura en su tarea y prevalece sobre la representaci
 
 Solo T015 y T016 llevan `[P]`: una vez completada T004, las pruebas y la función pura de frontend pueden avanzar, en su orden T015 → T016, mientras se trabaja en T005–T014 del backend. Se tocan archivos distintos y no se necesita el endpoint para comprobar el formato puro. No son paralelas entre sí.
 
-No se ejecutan suites o bancos simultáneos contra la base de pruebas. Las tareas del mismo `historial.test.js`, los cambios sucesivos de la isla, los del banco y los informes compartidos se realizan secuencialmente para conservar evidencias y evitar conflictos. `[P]` describe una posibilidad de organización, no una instrucción para crear agentes.
+No se ejecutan suites o bancos simultáneos contra la base de pruebas. Las tareas del mismo `historial.test.js`, los cambios sucesivos de la isla, los del banco y los informes compartidos se realizan secuencialmente para conservar evidencias y evitar conflictos. `[P]` indica tareas compatibles por sus archivos y dependencias.
 
 ## Matriz de trazabilidad funcional
 

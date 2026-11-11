@@ -4,9 +4,10 @@
 
 ## Alcance y procedimiento
 
-Se aplica directamente el procedimiento local `.claude/skills/speckit-implement/SKILL.md`, porque `/speckit-implement` no está registrado como herramienta. La ejecución se limita a T025–T030. Los bloques T001–T024 ya registrados se conservan y no se repiten. El checklist de requisitos mantiene 16/16 entradas cumplimentadas. La selección de spec-002 se realiza sin persistir configuración.
+Se aplica directamente el procedimiento local `.claude/skills/speckit-implement/SKILL.md`.
+ La ejecución se limita a T025–T030. Los bloques T001–T024 ya registrados se conservan y no se repiten. El checklist de requisitos mantiene 16/16 entradas cumplimentadas. La selección de spec-002 se realiza sin persistir configuración.
 
-El navegador integrado Chromium 156, visible a 1280×720, utiliza el build standalone existente de Astro, backend real y PostgreSQL en `ong_test_hu01`, esquema `hu01_integracion_fd4656ae02804528ac7effa875c870c8`. El banco instala adaptadores sintéticos y credenciales de pruebas. No se accede a datos de desarrollo ni se realizan pagos, cancelaciones, reentregas o envíos reales. Las comprobaciones de navegador y las consultas de este informe se ejecutan en este bloque; no se atribuyen a Nada ni a Javi.
+El navegador de pruebas Chromium 156, visible a 1280×720, utiliza el build standalone existente de Astro, backend real y PostgreSQL en `ong_test_hu01`, esquema `hu01_integracion_fd4656ae02804528ac7effa875c870c8`. El banco instala adaptadores sintéticos y credenciales de pruebas. No se accede a datos de desarrollo ni se realizan pagos, cancelaciones, reentregas o envíos reales. Las comprobaciones de navegador y las consultas de este informe se ejecutan en este bloque; no se atribuyen a Nada ni a Javi.
 
 Se amplía exclusivamente el soporte de pruebas:
 
@@ -49,7 +50,7 @@ node src/modulos/donaciones/pruebas/recorridos-historial.js
 node src/modulos/donaciones/pruebas/traza-historial.js
 ```
 
-El primer arranque sin terminal interactiva cerró limpiamente al recibir fin de entrada; se reinició una vez con terminal interactiva antes de los recorridos. Se conservan también las incidencias de preparación: selector de título inexacto corregido tras leer la página, login enviado antes de hidratación con validación «Indica tu correo» y repetido correctamente, y ámbito DOM de la herramienta sin acceso a navigator/performance, resuelto mediante el puente de lectura. No se alteró el producto para ocultarlas. La consulta CIM de equipo no estuvo disponible y el entorno se obtuvo mediante Node/os. Las salidas extensas de la terminal no se usan como JSON: los balances se guardan desde consultas de solo lectura.
+El primer arranque sin terminal interactiva cerró limpiamente al recibir fin de entrada; Se reinició una vez con terminal interactiva antes de los recorridos. Se conservan también las incidencias de preparación: selector de título inexacto corregido tras leer la página, login enviado antes de hidratación con validación «Indica tu correo» y repetido correctamente y ámbito DOM de la herramienta sin acceso a navigator/performance, resuelto mediante el puente de lectura. No se alteró el producto para ocultarlas. La consulta CIM de equipo no estuvo disponible y el entorno se obtuvo mediante Node/os. Las salidas extensas de la terminal no se usan como JSON: los balances se guardan desde consultas de solo lectura.
 
 T025–T028 quedan acreditadas. T029 se documenta en el informe de medición. T030 no se completa: primer intento válido de 2.745,30 ms e intento posterior inválido por problemas de recursos. SC-002 permanece pendiente. No se atribuye aprobación a Javi ni cierre de HU-02.
 
@@ -61,4 +62,4 @@ El primer cierre del puente detuvo su servidor, pero dejó la entrada estándar 
 
 `node --check` en los tres archivos JavaScript del soporte y `git diff --check` terminaron con código 0. La primera invocación offline de Prettier mediante npm falló con ENOTCACHED; no se descargó ni instaló nada. Se utilizó después el ejecutable Prettier ya existente en la caché local del usuario, aplicando `.prettierrc.json` únicamente a esos tres archivos, tasks y los dos informes nuevos; el formateo terminó con código 0.
 
-La comparación de 362 huellas de archivos existentes al inicio solo detectó cambios en `historial-local.js` y `tasks.md`. .env, .claude/launch.json, selección local e informes históricos conservan su contenido. output/ y tmp/ ya estaban sin seguimiento al inicio y se mantienen fuera del bloque. El índice permanece vacío; no se ejecuta Git de escritura.
+Se comprobó que solo cambiaron los archivos indicados.js` y `tasks.md`. .env, selección local e informes históricos conservan su contenido. output/ y tmp/ ya estaban sin seguimiento al inicio y se mantienen fuera del bloque. El índice permanece vacío; no se ejecuta Git de escritura.

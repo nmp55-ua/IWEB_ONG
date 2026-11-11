@@ -6,9 +6,10 @@
 
 ## Preparación — T001/T002
 
-El estado inicial contiene únicamente `.claude/launch.json` sin seguimiento y el índice vacío. El commit `24282d5` registra plan, tareas y primer analyze; se conservan todos esos documentos e informes. La selección temporal mediante `check-prerequisites.ps1 -Json -PathsOnly` resuelve `specs/spec-002` sin escribir configuración.
+El estado inicial contiene únicamente  sin seguimiento y el índice vacío. El commit `24282d5` registra plan, tareas y primer analyze; Se conservan todos esos documentos e informes. La selección temporal mediante `check-prerequisites.ps1 -Json -PathsOnly` resuelve `specs/spec-002` sin escribir configuración.
 
-Se aplica el procedimiento local `speckit-implement` directamente, al no estar registrado como herramienta, limitado a T001–T014. El checklist requirements contiene 16 marcas y cero pendientes; no se modifica. El hook anterior de commit es opcional y se omite; no hay un hook posterior de implementación configurado. Las exclusiones Git protegen `.env`, node_modules y dist. El formato se aplicará por rutas explícitas, sin crear o modificar configuración de herramientas.
+Se aplica el procedimiento local `speckit-implement` directamente.
+ El checklist requirements contiene 16 marcas y cero pendientes; no se modifica. El hook anterior de commit es opcional y se omite; no hay un hook posterior de implementación configurado. Las exclusiones Git protegen `.env`, node_modules y dist. El formato se aplicará por rutas explícitas, sin crear o modificar configuración de herramientas.
 
 Comandos iniciales: `git branch --show-current`, `git rev-parse HEAD`, `git status --short`, `git diff --cached --name-only`, `node --version`, `npm --version` y `npm ls --depth=0` desde backend. Resultados: Node 22.20.0, npm 10.9.3; dependencias instaladas disponibles, incluidos Vitest 2.1.9, Supertest 7.3.1, pg 8.23.1 y Stripe 17.7.0. No se necesita instalación ni se actualizan lockfiles.
 
@@ -73,13 +74,13 @@ El contraste incluye la aplicación real registrada y la repetibilidad de semill
 
 T001–T014 quedan acreditadas por las comprobaciones anteriores y el informe fiscal. T015–T035 permanecen pendientes. No se crean pantallas, no se modifica el menú, no se hacen nuevos pagos, reenvíos o envíos SMTP reales y no se acredita recepción de correo. No hay cambios en migraciones, autenticación, roles, cookies, app.js, módulos de compañeros, configuración o secretos.
 
-Prettier aprueba los nueve archivos del bloque con la configuración existente; `git diff --check` no detecta errores. Los avisos de conversión LF/CRLF de Git son informativos y no se modifica su configuración. Los enlaces locales de tareas e informes son válidos.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
-La comparación SHA-256 de 353 archivos iniciales detecta cambios únicamente en controlador, rutas, servicio, repositorio de donaciones y tasks.md. El resto, incluidos `.env`, `.claude/launch.json`, `.specify/feature.json`, migraciones, módulos ajenos y todos los históricos, permanece intacto. La rama/HEAD siguen en `spec-002`/`24282d5`; el índice está vacío y no se hacen commits.
+Se comprobó que solo cambiaron los archivos indicados. El resto, incluidos `.env`, `.specify/feature.json`, migraciones, módulos ajenos y todos los históricos, permanece intacto. La rama/HEAD siguen en `spec-002`/`24282d5`; el índice está vacío y no se hacen commits.
 
 ## Preparación de interfaz y banco — T015–T024
 
-Nueva entrega sobre `ca172ffecca737df6d96567bc2904f8cfe9b053c`, en `spec-002`; T001–T014 están registradas y no se repiten. Al inicio solo `.claude/launch.json` está sin seguimiento, el índice está vacío y el checklist conserva 16/16. Se aplica el procedimiento local de implementación dentro del bloque autorizado, selección temporal sin persistencia y sin hooks opcionales de commit. La evidencia de los bloques anteriores se conserva íntegra.
+Nueva entrega sobre `ca172ffecca737df6d96567bc2904f8cfe9b053c`, en `spec-002`; T001–T014 están registradas y no se repiten. Al inicio se conserva la configuración local, el índice está vacío y el checklist conserva 16/16. Se aplica el procedimiento local de implementación dentro del bloque autorizado, selección temporal sin persistencia y sin hooks opcionales de commit. La evidencia de los bloques anteriores se conserva íntegra.
 
 T015: se escriben primero los casos del formato anual. Desde frontend se ejecuta `npm test -- src/components/donaciones/historial.test.js`. Primera ejecución: código 1, un archivo fallido por `ERR_MODULE_NOT_FOUND` de `historial.js`, aún no implementado; cero casos aprobados. Es la fase roja inicial de este bloque, sin instalación ni conexión de base. Se implementa después el formateador mediante dígitos del texto, sin Number, parseFloat, redondeo o límite individual.
 
@@ -131,13 +132,13 @@ Resultado real: código **0**, mensaje `Banco preparado: build, proxy, login y c
 
 T015–T024 quedan completadas con ese alcance: formato y coordinación puros, interfaz implementada/compilada y banco integrado comprobado por HTTP. T025 y siguientes permanecen pendientes, incluida toda observación visible o aceptación del límite de dos segundos. Los commits anteriores y los informes históricos permanecen intactos; esta sección amplía la evidencia local sin reemplazar resultados anteriores.
 
-Comprobación final: Prettier aprueba los ocho archivos JS/JSX/Markdown del bloque, con la limitación Astro anterior; `git diff --check` no detecta errores y los enlaces locales son válidos. La comparación de 357 archivos iniciales detecta únicamente cuatro modificaciones previstas: banco existente, Menu.jsx, tasks.md y este informe. Los cinco archivos nuevos son la isla, sus funciones y pruebas puras, la página Astro y la suite del banco. El contenido de este informe anterior a la nueva sección se conserva íntegramente. `.env`, `.claude/launch.json`, selección de funcionalidad, migraciones, documentos de diseño, módulos ajenos y demás históricos permanecen intactos. Rama/HEAD: `spec-002`/`ca172ff`; índice vacío, sin acciones Git de escritura.
+Comprobación final: Prettier aprueba los ocho archivos JS/JSX/Markdown del bloque, con la limitación Astro anterior; `git diff --check` no detecta errores y los enlaces locales son válidos. Se comprobó que solo cambiaron los archivos indicados.jsx, tasks.md y este informe. Los cinco archivos nuevos son la isla, sus funciones y pruebas puras, la página Astro y la suite del banco. El contenido de este informe anterior a la nueva sección se conserva íntegramente. `.env`, selección de funcionalidad, migraciones, documentos de diseño, módulos ajenos y demás históricos permanecen intactos. Rama/HEAD: `spec-002`/`ca172ff`; índice vacío, sin acciones Git de escritura.
 
 ## Validación final y preparación de revisión — T031–T035 · 2026-11-10
 
-Base de esta entrega: **0cc28b1e44a1d932cf1da61cdc869883652693c4**, rama spec-002, con T001–T030 registradas. El árbol seguido estaba limpio; se conservan .claude/launch.json, output/ y tmp/ sin seguimiento. No se repiten sus bloques, commits o navegaciones. La selección temporal mediante SPECIFY_FEATURE_DIRECTORY/SPECIFY_FEATURE y `check-prerequisites.ps1 -Json -PathsOnly` resuelve specs/spec-002 sin persistir configuración. Checklist requirements: 16 marcadas, cero pendientes.
+Base de esta entrega: **0cc28b1e44a1d932cf1da61cdc869883652693c4**, rama spec-002, con T001–T030 registradas. El árbol seguido estaba limpio; Se conservan output/ y tmp/ sin seguimiento. No se repiten sus bloques, commits o navegaciones. La selección temporal mediante SPECIFY_FEATURE_DIRECTORY/SPECIFY_FEATURE y `check-prerequisites.ps1 -Json -PathsOnly` resuelve specs/spec-002 sin persistir configuración. Checklist requirements: 16 marcadas, cero pendientes.
 
-Se aplica el procedimiento local de implementación limitado a estas cinco tareas. El comando no está registrado como herramienta; se usa directamente su SKILL.md. La comprobación se adapta con PathsOnly y validación directa de spec, plan y tasks para evitar la escritura de selección del modo general. Los hooks de Git antes/después son opcionales y no se ejecutan. El alcance no incluye converge ni revisión externa.
+Se aplica el procedimiento local de implementación limitado a estas cinco tareas. Se aplica el procedimiento local del repositorio. La comprobación se adapta con PathsOnly y validación directa de spec, plan y tasks para evitar la escritura de selección del modo general. Los hooks de Git antes/después son opcionales y no se ejecutan. El alcance no incluye converge ni revisión externa.
 
 ### T031 — regresión backend nueva
 
@@ -170,9 +171,9 @@ Pruebas: **26/26 aprobadas**, código 0, duración del ejecutor **210,10 ms**; [
 
 Build: código **0**, Astro **11,08 s**; [salida](evidencias-finales-01/build-frontend.txt). Se reconstruye con el código de 0cc28b1, sin cambios funcionales posteriores. La medición de T030 conserva su build y traza propios; los hashes se contrastan sin repetir la navegación. El build incluye páginas de la aplicación completa, pero no acredita casos de aceptación de otras historias.
 
-El nuevo entry.mjs tiene SHA-256 `9DD2042E7E2D1F330ED7D09F2A6372ED83BB19C440B4D5EB52480EBBA6EEE58C`, distinto del artefacto medido en T030 (`40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`). No se afirma identidad binaria ni se atribuye a este build una medición no ejecutada. La isla fuente conserva SHA-256 `79AFE5C1C27EB655736CA40008EA69CB3C7353DF47EDBC78F279B0631F094030`; se reutiliza aceptación del mismo código de 0cc28b1, con el artefacto original identificado en su informe.
+El nuevo entry.mjs tiene SHA-256 `9DD2042E7E2D1F330ED7D09F2A6372ED83BB19C440B4D5EB52480EBBA6EEE58C`, distinto del artefacto medido en T030 (`40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`). No se afirma identidad binaria ni se atribuye a este build una medición no ejecutada. La isla fuente conserva SHA-256 `79AFE5C1C27EB655736CA40008EA69CB3C7353DF47EDBC78F279B0631F094030`; Se reutiliza aceptación del mismo código de 0cc28b1, con el artefacto original identificado en su informe.
 
-Prettier se ejecuta desde el binario ya instalado en la caché local, con .prettierrc.json y rutas explícitas, sin instalaciones o cambios de configuración. Se comprueban archivos JS/JSX de HU-02 y la documentación actualizada. La página Astro se verifica mediante build y lectura; se mantiene la limitación documentada del parser sin instalar un plugin. El resultado de formato y enlaces se registra al finalizar este apartado.
+Prettier se ejecuta desde el binario ya instalado en la caché local, con .prettierrc.json y rutas explícitas, sin instalaciones o cambios de configuración. Se comprueban archivos JS/JSX de HU-02 y la documentación actualizada. La página Astro se verifica mediante build y lectura; Se mantiene la limitación documentada del parser sin instalar un plugin. El resultado de formato y enlaces se registra al finalizar este apartado.
 
 ### T033–T035 — documentación y balance
 
@@ -190,6 +191,6 @@ Prettier aprueba **26 archivos JS/JSX/Markdown** de rutas explícitas, con la co
 
 Una consulta de solo lectura verifica PostgreSQL 16.15, base ong*test_hu01 y cero esquemas hu01*\* restantes. Las pruebas de migraciones comprueban conservación del inventario de public; los tests de GET y los balances visibles anteriores acreditan ausencia de efectos con su alcance, sin afirmar una auditoría global de bases.
 
-Se comprueba que el texto anterior de este informe es prefijo íntegro del nuevo, normalizando únicamente CRLF para la comparación. La revisión de huellas iniciales/finales y el diff delimitan los cambios a documentación autorizada, sin modificar código, migraciones, secretos o configuración. El índice permanece vacío. Los ficheros de output/, tmp/ y .claude/launch.json se mantienen fuera del bloque y no se seleccionan.
+Se comprobó que solo cambiaron los archivos indicados, conservando los resultados anteriores.
 
 Resultado de preservación: **411 archivos comparados**, con cambios solo en README, LEEME de módulos, plan, investigación, quickstart, dos contratos, tasks y el apartado nuevo de este informe. Se verifican **123 enlaces locales**, sin destinos ausentes. Los dos informes nuevos son matriz-validacion-01.md y revision-tecnica-01.md; las cuatro salidas nuevas están en evidencias-finales-01. T031–T035 quedan marcadas por su alcance, con converge y revisión externa expresamente pendientes.

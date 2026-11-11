@@ -11,12 +11,12 @@ bloqueantes identificadas; no se avanza a plan ni se atribuye revisión de Javi 
 ## Comprobación inicial y procedimiento
 
 Se comprueban rama spec-002, commit 258680e e índice vacío. Solo
-`.claude/launch.json` está sin seguimiento. HU-02 contiene únicamente spec.md y
+ está sin seguimiento. HU-02 contiene únicamente spec.md y
 checklists/requirements.md; no hay plan, tareas o informes anteriores que sobrescribir.
 Se conservan `.env`, configuración local y todos los históricos de las otras historias.
 
 Se aplica [.claude/skills/speckit-clarify/SKILL.md](../../../.claude/skills/speckit-clarify/SKILL.md)
-directamente, sin comando registrado en la sesión. Máximo de cinco preguntas en esta
+directamente, según el procedimiento local. Máximo de cinco preguntas en esta
 ronda, una cada vez, integrando solo las respuestas confirmadas. Los hooks before_clarify
 y after_clarify existentes son commits opcionales y se omiten por el alcance autorizado.
 
@@ -102,7 +102,7 @@ rendimiento fallida: no se ha ejecutado ninguna. Las demás marcas permanecen in
 no se cambian textos, notas o metadatos de la checklist.
 
 Los tres estados aceptados disponen de requisitos y escenarios explícitos. El enlace no
-se solicita ni se consume al entrar en el historial; las reglas de seguridad incorporadas
+Se solicita ni se consume al entrar en el historial; las reglas de seguridad incorporadas
 no requieren confirmación adicional. PA2.1 se reformula como alineación de alcance de solo
 lectura con HU-01, sin habilitar una operación de reasignación.
 
