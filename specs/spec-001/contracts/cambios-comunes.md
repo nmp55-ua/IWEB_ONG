@@ -1,8 +1,9 @@
 # Decisiones compartidas de diseño y revisión — HU-01
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: P-01–P-04 definidos y alineados documentalmente en `spec-001`. La revisión de
-Rubén y la incorporación compartida siguen pendientes. No se atribuye acuerdo colectivo.
+**Estado**: P-01–P-04 definidos y alineados documentalmente en `spec-001`, revisados con la PR #4.
 P-01–P-03 ya están implementados en esta rama; los resultados se conservan en la
 [matriz vigente](../refinamiento/matriz-validacion-01.md), sin atribuir publicación.
 
@@ -12,7 +13,7 @@ P-01–P-03 ya están implementados en esta rama; los resultados se conservan en
 soporte técnico. [data-model.md](../data-model.md) explica su uso, sin repetir el esquema.
 
 El modelo común documenta PaymentIntent único por pago, Invoice única por cuota, nulabilidad
-antes de conocer identificadores externos y fechas, y el instante de previsión junto a su
+antes de conocer identificadores externos y fechas y el instante de previsión junto a su
 DATE de Madrid. La confirmación tras rechazo o cierre local conserva la misma aportación;
 confirmada sigue siendo inmutable. Un primer rechazo recuperable deja el alta pendiente;
 solo el cierre definitivo cancela. Se evita cancelar irreversiblemente un alta que la
@@ -46,7 +47,7 @@ debe revisar los campos, fuentes temporales y transiciones antes de incorporar l
    Esta entrega desbloquea el consumo de aportaciones sin esperar HU-01 completa.
 3. **Ampliación operativa**: migración nueva con las cuatro tablas técnicas. Se coordina
    el siguiente número libre desde 009 al preparar su incorporación; **009 no está reservado**.
-   En esta rama existe `009_operativa_donaciones.sql` como nombre provisional, sin reserva
+   En esta rama existe `009_operativa_donaciones.sql` como nombre de la migración, sin reserva
    colectiva. Solo depende de 004 y su base común, sin referencias a 006–008.
 4. **Conservación**: no editar 004 publicada; ajustes posteriores requieren otra migración.
    La ampliación operativa es necesaria para ejecutar HU-01, pero no para consultar el dominio.
@@ -140,18 +141,11 @@ Antes de las pruebas reales de Stripe, en una fase autorizada, deberá comprobar
 La preparación y su evolución constan en
 [preparacion-stripe-01.md](../refinamiento/preparacion-stripe-01.md); las comprobaciones
 reales posteriores, en [validacion-stripe-01.md](../refinamiento/validacion-stripe-01.md).
-Se conserva su atribución a Nada y al guía, y los límites de cada recorrido. Una versión
+Se conservan la procedencia de la evidencia y los límites de cada recorrido. Una versión
 de evento distinta de las dos enumeradas exige una nueva revisión antes de admitirla.
 
-## Estado para revisión
+## Estado de incorporación
 
-No quedan decisiones de diseño identificadas sin resolver en HU-01: PA1.1–PA1.8 se mantienen,
-P-01–P-03 tienen definición única y P-04 está incorporado. La revisión de Rubén y el proceso
-de incorporación compartida siguen pendientes; son condiciones anteriores a integrar cambios
-comunes, no acuerdos ya producidos. La implementación, SQL y comprobaciones de P-05 constan
-en esta rama y sus evidencias. El [flujo autorizado por Nada](../refinamiento/ajuste-flujo-01.md)
-separa el paquete técnico de T006 y la comprobación/elección local de T007 de la aprobación
-de Rubén y los conflictos de incorporación, controles PR-R01/PR-R02 antes de main.
-No se atribuye reserva colectiva ni revisión realizada. La preparación/apertura de PR y
-el cierre del desarrollo no dependen de obtener antes esa aprobación; el cierre técnico
-sí requiere el converge posterior. Este bloque no lo ejecuta.
+HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
+PA1.1–PA1.8 y P-01–P-04 se mantienen. La implementación, SQL y comprobaciones de P-05 constan en los informes de validación.

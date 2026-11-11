@@ -1,12 +1,14 @@
 # Medición puntual de T079 — ejecución 2 y balance T079–T080
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Registro:** 2026-11-07 · **Historia:** HU-01 · **Rama:** spec-001.
 
-**Responsable:** Nada · **Revisor:** Rubén, pendiente.
+**Responsable:** Nada · **Revisor:** Rubén.
 
 ## Procedencia y medición
 
-Nada comunica una duración observada con cronómetro de **1 minuto y 1 segundo
+Se midió con cronómetro una duración de **1 minuto y 1 segundo
 (61 segundos)**. El cronómetro comenzó antes de abrir el formulario y terminó al
 ver la confirmación en la aplicación, siguiendo el procedimiento preparado.
 Por tanto, esta ejecución cumple el límite de **menos de 180 segundos** de SC-001.
@@ -14,7 +16,7 @@ El comienzo anterior a la apertura no descuenta el acceso al formulario.
 
 No se dispone de horas t0/t1 ni de una captura del cronómetro. No se inventan ni
 se reconstruye la duración con las fechas de Stripe, PostgreSQL o correo. Es una
-observación de Nada, no una medición realizada durante esta revisión documental.
+observación visual, no una medición realizada durante esta revisión documental.
 Los 61 segundos acreditan esta ejecución, no una garantía universal de rendimiento.
 
 La [ejecución 1](medicion-puntual-01.md), aportación 35, permanece íntegra:
@@ -22,9 +24,9 @@ La [ejecución 1](medicion-puntual-01.md), aportación 35, permanece íntegra:
 La ejecución 2 es independiente; no sustituye, reinicia, corrige ni promedia
 la primera medición.
 
-## Operación y comprobaciones comunicadas por el guía
+## Operación y comprobaciones comunicadas en el registro de ejecución
 
-Las consultas siguientes fueron realizadas por el guía, en solo lectura sobre
+Las consultas siguientes fueron realizadas en solo lectura sobre
 PostgreSQL, Stripe y Mailpit. No se repiten en este registro.
 
 | Dato                         | Evidencia comunicada                                                                                                          |
@@ -46,7 +48,7 @@ listener, horarios de inicio/fin o cotejos visuales adicionales no comunicados.
 
 ## Conjunto delimitado de confirmaciones recibidas
 
-El guía comunica una nueva búsqueda conjunta por las siete referencias de las
+Se registra una nueva búsqueda conjunta por las siete referencias de las
 aportaciones **30–36**, con **una confirmación recibida por cada referencia: 7/7**.
 El inventario por referencia se conserva en la [matriz vigente](matriz-validacion-01.md).
 La aportación 34 continúa incluida aunque su suscripción se cancelara: su cuota
@@ -62,10 +64,10 @@ todas las filas o mensajes del entorno. No se repiten sus pagos ni envíos.
 
 | Criterio | Evidencia y alcance                                                                                                                                                                                                                                      | Resultado para el balance                                                                                                                                          |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| SC-001   | Cronómetro observado por Nada desde antes de abrir el formulario hasta confirmación en la aplicación: 61 s. La ejecución 1 fallida se conserva separadamente.                                                                                            | Satisfecho en la ejecución 2, con la procedencia y limitaciones indicadas.                                                                                         |
-| SC-002   | Guía: 7/7 referencias confirmadas de 30–36 con recepción en Mailpit; mensaje y texto de 36 identificados. No basta el estado enviado ni un aviso de pantalla.                                                                                            | Satisfecho en el conjunto manual delimitado; sin extrapolación global.                                                                                             |
-| SC-003   | [Validación local](validacion-local-01.md), «Datos persistidos, sesión y registros (T074)», y A9 de la matriz: Checkout alojado, instantáneas sin tarjeta, esquema/sesión revisados y proyecciones del adaptador sin datos de tarjeta.                   | Evidencia previa conservada. No se repite la inspección ni se afirma una auditoría nueva. Las observaciones sobre registros comunes siguen para revisión de Rubén. |
-| SC-004   | R1/R3 de la matriz: importes visibles comprobados por Nada y pagos contrastados por el guía. En 36, el guía contrasta EUR/2000 céntimos, importe local 20,00 € y mismo importe en el texto recibido. A1/A8/A9 cubren conversión, resumen y proyecciones. | Coincidencia al céntimo respaldada por las evidencias anteriores y el nuevo contraste. No se inventa una captura o comparación visual adicional de 36.             |
+| SC-001   | Tiempo medido con cronómetro desde antes de abrir el formulario hasta confirmación en la aplicación: 61 s. La ejecución 1 fallida se conserva separadamente.                                                                                            | Satisfecho en la ejecución 2, con la procedencia y limitaciones indicadas.                                                                                         |
+| SC-002   | Registro de comprobación: 7/7 referencias confirmadas de 30–36 con recepción en Mailpit; mensaje y texto de 36 identificados. No basta el estado enviado ni un aviso de pantalla.                                                                                            | Satisfecho en el conjunto manual delimitado; sin extrapolación global.                                                                                             |
+| SC-003   | [Validación local](validacion-local-01.md), «Datos persistidos, sesión y registros (T074)» y A9 de la matriz: Checkout alojado, instantáneas sin tarjeta, esquema/sesión revisados y proyecciones del adaptador sin datos de tarjeta.                   | Evidencia previa conservada. No se repite la inspección ni se afirma una auditoría nueva. Las observaciones sobre registros comunes siguen para revisión de Rubén. |
+| SC-004   | R1/R3 de la matriz: importes visibles comprobados visualmente y pagos contrastados en el registro de ejecución. En 36, se contrasta EUR/2000 céntimos, importe local 20,00 € y mismo importe en el texto recibido. A1/A8/A9 cubren conversión, resumen y proyecciones. | Coincidencia al céntimo respaldada por las evidencias anteriores y el nuevo contraste. No se inventa una captura o comparación visual adicional de 36.             |
 
 **T079 completada:** T078 ya estaba completada; existe duración satisfactoria
 observada, contraste de importes y recepción para todas las referencias del
@@ -105,8 +107,8 @@ converge y coordinación de 009 permanecen pendientes.**
 ## Alcance de esta revisión documental
 
 Se comprueban rama, HEAD inicial a7dda2b, estado y documentación local. Al comenzar,
-solo `.claude/launch.json` estaba sin seguimiento; se conserva junto con `.env` y
-los históricos. Las observaciones de Nada y consultas del guía se registran como
+se conserva `.env` y
+los históricos. Las observaciones registradas y consultas del registro previo se registran como
 fuentes comunicadas, sin presentarlas como ejecuciones propias de esta revisión.
 No se realizan nuevas consultas externas, pruebas funcionales, pagos, reenvíos,
 cambios de configuración o escrituras de Git.

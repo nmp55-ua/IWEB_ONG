@@ -1,0 +1,30 @@
+
+> ong-backend@0.1.0 test
+> vitest run src/modulos/donaciones/medicion-historial.test.js --no-file-parallelism
+
+
+ RUN  v2.1.9 E:/asignaturas/IWeb/Practica grupal/IWEB_ONG/backend
+
+ ❯ src/modulos/donaciones/medicion-historial.test.js (3 tests | 1 failed) 167ms
+   × T036 · cierre del controlador de medición > cierra el banco y conserva el mismo error si fallan los contadores 129ms
+     → expected "spy" to be called once, but got 0 times
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/modulos/donaciones/medicion-historial.test.js > T036 · cierre del controlador de medición > cierra el banco y conserva el mismo error si fallan los contadores
+AssertionError: expected "spy" to be called once, but got 0 times
+ ❯ src/modulos/donaciones/medicion-historial.test.js:50:26
+     48| 
+     49|     expect(entrada.close).toHaveBeenCalledOnce();
+     50|     expect(banco.cerrar).toHaveBeenCalledOnce();
+       |                          ^
+     51|     expect(banco.recursosCerrados).toHaveBeenCalledOnce();
+     52|     expect(salida).toHaveBeenCalledWith(JSON.stringify({ recursosCerra…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  02:19:41
+   Duration  1.36s (transform 155ms, setup 0ms, collect 156ms, tests 167ms, environment 0ms, prepare 452ms)
+

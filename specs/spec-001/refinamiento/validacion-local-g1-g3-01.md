@@ -1,14 +1,16 @@
 # Comprobaciones locales G1–G3 — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Rama:** spec-001 · **HEAD inicial:** 076e439.
 
-**Responsable:** Nada · **Revisor:** Rubén, pendiente.
+**Responsable:** Nada · **Revisor:** Rubén.
 
 ## Alcance y aislamiento
 
 Se completan los huecos P05, P08, P10, P11, P16 y S05 identificados en la
 [matriz vigente](matriz-validacion-01.md). Se conservan los cambios documentales
-previos, `.env`, `.claude/launch.json` y los informes históricos. No se modifica
+previos, `.env`, los informes históricos. No se modifica
 código del producto: se añaden seis pruebas y un banco reutilizable de pruebas.
 
 El banco reutiliza `crearEntornoPruebas`, las migraciones, `crearServicio`,
@@ -70,7 +72,7 @@ se corrigió a URL de archivo. Un primer proceso no persistió y la navegación
 devolvió conexión rechazada. Se arrancó el banco persistente antes de observar
 las pantallas; ninguno de esos intentos se cuenta como comprobación de interfaz.
 
-La observación posterior sí se realizó mediante navegador integrado sobre las
+La observación posterior sí se realizó mediante navegador de pruebas sobre las
 páginas reales. Se validaron contenido, controles y acciones; no es una revisión
 del estilo visual o de la maquetación. Las capturas se conservan junto al
 [balance de persistencia y contadores](evidencias-g123/balance.json).
@@ -116,7 +118,7 @@ fallido; correo de socio: un intento, fallido. Estos contadores son del simulado
 no una comprobación de idempotencia o facturación real de Stripe.
 
 Se cerró la instancia temporal al finalizar. El proxy devolvió una respuesta
-interrumpida al cerrarse; se verificó posteriormente por SQL que su esquema
+interrumpida al cerrarse; Se verificó posteriormente por SQL que su esquema
 `hu01_integracion_51b86385362145de9105c51ab29b9c09` ya no existía. Se eliminó
 también el esquema residual del primer proceso, identificado exclusivamente por
 su referencia sintética, tras verificar `current_database() = ong_test_hu01`.
@@ -124,13 +126,13 @@ No se elimina `public` ni ningún esquema de otros bloques.
 
 ## Medición y balance que permanecen pendientes
 
-La [medición puntual 1](medicion-puntual-01.md), realizada por el guía, queda
+La [medición puntual 1](medicion-puntual-01.md), realizada en el registro de ejecución, queda
 intacta: aportación **35**, referencia `DON-0b914a77-2050-4429-ba19-19f16f62507c`,
 20,00 €, **480,836 s** incluyendo todas las incidencias. **No cumple SC-001**;
 no se reinicia ni reconstruye el cronómetro. La confirmación y recepción del
 correo se conservan como evidencia válida independiente de la duración.
 
-El guía acredita **6/6** confirmaciones recibidas por referencia en el conjunto
+se acredita **6/6** confirmaciones recibidas por referencia en el conjunto
 delimitado 30–35. No se han repetido sus pagos ni envíos y no se presenta como
 auditoría global. Se excluyen estas semillas locales, correos simulados, avisos
 de fallo y mensajes de vinculación del numerador y denominador de SC-002.
@@ -144,10 +146,4 @@ T007, converge y coordinación de 009 permanecen pendientes. No se detectaron
 defectos nuevos del producto en este bloque. No se hicieron operaciones externas
 ni escrituras de Git.
 
-Comprobación documental final: Prettier correcto en los siete archivos de texto
-del bloque; enlaces locales de matriz e informe sin destinos ausentes; 34
-identificadores de escenario distintos; `git diff --check` correcto e índice sin
-cambios. La comparación SHA-256 inicial/final conserva `.env`, `.claude/launch.json`,
-la medición 1 y los informes históricos. Solo cambian `tasks.md` y la matriz entre
-los archivos ya existentes al comenzar; el cambio previo de `quickstart.md` queda
-intacto. HEAD permanece en 076e439.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.

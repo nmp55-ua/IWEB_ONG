@@ -1,15 +1,17 @@
 # Validación de la entrega temprana 004 — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Rama**: spec-001 · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance ejecutado**: T001–T005. T006 y las tareas posteriores permanecen pendientes.  
-**Resultado**: Validación local de persistencia superada. No acredita revisión de Rubén,
+**Resultado**: Validación local de persistencia superada. La revisión se registra en PR #4;
 incorporación compartida, funcionamiento completo de HU-01 o integración Stripe.
 
 ## Procedimiento y contexto
 
 Se sigue la definición local de
-[speckit-implement](../../../.claude/skills/speckit-implement/SKILL.md), al no estar registrado
+[speckit-implement](../../../.claude/skills/speckit-implement/SKILL.md).
 el comando en la sesión. Se limita expresamente a T001–T005. La selección de
 specs/spec-001 se comprueba con check-prerequisites.ps1 -Json -PathsOnly y una variable
 SPECIFY_FEATURE_DIRECTORY limitada al proceso, sin persistir feature.json.
@@ -21,7 +23,7 @@ Los hooks opcionales de commit se omiten. No se cambia de rama ni se altera el �
 | Checklist requirements.md | 16 elementos, 16 marcados, 0 pendientes; no se modifica. |
 | Documentación ya preparada en Git | Se conserva; no se crea commit ni se vuelve a añadir al índice. |
 | .env / 004 antes del bloque | No existían. |
-| Ficha / informe de esta entrega | No existían; se crean sin sobrescribir evidencias. |
+| Ficha / informe de esta entrega | No existían; Se crean sin sobrescribir evidencias. |
 | Contenedores / volúmenes al consultar Docker | Ninguno; la preparación crea los servicios y el volumen del proyecto, sin eliminar recursos. |
 
 Fuentes: [modelo común](../../modelo-datos.md), [plan común](../../plan-comun.md),
@@ -78,7 +80,7 @@ Se prueban las dos secuencias:
 |---|---|
 | 001–003 → 004 | En un esquema nuevo se aplican las tres migraciones previas. Se ejecuta 004 en una transacción de observación y se comprueba que añade exactamente las tres tablas de dominio; después se revierte esa observación. El migrador real incorpora 004 y también 005, que seguía pendiente. |
 | 001–003/005 → 004 | En otro esquema nuevo se aplican y registran 001–003 y 005. La misma observación comprueba el efecto aislado de 004. El migrador real añade 004, aunque 005 ya constaba aplicada, sin repetir 005. |
-| Segunda ejecución, ambas secuencias | El migrador real no aplica ningún fichero, conserva el registro de nombres y sus timestamps, y no cambia el Donante de prueba existente. |
+| Segunda ejecución, ambas secuencias | El migrador real no aplica ningún fichero, conserva el registro de nombres y sus timestamps y no cambia el Donante de prueba existente. |
 
 Se ejecuta el programa existente backend/src/db/migrar.js en un proceso Node con la
 conexión del esquema correspondiente. No se copia ni se modifica su lógica para seleccionar

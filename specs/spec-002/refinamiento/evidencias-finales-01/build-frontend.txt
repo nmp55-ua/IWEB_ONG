@@ -1,0 +1,57 @@
+
+> ong-frontend@0.1.0 build
+> astro build
+
+16:41:17 [@astrojs/node] Enabling sessions with filesystem storage
+16:41:20 [content] Syncing content
+16:41:20 [content] Synced content
+16:41:20 [types] Generated 249ms
+16:41:20 [build] output: "server"
+16:41:20 [build] mode: "server"
+16:41:20 [build] directory: E:\asignaturas\IWeb\Practica grupal\IWEB_ONG\frontend\dist\
+16:41:20 [build] adapter: @astrojs/node
+16:41:20 [build] Collecting build info...
+16:41:20 [build] ✓ Completed in 2.76s.
+16:41:20 [build] Building server entrypoints...
+16:41:25 [vite] ✓ built in 4.95s
+16:41:25 [build] ✓ Completed in 5.10s.
+
+ building client (vite) 
+16:41:25 [vite] transforming...
+16:41:27 [vite] ✓ 75 modules transformed.
+16:41:27 [vite] rendering chunks...
+16:41:28 [vite] computing gzip size...
+16:41:28 [vite] dist/client/_astro/estados.DxUQ_MJ3.js                   0.20 kB │ gzip:  0.16 kB
+16:41:28 [vite] dist/client/_astro/EstadoVacio.Cq5cQM_h.js               0.26 kB │ gzip:  0.21 kB
+16:41:28 [vite] dist/client/_astro/formato.DRqxzlkB.js                   0.52 kB │ gzip:  0.28 kB
+16:41:28 [vite] dist/client/_astro/Modal.BORTIOye.js                     0.82 kB │ gzip:  0.47 kB
+16:41:28 [vite] dist/client/_astro/Tabla.RwRDkAsV.js                     0.91 kB │ gzip:  0.52 kB
+16:41:28 [vite] dist/client/_astro/comunDonacion.B5KUpZHL.js             1.00 kB │ gzip:  0.59 kB
+16:41:28 [vite] dist/client/_astro/Boton.BYhnaybJ.js                     1.11 kB │ gzip:  0.60 kB
+16:41:28 [vite] dist/client/_astro/FormEntrar.BQPy8ODd.js                1.19 kB │ gzip:  0.68 kB
+16:41:28 [vite] dist/client/_astro/Campo.DzBNSUji.js                     1.23 kB │ gzip:  0.60 kB
+16:41:28 [vite] dist/client/_astro/Menu.B_ZbiCoF.js                      1.34 kB │ gzip:  0.67 kB
+16:41:28 [vite] dist/client/_astro/api.DJbD62sc.js                       1.47 kB │ gzip:  0.89 kB
+16:41:28 [vite] dist/client/_astro/ListaActividades.DaKLkBiI.js          1.66 kB │ gzip:  0.89 kB
+16:41:28 [vite] dist/client/_astro/FormRegistro.BZSxUuag.js              1.75 kB │ gzip:  0.88 kB
+16:41:28 [vite] dist/client/_astro/VerificarCertificado.Cu8pKJT9.js      2.00 kB │ gzip:  0.99 kB
+16:41:28 [vite] dist/client/_astro/fechas.C5Mp1fnd.js                    2.56 kB │ gzip:  1.30 kB
+16:41:28 [vite] dist/client/_astro/VincularDonante.DlLiFzTM.js           2.78 kB │ gzip:  1.28 kB
+16:41:28 [vite] dist/client/_astro/MisCertificados.sjNYuEMR.js           3.55 kB │ gzip:  1.61 kB
+16:41:28 [vite] dist/client/_astro/FormActividad.BFmhA41t.js             3.64 kB │ gzip:  1.70 kB
+16:41:28 [vite] dist/client/_astro/DetalleActividad.BIvTbg0R.js          3.77 kB │ gzip:  1.59 kB
+16:41:28 [vite] dist/client/_astro/HistorialAportaciones.SYp5fze7.js     4.69 kB │ gzip:  2.17 kB
+16:41:28 [vite] dist/client/_astro/FormDonacion.CdQzggFF.js              6.43 kB │ gzip:  2.79 kB
+16:41:28 [vite] dist/client/_astro/ActividadesDisponibles.DxnA8euv.js    6.69 kB │ gzip:  2.56 kB
+16:41:28 [vite] dist/client/_astro/ResultadoDonacion.BixjOSCj.js         6.78 kB │ gzip:  2.66 kB
+16:41:28 [vite] dist/client/_astro/index.DLkBFFtG.js                     8.20 kB │ gzip:  3.17 kB
+16:41:28 [vite] dist/client/_astro/CalendarioVoluntario.CumYqKKd.js      8.46 kB │ gzip:  3.25 kB
+16:41:28 [vite] dist/client/_astro/client.C5RI7xnT.js                  215.57 kB │ gzip: 67.09 kB
+16:41:28 [vite] ✓ built in 2.36s
+
+ prerendering static routes 
+16:41:28 ✓ Completed in 533ms.
+
+16:41:28 [build] Rearranging server assets...
+16:41:28 [build] Server built in 11.08s
+16:41:28 [build] Complete!

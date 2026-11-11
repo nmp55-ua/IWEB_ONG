@@ -1,0 +1,40 @@
+{
+  "identidad": {
+    "base": "ong_test_hu01",
+    "esquema": "hu01_integracion_fd4656ae02804528ac7effa875c870c8"
+  },
+  "datos": {
+    "donantes": {
+      "cantidad": 11,
+      "huella": "942e12ec55bf914ebd9bf60df16cc542490ac843dc54b6424a39fbdbed4834ad"
+    },
+    "aportaciones": {
+      "cantidad": 135,
+      "huella": "30ba00ba86fa68f81775a47b5af8abf388947cf419f698890d6b53dad4f7677f"
+    },
+    "suscripciones_socio": {
+      "cantidad": 2,
+      "huella": "131757f9a051b7bfd66375e6554f52424c87c8691a6a391b451ea1e15c597547"
+    },
+    "operaciones_pago": {
+      "cantidad": 0,
+      "huella": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "eventos_pasarela": {
+      "cantidad": 0,
+      "huella": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "verificaciones_donante": {
+      "cantidad": 0,
+      "huella": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "correos_aportacion": {
+      "cantidad": 1,
+      "huella": "a208e7fb6c453a1a27bf34412fd74ef5eba847840ee2b771077e64aab9c1fc31"
+    },
+    "certificados_fiscales": {
+      "cantidad": 0,
+      "huella": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

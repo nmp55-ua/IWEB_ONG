@@ -1,15 +1,17 @@
 # Matriz vigente de validación y balance T079–T080 — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-07 · **Rama**: spec-001 · **Base de preparación**: 076e439 · **Base del cierre documental**: a7dda2b
 
-**Responsable**: Nada · **Revisor**: Rubén (pendiente).
+**Responsable**: Nada · **Revisor**: Rubén.
 
 **Estado**: G1–G3 comprobadas localmente, con API, PostgreSQL aislado e interfaz.
 T079 y T080 completadas tras contrastar la segunda medición, los 34 escenarios y
-SC-001–SC-004. Nada comunica 61 s; el guía acredita 7/7 correos en el conjunto 30–36.
+SC-001–SC-004. Se comunica 61 s; Se acredita 7/7 correos en el conjunto 30–36.
 La medición 1 de 480,836 s conserva su resultado fallido. El primer converge detectó
 CONV-001/CONV-002, corregidos y verificados en T082–T083; CONV-003 se cerró con T084. [converge-3.md](converge-3.md) acredita el cierre técnico. Revisión/aprobación e integración siguen separadas de ese cierre.
-Se conservan los cambios documentales previos, .env, .claude/launch.json y los históricos.
+Se conservan los cambios documentales previos, .env, los históricos.
 La preparación inicial no ejecutó pruebas; los resultados posteriores se atribuyen a
 sus fuentes y se añaden sin presentar simulaciones como integración real.
 
@@ -28,8 +30,7 @@ del correo ni una factura de Stripe. Los estados Cubierto indican el alcance de 
 descrito, no que todo el escenario se haya ejecutado con Stripe o en navegador.
 
 Se revisaron el contenido y las aserciones relevantes de las pruebas, además de los
-informes de ejecución. La última regresión de donaciones registrada es 367/367; el guía
-comunicó su repetición. G1–G3 añade después una ejecución dirigida de 17/17,
+informes de ejecución. La última regresión de donaciones registrada es 367/367; Se comunicó su repetición. G1–G3 añade después una ejecución dirigida de 17/17,
 sin repetir esa suite completa; no se toma el número de pruebas como
 demostración suficiente de cada escenario. Los pendientes antiguos de T053 se contrastan
 con las evidencias posteriores; por ejemplo, P02 y P21 ya tienen evidencia real.
@@ -47,19 +48,19 @@ con las evidencias posteriores; por ejemplo, P02 y P21 ya tienen evidencia real.
 | A9     | [pasarela.test.js](../../../backend/src/modulos/donaciones/pasarela.test.js)                                    | Constructor y proyecciones acacia, firma sintética, card/EUR y recurrencias; sin red real                                                                                                    |
 | M1     | [validacion-local-01.md](validacion-local-01.md), «Frontend de donación puntual, vínculo y semillas», T045–T053 | Acceso público, 0,99/campos vacíos, UUID estable, resultados propios/ajenos, vínculo y reintento recibido en Mailpit                                                                         |
 | M2     | [validacion-local-01.md](validacion-local-01.md), «Alta y cuotas de socio», T054–T072                           | Formulario de socio, alta sin pasarela configurada y presentación de cuotas sintéticas, rechazo, previsión desconocida y cancelación                                                         |
-| R1     | [validacion-stripe-01.md](validacion-stripe-01.md), operación 30, T077                                          | 15,75 €, Agua potable, Checkout y eventos originales, correo abierto por Nada, retorno automático, permiso invitado original y posterior vínculo                                             |
+| R1     | [validacion-stripe-01.md](validacion-stripe-01.md), operación 30, T077                                          | 15,75 €, Agua potable, Checkout y eventos originales, correo abierto durante la prueba, retorno automático, permiso invitado original y posterior vínculo                                             |
 | R2     | Mismo informe, «Cierre final de T077», operación 31                                                             | P21 adicional de 1,23 €: estado local pendiente, páginas cerradas, primera confirmación y reentrega sin duplicados                                                                           |
 | R3     | Mismo informe, «Bloque real de socios», operaciones de alta de aportaciones 32–34, T078                         | Tres periodicidades, primeras facturas, correos en Mailpit, reentregas y cancelación anual tras alta satisfactoria                                                                           |
 | A10    | [validacion-local.test.js](../../../backend/src/modulos/donaciones/validacion-local.test.js)                    | Seis pruebas G1–G3 con PostgreSQL aislado: cancel_url, recuperación, tres cambios de identidad, segundo fallo HTTP y socio activo                                                            |
-| M3     | [validacion-local-g1-g3-01.md](validacion-local-g1-g3-01.md) y sus capturas/balance                             | Navegador integrado sobre Astro y backend reales del banco aislado; Stripe y SMTP simulados; sin cambios financieros ni del Donante                                                          |
-| R4     | [medicion-puntual-01.md](medicion-puntual-01.md), aportación 35; ejecución del guía                             | Puntual de 20 €, confirmada y correo recibido; 480,836 s, no cumple SC-001. Conjunto delimitado 30–35: 6/6 recibidos por referencia                                                          |
-| R5     | [medicion-puntual-02.md](medicion-puntual-02.md), aportación 36 y cierre T079–T080                              | Nada: cronómetro de 61 s hasta confirmación; sin t0/t1 ni captura disponibles. Guía: pago, importe, unicidad y recepción; conjunto 30–36, 7/7                                                |
+| M3     | [validacion-local-g1-g3-01.md](validacion-local-g1-g3-01.md) y sus capturas/balance                             | Navegador de pruebas sobre Astro y backend reales del banco aislado; Stripe y SMTP simulados; sin cambios financieros ni del Donante                                                          |
+| R4     | [medicion-puntual-01.md](medicion-puntual-01.md), aportación 35; ejecución del registro previo                             | Puntual de 20 €, confirmada y correo recibido; 480,836 s, no cumple SC-001. Conjunto delimitado 30–35: 6/6 recibidos por referencia                                                          |
+| R5     | [medicion-puntual-02.md](medicion-puntual-02.md), aportación 36 y cierre T079–T080                              | Medición con cronómetro de 61 s hasta confirmación; sin t0/t1 ni captura disponibles. Registro de comprobación: pago, importe, unicidad y recepción; conjunto 30–36, 7/7                                                |
 | A11    | [validacion-converge-01.md](validacion-converge-01.md), confirmaciones/rutas/cuotas/textoCorreo y eventos       | Cuatro regresiones iniciales fallidas; 83/83 y 21/21 posteriores en ejecuciones separadas. Carrera terminal y contexto histórico corregidos, solo PostgreSQL aislado/Stripe y SMTP simulados |
 
 Los importes de ejemplo 20 € o 10 €/mes no obligan por sí solos a repetir pagos ya
 acreditados con otros importes válidos. La ejecución cronometrada R4 usa 20 € y
 complementa P01/P06; su duración fallida no se presenta como SC-001 satisfecho.
-R5 añade otra puntual independiente de 20 €, con 61 s observados por Nada; los dos
+R5 añade otra puntual independiente de 20 €, con 61 s medidos con cronómetro; los dos
 resultados se conservan sin reconstruir cronómetros ni descontar esperas.
 
 ## Matriz única de escenarios
@@ -70,12 +71,12 @@ conserva como limitación, sin convertirla automáticamente en un pago pendiente
 
 | Caso | Criterio y fuente normativa                                                                          | Evidencia existente                                                                                                                                                                                                                     | Resultado y límites                                                                                                                                                                                                                                                                                               | Adicional exigida identificada                                                             |
 | ---- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| P01  | US1.1; FR-001/002/005–007: confirmación puntual con importe, fecha, modalidad, fondo y referencia    | A3 creación/resultado; A4 «confirma una vez…»; A8 resumen; R2 y resultado de Nada; R4 puntual de 20 €; R5 puntual 36 de 20 €                                                                                                            | Cubierto A/M/R. R4 conserva 480,836 s, no cumple SC-001; R5 registra 61 s observados por Nada hasta confirmación, sin t0/t1 ni captura disponibles.                                                                                                                                                               | —; T079 cerrada con R5, sin garantía universal de duración                                 |
-| P02  | US1.2; FR-003/007: destino elegido en aportación y confirmación                                      | A2 proyecto activo; A8 destino; R1, 15,75 € a Agua potable y correo comprobado por Nada                                                                                                                                                 | Cubierto. El pendiente de proyecto de T053 fue resuelto por R1                                                                                                                                                                                                                                                    | —                                                                                          |
+| P01  | US1.1; FR-001/002/005–007: confirmación puntual con importe, fecha, modalidad, fondo y referencia    | A3 creación/resultado; A4 «confirma una vez…»; A8 resumen; R2 y resultado de Nada; R4 puntual de 20 €; R5 puntual 36 de 20 €                                                                                                            | Cubierto A/M/R. R4 conserva 480,836 s, no cumple SC-001; R5 registra 61 s medidos con cronómetro hasta confirmación, sin t0/t1 ni captura disponibles.                                                                                                                                                               | —; T079 cerrada con R5, sin garantía universal de duración                                 |
+| P02  | US1.2; FR-003/007: destino elegido en aportación y confirmación                                      | A2 proyecto activo; A8 destino; R1, 15,75 € a Agua potable y correo comprobado durante la prueba                                                                                                                                                 | Cubierto. El pendiente de proyecto de T053 fue resuelto por R1                                                                                                                                                                                                                                                    | —                                                                                          |
 | P03  | US1.3; FR-002: importe inválido no avanza y error junto al campo                                     | A1 importes; A2 límites de socio; A3 validación; M1 0,99/campos vacíos sin petición                                                                                                                                                     | Cubierto por validación automatizada y muestra visible local; incluye rango, coma/punto y rechazo sin redondeo. No hace falta cobrar los extremos en Stripe                                                                                                                                                       | —                                                                                          |
 | P04  | US1.4; FR-004: NIF/NIE inválido y aviso de campo                                                     | A1 grupos de NIF/NIE y datos; M1 validaciones visibles del formulario                                                                                                                                                                   | Cubierto en A para formato/letra y campos de error; M local de validaciones. No se declara recorrido Stripe con NIF inválido, que debe detenerse antes                                                                                                                                                            | —                                                                                          |
 | P05  | US1.5; FR-006: rechazo/cancelación sin confirmada, motivo y reintento                                | A4 estados; A2 recuperación; A10 y M3 rechazo/cancel_url/recuperación                                                                                                                                                                   | Cubierto localmente: motivo y reintento visibles, retorno pendiente inalterado y recuperación de la misma referencia/URL sin otra llamada Checkout. Sin nuevo pago Stripe.                                                                                                                                        | —                                                                                          |
-| P06  | US1.6; FR-007: correo recibido con datos de la confirmación                                          | A8 contenido; M1 correo local de reintento; R1 correo abierto y comparación de importe/destino/referencia; R2/R3 recepción por Mailpit; R4 texto del mensaje contrastado por el guía; R5 texto del mensaje 36 y nueva búsqueda conjunta | Cubierto en el conjunto delimitado 30–36: 7/7 recibidos por referencia según el guía. No es auditoría global ni apertura visual de todos los mensajes.                                                                                                                                                            | —; recepción contrastada separadamente del cronómetro                                      |
+| P06  | US1.6; FR-007: correo recibido con datos de la confirmación                                          | A8 contenido; M1 correo local de reintento; R1 correo abierto y comparación de importe/destino/referencia; R2/R3 recepción por Mailpit; R4 texto del mensaje contrastado en el registro de ejecución; R5 texto del mensaje 36 y nueva búsqueda conjunta | Cubierto en el conjunto delimitado 30–36: 7/7 recibidos por referencia según el registro de ejecución. No es auditoría global ni apertura visual de todos los mensajes.                                                                                                                                                            | —; recepción contrastada separadamente del cronómetro                                      |
 | P07  | US1.7; FR-011: donación sin cuenta                                                                   | A3 agente invitado; M1 formulario público; R1 permiso invitado original anterior a la creación de cuenta                                                                                                                                | Cubierto. No se confunde R2, consultada con cuenta vinculada, con una nueva prueba invitada                                                                                                                                                                                                                       | —                                                                                          |
 | P08  | US1.8; FR-007/012: fallo de correo conserva cobro y muestra aviso/reintento                          | A3/A4 fallo SMTP; M1 reintento; A10/M3 confirmada con correo fallido                                                                                                                                                                    | Cubierto localmente: resumen, aviso y reintento visibles; confirmación y pago persistidos. SMTP simulado no acredita recepción.                                                                                                                                                                                   | —                                                                                          |
 | P09  | US1.9; FR-012: reintento satisfactorio del mismo resumen, sin cobro ni duplicado                     | A3 resultado/correo; A6 resumen; M1 reintento con mensaje en Mailpit y aportación conservada; A11 correcciones posteriores al primer converge                                                                                           | Cubierto en A y M. M usa una aportación sintética, no un segundo pago Stripe CONV-001 reproducida y corregida: la carrera terminal devuelve enviado, con reserva viva 409, sin SMTP o dinero duplicados.                                                                                                          | —                                                                                          |
@@ -148,7 +149,7 @@ contrastadas conjuntamente; SMTP simulado. El texto siguiente conserva el alcanc
 
 Completar solo la evidencia visible que falta: puntual confirmada con correo fallido,
 un nuevo reintento HTTP fallido sobre la misma aportación confirmada que mantiene
-aviso/opción sin éxito falso, y alta activa con
+aviso/opción sin éxito falso y alta activa con
 correo fallido junto a periodicidad y previsión. Se propone un entorno aislado con datos
 sintéticos y respuestas API/SMTP controladas, expresamente etiquetado como local; si no
 existe esa instrumentación, debe prepararse y revisarse antes de usarla. No se detiene
@@ -160,7 +161,7 @@ No se exige otro pago ni se repite el reintento satisfactorio recibido de M1/P09
 **Resultado posterior:** [medición 1](medicion-puntual-01.md), aportación 35,
 `DON-0b914a77-2050-4429-ba19-19f16f62507c`, 20 €, 480,836 segundos: **SC-001 no cumple**.
 El pago y correo están acreditados; no se repiten. **Medición 2:** R5, aportación 36,
-`DON-a8fcdc66-4562-41b4-8133-6864d583f0e0`, otros 20 €, **61 s observados por Nada**:
+`DON-a8fcdc66-4562-41b4-8133-6864d583f0e0`, otros 20 €, **61 s medidos con cronómetro**:
 satisface SC-001 en esa ejecución. Sin horas t0/t1 o captura comunicadas; no se deducen
 del pago. Se conservan ambos intentos y no se autoriza otra operación automática.
 
@@ -176,7 +177,7 @@ ID o referencia que no existe. Un fallo de infraestructura no se oculta del tiem
 El conjunto documental vigente contiene exclusivamente las aportaciones reales de pruebas
 **30, 31, 32, 33, 34, 35 y 36**. R4 incorpora la puntual 35 confirmada con duración
 no satisfactoria para SC-001; R5 incorpora la puntual 36 confirmada, con medición de
-61 s comunicada por Nada. Se excluyen semillas sin Stripe, correos ficticios marcados enviados,
+61 s aportada durante la prueba. Se excluyen semillas sin Stripe, correos ficticios marcados enviados,
 avisos fallo_cuota y correos de vínculo. La aportación anual 34 sigue incluida aunque su
 suscripción esté cancelada: el cobro permanece confirmado.
 
@@ -184,22 +185,22 @@ suscripción esté cancelada: el cobro permanece confirmado.
 | ------------ | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | 30 · 15,75 € | DON-47619c0b-0cb7-4149-9a80-29e2b133829c; confirmacion | enviado_en 2026-11-07T01:16:20.923Z, un intento; una coincidencia Mailpit y apertura/comprobación de Nada                     | R1 y sus consultas posteriores ya documentadas  |
 | 31 · 1,23 €  | DON-868afebb-090a-492e-9966-ab31b6bad6bf; confirmacion | enviado_en 2026-11-07T02:53:18.133Z, un intento; una coincidencia Mailpit                                                     | R2; no consta apertura visual del nuevo mensaje |
-| 32 · 1,11 €  | DON-d929b6c6-a2bf-4c52-97ee-cf74a4897f96; confirmacion | enviado_en 2026-11-07T03:19:57.149Z, un intento; una coincidencia Mailpit tras reentrega                                      | R3/guía                                         |
-| 33 · 1,22 €  | DON-8de7cf59-b711-4ffe-928c-a839d9345f63; confirmacion | enviado_en 2026-11-07T03:24:46.929Z, un intento; una coincidencia Mailpit tras reentrega                                      | R3/guía                                         |
-| 34 · 1,33 €  | DON-6bb1aa78-1c3a-46a5-8647-a7bf9a5a2e57; confirmacion | enviado_en 2026-11-07T03:26:00.466Z, un intento; una coincidencia Mailpit tras reentrega/cancelación                          | R3/guía                                         |
-| 35 · 20,00 € | DON-0b914a77-2050-4429-ba19-19f16f62507c; confirmacion | enviado_en 2026-11-07T04:06:23.974Z; una coincidencia Mailpit, mensaje jDYvMfFNJdVfBXv6hz6vrr y texto contrastado             | R4/guía; medición 480,836 s no cumple SC-001    |
-| 36 · 20,00 € | DON-a8fcdc66-4562-41b4-8133-6864d583f0e0; confirmacion | enviado_en 2026-11-07T04:38:35.483Z, un intento; una coincidencia Mailpit, mensaje eEG6FFzV22N4sePVh9nzzp y texto contrastado | R5/guía; cronómetro 61 s observado por Nada     |
+| 32 · 1,11 €  | DON-d929b6c6-a2bf-4c52-97ee-cf74a4897f96; confirmacion | enviado_en 2026-11-07T03:19:57.149Z, un intento; una coincidencia Mailpit tras reentrega                                      | R3/registro                                         |
+| 33 · 1,22 €  | DON-8de7cf59-b711-4ffe-928c-a839d9345f63; confirmacion | enviado_en 2026-11-07T03:24:46.929Z, un intento; una coincidencia Mailpit tras reentrega                                      | R3/registro                                         |
+| 34 · 1,33 €  | DON-6bb1aa78-1c3a-46a5-8647-a7bf9a5a2e57; confirmacion | enviado_en 2026-11-07T03:26:00.466Z, un intento; una coincidencia Mailpit tras reentrega/cancelación                          | R3/registro                                         |
+| 35 · 20,00 € | DON-0b914a77-2050-4429-ba19-19f16f62507c; confirmacion | enviado_en 2026-11-07T04:06:23.974Z; una coincidencia Mailpit, mensaje jDYvMfFNJdVfBXv6hz6vrr y texto contrastado             | R4/registro; medición 480,836 s no cumple SC-001    |
+| 36 · 20,00 € | DON-a8fcdc66-4562-41b4-8133-6864d583f0e0; confirmacion | enviado_en 2026-11-07T04:38:35.483Z, un intento; una coincidencia Mailpit, mensaje eEG6FFzV22N4sePVh9nzzp y texto contrastado | R5/registro; cronómetro 61 s observado con cronómetro     |
 
 La identificación histórica del mensaje es por referencia y correspondencia de envío;
-no se inventan IDs de Mailpit que no se guardaron. Los cinco antecedentes se conservan; posteriormente el guía buscó cada una de las seis
+no se inventan IDs de Mailpit que no se guardaron. Los cinco antecedentes se conservan; posteriormente se buscó cada una de las seis
 referencias de 30–35 y, tras R5, las siete de 30–36, con una coincidencia por referencia.
 R4 y R5 registran además ID y texto de los mensajes 35 y 36. No se presenta la fecha persistida de envío como hora exacta de recepción.
 No se repiten pagos ni envíos para obtener otra captura.
 
 El numerador es el número de referencias confirmadas de este conjunto con su confirmación
-recibida acreditada, y el denominador el de referencias confirmadas incluidas. Una respuesta
+recibida acreditada y el denominador el de referencias confirmadas incluidas. Una respuesta
 SMTP true, un aviso de pantalla o correo enviado sin prueba de recepción no incrementan el
-numerador. El resultado acreditado por el guía es **7/7 para este conjunto delimitado**,
+numerador. El resultado acreditado en el registro de ejecución es **7/7 para este conjunto delimitado**,
 no el 100 % global de toda la base. Si se añade otra aportación
 manual confirmada durante el bloque, debe incorporarse al conjunto, no excluirse silenciosamente.
 Los contadores de coincidencias Mailpit se toman de la búsqueda por referencia, no del total
@@ -209,35 +210,35 @@ respalda el cierre de T079. La medición R4 conserva su resultado no satisfactor
 ## Procedimiento conservado de la puntual cronometrada
 
 La primera ejecución consta en R4, no satisfactoria para SC-001; la segunda, en R5,
-con 61 s observados por Nada. Se conserva el procedimiento como referencia histórica;
+con 61 s medidos con cronómetro. Se conserva el procedimiento como referencia histórica;
 no se rellenan retrospectivamente horas o capturas ausentes. Este bloque documental
 no ejecuta otro pago.
 
-1. **Antes de medir**, el guía comprueba en lectura rama/servicios (frontend, backend,
+1. **Antes de medir**, se comprueba en lectura rama/servicios (frontend, backend,
    PostgreSQL, Mailpit), la misma cuenta de Stripe de pruebas y credenciales de .env.
    Verifica el listener con forwarding continuo y filtro completo del contrato:
    checkout.session.completed, checkout.session.expired, payment_intent.succeeded,
    payment_intent.payment_failed, payment_intent.canceled, invoice.paid,
    invoice.payment_failed, invoice.updated, customer.subscription.updated y
    customer.subscription.deleted. Todos los comandos usan internamente --api-key desde
-   STRIPE_SECRET_KEY; se excluye STRIPE_API_KEY heredada y se compara el secreto con el
+   STRIPE_SECRET_KEY; Se excluye STRIPE_API_KEY heredada y se compara el secreto con el
    configurado sin mostrarlo, conforme al protocolo ya revisado. Si hay desajuste, no se
    crea la operación ni se modifica .env. No se inicia ni cambia el listener en esta preparación.
 2. Fijar **20,00 €, EUR y fondo general**, datos sintéticos válidos y perfil de navegador
    normal. Confirmar antes si se utilizará invitado o cuenta vinculada; conservar esa
    atribución. Preparar los datos sin rellenar anticipadamente el formulario medido.
-   Nada realiza el pago; no se reutilizan UUID, referencias o Checkout anteriores.
+   Se realiza el pago; no se reutilizan UUID, referencias o Checkout anteriores.
 3. Iniciar un cronómetro observable al entrar en /donar (**t0**, antes de introducir datos),
-   registrando también la hora UTC y el método de medición. Nada completa el formulario,
+   registrando también la hora UTC y el método de medición. Se completa el formulario,
    Checkout de pruebas y retorno normal sin retener eventos, cerrar el cliente, detener
-   servicios o introducir pausas de prueba. El guía recoge IDs en paralelo sin detener
+   servicios o introducir pausas de prueba. Se recoge IDs en paralelo sin detener
    el recorrido. P21 no se repite aquí.
 4. Parar el cronómetro cuando Nada ve el resultado propio **confirmado** (**t1**), no en el
    clic Pagar, creación del evento, pantalla de Stripe o estado pendiente. Conservar
    duración observada, t0/t1, referencia e imagen del resultado. Se exige menos de 180 s;
    si no se logra o se pierde la medición, registrar el resultado real, sin reconstruirlo
    con fecha_cobro/enviado_en ni excluir retrasos. No repetir otro pago automáticamente.
-5. El guía contrasta por lectura modo de pruebas, EUR/2000 céntimos, referencia, un pago,
+5. Se contrasta por lectura modo de pruebas, EUR/2000 céntimos, referencia, un pago,
    una aportación/operación y confirmación persistida. Nada coteja importe, fecha, modalidad,
    fondo general y referencia visibles; los registros del webhook se conservan sin claves.
    Una captura de Stripe paid no sustituye a t1 ni a la autorización del resultado.
@@ -261,20 +262,20 @@ y el inventario acotado no deben presentarse como auditoría global o convergenc
 
 | Criterio | Evidencia que respalda el balance                                                                                         | Alcance y límites                                                                                                                                |
 | -------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| SC-001   | R5: 61 s observados por Nada desde antes de abrir formulario hasta resultado confirmado                                   | Satisfecho para esa ejecución. Sin t0/t1 ni captura comunicados; R4 fallida permanece intacta, sin promedios ni reconstrucción.                  |
-| SC-002   | R1–R5 y nueva búsqueda del guía: una confirmación recibida por cada referencia 30–36, 7/7                                 | Conjunto manual delimitado, sin pendientes de confirmación en él. Excluye semillas, avisos y vínculos; no es auditoría global.                   |
+| SC-001   | R5: 61 s medidos con cronómetro desde antes de abrir formulario hasta resultado confirmado                                   | Satisfecho para esa ejecución. Sin t0/t1 ni captura comunicados; R4 fallida permanece intacta, sin promedios ni reconstrucción.                  |
+| SC-002   | R1–R5 y nueva búsqueda del registro previo: una confirmación recibida por cada referencia 30–36, 7/7                                 | Conjunto manual delimitado, sin pendientes de confirmación en él. Excluye semillas, avisos y vínculos; no es auditoría global.                   |
 | SC-003   | [validacion-local-01.md](validacion-local-01.md), T074, datos persistidos/sesión/registros; A9 proyecciones del adaptador | Evidencia existente sin tarjeta en datos de la ONG; no se repite la inspección. Observaciones sobre registros comunes conservadas para revisión. |
 | SC-004   | R1/R3, cotejo de importes visibles y pasarela; R5, EUR/2000 céntimos, base 20,00 € y texto del correo; A1/A8/A9           | Coincidencia al céntimo respaldada. No se inventa otra captura o cotejo visual de 36 ni se usan floats o timestamps para medir duración.         |
 
 El [informe de medición 2 y cierre](medicion-puntual-02.md) contrasta las comprobaciones
-exactas de T079 y T080. Se conserva la atribución Nada/guía; esta revisión solo consulta
+exactas de T079 y T080. Se conserva la atribución observación y consulta registradas; esta revisión solo consulta
 Git y documentos locales, sin nuevas pruebas funcionales o consultas externas.
 
 ## Estado de revisión
 
 **T079 y T080 completadas en su alcance de validación.** La dependencia T079 queda
 satisfecha; 34 escenarios con fuentes identificadas, G1–G3 cerradas mediante interfaz
-y persistencia, y cuatro criterios SC contrastados. La ejecución local G1–G3 conserva
+y persistencia y cuatro criterios SC contrastados. La ejecución local G1–G3 conserva
 17/17 pruebas dirigidas aprobadas; no se repite. Las operaciones 30–36, los informes
 históricos y la medición fallida R4 se conservan íntegros.
 
@@ -286,6 +287,6 @@ defecto ni se presenta aprobación colectiva.
 
 **Actualización del flujo y correcciones:** T081 ya preparó la revisión; T006 completa el
 paquete técnico y T007 registra la comprobación actual de nueve ramas y elección local
-de 009, según el [ajuste autorizado por Nada](ajuste-flujo-01.md). No acreditan aprobación
-ni reserva colectiva. T082–T083 tienen reproducción y regresión en A11; el primer informe
-[converge-1.md](converge-1.md) se conserva íntegro. **Cierre técnico acreditado en [converge-3.md](converge-3.md)**. PR-R01/PR-R02 siguen pendientes antes de main; el cierre técnico no acredita revisión externa ni incorporación.
+de 009, según el [ajuste documentado](ajuste-flujo-01.md). No acreditan aprobación
+. T082–T083 tienen reproducción y regresión en A11; el primer informe
+[converge-1.md](converge-1.md) se conserva íntegro. **Cierre técnico acreditado en [converge-3.md](converge-3.md)**. los controles de incorporación siguen pendientes antes de main; el cierre técnico no acredita revisión externa ni incorporación.

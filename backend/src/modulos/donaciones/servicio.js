@@ -1,7 +1,8 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
+import { z } from 'zod';
 import { config } from '../../config.js';
 import { ErrorApi } from '../../middleware/errores.js';
-import { aIsoMadrid, ahora, ZONA } from '../../servicios-comunes/fechas.js';
+import { aIsoMadrid, ahora, rangoAnio, ZONA } from '../../servicios-comunes/fechas.js';
 import { normalizarDonante, normalizarImporte } from './normalizacion.js';
 import {
   autorizarAportacion,
@@ -21,6 +22,14 @@ const TIPOS_FACTURA = ['invoice.paid', 'invoice.payment_failed', 'invoice.update
 const TIPOS_SUSCRIPCION = ['customer.subscription.updated', 'customer.subscription.deleted'];
 // Solo avisos snapshot de estas dos versiones; los recursos de negocio se consultan en acacia.
 const VERSIONES_EVENTO = new Set(['2025-02-24.acacia', '2026-10-28.endive']);
+const filtroHistorial = z
+  .object({
+    anio: z
+      .string()
+      .regex(/^[1-9][0-9]{3}$/, 'Introduce un año de cuatro cifras entre 1000 y 9999.')
+      .optional(),
+  })
+  .strict();
 const diaMadrid = (fecha) =>
   new Intl.DateTimeFormat('en-CA', {
     timeZone: ZONA,
@@ -143,6 +152,34 @@ export function crearServicio({ pool, pasarela, enviarCorreo }) {
   }
   return {
     repo,
+    async historial(req, query = {}) {
+      if (!req.usuario) throw new ErrorApi(401, 'NO_IDENTIFICADO', 'Inicia sesión para continuar.');
+      if (!req.usuario.roles.includes('donante'))
+        throw new ErrorApi(403, 'SIN_PERMISO', 'No tienes permiso para realizar esta acción.');
+      const filtro = filtroHistorial.parse(query);
+      const filtroAnio = filtro.anio === undefined ? null : Number(filtro.anio);
+      const lectura = await repo.historialDeUsuario(
+        req.usuario.id,
+        filtroAnio === null ? null : rangoAnio(filtroAnio),
+      );
+      const base = {
+        vinculado: lectura.vinculado,
+        filtroAnio,
+        hayAportaciones: lectura.vinculado ? lectura.resumenes.length > 0 : null,
+        aniosDisponibles: lectura.resumenes.map((x) => x.anio),
+        datos: [],
+        total: lectura.aportaciones.length,
+      };
+      const grupos = new Map(
+        lectura.resumenes
+          .filter((x) => filtroAnio === null || x.anio === filtroAnio)
+          .map((x) => [x.anio, { ...x, aportaciones: [] }]),
+      );
+      for (const { anio, fechaCobro, ...aportacion } of lectura.aportaciones) {
+        grupos.get(anio).aportaciones.push({ ...aportacion, fechaCobro: aIsoMadrid(fechaCobro) });
+      }
+      return { ...base, datos: [...grupos.values()] };
+    },
     async contexto(req) {
       return {
         ...(await prepararContextoDonaciones(req)),

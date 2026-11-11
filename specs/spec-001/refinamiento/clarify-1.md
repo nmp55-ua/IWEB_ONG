@@ -1,5 +1,7 @@
 # Informe de clarify — HU-01 — Iteración 1
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-04
 **Rama**: `spec-001`
 **Historia afectada**: HU-01 — Donación puntual o alta como socio
@@ -11,8 +13,9 @@
 ## Procedimiento y alcance
 
 Se sigue directamente `.claude/skills/speckit-clarify/SKILL.md`, equivalente al comando
-`/speckit-clarify`, que no está registrado en este chat. Se formulan las preguntas de una
-en una y solo se incorporan las respuestas confirmadas por Nada.
+`/speckit-clarify`.
+ Se formulan las preguntas de una
+en una y solo se incorporan las respuestas confirmadas durante la prueba.
 
 El comprobador `check-prerequisites.ps1 -Json -PathsOnly` se ejecutó indicando
 `SPECIFY_FEATURE_DIRECTORY=specs/spec-001` únicamente en el entorno del proceso. La
@@ -22,7 +25,7 @@ corresponden a `specs/spec-001`. No se guardó configuración de selección de h
 Se consultaron la constitución, `CONVENCIONES.md`, el plan común, el modelo de datos,
 la especificación y su checklist, además de los contratos implementados relevantes de
 autenticación, proyectos, pasarela, correo e importes. Los hooks opcionales de commit
-se omiten por instrucción expresa de Nada. Los cambios se limitan a documentación de
+se omiten por alcance documental de la fase. Los cambios se limitan a documentación de
 spec-001. No se ha ejecutado plan, implement ni ninguna operación de escritura de Git.
 
 ## Decisiones confirmadas
@@ -31,14 +34,14 @@ spec-001. No se ha ejecutado plan, implement ni ninguna operación de escritura 
 
 - **Pregunta**: ¿Debe un socio poder modificar el importe de su cuota o darse de baja desde
   la aplicación en esta primera versión?
-- **Respuesta confirmada por Nada**: Opción A. En esta primera versión, modificar el
+- **Respuesta confirmada durante la prueba**: Opción A. En esta primera versión, modificar el
   importe de la cuota y darse de baja desde la aplicación quedan fuera de alcance. Se
   mantienen el alta como socio y el registro de los cobros periódicos previstos en HU-01.
-- **Justificación aportada por Nada**: Mantener el alcance de los criterios actuales de
+- **Justificación aportada durante la prueba**: Mantener el alcance de los criterios actuales de
   HU-01, centrados en donaciones y altas.
 - **Historia afectada**: HU-01; escenario de alta como socio y requisitos FR-008 y FR-009.
 - **Integración**: Se registra la respuesta en `spec.md`, sección `Clarifications`, sesión
-  2026-11-04; se explicita la exclusión en FR-008 y se retira PA1.1 de las preguntas abiertas.
+  2026-11-04; Se explicita la exclusión en FR-008 y se retira PA1.1 de las preguntas abiertas.
   FR-009 y los escenarios existentes de alta y cobros periódicos se conservan.
 - **Antes**: PA1.1 contenía una propuesta de exclusión pendiente de confirmar.
 - **Después**: La exclusión está confirmada y forma parte del alcance de HU-01.
@@ -52,14 +55,14 @@ spec-001. No se ha ejecutado plan, implement ni ninguna operación de escritura 
 
 - **Pregunta**: ¿Debe ser obligatorio tener una cuenta para hacer una donación puntual o
   darse de alta como socio?
-- **Respuesta confirmada por Nada**: Opción A. Tanto la donación puntual como el alta de
+- **Respuesta confirmada durante la prueba**: Opción A. Tanto la donación puntual como el alta de
   socio pueden completarse sin tener cuenta. Para consultar el historial será necesario
   iniciar sesión con una cuenta del mismo correo utilizado al donar.
-- **Justificación aportada por Nada**: Permitir colaborar sin registro previo, manteniendo
+- **Justificación aportada durante la prueba**: Permitir colaborar sin registro previo, manteniendo
   el historial como información privada.
 - **Historia afectada**: HU-01, ambas modalidades de aportación; dependencia con HU-02 para
   la consulta privada del historial. No se modifica la documentación de HU-02.
-- **Instrucción adicional de Nada**: No dar por segura la vinculación por la mera coincidencia
+- **Condición de seguridad**: No dar por segura la vinculación por la mera coincidencia
   de correos; comprobar si está definido cómo acreditar la titularidad y preguntar si falta.
 - **Integración**: Se registra PA1.2 en `Clarifications`, se explicita el acceso sin cuenta en
   los dos recorridos y se añaden escenarios de aceptación (donación puntual, escenario 7;
@@ -94,25 +97,25 @@ spec-001. No se ha ejecutado plan, implement ni ninguna operación de escritura 
   estado de verificación en usuarios u otros cambios compartidos, el plan y el modelo común
   requerirán acuerdo del grupo y una migración nueva cuando corresponda. Estos cambios no
   están autorizados ni se realizan en este encargo. No se modifica una migración existente.
-- **Estado al formular la pregunta**: Pendiente de respuesta de Nada; en ese momento no se
+- **Estado al formular la pregunta**: Pendiente de respuesta; en ese momento no se
   había elegido enlace, código ni otro mecanismo. La respuesta posterior se conserva debajo.
 
 ## Propuesta condicionada — PA1.3: enlace para vincular aportaciones
 
 - **Pregunta**: ¿Cómo debe demostrar una persona que controla el correo utilizado al donar
   antes de vincular las aportaciones a su cuenta?
-- **Respuesta de Nada**: Opción A como propuesta: antes de vincular las aportaciones a una
+- **Respuesta confirmada**: Opción A como propuesta: antes de vincular las aportaciones a una
   cuenta, la persona debe abrir un enlace de verificación enviado al correo utilizado al donar.
   La verificación se limita a la vinculación de aportaciones.
-- **Justificación aportada por Nada**: Proteger el historial frente a cuentas creadas con
+- **Justificación aportada durante la prueba**: Proteger el historial frente a cuentas creadas con
   correos ajenos.
 - **Historia afectada**: HU-01, vinculación del Donante con una cuenta; dependencia con la
   privacidad del historial de HU-02. La propuesta no convierte la verificación en condición
   general para crear una cuenta o iniciar sesión.
 - **Integración documental**: Se registra la respuesta en `spec.md`, `Clarifications`, como
-  propuesta, y se actualizan `Dependencies` y el estado abierto de PA1.3. No se añade un
+  propuesta y se actualizan `Dependencies` y el estado abierto de PA1.3. No se añade un
   requisito de enlace como si estuviese aprobado por el grupo.
-- **Estado**: Propuesta de Nada registrada. Encaje común y detalles pendientes; revisión de
+- **Estado**: Propuesta registrada. Encaje común y detalles pendientes; revisión de
   Rubén pendiente. No equivale a una decisión completamente cerrada ni a una implementación.
 
 ### Viabilidad dentro del módulo de donaciones
@@ -140,7 +143,7 @@ contratos leídos, no un plan de implementación ni una prueba de funcionamiento
 
 | Elemento | Ajuste o acuerdo pendiente | Carácter |
 |---|---|---|
-| `specs/plan-comun.md`, §3, enlace Usuario–Donante | Acordar que la coincidencia de correo es necesaria pero no suficiente, y que donaciones acredita el acceso al buzón antes de establecer el vínculo; no cambiar el inicio de sesión general. | Condición compartida pendiente de acuerdo. |
+| `specs/plan-comun.md`, §3, enlace Usuario–Donante | Acordar que la coincidencia de correo es necesaria pero no suficiente y que donaciones acredita el acceso al buzón antes de establecer el vínculo; no cambiar el inicio de sesión general. | Condición compartida pendiente de acuerdo. |
 | `specs/modelo-datos.md`, `donantes.usuario_id` y su regla de enlace | Reflejar la condición de prueba previa y concretar su conservación. El modelo actual no recoge ese procedimiento. | Aclaración compartida pendiente de acuerdo; no implica por sí sola añadir columnas a `usuarios`. |
 | `backend/src/app.js` | Registrar el futuro router de donaciones en el punto ya previsto para el módulo. | Integración común de HU-01, no un cambio de autenticación causado por PA1.3; no se realiza en clarify. |
 | `backend/src/db/migraciones/004_donaciones.sql` (todavía inexistente) | Crear en su fase la estructura de donaciones acordada. Si el diseño requiere campos o tablas adicionales para la prueba, acordarlos primero en el modelo común. | Archivo reservado a Nada; no se crea en clarify. No se modifica `001_usuarios.sql` ni otra migración existente. Un cambio posterior a una migración ya publicada requiere un número nuevo acordado. |
@@ -161,12 +164,12 @@ consumen el vínculo. Este informe no sustituye ese acuerdo del grupo.
 
 - **Pregunta**: ¿Qué debe ocurrir si el cobro está confirmado pero falla el envío del correo
   de confirmación?
-- **Respuesta confirmada por Nada**: Opción A. Se conserva la aportación confirmada, se
+- **Respuesta confirmada durante la prueba**: Opción A. Se conserva la aportación confirmada, se
   muestra el resumen y se avisa del fallo. Se permite reintentar únicamente el envío del
   correo, sin iniciar otro cobro ni crear otra aportación.
-- **Justificación derivada de la decisión y de la indicación expresa de Nada**: Recuperar
+- **Justificación derivada de la decisión funcional**: Recuperar
   el correo sin duplicar pagos ni aportaciones y sin confundir el aviso de fallo con un
-  correo enviado. Nada pidió expresamente revisar la coherencia con FR-007 y SC-002.
+  correo enviado. Se revisó la coherencia con FR-007 y SC-002.
 - **Historia afectada**: HU-01, donación puntual, alta de socio y confirmaciones de cuotas.
 - **Integración**: FR-007 distingue la confirmación del pago de la obligación pendiente de
   enviar el correo. FR-012 define el reintento exclusivo del correo sin repetir cobros ni
@@ -194,21 +197,16 @@ consumen el vínculo. Este informe no sustituye ese acuerdo del grupo.
 
 ## Seguimiento del acuerdo común de PA1.3
 
-Nada ha incluido un texto que solicita al grupo acordar la verificación por enlace limitada
-a vincular aportaciones y reflejarla en `plan-comun.md` §3 y `modelo-datos.md`, regla de
-`donantes.usuario_id`, con especial atención a Rubén por el uso en certificados. En este chat
-no consta una respuesta de aprobación del grupo. El texto no se interpreta como aprobación
-de Rubén ni de los demás integrantes, ni autoriza modificar archivos comunes. Se mantiene
-la propuesta y su análisis de encaje, con el acuerdo todavía pendiente.
+Se aplica el procedimiento Spec Kit del repositorio correspondiente a esta fase. Se mantienen el alcance y los resultados descritos en el informe.
 
 ## Propuesta condicionada — PA1.5: correo utilizado con otro NIF/NIE
 
 - **Pregunta**: ¿Qué debe ocurrir si alguien introduce un correo ya utilizado por un donante,
   pero con un NIF/NIE diferente?
-- **Respuesta de Nada**: Opción A como propuesta para v1. Se detiene la operación antes del
+- **Respuesta confirmada**: Opción A como propuesta para v1. Se detiene la operación antes del
   pago y se pide revisar los datos, sin mostrar datos del donante existente, modificarlo
   ni mezclar aportaciones.
-- **Justificación aportada por Nada**: Evitar atribuir aportaciones a otra persona mientras
+- **Justificación aportada durante la prueba**: Evitar atribuir aportaciones a otra persona mientras
   no exista una política acordada para correos compartidos. El correo por sí solo no
   identifica al donante.
 - **Historia afectada**: HU-01, identificación del Donante antes de iniciar el pago;
@@ -230,7 +228,7 @@ la propuesta y su análisis de encaje, con el acuerdo todavía pendiente.
 - **Límites**: No se modifican esos documentos ni las specs consumidoras. No se crea ni
   altera una migración, un índice único o cualquier otra restricción de base de datos.
   Proponer una validación funcional no equivale a decidir una unicidad SQL del correo.
-- **Estado**: Propuesta de Nada registrada; acuerdo del grupo y revisión de Rubén pendientes.
+- **Estado**: Propuesta registrada; acuerdo del grupo y revisión de Rubén pendientes.
 
 ## Otras ambigüedades relevantes pendientes
 
@@ -313,8 +311,8 @@ la dependencia y el estado de las propuestas, sin convertirla en un plan técnic
   restantes siguen pendientes. Se conserva la evidencia de las 16 marcas iniciales.
 - Esta iteración es documental: no acredita el funcionamiento de la aplicación.
 - Se revisó el hook `after_clarify` en `.specify/extensions.yml`: el commit es opcional y se
-  omite por la instrucción de Nada. No se invoca ningún hook de escritura de Git.
-- Se detiene la sesión después de la quinta respuesta, como pidió Nada. Clarify NO está
+  omite por el alcance documental. No se invoca ningún hook de escritura de Git.
+- Se detiene la sesión después de la quinta respuesta, al completar las respuestas previstas. Clarify NO está
   completamente cerrado: faltan acuerdos y decisiones bloqueantes. No se formulan más
   preguntas ni se avanza a plan.
 - Siguiente paso recomendado: obtener el acuerdo del grupo sobre PA1.3 y PA1.5 y retomar

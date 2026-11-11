@@ -1,0 +1,3 @@
+Después de recuperar la traza inválida del segundo intento y verificar el contenido accesible real, la captura solicitada con fullPage:true falló:
+Timed out running CDP command "Page.captureScreenshot" for tab 3
+No se obtuvo ni se presenta una captura de ese segundo intento. La captura del primer intento se conserva independientemente.

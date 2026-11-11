@@ -1,5 +1,7 @@
 # Plan técnico de HU-01 — Donación puntual y alta como socio
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Rama**: `spec-001` · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Estado**: Implementación, validación y preparación de revisión documentadas; correcciones
@@ -81,7 +83,7 @@ frontend/src/pages/donar/
 frontend/src/components/donaciones/
   FormDonacion.jsx  ResultadoDonacion.jsx  VincularDonante.jsx
 backend/src/db/migraciones/004_donaciones.sql
-backend/src/db/migraciones/009_operativa_donaciones.sql (provisional)
+backend/src/db/migraciones/009_operativa_donaciones.sql
 backend/src/db/semillas/donaciones.js
 ```
 
@@ -99,7 +101,7 @@ en el webhook, según P-02. No se alteran autenticación, roles ni cookies comun
    tarjeta, contraseña ni información adicional del donante.
 2. El servidor normaliza y compara los datos según R-03 de [research.md](research.md).
    Serializa las altas por NIF/NIE y correo; rechaza conflictos antes de preparar Checkout.
-3. En transacción crea o reutiliza al Donante sin sobrescribir datos, y crea aportación,
+3. En transacción crea o reutiliza al Donante sin sobrescribir datos y crea aportación,
    operación y, si procede, suscripción pendiente. La envoltura prepara una sola vez
    solicitud_checkout y se guarda inmutable con la huella. Fondo general es proyecto_id NULL.
 4. Guarda y confirma la sesión de navegador con el permiso de esa operación antes de
@@ -136,7 +138,7 @@ transiciones en el modelo común de esta rama. No se resuelve creando una segund
 El primer cobro confirmado activa el alta solo si no existe una cancelación definitiva de
 pasarela. Una factura antigua pagada después de una cancelación se registra como aportación,
 pero no reactiva una suscripción cancelada. Las cuotas posteriores fallidas no suman ni
-cancelan por sí solas; se procesa una cancelación válida posterior. No se llama a operaciones
+cancelan por sí solas; Se procesa una cancelación válida posterior. No se llama a operaciones
 de pago, reintento de cargo o cancelación desde la aplicación.
 
 ### Consultar, vincular y reintentar correo
@@ -177,12 +179,8 @@ consumir aportaciones confirmadas antes de tener la interfaz o el procesamiento 
 
 Las cuatro tablas operativas ya están implementadas y validadas en
 `009_operativa_donaciones.sql`, dependiente solo de 004 y su base común, sin esperar
-006–008. **009 no está reservado colectivamente**: T007 registra su elección para esta
-rama tras comprobar las nueve cabezas publicadas. La comprobación y alcance constan en
-[ajuste-flujo-01.md](refinamiento/ajuste-flujo-01.md). Antes de main se resolverán los
-conflictos de numeración, considerando entornos ya migrados; la ausencia publicada no
-descarta trabajo sin publicar. 004 se conserva intacta; su creación y
-validación constan en el commit local 5291d31, sin atribuir publicación o aprobación.
+006–008. HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. La creación y validación de 004 constan en 5291d31.
+
 
 ## Validación y evidencias vigentes
 
@@ -199,8 +197,8 @@ el texto de respuesta. Las ejecuciones y límites constan en la
 [matriz vigente](refinamiento/matriz-validacion-01.md) y sus fuentes: regresión del módulo
 367/367, comprobación dirigida G1–G3 de 17/17 y pruebas reales comunicadas de Stripe.
 No se suman suites de fechas diferentes como una nueva ejecución conjunta.
-La [medición 2](refinamiento/medicion-puntual-02.md) registra 61 s observados por Nada y
-7/7 confirmaciones recibidas del conjunto 30–36, según el guía. Se conserva la medición 1
+La [medición 2](refinamiento/medicion-puntual-02.md) registra 61 s medidos con cronómetro y
+7/7 confirmaciones recibidas del conjunto 30–36, según el registro previo. Se conserva la medición 1
 fallida de 480,836 s. T079–T080 están documentadas; la revisión de Rubén no se ha realizado.
 
 ## Estado del diseño y revisión pendiente
@@ -210,21 +208,14 @@ pasarela; P-03 añade opciones de correo solo para HU-01, conservando las llamad
 P-04 fija tarjeta, EUR y rango de importe propio de la aplicación. No quedan decisiones de
 diseño identificadas sin resolver que impidan preparar el desglose en tareas.
 
-La revisión de Rubén y la incorporación de los cambios comunes siguen pendientes, según la
-constitución; el estado de esta rama no acredita un acuerdo colectivo. Funciones,
+La revisión y la incorporación de los cambios comunes se completaron con la PR #4. Funciones,
 migraciones, semillas y pruebas están implementadas en spec-001. P-05 conserva la
 preparación y las comprobaciones de T075–T076 en
 [preparacion-stripe-01.md](refinamiento/preparacion-stripe-01.md); T077–T078 y los informes
 de medición acreditan los recorridos reales realizados, sin afirmar los ciclos o fallos
 reales no ejecutados. Este plan actualizado no ejecuta pruebas ni modifica configuración.
 
-El [ajuste autorizado por Nada](refinamiento/ajuste-flujo-01.md) separa preparación técnica
-y controles de incorporación: T006/T007 no incluyen aprobación ni reserva colectiva.
-Rubén revisará el paquete completo en la PR antes de main; esto no bloquea terminar el
-desarrollo, preparar/abrir la PR o ejecutar el próximo converge autorizado. PR-R01/PR-R02
-siguen pendientes. Las [correcciones T082–T083](refinamiento/validacion-converge-01.md)
-resuelven los dos hallazgos del primer diagnóstico sin modificarlo; no sustituyen el
-converge posterior ni declaran cierre técnico.
+HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Las [correcciones T082–T083](refinamiento/validacion-converge-01.md) resuelven los dos hallazgos del primer diagnóstico; el cierre técnico consta en [converge-3.md](refinamiento/converge-3.md).
 
 Límites conocidos: no se recupera acceso directo invitado perdido; el enlace de donaciones
 no recupera cuentas reservadas con correo ajeno; SMTP puede duplicar un mensaje tras una
@@ -236,7 +227,7 @@ SC-002 no se cumple. Ninguno se presenta como resultado satisfactorio de pruebas
 Se utilizó la estructura de `.specify/templates/plan-template.md` y la definición local de
 `speckit-plan`. Se comprobó la resolución de `specs/spec-001` mediante
 `check-prerequisites.ps1 -Json -PathsOnly`, sin persistir selección fuera de la historia.
-`setup-plan.ps1` no se ejecutó porque también escribe el estado de selección; se reprodujo
+`setup-plan.ps1` no se ejecutó porque también escribe el estado de selección; Se reprodujo
 la lectura de plantilla y preparación documental dentro del alcance de esta fase.
 Se preservaron los informes históricos. Los hooks opcionales de commit no se ejecutaron.
 La comprobación final de enlaces y alcance es documental, no una ejecución de la aplicación.
