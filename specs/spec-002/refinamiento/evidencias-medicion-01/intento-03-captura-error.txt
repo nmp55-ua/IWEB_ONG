@@ -1,0 +1,3 @@
+La captura fullPage:true del intento 03 falló: Unable to capture screenshot.
+La traza ya estaba guardada. No se repitió la navegación.
+La posterior captura fullPage:false sí se guardó como intento-03-visible.png y se inspeccionó.

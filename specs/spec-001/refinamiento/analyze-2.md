@@ -1,5 +1,7 @@
 # Segundo informe de analyze — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Identificador**: analyze-2 · **Fecha**: 2026-11-06  
 **Rama y funcionalidad**: `spec-001` · `specs/spec-001`  
 **Referencia Git observada**: `bdd6476`, con documentación local pendiente de commit.  
@@ -25,12 +27,7 @@ no se presentan como defectos ya observados ni como resultados satisfactorios.
 
 ## Procedimiento y alcance de solo lectura
 
-Al no estar registrado /speckit-analyze en esta sesión, se sigue su
-[definición local](../../../.claude/skills/speckit-analyze/SKILL.md): inventario semántico,
-duplicaciones, ambigüedad, precisión, alineación constitucional, cobertura y dependencias.
-La adaptación autorizada permite guardar únicamente este informe durante el segundo
-analyze. Las correcciones y el registro de hallazgos se habían guardado antes de iniciarlo;
-no se aplican correcciones durante el diagnóstico.
+Se aplica el procedimiento Spec Kit del repositorio correspondiente a esta fase. Se mantienen el alcance y los resultados descritos en el informe.
 
 La resolución inicial sin selección explícita informa de que falta el contexto de
 funcionalidad. Los scripts reales no deducen la carpeta a partir de la rama: usan
@@ -87,7 +84,7 @@ ya presente.
 | ID | Gravedad inicial | Ubicación vigente y evidencia | Resultado de la segunda revisión | Recomendación y límite |
 |---|---|---|---|---|
 | COV-001 | MEDIA | spec.md:57–58,122; plan.md:138–143; api-donaciones.md:158–204; tasks.md:207–209,255–281,291–293,505,540–541; quickstart.md:262–263 | Resuelto documentalmente. Se concreta la entrada desde ambas páginas, estado sin token, solicitud autenticada, aviso genérico, recepción y confirmación, con tareas y comprobaciones visibles. | Implementar y verificar en la fase autorizada; mantener pendiente la revisión de Rubén. No se acredita envío, vínculo o interfaz operativa. |
-| UND-001 | MEDIA | modelo-datos.md:199–249; pasarela-stripe.md:48–122; api-donaciones.md:81–119,135; tasks.md:108–114,132–138,152–154,199–201,219–229; quickstart.md:325–347 | Resuelto documentalmente. La conexión acredita actividad, se precisan adquisición/liberación y reanudación, cuerpo inmutable y plazo fijo; se prevén concurrencia, timeout, caída y reinicio. | Revisar P-01/P-02 antes de incorporar; implementar y probar con PostgreSQL y simulador persistente. No se acredita ausencia real de duplicados o fugas de conexión. |
+| UND-001 | MEDIA | modelo-datos.md:199–249; pasarela-stripe.md:48–122; api-donaciones.md:81–119,135; tasks.md:108–114,132–138,152–154,199–201,219–229; quickstart.md:325–347 | Resuelto documentalmente. La conexión acredita actividad, se precisan adquisición/liberación y reanudación, cuerpo inmutable y plazo fijo; Se prevén concurrencia, timeout, caída y reinicio. | Revisar P-01/P-02 antes de incorporar; implementar y probar con PostgreSQL y simulador persistente. No se acredita ausencia real de duplicados o fugas de conexión. |
 
 El [registro de hallazgos](registro-hallazgos.md) conserva evidencia, decisión, historia y
 criterios, documentos afectados, responsable, revisor y estado. Los mismos ID se mantienen;
@@ -174,7 +171,7 @@ son los escenarios numerados de US1/US2 de **HU-01**; US2 no es HU-02.
 | FR-011 | Prevista completa | T023, T035–T036, T043, T059 | T022, T029, T031, T054 | Puntual y socio sin cuenta; correo coincidente no autoriza. La entrada web de vinculación queda cubierta junto a FR-013. |
 | FR-012 | Prevista completa | T026, T041, T047, T070 | T024, T031, T057, T079 | Reintento autorizado del mismo mensaje, lease e intento; sin pagos, altas o aportaciones nuevas. |
 | FR-013 | Prevista completa | T042–T045, T047, T049 | T022, T031, T052, T074 | Entradas desde formulario/resultado, página sin token, solicitud, aviso genérico y confirmación; controles negativos y recorrido visible explícitos. |
-| FR-014 | Prevista completa | T032–T033, T059 | T028, T054 | Correo con otro NIF se rechaza antes de Stripe sin mostrar ni mezclar datos; se contempla concurrencia. |
+| FR-014 | Prevista completa | T032–T033, T059 | T028, T054 | Correo con otro NIF se rechaza antes de Stripe sin mostrar ni mezclar datos; Se contempla concurrencia. |
 | FR-015 | Prevista completa | T021, T032–T033, T059 | T020, T028, T054 | Datos reales distintos se rechazan aun con cuenta vinculada; formato equivalente reutiliza sin sobrescribir. |
 | FR-016 | Prevista completa | T023, T040–T041, T068 | T022, T031, T057 | Permiso por operación, ocho horas, 404 genérico y denegación de otras operaciones/cuotas; cuenta vinculada como vía separada. |
 | FR-017 | Prevista completa | T037–T039, T061–T062 | T030, T055, T077 | Webhook firmado sin cookie, rollback/reentrega y procesamiento sin retorno de navegador. |

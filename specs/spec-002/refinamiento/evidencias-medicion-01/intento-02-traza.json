@@ -1,0 +1,829 @@
+{
+  "formato": "Performance Timeline y observador HU-02",
+  "capturadaEn": "2026-11-10T14:55:53.475Z",
+  "medicion": {
+    "estado": "invalida",
+    "motivo": "No se presentó el conjunto esperado dentro del plazo de observación.",
+    "inicioMs": 0,
+    "finMs": 16162.5,
+    "filas": 60,
+    "grupos": 5,
+    "requiereRevisionVisual": true,
+    "duracionMs": 16162.5,
+    "inferiorA2000Ms": false
+  },
+  "entorno": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "plataforma": "Win32",
+    "concurrencia": 8,
+    "memoriaGB": 8,
+    "ancho": 0,
+    "alto": 0,
+    "pixelRatio": 1,
+    "visibilidad": "visible",
+    "timeOrigin": 1794322537311.9
+  },
+  "navegacion": [
+    {
+      "name": "http://localhost:44325/mis-aportaciones?medir=1",
+      "entryType": "navigation",
+      "startTime": 0,
+      "duration": 1415.300000011921,
+      "navigationId": 1136,
+      "initiatorType": "navigation",
+      "deliveryType": "",
+      "nextHopProtocol": "http/1.1",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/html",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 6,
+      "domainLookupStart": 6,
+      "domainLookupEnd": 6,
+      "connectStart": 6,
+      "secureConnectionStart": 0,
+      "connectEnd": 6,
+      "requestStart": 56.40000003576279,
+      "responseStart": 464.5,
+      "firstInterimResponseStart": 0,
+      "finalResponseHeadersStart": 464.5,
+      "responseEnd": 467,
+      "transferSize": 11253,
+      "encodedBodySize": 10953,
+      "decodedBodySize": 10953,
+      "responseStatus": 200,
+      "serverTiming": [],
+      "unloadEventStart": 0,
+      "unloadEventEnd": 0,
+      "domInteractive": 1217.800000011921,
+      "domContentLoadedEventStart": 1218.300000011921,
+      "domContentLoadedEventEnd": 1400.1000000238419,
+      "domComplete": 1415.1000000238419,
+      "loadEventStart": 1415.199999988079,
+      "loadEventEnd": 1415.300000011921,
+      "type": "navigate",
+      "redirectCount": 0,
+      "activationStart": 0,
+      "criticalCHRestart": 0,
+      "notRestoredReasons": null,
+      "confidence": {
+        "randomizedTriggerRate": 0.4994798,
+        "value": "high"
+      }
+    }
+  ],
+  "recursos": [
+    {
+      "name": "http://localhost:44325/_astro/index.aD3rPQWH.css",
+      "entryType": "resource",
+      "startTime": 812,
+      "duration": 75.69999998807907,
+      "navigationId": 1136,
+      "initiatorType": "link",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "blocking",
+      "contentType": "text/css",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 812,
+      "domainLookupStart": 812,
+      "domainLookupEnd": 812,
+      "connectStart": 812,
+      "secureConnectionStart": 0,
+      "connectEnd": 812,
+      "requestStart": 880.8000000119209,
+      "responseStart": 884.5,
+      "firstInterimResponseStart": 884.5,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 887.6999999880791,
+      "transferSize": 0,
+      "encodedBodySize": 13717,
+      "decodedBodySize": 13717,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/Menu.B_ZbiCoF.js",
+      "entryType": "resource",
+      "startTime": 1202.9000000357628,
+      "duration": 15.599999964237213,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1202.9000000357628,
+      "domainLookupStart": 1202.9000000357628,
+      "domainLookupEnd": 1202.9000000357628,
+      "connectStart": 1202.9000000357628,
+      "secureConnectionStart": 0,
+      "connectEnd": 1202.9000000357628,
+      "requestStart": 1213,
+      "responseStart": 1215.300000011921,
+      "firstInterimResponseStart": 1215.300000011921,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1218.5,
+      "transferSize": 0,
+      "encodedBodySize": 1343,
+      "decodedBodySize": 1343,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/client.C5RI7xnT.js",
+      "entryType": "resource",
+      "startTime": 1203.9000000357628,
+      "duration": 25.5,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1203.9000000357628,
+      "domainLookupStart": 1203.9000000357628,
+      "domainLookupEnd": 1203.9000000357628,
+      "connectStart": 1203.9000000357628,
+      "secureConnectionStart": 0,
+      "connectEnd": 1203.9000000357628,
+      "requestStart": 1213.199999988079,
+      "responseStart": 1217.5,
+      "firstInterimResponseStart": 1217.5,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1229.4000000357628,
+      "transferSize": 0,
+      "encodedBodySize": 215568,
+      "decodedBodySize": 215568,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/HistorialAportaciones.SYp5fze7.js",
+      "entryType": "resource",
+      "startTime": 1218.699999988079,
+      "duration": 8.400000035762787,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1218.699999988079,
+      "domainLookupStart": 1218.699999988079,
+      "domainLookupEnd": 1218.699999988079,
+      "connectStart": 1218.699999988079,
+      "secureConnectionStart": 0,
+      "connectEnd": 1218.699999988079,
+      "requestStart": 1221.6000000238419,
+      "responseStart": 1223.199999988079,
+      "firstInterimResponseStart": 1223.199999988079,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1227.1000000238419,
+      "transferSize": 0,
+      "encodedBodySize": 4693,
+      "decodedBodySize": 4693,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/api.DJbD62sc.js",
+      "entryType": "resource",
+      "startTime": 1428.199999988079,
+      "duration": 66.30000001192093,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.199999988079,
+      "domainLookupStart": 1428.199999988079,
+      "domainLookupEnd": 1428.199999988079,
+      "connectStart": 1428.199999988079,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.199999988079,
+      "requestStart": 1452.5,
+      "responseStart": 1481.6000000238419,
+      "firstInterimResponseStart": 1481.6000000238419,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1494.5,
+      "transferSize": 0,
+      "encodedBodySize": 1472,
+      "decodedBodySize": 1472,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/index.DLkBFFtG.js",
+      "entryType": "resource",
+      "startTime": 1428.199999988079,
+      "duration": 66.80000001192093,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.199999988079,
+      "domainLookupStart": 1428.199999988079,
+      "domainLookupEnd": 1428.199999988079,
+      "connectStart": 1428.199999988079,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.199999988079,
+      "requestStart": 1459.5,
+      "responseStart": 1481.800000011921,
+      "firstInterimResponseStart": 1481.800000011921,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1495,
+      "transferSize": 0,
+      "encodedBodySize": 8199,
+      "decodedBodySize": 8199,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/formato.DRqxzlkB.js",
+      "entryType": "resource",
+      "startTime": 1428.4000000357628,
+      "duration": 59.299999952316284,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.4000000357628,
+      "domainLookupStart": 1428.4000000357628,
+      "domainLookupEnd": 1428.4000000357628,
+      "connectStart": 1428.4000000357628,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.4000000357628,
+      "requestStart": 1464,
+      "responseStart": 1481.9000000357628,
+      "firstInterimResponseStart": 1481.9000000357628,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1487.699999988079,
+      "transferSize": 0,
+      "encodedBodySize": 517,
+      "decodedBodySize": 517,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/Tabla.RwRDkAsV.js",
+      "entryType": "resource",
+      "startTime": 1428.5,
+      "duration": 60,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.5,
+      "domainLookupStart": 1428.5,
+      "domainLookupEnd": 1428.5,
+      "connectStart": 1428.5,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.5,
+      "requestStart": 1469.199999988079,
+      "responseStart": 1481.9000000357628,
+      "firstInterimResponseStart": 1481.9000000357628,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1488.5,
+      "transferSize": 0,
+      "encodedBodySize": 909,
+      "decodedBodySize": 909,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/Campo.DzBNSUji.js",
+      "entryType": "resource",
+      "startTime": 1428.6000000238419,
+      "duration": 66.69999998807907,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.6000000238419,
+      "domainLookupStart": 1428.6000000238419,
+      "domainLookupEnd": 1428.6000000238419,
+      "connectStart": 1428.6000000238419,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.6000000238419,
+      "requestStart": 1470.199999988079,
+      "responseStart": 1481.9000000357628,
+      "firstInterimResponseStart": 1481.9000000357628,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1495.300000011921,
+      "transferSize": 0,
+      "encodedBodySize": 1232,
+      "decodedBodySize": 1232,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/Boton.BYhnaybJ.js",
+      "entryType": "resource",
+      "startTime": 1428.6000000238419,
+      "duration": 68.30000001192093,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.6000000238419,
+      "domainLookupStart": 1428.6000000238419,
+      "domainLookupEnd": 1428.6000000238419,
+      "connectStart": 1428.6000000238419,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.6000000238419,
+      "requestStart": 1470.300000011921,
+      "responseStart": 1482,
+      "firstInterimResponseStart": 1482,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1496.9000000357628,
+      "transferSize": 0,
+      "encodedBodySize": 1107,
+      "decodedBodySize": 1107,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/_astro/EstadoVacio.Cq5cQM_h.js",
+      "entryType": "resource",
+      "startTime": 1428.699999988079,
+      "duration": 68.60000002384186,
+      "navigationId": 1136,
+      "initiatorType": "script",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "text/javascript",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1428.699999988079,
+      "domainLookupStart": 1428.699999988079,
+      "domainLookupEnd": 1428.699999988079,
+      "connectStart": 1428.699999988079,
+      "secureConnectionStart": 0,
+      "connectEnd": 1428.699999988079,
+      "requestStart": 1470.300000011921,
+      "responseStart": 1482.1000000238419,
+      "firstInterimResponseStart": 1482.1000000238419,
+      "finalResponseHeadersStart": 0,
+      "responseEnd": 1497.300000011921,
+      "transferSize": 0,
+      "encodedBodySize": 260,
+      "decodedBodySize": 260,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/api/auth/yo",
+      "entryType": "resource",
+      "startTime": 1866.1000000238419,
+      "duration": 1518.5,
+      "navigationId": 1136,
+      "initiatorType": "fetch",
+      "deliveryType": "cache",
+      "nextHopProtocol": "",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "application/json",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1866.1000000238419,
+      "domainLookupStart": 1866.1000000238419,
+      "domainLookupEnd": 1866.1000000238419,
+      "connectStart": 1866.1000000238419,
+      "secureConnectionStart": 0,
+      "connectEnd": 1866.1000000238419,
+      "requestStart": 1875.699999988079,
+      "responseStart": 3350,
+      "firstInterimResponseStart": 0,
+      "finalResponseHeadersStart": 3350,
+      "responseEnd": 3384.600000023842,
+      "transferSize": 300,
+      "encodedBodySize": 96,
+      "decodedBodySize": 96,
+      "responseStatus": 200,
+      "serverTiming": []
+    },
+    {
+      "name": "http://localhost:44325/api/yo/aportaciones",
+      "entryType": "resource",
+      "startTime": 1873.300000011921,
+      "duration": 2182.399999976158,
+      "navigationId": 1136,
+      "initiatorType": "fetch",
+      "deliveryType": "",
+      "nextHopProtocol": "http/1.1",
+      "renderBlockingStatus": "non-blocking",
+      "contentType": "application/json",
+      "contentEncoding": "",
+      "workerStart": 0,
+      "workerRouterEvaluationStart": 0,
+      "workerCacheLookupStart": 0,
+      "workerMatchedSourceType": "",
+      "workerFinalSourceType": "",
+      "redirectStart": 0,
+      "redirectEnd": 0,
+      "fetchStart": 1873.300000011921,
+      "domainLookupStart": 1881.9000000357628,
+      "domainLookupEnd": 1882.4000000357628,
+      "connectStart": 1882.4000000357628,
+      "secureConnectionStart": 0,
+      "connectEnd": 1884,
+      "requestStart": 1884.300000011921,
+      "responseStart": 4054.199999988079,
+      "firstInterimResponseStart": 0,
+      "finalResponseHeadersStart": 4054.199999988079,
+      "responseEnd": 4055.699999988079,
+      "transferSize": 8115,
+      "encodedBodySize": 7815,
+      "decodedBodySize": 7815,
+      "responseStatus": 200,
+      "serverTiming": []
+    }
+  ],
+  "pintado": [],
+  "contenido": [
+    {
+      "anio": "2025",
+      "total": "120.00",
+      "texto": "2025\n\nTotal de 2025: 120,00 €\n\nFecha\tImporte\tModalidad\tDestino\n15/12/2025\t10,00 €\tCuota de socio\tfondo general\n15/11/2025\t10,00 €\tCuota de socio\tfondo general\n15/10/2025\t10,00 €\tCuota de socio\tfondo general\n15/09/2025\t10,00 €\tCuota de socio\tfondo general\n15/08/2025\t10,00 €\tCuota de socio\tfondo general\n15/07/2025\t10,00 €\tCuota de socio\tfondo general\n15/06/2025\t10,00 €\tCuota de socio\tfondo general\n15/05/2025\t10,00 €\tCuota de socio\tfondo general\n15/04/2025\t10,00 €\tCuota de socio\tfondo general\n15/03/2025\t10,00 €\tCuota de socio\tfondo general\n15/02/2025\t10,00 €\tCuota de socio\tfondo general\n15/01/2025\t10,00 €\tCuota de socio\tfondo general",
+      "filas": [
+        {
+          "id": "133",
+          "texto": "15/12/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "132",
+          "texto": "15/11/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "131",
+          "texto": "15/10/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "130",
+          "texto": "15/09/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "129",
+          "texto": "15/08/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "128",
+          "texto": "15/07/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "127",
+          "texto": "15/06/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "126",
+          "texto": "15/05/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "125",
+          "texto": "15/04/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "124",
+          "texto": "15/03/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "123",
+          "texto": "15/02/2025\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "122",
+          "texto": "15/01/2025\t10,00 €\tCuota de socio\tfondo general"
+        }
+      ]
+    },
+    {
+      "anio": "2024",
+      "total": "120.00",
+      "texto": "2024\n\nTotal de 2024: 120,00 €\n\nFecha\tImporte\tModalidad\tDestino\n15/12/2024\t10,00 €\tCuota de socio\tfondo general\n15/11/2024\t10,00 €\tCuota de socio\tfondo general\n15/10/2024\t10,00 €\tCuota de socio\tfondo general\n15/09/2024\t10,00 €\tCuota de socio\tfondo general\n15/08/2024\t10,00 €\tCuota de socio\tfondo general\n15/07/2024\t10,00 €\tCuota de socio\tfondo general\n15/06/2024\t10,00 €\tCuota de socio\tfondo general\n15/05/2024\t10,00 €\tCuota de socio\tfondo general\n15/04/2024\t10,00 €\tCuota de socio\tfondo general\n15/03/2024\t10,00 €\tCuota de socio\tfondo general\n15/02/2024\t10,00 €\tCuota de socio\tfondo general\n15/01/2024\t10,00 €\tCuota de socio\tfondo general",
+      "filas": [
+        {
+          "id": "121",
+          "texto": "15/12/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "120",
+          "texto": "15/11/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "119",
+          "texto": "15/10/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "118",
+          "texto": "15/09/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "117",
+          "texto": "15/08/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "116",
+          "texto": "15/07/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "115",
+          "texto": "15/06/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "114",
+          "texto": "15/05/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "113",
+          "texto": "15/04/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "112",
+          "texto": "15/03/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "111",
+          "texto": "15/02/2024\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "110",
+          "texto": "15/01/2024\t10,00 €\tCuota de socio\tfondo general"
+        }
+      ]
+    },
+    {
+      "anio": "2023",
+      "total": "120.00",
+      "texto": "2023\n\nTotal de 2023: 120,00 €\n\nFecha\tImporte\tModalidad\tDestino\n15/12/2023\t10,00 €\tCuota de socio\tfondo general\n15/11/2023\t10,00 €\tCuota de socio\tfondo general\n15/10/2023\t10,00 €\tCuota de socio\tfondo general\n15/09/2023\t10,00 €\tCuota de socio\tfondo general\n15/08/2023\t10,00 €\tCuota de socio\tfondo general\n15/07/2023\t10,00 €\tCuota de socio\tfondo general\n15/06/2023\t10,00 €\tCuota de socio\tfondo general\n15/05/2023\t10,00 €\tCuota de socio\tfondo general\n15/04/2023\t10,00 €\tCuota de socio\tfondo general\n15/03/2023\t10,00 €\tCuota de socio\tfondo general\n15/02/2023\t10,00 €\tCuota de socio\tfondo general\n15/01/2023\t10,00 €\tCuota de socio\tfondo general",
+      "filas": [
+        {
+          "id": "109",
+          "texto": "15/12/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "108",
+          "texto": "15/11/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "107",
+          "texto": "15/10/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "106",
+          "texto": "15/09/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "105",
+          "texto": "15/08/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "104",
+          "texto": "15/07/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "103",
+          "texto": "15/06/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "102",
+          "texto": "15/05/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "101",
+          "texto": "15/04/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "100",
+          "texto": "15/03/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "99",
+          "texto": "15/02/2023\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "98",
+          "texto": "15/01/2023\t10,00 €\tCuota de socio\tfondo general"
+        }
+      ]
+    },
+    {
+      "anio": "2022",
+      "total": "120.00",
+      "texto": "2022\n\nTotal de 2022: 120,00 €\n\nFecha\tImporte\tModalidad\tDestino\n15/12/2022\t10,00 €\tCuota de socio\tfondo general\n15/11/2022\t10,00 €\tCuota de socio\tfondo general\n15/10/2022\t10,00 €\tCuota de socio\tfondo general\n15/09/2022\t10,00 €\tCuota de socio\tfondo general\n15/08/2022\t10,00 €\tCuota de socio\tfondo general\n15/07/2022\t10,00 €\tCuota de socio\tfondo general\n15/06/2022\t10,00 €\tCuota de socio\tfondo general\n15/05/2022\t10,00 €\tCuota de socio\tfondo general\n15/04/2022\t10,00 €\tCuota de socio\tfondo general\n15/03/2022\t10,00 €\tCuota de socio\tfondo general\n15/02/2022\t10,00 €\tCuota de socio\tfondo general\n15/01/2022\t10,00 €\tCuota de socio\tfondo general",
+      "filas": [
+        {
+          "id": "97",
+          "texto": "15/12/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "96",
+          "texto": "15/11/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "95",
+          "texto": "15/10/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "94",
+          "texto": "15/09/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "93",
+          "texto": "15/08/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "92",
+          "texto": "15/07/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "91",
+          "texto": "15/06/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "90",
+          "texto": "15/05/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "89",
+          "texto": "15/04/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "88",
+          "texto": "15/03/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "87",
+          "texto": "15/02/2022\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "86",
+          "texto": "15/01/2022\t10,00 €\tCuota de socio\tfondo general"
+        }
+      ]
+    },
+    {
+      "anio": "2021",
+      "total": "120.00",
+      "texto": "2021\n\nTotal de 2021: 120,00 €\n\nFecha\tImporte\tModalidad\tDestino\n15/12/2021\t10,00 €\tCuota de socio\tfondo general\n15/11/2021\t10,00 €\tCuota de socio\tfondo general\n15/10/2021\t10,00 €\tCuota de socio\tfondo general\n15/09/2021\t10,00 €\tCuota de socio\tfondo general\n15/08/2021\t10,00 €\tCuota de socio\tfondo general\n15/07/2021\t10,00 €\tCuota de socio\tfondo general\n15/06/2021\t10,00 €\tCuota de socio\tfondo general\n15/05/2021\t10,00 €\tCuota de socio\tfondo general\n15/04/2021\t10,00 €\tCuota de socio\tfondo general\n15/03/2021\t10,00 €\tCuota de socio\tfondo general\n15/02/2021\t10,00 €\tCuota de socio\tfondo general\n15/01/2021\t10,00 €\tCuota de socio\tfondo general",
+      "filas": [
+        {
+          "id": "85",
+          "texto": "15/12/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "84",
+          "texto": "15/11/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "83",
+          "texto": "15/10/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "82",
+          "texto": "15/09/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "81",
+          "texto": "15/08/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "80",
+          "texto": "15/07/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "79",
+          "texto": "15/06/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "78",
+          "texto": "15/05/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "77",
+          "texto": "15/04/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "76",
+          "texto": "15/03/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "75",
+          "texto": "15/02/2021\t10,00 €\tCuota de socio\tfondo general"
+        },
+        {
+          "id": "74",
+          "texto": "15/01/2021\t10,00 €\tCuota de socio\tfondo general"
+        }
+      ]
+    }
+  ]
+}

@@ -227,6 +227,7 @@ describe.each(secuencias)('HU-01 · 004 · $nombre', (secuencia) => {
       '004_donaciones.sql',
       '005_actividades.sql',
       '006_voluntariado.sql',
+      '007_asistencias.sql',
       '008_certificados.sql',
       '009_operativa_donaciones.sql',
     ]);

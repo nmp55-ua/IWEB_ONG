@@ -8,9 +8,7 @@ solo añade lo propio de su historia (pantallas, rutas, reglas de su `servicio.j
 que aquí se fija no se repite ni se contradice en los planes individuales. Para cambiarlo hace
 falta el acuerdo del grupo (principio XII).
 
-**Alineación de HU-01 (2026-11-06)**: ajustes preparados por Nada en `spec-001` para
-revisión, a partir de PA1.1–PA1.8 y del diseño P-01–P-04. La documentación queda alineada
-en esta rama; no acredita acuerdo colectivo, revisión de Rubén ni implementación.
+**Estado de HU-01**: HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
 
 ## Resumen
 

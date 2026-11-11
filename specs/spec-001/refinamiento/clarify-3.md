@@ -1,5 +1,7 @@
 # Informe de clarify — HU-01 — Segunda ronda
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha de inicio**: 2026-11-04
 **Rama**: `spec-001`
 **Responsable**: Nada
@@ -11,7 +13,8 @@
 ## Procedimiento y alcance
 
 Se sigue directamente `.claude/skills/speckit-clarify/SKILL.md`, equivalente a
-`/speckit-clarify`, que no está registrado en este chat. Se inicia una nueva ronda a petición
+`/speckit-clarify`.
+ Se inicia una nueva ronda a petición
 expresa, limitada a resolver PA1.6, PA1.7 y PA1.8, con una pregunta cada vez. No se atribuyen
 respuestas a las preguntas pendientes ni se amplía el alcance funcional por anticipado.
 
@@ -40,7 +43,7 @@ directo sin cuenta.
 
 La especificación distingue la reutilización de un Donante con NIF/NIE y correo
 coincidentes del rechazo de correo existente con otro NIF/NIE (FR-014). Falta resolver
-el caso inverso: NIF/NIE existente con otro correo, y la autorización para modificar
+el caso inverso: NIF/NIE existente con otro correo y la autorización para modificar
 nombre, apellidos o dirección del Donante existente. Conocer el NIF/NIE no acredita por
 sí solo la autorización para modificar sus datos.
 
@@ -224,7 +227,7 @@ por anticipado cómo se registra el intento ni cómo se mapean eventos o estados
 - La aplicación no inicia cobros adicionales por su cuenta.
 
 **Justificación**: Distinguir un fallo de cobro de una baja, preservar las cantidades
-efectivamente aportadas y el historial anterior, y mantener la gestión de cobros y sus
+efectivamente aportadas y el historial anterior y mantener la gestión de cobros y sus
 fechas en la pasarela. La continuidad ante un fallo no permite desatender una cancelación
 posterior válida. Esta precisión no introduce baja de socio desde la aplicación.
 
@@ -293,7 +296,7 @@ alineación, sin dar por aprobados ni realizados los cambios comunes:
 | Documento | Alineación pendiente |
 |---|---|
 | `specs/plan-comun.md` §3 y `specs/modelo-datos.md`, `donantes.usuario_id` | Verificación de acceso al correo antes de vincular, limitada a donaciones (PA1.3). |
-| `specs/modelo-datos.md`, reglas de Donante, y `specs/plan-comun.md` §5 | Rechazo de conflictos de correo/NIF, reutilización sin sobrescritura y correcciones fuera de v1 (PA1.5 y PA1.6). |
+| `specs/modelo-datos.md`, reglas de Donante y `specs/plan-comun.md` §5 | Rechazo de conflictos de correo/NIF, reutilización sin sobrescritura y correcciones fuera de v1 (PA1.5 y PA1.6). |
 | `specs/plan-comun.md` §4 y §5 | Acceso sin cuenta autorizado por operación, referencia insuficiente, pérdida de acceso sin recuperación y procesamiento de pasarela independiente del navegador (PA1.7). |
 | `specs/plan-comun.md` §5 y `specs/modelo-datos.md`, suscripciones | Fallo posterior, fecha del próximo cobro y distinción entre baja desde la aplicación y cancelación comunicada por pasarela (PA1.8). |
 
@@ -354,17 +357,4 @@ pruebas superadas, correo recibido, cobros correctos ni una historia implementad
 
 ## Estado de la ronda
 
-- PA1.6: respuesta confirmada e integrada; decisión funcional resuelta y ajuste común identificado.
-- PA1.7: respuesta confirmada e integrada, con límite de acceso y ajuste común identificados.
-- PA1.8: respuesta confirmada e integrada; fallo, cancelación posterior y próximo cobro definidos.
-- Único archivo creado al iniciar esta ronda: `refinamiento/clarify-3.md`.
-- Tras las tres respuestas, se actualizan `spec.md`, tres marcas del checklist y este informe.
-  Los informes `clarify-1.md` y `clarify-2.md` se conservan sin modificar.
-- Se comprueban rama `spec-001`, ocho aclaraciones (cinco y tres por ronda), diecinueve
-  requisitos con identificadores consecutivos y dieciséis casillas marcadas.
-- Se comprueba el formato con `git diff --check` y que los cambios quedan bajo `specs/spec-001/`.
-- El hook `after_clarify` de commit es opcional y se omite por el alcance autorizado.
-- No se han realizado pruebas funcionales, instalaciones, arranques, cambios comunes,
-  implementación, commits, push ni cambios de rama.
-- Segunda ronda terminada para revisión; no se declara cerrado el conjunto de diferencias
-  compartidas ni validada la implementación. Se detiene antes de plan, sin iniciarlo.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.

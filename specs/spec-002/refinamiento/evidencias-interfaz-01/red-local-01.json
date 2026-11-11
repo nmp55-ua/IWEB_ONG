@@ -1,0 +1,97 @@
+[
+  {
+    "instante": "2026-11-10T14:40:35.044Z",
+    "metodo": "GET",
+    "ruta": "/api/auth/yo",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:40:35.381Z",
+    "metodo": "POST",
+    "ruta": "/api/auth/sesion",
+    "estado": 400
+  },
+  {
+    "instante": "2026-11-10T14:41:15.713Z",
+    "metodo": "POST",
+    "ruta": "/api/auth/sesion",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:41:17.124Z",
+    "metodo": "GET",
+    "ruta": "/api/auth/yo",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:41:17.241Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:41:17.844Z",
+    "metodo": "GET",
+    "ruta": "/api/auth/yo",
+    "estado": 304
+  },
+  {
+    "instante": "2026-11-10T14:41:17.904Z",
+    "metodo": "GET",
+    "ruta": "/api/donaciones/contexto",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:41:29.425Z",
+    "metodo": "GET",
+    "ruta": "/api/auth/yo",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:41:29.427Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:41:53.173Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones",
+    "estado": 503,
+    "simulado": true
+  },
+  {
+    "instante": "2026-11-10T14:41:53.568Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:42:12.253Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones?anio=2025",
+    "estado": 200,
+    "liberada": "2026-11-10T14:42:23.519Z",
+    "clienteCerrado": false
+  },
+  {
+    "instante": "2026-11-10T14:42:12.548Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones?anio=2026",
+    "estado": 200
+  },
+  {
+    "instante": "2026-11-10T14:42:57.203Z",
+    "metodo": "GET",
+    "ruta": "/api/yo/aportaciones?anio=2025",
+    "estado": 200,
+    "liberada": "2026-11-10T14:43:07.140Z",
+    "clienteCerrado": true
+  },
+  {
+    "instante": "2026-11-10T14:42:59.228Z",
+    "metodo": "GET",
+    "ruta": "/api/auth/yo",
+    "estado": 304
+  }
+]

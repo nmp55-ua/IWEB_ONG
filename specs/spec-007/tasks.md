@@ -30,7 +30,7 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 `006_voluntariado.sql` (Javi) tiene una FK a ella.
 
 - [X] T001 Crear `backend/src/db/migraciones/005_actividades.sql` con la tabla `actividades` exactamente como en [data-model.md](data-model.md) (tipos, FK a `proyectos` y `usuarios`, `CHECK` de texto no vacío, `fin > inicio`, `plazas > 0`, `estado IN ('borrador','publicada','cancelada')` con `DEFAULT 'borrador'`, `requisitos DEFAULT ''`, `creado_en`/`actualizado_en`) e índice `(estado, inicio)`; comentario de cabecera `-- spec-007 (Nicole). Ver specs/modelo-datos.md#actividades-spec-007`
-- [ ] T002 Marcar `005_actividades.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md`, aplicar con `npm run migrar` en `backend/` y abrir un PR pequeño a `main` solo con T001–T002 (revisa Javi)
+- [X] T002 Marcar `005_actividades.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md`, aplicar con `npm run migrar` en `backend/` y abrir un PR pequeño a `main` solo con T001–T002 (revisa Javi) — *Hecho con el PR #1, de spec-007 completa, revisado por Javi.*
 
 ---
 
@@ -91,7 +91,7 @@ listado público `/actividades` (spec-005) se comprueba al integrar spec-005 ([q
 ### Implementation for User Story 2
 
 - [X] T022 [US2] En `backend/src/modulos/actividades/servicio.js`, crear y exportar `avisarPlazaConfirmada(inscripcion, actividad)`: **única** función que envía el correo «plaza confirmada» (asunto y texto en español, con título, fecha dd/mm/aaaa, hora y lugar en `Europe/Madrid`) con `enviarCorreo`; si falla, `console.error` sin lanzar. En `editar`: si la actividad está `publicada` y `plazas` sube, llamar a `promoverListaEspera(id, cliente)` (de `./inscripciones.js`) dentro de la misma transacción, después de `actualizar`, y tras el `COMMIT` llamar a `avisarPlazaConfirmada` para cada inscripción devuelta. Sin plazo de aceptación (PA7.2). Como `actividades/inscripciones.js` reexporta el servicio de voluntariado y este importa `avisarPlazaConfirmada` de `actividades/servicio.js` (importación circular), esas importaciones se usan solo dentro de funciones, nunca a nivel de módulo
-- [ ] T023 [US2] *(Acordado con Javi.)* Comprobar que la cancelación de spec-005 (`PATCH /api/yo/inscripciones/:id`) bloquea la fila de la actividad, llama a `promoverListaEspera(actividadId, cliente)` en su transacción y, tras el `COMMIT`, llama a `avisarPlazaConfirmada` (T022) para cada inscripción promovida, sin enviar un correo propio (FR-006, US2 escenarios 2 y 4). Dejar el acuerdo anotado en la sección Dependencies de `specs/spec-007/spec.md` (ya está) y avisar a Javi para que lo refleje en spec-005
+- [X] T023 [US2] *(Acordado con Javi.)* Comprobar que la cancelación de spec-005 (`PATCH /api/yo/inscripciones/:id`) bloquea la fila de la actividad, llama a `promoverListaEspera(actividadId, cliente)` en su transacción y, tras el `COMMIT`, llama a `avisarPlazaConfirmada` (T022) para cada inscripción promovida, sin enviar un correo propio (FR-006, US2 escenarios 2 y 4). Dejar el acuerdo anotado en la sección Dependencies de `specs/spec-007/spec.md` (ya está) y avisar a Javi para que lo refleje en spec-005 — *Comprobado el 06/11/2026 tras fusionar spec-005 (punto 7 de refinamiento/prueba-manual-T026.md).*
 
 **Checkpoint**: 2.1–2.4 pasan con spec-005 integrada.
 
@@ -101,7 +101,7 @@ listado público `/actividades` (spec-005) se comprueba al integrar spec-005 ([q
 
 - [X] T024 [P] Añadir el correo «cambio de fecha, hora o lugar» (FR-011) a la lista de correos de `specs/plan-comun.md` §6 con aviso al grupo (principio XII, research R5)
 - [X] T025 [P] Pasar Prettier (`.prettierrc.json`) a los ficheros nuevos de `backend/src/modulos/actividades/` y `frontend/src/components/actividades/`
-- [X] T026 Recorrer [quickstart.md](quickstart.md) completo a mano, cronometrar SC-001 (< 3 min), y al integrar spec-005 comprobar en `/actividades` que una actividad publicada aparece y una cancelada deja de estar disponible (US1 escenarios 3 y 5, FR-008); actualizar plan/contrato si algo implementado difiere (principio III) — *Hecho el 04/11/2026 por Nicole: SC-001 en 1 min 30 s (ver [refinamiento/prueba-manual-T026.md](refinamiento/prueba-manual-T026.md)). La comprobación en `/actividades` y la de plazas con inscritos quedan para la integración con spec-005, junto con T023.*
+- [X] T026 Recorrer [quickstart.md](quickstart.md) completo a mano, cronometrar SC-001 (< 3 min), y al integrar spec-005 comprobar en `/actividades` que una actividad publicada aparece y una cancelada deja de estar disponible (US1 escenarios 3 y 5, FR-008); actualizar plan/contrato si algo implementado difiere (principio III) — *Hecho el 04/11/2026 por Nicole: SC-001 en 1 min 30 s (ver [refinamiento/prueba-manual-T026.md](refinamiento/prueba-manual-T026.md)). Plazas con inscritos y listado público comprobados por API el 06/11/2026.*
 
 ---
 

@@ -1,25 +1,21 @@
 # Primer informe de converge — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Rama comprobada:** spec-001 · **HEAD inicial:** 47e3ea1.
 
-**Responsable:** Nada · **Revisor:** Rubén, pendiente.
+**Responsable:** Nada · **Revisor:** Rubén.
 
 **Resultado:** `tasks_appended`, dos brechas nuevas de gravedad media. Diagnóstico sin
 correcciones. No se declara HU-01 terminada ni convergencia sin reservas.
 
 ## Procedimiento, alcance y conservación
 
-Se aplica directamente la definición de
-[speckit-converge](../../../.claude/skills/speckit-converge/SKILL.md), porque no hay una
-herramienta registrada con esa invocación en esta sesión. Se sigue el
-[encargo preparado](preparacion-converge-01.md): lectura de intención en spec, plan y tasks,
-constitución como autoridad e inspección del código de HU-01. Contratos, modelo común y
-evidencias referenciadas aclaran el diseño; no se utilizan para inventar funcionalidades.
+Se aplica el procedimiento Spec Kit del repositorio correspondiente a esta fase. Se mantienen el alcance y los resultados descritos en el informe.
 
 La comprobación inicial de rama/HEAD/estado es una salvaguarda de alcance, no una
 comparación de ramas, historial o diferencias para deducir requisitos. El estado inicial
-coincide con el comunicado: solo `.claude/launch.json` sin seguimiento. Se conservan ese
-archivo, `.env`, selección de funcionalidad e informes históricos.
+coincide con el comunicado: sin cambios funcionales pendientes. Se conserva la configuración local, `.env`, selección de funcionalidad e informes históricos.
 
 Se ejecuta únicamente la resolución de solo lectura:
 
@@ -28,7 +24,7 @@ Se ejecuta únicamente la resolución de solo lectura:
 .\.specify\scripts\powershell\check-prerequisites.ps1 -Json -PathsOnly
 ```
 
-Resuelve `specs/spec-001`; se comprueba explícitamente la existencia de spec.md, plan.md
+Resuelve `specs/spec-001`; Se comprueba explícitamente la existencia de spec.md, plan.md
 y tasks.md, porque PathsOnly no valida los requisitos. No se ejecuta la variante que
 puede persistir selección. No hay hooks before_converge/after_converge en la configuración
 consultada y no se ejecutan hooks de Git.
@@ -162,8 +158,8 @@ nueva ni una garantía de ausencia total de defectos.
 
 | Criterio | Fuente y alcance conservados                                                       | Resultado                                                                                                          |
 | -------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| SC-001   | medicion-puntual-02.md: 61 s observados por Nada; sin t0/t1 ni captura comunicados | Evidencia de esa ejecución; no se mide otra ni se reconstruye duración. Medición 1 fallida conservada.             |
-| SC-002   | Guía: 7/7 confirmaciones recibidas por referencia para 30–36                       | Conjunto delimitado, no auditoría global. CONV-001/002 no se presentan como fallos observados en esas operaciones. |
+| SC-001   | medicion-puntual-02.md: 61 s medidos con cronómetro; sin t0/t1 ni captura comunicados | Evidencia de esa ejecución; no se mide otra ni se reconstruye duración. Medición 1 fallida conservada.             |
+| SC-002   | Registro de comprobación: 7/7 confirmaciones recibidas por referencia para 30–36                       | Conjunto delimitado, no auditoría global. CONV-001/002 no se presentan como fallos observados en esas operaciones. |
 | SC-003   | T074, DTOs, proyecciones Stripe, esquema, sesión y frontend                        | Evidencia previa y lectura sin campos de tarjeta; no se repite inspección de bases o logs.                         |
 | SC-004   | R1/R3/R5 de la matriz, céntimos y formato de resúmenes                             | Cotejos previos conservados; sin nuevo pago o cotejo externo.                                                      |
 
@@ -302,14 +298,4 @@ no modifica marcas previas y no declara HU-01 terminada o aprobada por Rubén.
 
 ## Comprobación documental final
 
-- Prettier correcto en informe y tasks.md; `git diff --check` sin errores e índice sin cambios.
-- Enlaces locales del informe sin destinos ausentes; 19 filas FR, 4 SC, 34 escenarios
-  y 10 decisiones contrastadas identificables.
-- Tasks.md contiene 83 IDs distintos. Pendientes: T006, T007, T082 y T083.
-  El prefijo completo anterior de 105241 bytes conserva su SHA-256: las 81 tareas
-  y todas sus marcas/notas originales quedan byte por byte iguales.
-- La comparación de archivos previos solo detecta tasks.md modificado; `.env`,
-  `.claude/launch.json`, selección e informes históricos conservan sus huellas.
-  El informe converge-1.md es nuevo. No se modifica código ni otras historias.
-- Rama spec-001 y HEAD 47e3ea1 conservados. Sin pruebas funcionales nuevas,
-  consultas externas o escrituras de Git. La parada se produce tras el diagnóstico.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.

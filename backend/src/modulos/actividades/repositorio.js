@@ -99,3 +99,57 @@ export async function obtenerProyecto(id, cliente) {
   const { rows } = await ejecutar(cliente, 'SELECT id, activo FROM proyectos WHERE id = $1', [id]);
   return rows[0] ?? null;
 }
+
+// --- Asistencias (spec-008). Solo asistencias y actividades: las inscripciones, vía ./inscripciones.js.
+
+export async function listarAsistencias(inscripcionIds) {
+  const { rows } = await consulta(
+    'SELECT inscripcion_id, asistio FROM asistencias WHERE inscripcion_id = ANY($1::bigint[])',
+    [inscripcionIds],
+  );
+  return rows;
+}
+
+// Horas de la actividad, calculadas sobre los instantes (22:00–01:00 = 3; research R5).
+export async function horasDeActividad(id, cliente) {
+  const { rows } = await ejecutar(
+    cliente,
+    'SELECT ROUND(EXTRACT(EPOCH FROM fin - inicio) / 3600, 2) AS horas FROM actividades WHERE id = $1',
+    [id],
+  );
+  return Number(rows[0].horas);
+}
+
+// Una fila por inscripción: repetir no duplica y corregir solo cambia la fila (research R1).
+export async function guardarAsistencias(filas, cliente) {
+  for (const fila of filas) {
+    await ejecutar(
+      cliente,
+      `INSERT INTO asistencias (inscripcion_id, asistio, horas, registrada_por, fecha_registro)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (inscripcion_id) DO UPDATE SET asistio = EXCLUDED.asistio, horas = EXCLUDED.horas,
+         registrada_por = EXCLUDED.registrada_por, fecha_registro = EXCLUDED.fecha_registro,
+         actualizado_en = now()`,
+      [fila.inscripcionId, fila.asistio, fila.horas, fila.registradaPor, fila.fechaRegistro],
+    );
+  }
+}
+
+// pares: [{ inscripcionId, actividadId }] de listarInscripcionesDeUsuario. asistencias no tiene
+// actividad_id: el enlace con actividades sale de cada par, sin consultar inscripciones (research R3).
+export async function sumarHorasDeInscripciones(pares) {
+  const parametros = [pares.map((p) => p.inscripcionId), pares.map((p) => p.actividadId)];
+  const desde = `FROM unnest($1::bigint[], $2::bigint[]) AS p(inscripcion_id, actividad_id)
+    JOIN asistencias s ON s.inscripcion_id = p.inscripcion_id
+    JOIN actividades a ON a.id = p.actividad_id
+    WHERE s.asistio`;
+  const { rows: total } = await consulta(`SELECT COALESCE(SUM(s.horas), 0) AS total ${desde}`, parametros);
+  const { rows: filas } = await consulta(
+    `SELECT a.id AS actividad_id, a.titulo, a.inicio, s.horas ${desde} ORDER BY a.inicio DESC`,
+    parametros,
+  );
+  return {
+    totalHoras: Number(total[0].total),
+    filas: filas.map((f) => ({ ...f, horas: Number(f.horas) })),
+  };
+}

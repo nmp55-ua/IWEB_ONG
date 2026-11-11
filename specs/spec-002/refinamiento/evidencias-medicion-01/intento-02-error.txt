@@ -1,0 +1,1 @@
+La segunda navegación real falló en la herramienta: net::ERR_INSUFFICIENT_RESOURCES. No se obtuvo medición de presentación ni se atribuye una duración. Se conserva el error íntegro; no acredita SC-002.

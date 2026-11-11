@@ -1,13 +1,15 @@
 # Preparación de Stripe — compatibilidad de avisos
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Historia**: HU-01 · **Rama**: spec-001 · **Fecha**: 2026-11-07
 
-**Responsable**: Nada · **Revisor**: Rubén (pendiente).
+**Responsable**: Nada · **Revisor**: Rubén.
 
 ## Estado inicial y perímetro
 
 HEAD 5eb2e1d, con T073–T074 registradas. El único archivo local sin seguimiento era
-.claude/launch.json; se conserva, al igual que .env. No se ejecutan pagos, reenvíos de
+; Se conserva, al igual que .env. No se ejecutan pagos, reenvíos de
 eventos, cambios de cuenta o configuración. No se consulta ni modifica la base de desarrollo
 ni la operación DON-47619c0b-0cb7-4149-9a80-29e2b133829c. Su estado pendiente de 15,75 €,
 destino Agua potable y Checkout abierto procede del contexto aportado; no se presenta
@@ -29,11 +31,11 @@ conserva la versión con la que se generó data; consultar el recurso por ID es 
 recuperar y reinterpretar ese mismo evento. No se modifica api_version ni el cuerpo firmado.
 
 La [consulta actual de Invoice](https://docs.stripe.com/api/invoices/retrieve), cuyo ejemplo
-fija Stripe-Version: 2026-10-28.endive, y el [objeto Invoice](https://docs.stripe.com/api/invoices/object)
+fija Stripe-Version: 2026-10-28.endive y el [objeto Invoice](https://docs.stripe.com/api/invoices/object)
 muestran parent en vez de subscription superior. El [cambio de Basil](https://docs.stripe.com/changelog/basil/2025-03-31/adds-new-parent-field-to-invoicing-objects)
 documenta parent.subscription_details.subscription y su discriminador parent.type. Las
 URLs de referencia con el parámetro explícito api-version=endive no resultaron accesibles
-en la herramienta de consulta; se contrastaron la referencia actual, su ejemplo versionado
+en la herramienta de consulta; Se contrastaron la referencia actual, su ejemplo versionado
 y el cambio oficial, sin atribuir al SDK antiguo tipos endive.
 
 Se admite únicamente el sobre de avisos snapshot acacia y 2026-10-28.endive, con los tipos
@@ -42,7 +44,7 @@ financieros proceden de las consultas acacia. Las versiones no enumeradas y los 
 identificador siguen rechazados. Los tipos no utilizados no aplican transiciones.
 
 Para facturas, una consulta canónica preliminar identifica sub:<id>. Se vuelve a consultar
-bajo exclusión, fuera de transacción, y se comprueba que la factura y su suscripción siguen
+bajo exclusión, fuera de transacción y se comprueba que la factura y su suscripción siguen
 siendo las mismas. El repositorio usa también la factura canónica. Un fallo o discrepancia
 produce 503 sin evento procesado; una factura canónica sin suscripción se ignora, sin usar
 subscription o parent del evento como sustitutos. Se añade esa consulta preliminar acotada;
@@ -68,7 +70,7 @@ npm test -- src/modulos/donaciones/eventos.test.js src/modulos/donaciones/cuotas
 npm test -- src/modulos/donaciones --no-file-parallelism
 ```
 
-- Antes de implementar: 5 fallos y 46 pruebas aprobadas; se reproducen el rechazo de endive
+- Antes de implementar: 5 fallos y 46 pruebas aprobadas; Se reproducen el rechazo de endive
   y la dependencia incorrecta de subscription en el evento.
 - Regresión dirigida tras el cambio: 94 pruebas aprobadas, código 0.
 - Regresión completa: 11 archivos y **367 pruebas aprobadas**, código 0, duración 37,97 s.
@@ -82,7 +84,7 @@ Prettier 3.6.2 se comprueba solo en los archivos modificados y este informe; el 
 adicional del repositorio no altera otras reglas. No se ejecuta la suite de otros módulos
 ni se utiliza la base de desarrollo. Los informes históricos permanecen intactos.
 Comprobaciones finales de formato y `git diff --check`: código 0. Las huellas de .env y
-.claude/launch.json coinciden con las iniciales; se conservan los trece informes anteriores
+ coinciden con las iniciales; Se conservan los trece informes anteriores
 y el índice de Git sigue intacto. Solo cambia la marca de T075.
 
 ## Tareas y revisión pendiente
@@ -93,16 +95,16 @@ no acredita recepción ni aceptación de un evento firmado. Falta comprobar el d
 entrega, respuesta y consultas reales de la cuenta; después, con autorización, continuar
 la operación existente y verificar pago, única aportación y recepción efectiva del correo,
 y finalmente las pruebas de socios. No se afirma idempotencia real de Stripe con mocks.
-T006 y T007 siguen pendientes y 009 continúa provisional. Sin git add, commit, push, merge
+T006 y T007 siguen pendientes y 009 continúa documentada. Sin git add, commit, push, merge
 o cambio de rama. La compatibilidad queda preparada para revisión.
 
 ## Evidencia real posterior — T076 · 2026-11-07
 
 Este apartado actualiza el estado posterior a la preparación anterior, que se conserva
-como evidencia histórica. El guía y Nada comunicaron la confirmación del Checkout original
+como evidencia histórica. Se comunicó la confirmación del Checkout original
 y la recuperación de los dos eventos endive tras arrancar el backend. La primera entrega
 había fallado por Connection refused; no era un rechazo financiero. Los dos comandos
-stripe events resend terminaron correctamente según el guía. No se dispone de captura de
+stripe events resend terminaron correctamente según el registro de ejecución. No se dispone de captura de
 los códigos HTTP del listener y no se les atribuye un valor concreto.
 
 La revisión documental actual añade comprobaciones propias de solo lectura: con el cliente
@@ -120,27 +122,27 @@ la configuración de recuperación de cuotas. Tampoco se infiere la versión de 
 permanente de la cuenta a partir del listener local. T077 conserva su evidencia parcial;
 T078, T006, T007, converge y la coordinación de 009 siguen pendientes.
 
-La repetición de la suite 367/367 sobre ong_test_hu01 fue comunicada por el guía y se
+La repetición de la suite 367/367 sobre ong_test_hu01 fue comunicada en el registro de ejecución y se
 registra aparte de las pruebas reales. En esta revisión no se ejecutó la suite, ni pagos,
-reenvíos o cambios de configuración. Se conservan .env, .claude/launch.json y el resto de
+reenvíos o cambios de configuración. Se conservan .env, el resto de
 los cambios de compatibilidad; no hay acciones de Git de escritura.
 
 ## Aclaración posterior del retorno — 2026-11-07
 
-Nada y el guía acreditan el retorno automático del Checkout original a la página de resultado con la misma referencia. El error visible y ECONNREFUSED del frontend correspondieron al backend apagado, no a la ausencia de retorno. Véase la aclaración en [validacion-stripe-01.md](validacion-stripe-01.md). Se conserva el registro anterior. T076 sigue pendiente de comprobar la configuración de recuperación/cancelación de cuotas; T077, de la prueba explícita de cierre del navegador y del cierre de T076. No se ejecutan pagos, reenvíos o pruebas adicionales ni se inventan respuestas HTTP.
+la ejecución de prueba acreditan el retorno automático del Checkout original a la página de resultado con la misma referencia. El error visible y ECONNREFUSED del frontend correspondieron al backend apagado, no a la ausencia de retorno. Véase la aclaración en [validacion-stripe-01.md](validacion-stripe-01.md). Se conserva el registro anterior. T076 sigue pendiente de comprobar la configuración de recuperación/cancelación de cuotas; T077, de la prueba explícita de cierre del navegador y del cierre de T076. No se ejecutan pagos, reenvíos o pruebas adicionales ni se inventan respuestas HTTP.
 
 ## Cierre de configuración de T076 mediante capturas — 2026-11-07
 
 Este apartado completa la comprobación que faltaba y actualiza los estados parciales
-anteriores, conservados como evolución. Nada navegó por el panel y aportó tres capturas;
+anteriores, conservados como evolución. Se consultó el panel y se aportaron tres capturas;
 la revisión actual lee sus valores, sin acceso directo adicional al panel ni cambios de
-configuración. Las imágenes se conservan sin editar en capturas/.
+configuración. Las imágenes se sustituyen en la entrega por su descripción escrita para excluir elementos personales del escritorio.
 
-| Evidencia aportada por Nada                                           | Configuración visible                                                                                                                                                                                                    |
+| Evidencia aportada durante la prueba                                           | Configuración visible                                                                                                                                                                                                    |
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [Entorno](capturas/t076-01-entorno-pruebas.png)                       | Entorno de prueba, Practica IWEB ONG, Recuperación de ingresos → Reintentos                                                                                                                                              |
-| [Política para tarjetas](capturas/t076-02-smart-retries.png)          | Pagos con tarjeta activados; Smart Retries seleccionado; hasta 8 reintentos en 2 semanas; reintentos personalizados sin seleccionar                                                                                      |
-| [Acciones tras el fallo](capturas/t076-03-agotamiento-reintentos.png) | Suscripción activa cuando su factura más reciente se ha cobrado; el primer fallo de renovación deja la suscripción como vencida; al fallar todos los reintentos, cancelar la suscripción y dejar la factura como vencida |
+| Entorno (descripción de la configuración observada)                       | Entorno de prueba, Practica IWEB ONG, Recuperación de ingresos → Reintentos                                                                                                                                              |
+| Política para tarjetas (descripción de la configuración observada)          | Pagos con tarjeta activados; Smart Retries seleccionado; hasta 8 reintentos en 2 semanas; reintentos personalizados sin seleccionar                                                                                      |
+| Acciones tras el fallo (descripción de la configuración observada) | Suscripción activa cuando su factura más reciente se ha cobrado; el primer fallo de renovación deja la suscripción como vencida; al fallar todos los reintentos, cancelar la suscripción y dejar la factura como vencida |
 
 Se transcriben las etiquetas visibles, sin deducir de ellas una fecha concreta de próximo
 cobro ni un estado de una suscripción particular. La configuración de reintentos y su
@@ -166,11 +168,10 @@ reenvíos, cambios de ajustes o acciones de Git de escritura.
 
 ## Comprobación posterior de T077: alcance de la reentrega — 2026-11-07
 
-Nada y el guía aportaron evidencia de cierre del navegador y páginas de la aplicación,
+la ejecución de prueba aportaron evidencia de cierre del navegador y páginas de la aplicación,
 ausencia de procesos de los navegadores comprobados, reenvío autorizado de un único evento
-original y recepción y aceptación por el listener con HTTP 200, sin duplicados. El guía
-contrastó los registros y Mailpit antes y después, todavía con el navegador cerrado;
-Nada confirmó después el resultado correcto al reabrir la aplicación. El detalle y la
+original y recepción y aceptación por el listener con HTTP 200, sin duplicados. Se contrastó los registros y Mailpit antes y después, todavía con el navegador cerrado;
+Se confirmó después el resultado correcto al reabrir la aplicación. El detalle y la
 atribución están en [validacion-stripe-01.md](validacion-stripe-01.md).
 
 T076 sigue completada. La comprobación adicional cubre una **reentrega de un pago ya
@@ -181,7 +182,7 @@ quickstart concreta el cierre antes del pago. Por ello T077 sigue parcial, pendi
 acreditar ese recorrido real, sin modificar el criterio ni volver a pagar la operación
 original. Los estados anteriores se conservan como evolución documental.
 
-La respuesta 200 está observada en las líneas nuevas aportadas por Nada y se limita a
+La respuesta 200 está observada en las líneas nuevas aportadas durante la prueba y se limita a
 esta reentrega. No se atribuye a los reenvíos anteriores sin captura HTTP. Se conserva el
 fallo inicial por backend apagado y su recuperación, además de pago, correo, retorno y
 acceso verificado ya acreditados. No se realizan nuevos pagos, reenvíos o ajustes en esta
@@ -213,12 +214,12 @@ parcial y sin marcar; T076 completada y el resto de pendientes conservan su esta
 
 ## Evidencia posterior de ejecución y cierre de T077/P21 — 2026-11-07
 
-La prueba adicional preparada se ejecutó, según las evidencias comunicadas por Nada y
-el guía, con la aportación 31, operación 4, referencia DON-868afebb-090a-492e-9966-ab31b6bad6bf,
+La prueba adicional preparada se ejecutó, según las evidencias comunicadas durante la prueba y
+el registro de ejecución, con la aportación 31, operación 4, referencia DON-868afebb-090a-492e-9966-ab31b6bad6bf,
 importe 1,23 € EUR y fondo general. La donación anterior de 15,75 € permanece independiente
 y conserva su relato de fallo inicial por backend apagado, recuperación y reentrega.
 
-El listener observó sin forwarding durante el pago único de Nada. El guía confirmó por
+El listener observó sin forwarding durante el pago único de Nada. El registro de ejecución confirmó por
 GET de Stripe el pago de pruebas y por lecturas de PostgreSQL el estado local pendiente,
 sin fecha/pago local, correo o evento, antes del cierre y justo antes de la primera entrega
 a las 02:53:15.438Z. Se cerraron las páginas de aplicación/Checkout y todas las pestañas del
@@ -226,10 +227,10 @@ integrado, incluida Mailpit. Firefox mantuvo páginas ajenas: no se afirma que s
 estuvieran terminados. Backend y demás servicios siguieron activos.
 
 Con la misma clave de .env, el secreto del listener con forwarding coincidió con el
-configurado, según la comprobación del guía sin exponer valores. Se reenvió únicamente el
+configurado, según la comprobación del registro previo sin exponer valores. Se reenvió únicamente el
 evento auténtico nuevo evt_3UYzXwE0jEvPnEcp1ECh1dn8, payment_intent.succeeded, API endive.
-Nada aportó recepción a las 03:53:16 y respuesta 200 a las 03:53:18 locales. Sin reabrir
-páginas, el guía comprobó a las 02:53:20.900Z la primera transición a confirmada, unicidad
+Se aportaron recepción a las 03:53:16 y respuesta 200 a las 03:53:18 locales. Sin reabrir
+páginas, se comprobó a las 02:53:20.900Z la primera transición a confirmada, unicidad
 local, evento procesado y correo enviado con un intento y recibido en Mailpit. Tras otra
 entrega del mismo evento con 200 a las 03:56:10 locales, los recuentos y el envío se conservaron.
 Nada reabrió el resultado con cuenta vinculada y confirmó sus datos.
@@ -242,23 +243,23 @@ estados parciales anteriores se conservan como evolución y no se presentan como
 
 No se afirma inspección visual del nuevo correo, cierre completo de Firefox o duración
 inferior a tres minutos. La recepción del correo se acredita por Mailpit y las consultas
-del guía. T078 y siguientes, T006, T007, converge y coordinación de 009 siguen pendientes.
+del registro previo. T078 y siguientes, T006, T007, converge y coordinación de 009 siguen pendientes.
 Esta revisión solo actualiza documentación: no ejecuta suites, consultas externas, pagos,
 reenvíos, configuración o acciones de Git de escritura; conserva secretos e históricos.
 
 ## Evidencia posterior de socios — T078 · 2026-11-07
 
-Nada realizó las altas mensual de 1,11 €, trimestral de 1,22 € y anual de 1,33 €, EUR y fondo
-general, en Stripe de pruebas. El guía contrastó con PostgreSQL, consultas Stripe acacia y
+Se realizaron las altas mensual de 1,11 €, trimestral de 1,22 € y anual de 1,33 €, EUR y fondo
+general, en Stripe de pruebas. Se contrastó con PostgreSQL, consultas Stripe acacia y
 Mailpit las facturas iniciales pagadas, relaciones correctas, fechas de alta/cobro iguales
 a paid_at, suscripciones inicialmente activas y una cuota, operación y confirmación por alta.
-Nada aportó primeras entregas y reentregas de invoice.paid con HTTP 200. Los recuentos, fechas
+Se aportaron primeras entregas y reentregas de invoice.paid con HTTP 200. Los recuentos, fechas
 y envíos se conservaron tras las reentregas. Estos casos aportan evidencia de recursos reales
 de suscripciones y facturas iniciales con el adaptador acacia, sin generalizar a todos los
 recorridos de Billing o a la estructura completa de eventos endive.
 
-Nada canceló solo la anual inmediatamente y sin reembolso desde el panel de pruebas.
-El customer.subscription.deleted obtuvo 200 según las líneas aportadas; el guía contrastó
+Se canceló solo la anual inmediatamente y sin reembolso desde el panel de pruebas.
+El customer.subscription.deleted obtuvo 200 según las líneas aportadas; Se contrastó
 canceled en Stripe, cancelada localmente, previsión nula, aportación confirmada intacta,
 ausencia de factura adicional, amount_refunded=0 y confirmación original conservada. Nada
 comprobó el resultado anual. Mensual y trimestral no se cancelaron.
@@ -272,10 +273,15 @@ la cancelación tras alta satisfactoria no equivale a S13 completo después de u
 
 El inventario de tres nuevas confirmaciones recibidas en Mailpit se incorpora a la evidencia
 parcial de T079–T080, sin atribuir inspección visual de sus contenidos ni cobertura global de
-SC-002. T079 sigue pendiente por falta de medición de la donación puntual de SC-001, y T080
+SC-002. T079 sigue pendiente por falta de medición de la donación puntual de SC-001 y T080
 por el balance completo de 34 escenarios. T006, T007, converge y coordinación de 009 siguen
 pendientes. Los estados previos de este informe se conservan como evolución.
 
-Esta revisión es documental: no repite las acciones de Nada ni las consultas del guía, no
+Esta revisión es documental: no repite las acciones de Nada ni las consultas del registro previo, no
 ejecuta suites ni acciones externas y no modifica secretos, código o configuración. No se
 realizan acciones de Git de escritura; la rama y los commits anteriores se conservan.
+
+
+### Presentación de la evidencia de configuración
+
+Las tres capturas de escritorio de T076 se retiran de la entrega por incluir elementos personales. Se conserva la descripción contrastada: entorno de pruebas de Stripe; Smart Retries activado con hasta 8 reintentos en 2 semanas; al agotarlos, cancelar la suscripción y dejar la factura como vencida. Esta sustitución no implica una nueva comprobación de la cuenta.

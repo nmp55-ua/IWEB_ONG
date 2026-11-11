@@ -6,9 +6,7 @@ Es la **única** definición de cada entidad para las 8 specs (principio VIII de
 Quien es dueño de una tabla escribe su migración; los demás la usan y no la duplican. Cualquier
 cambio se acuerda con el grupo y se hace con una migración nueva (principio XII).
 
-**Alineación de HU-01 (2026-11-06)**: ajustes preparados por Nada en `spec-001` para
-revisión, incluidas las decisiones técnicas P-01–P-04. La definición documental queda
-alineada en esta rama; no acredita acuerdo colectivo, revisión de Rubén ni implementación.
+**Estado de HU-01**: HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
 
 ## Reglas generales
 
@@ -406,6 +404,8 @@ La **posición** en la lista de espera se calcula (orden de `fecha_inscripcion` 
 | `horas` | NUMERIC(5,2) | horas de la actividad al registrar |
 | `registrada_por` | BIGINT → usuarios | coordinador |
 | `fecha_registro` | TIMESTAMPTZ | última modificación |
+| `creado_en` | TIMESTAMPTZ | por defecto `now()` |
+| `actualizado_en` | TIMESTAMPTZ | por defecto `now()`; se actualiza al corregir |
 
 Una inscripción tiene como mucho una asistencia; corregir cambia `asistio`, no crea otra fila.
 El **total de horas** de un voluntario no se guarda: es `SUM(horas) WHERE asistio = true`. Así
