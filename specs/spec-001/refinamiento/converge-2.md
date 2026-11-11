@@ -1,5 +1,7 @@
 # Segundo informe de converge — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha:** 2026-11-07 · **Rama:** spec-001 · **HEAD comprobado:** 140718b.
 
 **Responsable:** Nada · **Revisor externo:** Rubén, revisión y aprobación pendientes.
@@ -12,18 +14,18 @@ inspeccionados. Se añade T084 sin modificar las 83 tareas anteriores.
 
 Se sigue la definición local de
 [speckit-converge](../../../.claude/skills/speckit-converge/SKILL.md), sin herramienta
-registrada para invocar `/speckit-converge` en esta sesión. La intención procede de
+registrada para invocar `/speckit-converge` en esta fase. La intención procede de
 [spec.md](../spec.md), [plan.md](../plan.md) y [tasks.md](../tasks.md), bajo la constitución.
 Se consultan contratos, modelo y evidencias para contrastarla, sin añadir requisitos.
 
-El [encargo preparado](preparacion-converge-01.md) se aplica con el
-[ajuste posterior autorizado por Nada](ajuste-flujo-01.md): T006/T007 son preparación
-técnica completada; PR-R01/PR-R02 son controles externos antes de main. El significado
+El [primer diagnóstico de converge](converge-1.md) se aplica con el
+[ajuste posterior documentado](ajuste-flujo-01.md): T006/T007 son preparación
+técnica completada; los controles de incorporación son controles externos antes de main. El significado
 anterior de esas tareas en el primer informe no se interpreta como un bloqueo vigente
 para desarrollar, verificar o preparar/abrir una PR.
 
-La salvaguarda inicial confirma spec-001, HEAD 140718b y únicamente
-`.claude/launch.json` sin seguimiento. Los commits locales comprobados son:
+La salvaguarda inicial confirma spec-001 y HEAD 140718b; Se conserva la configuración local.
+ sin seguimiento. Los commits locales comprobados son:
 
 | Commit  | Evidencia conservada                                     |
 | ------- | -------------------------------------------------------- |
@@ -38,7 +40,7 @@ publicados. No se repiten sus acciones. La resolución de selección, desde la r
 .\.specify\scripts\powershell\check-prerequisites.ps1 -Json -PathsOnly
 ```
 
-Resuelve specs/spec-001; se verifica además la existencia de spec.md, plan.md y tasks.md.
+Resuelve specs/spec-001; Se verifica además la existencia de spec.md, plan.md y tasks.md.
 Se usa PathsOnly para evitar persistir la selección; no sustituye esa comprobación de
 existencia. Se lee `.specify/extensions.yml`: no registra before_converge/after_converge.
 No se ejecutan hooks de Git. La escritura adicional del informe está autorizada por el
@@ -133,8 +135,8 @@ prueba de ejecución. El resultado siguiente conserva el alcance de esas fuentes
 
 | Criterio | Evidencia contrastada                                                                    | Límite conservado                                                                       |
 | -------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| SC-001   | R5 y medicion-puntual-02.md: 61 s observados por Nada.                                   | Una ejecución, sin reconstruir t0/t1; R4 conserva 480,836 s fallidos.                   |
-| SC-002   | R1–R5: el guía acredita 7/7 confirmaciones recibidas por referencia, aportaciones 30–36. | Conjunto manual delimitado, no auditoría global. SMTP aceptado no equivale a recepción. |
+| SC-001   | R5 y medicion-puntual-02.md: 61 s medidos con cronómetro.                                   | Una ejecución, sin reconstruir t0/t1; R4 conserva 480,836 s fallidos.                   |
+| SC-002   | R1–R5: se acredita 7/7 confirmaciones recibidas por referencia, aportaciones 30–36. | Conjunto manual delimitado, no auditoría global. SMTP aceptado no equivale a recepción. |
 | SC-003   | T074, esquema, DTOs y proyecciones del adaptador.                                        | Inspección previa conservada; no nueva auditoría de bases, logs o infraestructura.      |
 | SC-004   | R1/R3/R5 y A1/A8/A9: céntimos, base, pantalla y mensajes según cada fuente.              | No se inventan capturas o cotejos visuales nuevos.                                      |
 
@@ -201,7 +203,7 @@ Se contrastan los doce principios constitucionales: I–II, simplicidad y alcanc
 III, verificabilidad y coherencia documental, con la reserva CONV-003; IV, español,
 euros y fechas; V–VI, autorización en servidor, Checkout alojado y conservación financiera;
 VII–IX, pila, capas, reutilización y modelo único; X, responsable/revisor y rama; XI–XII,
-revisión e incorporación de cambios comunes aún sujetas a PR-R01/PR-R02. No se identifica
+revisión e incorporación de cambios comunes aún sujetas a los controles de incorporación. No se identifica
 otra infracción en el código inspeccionado ni se certifica seguridad absoluta mediante
 esta lectura. La aprobación externa no se sustituye por converge.
 
@@ -223,11 +225,11 @@ esta lectura. La aprobación externa no se sustituye por converge.
 
 | Fuente                                    | Resultado registrado                                                 | Alcance                                                                                                   |
 | ----------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| validacion-converge-01.md                 | Cuatro fallos iniciales; después 83/83, y 21/21 en otra ejecución.   | PostgreSQL aislado y Stripe/SMTP simulados; cierres CONV-001/002.                                         |
-| Matriz y validacion-stripe-01.md          | Regresión de donaciones 367/367; repetición comunicada por el guía.  | Otra fecha/alcance; no suite de este converge ni suma con las anteriores.                                 |
+| validacion-converge-01.md                 | Cuatro fallos iniciales; después 83/83 y 21/21 en otra ejecución.   | PostgreSQL aislado y Stripe/SMTP simulados; cierres CONV-001/002.                                         |
+| Matriz y validacion-stripe-01.md          | Regresión de donaciones 367/367; repetición comunicada en el registro de ejecución.  | Otra fecha/alcance; no suite de este converge ni suma con las anteriores.                                 |
 | validacion-local-g1-g3-01.md              | 17/17 dirigidas y recorrido de interfaz del banco aislado.           | Seis huecos G1–G3, con persistencia y pasarela/SMTP simulados.                                            |
 | validacion-local-01.md, T073/T074         | Regresión/compilación y revisión de datos, sesión y registros.       | Pruebas ajenas omitidas identificadas allí; observaciones de registros comunes conservadas para revisión. |
-| Stripe, mediciones e inventario de correo | Puntuales, P21, tres altas/reentregas/cancelación anual; 61 s y 7/7. | Observaciones de Nada/guía y comprobaciones anteriores atribuidas en sus informes, no de esta sesión.     |
+| Stripe, mediciones e inventario de correo | Puntuales, P21, tres altas/reentregas/cancelación anual; 61 s y 7/7. | Observaciones de observación y consulta registradas y comprobaciones anteriores atribuidas en sus informes, no de esta sesión.     |
 
 No se ejecutan pruebas funcionales, compilación, consultas a PostgreSQL, Stripe o Mailpit,
 pagos, reenvíos, navegador, servicios o consultas de ramas publicadas. Tampoco se cambia
@@ -263,17 +265,17 @@ pagos/suites si no aparecen cambios que lo justifiquen.
 
 | Control | Condición pendiente                                                                                                                                      |
 | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PR-R01  | Revisión/aprobación reales de Rubén del paquete 004/P-01–P-03/incremento completo, observaciones resueltas y coordinación común aplicable antes de main. |
-| PR-R02  | Explicar 009 en la PR, comprobar el destino de integración actualizado y resolver conflictos, considerando entornos donde el nombre ya está aplicado.    |
+| el control de revisión  | Revisión/aprobación reales de Rubén del paquete 004/P-01–P-03/incremento completo, observaciones resueltas y coordinación común aplicable antes de main. |
+| el control de integración  | Explicar 009 en la PR, comprobar el destino de integración actualizado y resolver conflictos, considerando entornos donde el nombre ya está aplicado.    |
 
 T006 acredita paquete preparado y T007 la comprobación/elección local registrada en
 ajuste-flujo-01.md: nueve ramas/seis commits, consulta del 2026-11-07T05:24:01.3676404Z,
 sin 009 en las cabezas enumeradas. Este converge no vuelve a consultar GitHub ni convierte
-aquella ausencia en disponibilidad actual garantizada o reserva colectiva. No descarta
+aquella ausencia en disponibilidad actual garantizada o numeración de la migración. No descarta
 trabajo sin publicar. Un eventual renombrado requiere tratar el registro de nombres
 aplicados; no basta renombrar y ejecutar de nuevo.
 
-Los controles PR-R01/PR-R02 no impiden preparar/abrir una PR ni terminar el trabajo técnico
+Los controles de incorporación no impiden preparar/abrir una PR ni terminar el trabajo técnico
 en la rama; sí condicionan main. Este diagnóstico no publica PR, no envía mensajes y no
 declara aprobación externa, incorporación o historia terminada.
 
@@ -290,14 +292,4 @@ sin git add, commit, push, merge, cambios de rama, pagos, reenvíos o comunicaci
 
 ## Comprobación documental final
 
-- Prettier correcto en converge-2.md y tasks.md, mediante la copia existente de la caché
-  local, sin instalar paquetes. La búsqueda inicial con npx no encontró una versión utilizable;
-  se ejecutó después directamente el archivo prettier.cjs ya disponible.
-- Enlaces locales del informe sin destinos ausentes; 19 filas FR, 4 SC y 34 escenarios.
-- tasks.md conserva byte por byte sus 112246 bytes anteriores, verificados por SHA-256;
-  solo se añade Phase 7/T084. Resultado: 84 IDs únicos, 83 marcados y T084 sin marcar.
-- El contraste SHA-256 de los 262 archivos iniciales solo detecta tasks.md cambiado.
-  converge-1.md, informes históricos, código, migraciones, selección, `.env` y
-  `.claude/launch.json` permanecen intactos. converge-2.md es el único archivo nuevo.
-- `git diff --check` sin errores e índice sin cambios. Rama y HEAD iniciales conservados.
-  No se atribuye ninguna prueba funcional nueva a esta comprobación de documentos.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.

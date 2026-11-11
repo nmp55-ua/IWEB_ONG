@@ -1,0 +1,48 @@
+
+> ong-backend@0.1.0 test
+> vitest run src/modulos/donaciones src/servicios-comunes/correo.test.js --no-file-parallelism
+
+
+ RUN  v2.1.9 E:/asignaturas/IWeb/Practica grupal/IWEB_ONG/backend
+
+ ✓ src/modulos/donaciones/migraciones.test.js (68 tests) 9559ms
+   ✓ HU-01 · soporte de integración T019 > dos procesos nuevos conservan sesión/base/secreto y comparten el simulador por clave 1269ms
+ ✓ src/modulos/donaciones/cuotas.test.js (38 tests) 8835ms
+   ✓ resuelve la factura 2025-02-24.acacia por consulta acacia, sin confiar en la suscripción del evento 378ms
+   ✓ T055 · primera factura, ciclos, reentregas y desorden > Checkout completado antes o después de la factura solo correlaciona; reentregas y entregas simultáneas no duplican 305ms
+   ✓ T055 · primera factura, ciclos, reentregas y desorden > fallo seguido de éxito de la misma factura de ciclo confirma la misma fila sin duplicar la suma 308ms
+   ✓ CONV-002 · recuperación del aviso histórico > no presenta el fallo/previsión como actuales tras pago y reentrega 313ms
+   ✓ T056 · fallo posterior, previsión y cancelación > S12: una previsión nula o pasada se devuelve null, también al vencer sin otro webhook 305ms
+   ✓ T056 · fallo posterior, previsión y cancelación > una factura antigua no reemplaza la previsión vigente ni registra un rechazo si ya está pagada 338ms
+   ✓ T056 · fallo posterior, previsión y cancelación > S13: la cancelación tras un fallo conserva las cuotas y un evento antiguo no reactiva ni anuncia otro cobro 424ms
+ ✓ src/modulos/donaciones/servicio.test.js (24 tests) 4988ms
+   ✓ reanuda desde otro proceso con sesión, instantánea y simulador persistentes 569ms
+   ✓ alta de socio mensual con importe 1.00 sin cuenta: suscripción pendiente, cuota inicial y recurrencia congelada 788ms
+stderr | src/modulos/donaciones/rutas.test.js > solicitud de vínculo no enumera, exige cuenta/rol y el cliente no elige destinatario
+No se aceptó el correo de verificación de donaciones.
+
+ ✓ src/modulos/donaciones/rutas.test.js (12 tests) 3434ms
+   ✓ contexto, creación privada y DTO corto; rechaza CSRF, campos desconocidos y sesión ajena 343ms
+   ✓ S06: la sesión del alta no autoriza cuotas posteriores; la cuenta vinculada propietaria sí, sin cargos ni filas nuevas 633ms
+ ✓ src/modulos/donaciones/historial.test.js (38 tests) 4865ms
+   ✓ Preparacion HU-02 > comprueba limpieza limitada al esquema propio 1207ms
+ ✓ src/modulos/donaciones/pasarela.test.js (37 tests) 434ms
+ ✓ src/modulos/donaciones/eventos.test.js (21 tests) 2259ms
+ ✓ src/modulos/donaciones/autorizacion.test.js (35 tests) 26ms
+ ✓ src/modulos/donaciones/textoCorreo.test.js (26 tests) 41ms
+ ✓ src/modulos/donaciones/historial-banco.test.js (9 tests) 9120ms
+   ✓ Banco integrado HU-02, sin navegador > arranca build/proxy/backend reales, usa login comun y limpia solo recursos propios 5424ms
+   ✓ Banco integrado HU-02, sin navegador > un fallo al arrancar Astro cierra el backend, el esquema y los puertos 3659ms
+ ✓ src/servicios-comunes/correo.test.js (16 tests) 61ms
+ ✓ src/modulos/donaciones/registro.test.js (3 tests) 6069ms
+   ✓ registra donaciones en la aplicación real y conserva auth, proyectos y permisos de actividades 404ms
+   ✓ ejecuta dos veces el registro conjunto de semillas en un esquema exclusivo sin duplicar datos 3551ms
+ ✓ src/modulos/donaciones/confirmaciones.test.js (7 tests) 1635ms
+ ✓ src/modulos/donaciones/normalizacion.test.js (102 tests) 39ms
+ ✓ src/modulos/donaciones/validacion-local.test.js (6 tests) 2107ms
+
+ Test Files  15 passed (15)
+      Tests  442 passed (442)
+   Start at  16:38:43
+   Duration  71.91s (transform 938ms, setup 0ms, collect 13.31s, tests 53.47s, environment 4ms, prepare 1.95s)
+

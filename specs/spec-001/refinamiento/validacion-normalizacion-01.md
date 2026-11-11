@@ -1,5 +1,7 @@
 # Validación de normalización de datos — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-06 · **Rama**: spec-001  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance**: T020–T021. Implementación y pruebas de funciones puras.  
@@ -13,8 +15,8 @@ normalizacion.js, normalizacion.test.js y este informe no existen al comenzar.
 Se conservan la migración 004, su evidencia de validación y todos los informes históricos.
 No se incorpora origin/main ni se cambia de rama.
 
-Se sigue la [definición local de speckit-implement](../../../.claude/skills/speckit-implement/SKILL.md),
-al no estar registrado el comando en la sesión, limitada a las dos tareas del bloque.
+Se sigue la [definición local de speckit-implement](../../../.claude/skills/speckit-implement/SKILL.md).
+
 Se verifica specs/spec-001 con check-prerequisites.ps1 -Json -PathsOnly y selección de
 proceso, sin persistir feature.json. La checklist requirements.md conserva sus 16 marcas,
 sin pendientes. Se omiten los hooks opcionales de commit antes y después de implementar.
@@ -111,7 +113,7 @@ mostradas por Vitest; los fallos de recolección no cuentan como pruebas funcion
 | Después de corregir la tabla de casos | 18:32:01 | 0 | Un archivo y 102 pruebas aprobados; 0 fallidos y 0 omitidos. Duración 1,43 s, 66 ms de pruebas. |
 | Comprobación final tras ajustar formato de los archivos nuevos | 18:34:44 | 0 | Un archivo y 102 pruebas aprobados; 0 fallidos y 0 omitidos. Duración 2,73 s, 64 ms de pruebas. |
 
-El caso BigInt se conserva como entrada inválida; se cambia únicamente el formato del
+El caso BigInt se conserva como entrada inválida; Se cambia únicamente el formato del
 rótulo. Los valores array se pasan como un único argumento de la tabla para que se
 compruebe realmente su rechazo. No se eliminan casos para obtener el resultado final.
 
@@ -139,9 +141,7 @@ npx --yes prettier@3.6.2 --check src/modulos/donaciones/normalizacion.js src/mod
 npx --yes prettier@3.6.2 --write src/modulos/donaciones/normalizacion.js src/modulos/donaciones/normalizacion.test.js
 ```
 
-La herramienta se obtiene en la caché de npm; no se modifican manifiestos, lockfiles o
-dependencias del proyecto. La comprobación posterior con esa misma versión de Prettier
-termina con código 0: los dos archivos cumplen el formato.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 Después del ajuste se repite el mismo comando de pruebas: inicio 18:58:10, código 0,
 102 pruebas aprobadas, ninguna fallida u omitida; duración 1,19 s y 47 ms de pruebas.

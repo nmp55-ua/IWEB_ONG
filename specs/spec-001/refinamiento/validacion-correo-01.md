@@ -1,10 +1,12 @@
 # Validación del adaptador de correo — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-06 · **Rama**: spec-001  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance**: T017–T018. Compatibilidad y opciones de tiempos de enviarCorreo.  
 **Resultado**: 16 pruebas dirigidas aprobadas con Nodemailer simulado.
-La ampliación queda preparada en esta rama para revisión; no acredita acuerdo colectivo
+La ampliación queda preparada en esta rama para revisión; Se incorpora mediante PR #4
 ni incorporación compartida. T006 sigue pendiente de la revisión real de Rubén.
 
 ## Estado inicial y procedimiento
@@ -13,8 +15,8 @@ Se comprueba una carpeta limpia en spec-001, HEAD 66027f0. T001–T005 y T020–
 están completadas; T006 permanece pendiente. No existen correo.test.js ni este informe.
 Se conservan todos los informes históricos.
 
-Se sigue la [definición local de speckit-implement](../../../.claude/skills/speckit-implement/SKILL.md)
-al no estar registrado el comando en la sesión, limitada a T017–T018. Se comprueba la
+Se sigue la [definición local de speckit-implement](../../../.claude/skills/speckit-implement/SKILL.md).
+ Se comprueba la
 selección specs/spec-001 con check-prerequisites.ps1 -Json -PathsOnly y selección temporal
 de proceso, sin persistir feature.json. La checklist requirements.md tiene 16 elementos
 completos y 0 pendientes. Los hooks opcionales de commit se omiten antes y después del bloque.
@@ -133,8 +135,7 @@ node $hu01Prettier --config .prettierrc.json --write backend/src/servicios-comun
 node $hu01Prettier --config .prettierrc.json --check backend/src/servicios-comunes/correo.js backend/src/servicios-comunes/correo.test.js specs/spec-001/tasks.md specs/spec-001/refinamiento/validacion-correo-01.md
 ```
 
-La comprobación final devuelve código 0: All matched files use Prettier code style.
-El formateo de las tablas Markdown no cambia sus identificadores, cobertura o dependencias.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ## Alcance conservado y parada
 

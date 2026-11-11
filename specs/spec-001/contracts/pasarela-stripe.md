@@ -1,5 +1,7 @@
 # Contrato de pasarela y reconciliación — HU-01
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-07
 
 **Estado**: Compatibilidad acacia/endive comprobada localmente y entregas reales del
@@ -99,7 +101,7 @@ transaccionales pi/sub usados al reconciliar notificaciones.
    minúsculas con guiones como solicitud_id de PostgreSQL, nunca con el texto bruto recibido.
    Esa misma representación forma hu01:<solicitud_id> para Stripe, en las dos fases.
    En transacción se crea/reutiliza la operación, se compara la huella del cuerpo cuando
-   se reenvía completo y se guarda solicitud_checkout mediante el preparador común.
+   Se reenvía completo y se guarda solicitud_checkout mediante el preparador común.
    No se vuelve a construir la instantánea de una operación existente.
 2. **Autorización antes del envío**: hacer commit y devolver la conexión de preparación;
    guardar la sesión y su permiso antes de adquirir la conexión de creación. Si falla ese
@@ -144,7 +146,7 @@ La aplicación conserva la clave de solicitud en sessionStorage por operación, 
 allí datos fiscales. Puede reanudar mediante el DTO corto autorizado definido en el contrato
 API, que referencia la solicitud original sin aportar otra. No ofrece un botón de reiniciar
 el pago con otro UUID para resolver incertidumbre. Una sesión perdida no se recupera
-por conocer esa clave; se mantiene PA1.7.
+por conocer esa clave; Se mantiene PA1.7.
 
 **Necesidad de datos**: se añade solo solicitud_checkout JSONB al registro operativo ya
 previsto. La huella anterior no permite reconstruir después de un reinicio el cuerpo exacto
@@ -203,7 +205,7 @@ rechazarla. P-01 alinea estas transiciones en el modelo común de esta rama; est
 implementadas y comprobadas localmente según
 [validacion-local-01.md](../refinamiento/validacion-local-01.md), sin equiparar las
 regresiones con recursos simulados a una prueba real de todos los rechazos de Stripe.
-La revisión de Rubén y el control de incorporación siguen pendientes en PR-R01/PR-R02,
+La revisión de Rubén y el control de incorporación siguen pendientes en los controles de incorporación,
 según [ajuste-flujo-01.md](../refinamiento/ajuste-flujo-01.md); la implementación local
 no acredita publicación, aprobación ni incorporación a main.
 Un evento de fallo que ya encuentra el pago satisfecho no registra otro rechazo: la
@@ -223,7 +225,7 @@ con ella. La Subscription debe corresponder a la suscripción local y a la refer
 alta; una coincidencia de importe sin esas relaciones no acredita pertenencia.
 
 - `billing_reason = 'subscription_create'`: `Subscription.metadata.referencia` localiza
-  la aportación pendiente del alta; se le asignan factura, pago y suscripción externa.
+  la aportación pendiente del alta; Se le asignan factura, pago y suscripción externa.
 - `billing_reason = 'subscription_cycle'`: se busca por `pasarela_factura_id`; si no existe,
   se crea una sola cuota del mismo Donante, destino e importe de la suscripción.
 - Otros motivos, como cambios de suscripción o facturación manual, se registran como
@@ -238,7 +240,7 @@ El PaymentIntent conocido no se sustituye por otro identificador sin revisar la 
 Si una factura de ciclo llega antes de la notificación de la primera cuota y esta aún no
 consta confirmada, se recupera la factura inicial mediante `Checkout Session.invoice` de
 la operación del alta. Si falta el ID de Session por una respuesta incierta, se consulta
-Session por `subscription`, con límite 2 y comprobación de referencia; se exige una única
+Session por `subscription`, con límite 2 y comprobación de referencia; Se exige una única
 coincidencia. Estos campos y filtro existen en los
 [tipos Session](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Checkout/Sessions.d.ts)
 y [parámetros de listado](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Checkout/SessionsResource.d.ts).

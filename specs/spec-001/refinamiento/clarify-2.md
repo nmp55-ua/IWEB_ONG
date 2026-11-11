@@ -1,5 +1,7 @@
 # Informe de clarify — HU-01 — Actualización de decisiones
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-04
 **Rama**: `spec-001`
 **Responsable**: Nada
@@ -15,7 +17,8 @@ una redacción impersonal. No registra una sexta pregunta ni una revisión reali
 Rubén. Los ajustes del plan y del modelo comunes siguen identificados y sin realizar.
 
 Se continúa el procedimiento local de `.claude/skills/speckit-clarify/SKILL.md` como
-adaptación de `/speckit-clarify`, que no está registrado en este chat. La resolución de
+adaptación de `/speckit-clarify`.
+ La resolución de
 `specs/spec-001` y las lecturas iniciales están documentadas en el informe anterior. Se
 comprueban de nuevo rama, cambios y documentación vigente antes de editar. Los cambios
 se limitan a `specs/spec-001/`; los hooks opcionales de commit siguen omitidos según el
@@ -25,7 +28,7 @@ alcance autorizado. No se ejecuta plan ni se implementa.
 
 | Pregunta | Decisión | Justificación registrada | Trazabilidad |
 |---|---|---|---|
-| PA1.1 | Modificar la cuota y darse de baja desde la aplicación quedan fuera de v1; se conservan alta y cobros periódicos. | Mantener el alcance de los criterios actuales, centrados en donaciones y altas. | FR-008 y FR-009; alta como socio. |
+| PA1.1 | Modificar la cuota y darse de baja desde la aplicación quedan fuera de v1; Se conservan alta y cobros periódicos. | Mantener el alcance de los criterios actuales, centrados en donaciones y altas. | FR-008 y FR-009; alta como socio. |
 | PA1.2 | Donación puntual y alta de socio sin cuenta. El historial requiere sesión con una cuenta del mismo correo, sin considerar esa coincidencia prueba de titularidad. | Permitir colaborar sin registro previo y mantener el historial privado. | FR-011; donación puntual, escenario 7; alta de socio, escenario 4. |
 | PA1.3 | Abrir un enlace enviado al correo utilizado al donar antes de vincular las aportaciones a una cuenta. Comprobación limitada a donaciones; no cambia el registro ni el inicio de sesión generales. | Proteger el historial frente a cuentas creadas con correos ajenos. | FR-013; donación puntual, escenarios 11 y 12; entidad Donante y dependencia de vinculación. |
 | PA1.4 | Conservar el pago confirmado y su resumen ante un fallo de correo; avisar y permitir reintentar solo el envío, sin otro cobro ni aportación. | Recuperar el correo sin duplicar pagos ni confundir un aviso con el envío; coherencia expresamente solicitada con FR-007 y SC-002. | FR-007 y FR-012; SC-002; donación puntual, escenarios 6 y 8–10; socio, escenarios 5 y 6. |
@@ -43,7 +46,7 @@ No supone que se hayan actualizado los contratos compartidos ni probado el códi
 - Se añaden FR-013 y FR-014 y criterios verificables para ambas decisiones; los requisitos
   existentes FR-001 a FR-012 conservan sus identificadores.
 - Se elimina la regla de reutilización por coincidencia de correo y se distingue entre
-  NIF/NIE y correo coincidentes, correo con otro NIF/NIE, y el caso inverso todavía abierto.
+  NIF/NIE y correo coincidentes, correo con otro NIF/NIE y el caso inverso todavía abierto.
 - El caso ordinario de reutilización con NIF/NIE y correo coincidentes conserva la intención
   original de evitar duplicados; no acredita permiso para vincular una cuenta ni actualizar
   datos en conflicto.
@@ -86,7 +89,7 @@ actualización. Son distintas de las dudas funcionales siguientes:
 | PA1.8 | Resultado visible, estado de la suscripción y próximo cobro tras rechazarse una cuota posterior al primer cobro. | Falta concretar ese comportamiento del ciclo periódico. No se inventan estados, bajas, reembolsos ni respuestas. |
 
 La caducidad y protección de la prueba del enlace, su asociación a la cuenta y al Donante
-correctos, y la conservación de envíos pendientes siguen como detalles de diseño por
+correctos y la conservación de envíos pendientes siguen como detalles de diseño por
 concretar conforme a las decisiones funcionales. No se ha iniciado plan para resolverlos.
 
 ## Cobertura y checklist
@@ -94,7 +97,7 @@ concretar conforme a las decisiones funcionales. No se ha iniciado plan para res
 Se reevaluaron las 16 casillas contra la especificación actual. Resultado de este paso:
 **12/16 → 13/16**. Solo cambia a marcada `Scope is clearly bounded`: las cinco decisiones
 delimitan ahora el alcance de HU-01; la alineación común pendiente
-se registra separadamente. No cambia ninguna otra marca ni el texto del checklist.
+Se registra separadamente. No cambia ninguna otra marca ni el texto del checklist.
 
 Siguen pendientes:
 

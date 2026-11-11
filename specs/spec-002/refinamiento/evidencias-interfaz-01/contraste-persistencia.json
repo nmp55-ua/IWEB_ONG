@@ -1,0 +1,130 @@
+{
+  "identidad": {
+    "base": "ong_test_hu01",
+    "esquema": "hu01_integracion_fd4656ae02804528ac7effa875c870c8"
+  },
+  "cuenta": {
+    "usuario": "11",
+    "activo": true,
+    "roles": [
+      "donante"
+    ],
+    "donante": "11"
+  },
+  "grupos": [
+    {
+      "anio": 2025,
+      "cuotas": 12,
+      "total": "120.00",
+      "minimo": "10.00",
+      "maximo": "10.00"
+    },
+    {
+      "anio": 2024,
+      "cuotas": 12,
+      "total": "120.00",
+      "minimo": "10.00",
+      "maximo": "10.00"
+    },
+    {
+      "anio": 2023,
+      "cuotas": 12,
+      "total": "120.00",
+      "minimo": "10.00",
+      "maximo": "10.00"
+    },
+    {
+      "anio": 2022,
+      "cuotas": 12,
+      "total": "120.00",
+      "minimo": "10.00",
+      "maximo": "10.00"
+    },
+    {
+      "anio": 2021,
+      "cuotas": 12,
+      "total": "120.00",
+      "minimo": "10.00",
+      "maximo": "10.00"
+    }
+  ],
+  "control": {
+    "cuotas": 60,
+    "meses": 60,
+    "total": "600.00"
+  },
+  "contrasteInterfaz": [
+    {
+      "nombre": "empates",
+      "id": "9007199254740993",
+      "importe": "1.00",
+      "fecha_cobro": "2025-06-15T11:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "empates",
+      "id": "9007199254740992",
+      "importe": "1.00",
+      "fecha_cobro": "2025-06-15T11:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "fechas",
+      "id": "10",
+      "importe": "2.00",
+      "fecha_cobro": "2025-12-31T23:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "fechas",
+      "id": "9",
+      "importe": "1.00",
+      "fecha_cobro": "2025-12-31T22:59:59.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "grande",
+      "id": "12",
+      "importe": "999999.99",
+      "fecha_cobro": "2025-06-15T11:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "grande",
+      "id": "11",
+      "importe": "999999.99",
+      "fecha_cobro": "2025-06-15T11:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "principal",
+      "id": "3",
+      "importe": "20.00",
+      "fecha_cobro": "2026-01-15T11:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    },
+    {
+      "nombre": "principal",
+      "id": "2",
+      "importe": "30.00",
+      "fecha_cobro": "2025-12-15T11:00:00.000Z",
+      "destino": "Destino historico sintetico",
+      "proyecto_activo": false
+    },
+    {
+      "nombre": "principal",
+      "id": "1",
+      "importe": "50.00",
+      "fecha_cobro": "2025-01-15T11:00:00.000Z",
+      "destino": null,
+      "proyecto_activo": null
+    }
+  ]
+}

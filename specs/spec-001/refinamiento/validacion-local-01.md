@@ -1,5 +1,7 @@
 # Validación local: persistencia operativa y soporte — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Fecha**: 2026-11-06 · **Rama**: spec-001 · **HEAD inicial**: 8ee3976  
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance**: T008–T013 y T019.  
@@ -8,10 +10,10 @@
 ## Estado, numeración y dependencia
 
 Se comprueba carpeta limpia y último commit «HU-01: añade funciones y pruebas de autorización».
-009_operativa_donaciones.sql es una propuesta local autorizada, **sin reserva colectiva**.
+009_operativa_donaciones.sql es una propuesta local autorizada, **como elección de numeración de HU-01**.
 Su número debe coordinarse en T007 y la revisión real de Rubén de T006 sigue pendiente.
-Ambas condiciones preceden a la incorporación compartida; no se atribuye acuerdo colectivo.
-La condición provisional consta en [LEEME](../../../backend/src/db/migraciones/LEEME.md)
+Ambas condiciones preceden a la incorporación compartida; Se conserva la decisión incorporada en PR #4.
+La condición documentada consta en [LEEME](../../../backend/src/db/migraciones/LEEME.md)
 y [ficha de revisión](revision-tecnica-01.md).
 
 T008 cambia de T007 a T005 exclusivamente para este desarrollo local: 004 ya está validada.
@@ -54,7 +56,7 @@ implementar esos servicios o afirmar que sus reglas ya funcionan.
 - Usuarios con hashes bcrypt comprobados, donantes propios/ajenos e invitado, proyecto
   y aportaciones pendientes. Son fixtures sintéticos, no un alta o vinculación funcional.
 - Sesiones separadas persistidas en sesiones, con IDs distintos y datos aislados.
-- Pool acotado y conexiones controladas; se verifica aislamiento de una transacción
+- Pool acotado y conexiones controladas; Se verifica aislamiento de una transacción
   entre dos conexiones y rollback. La eliminación de una tabla dentro de otra transacción
   comprueba el fallo por esquema incompleto y se revierte.
 - Recursos canónicos Acacia correlacionados de Session, PaymentIntent, Invoice y
@@ -124,11 +126,7 @@ node $hu01Prettier --config .prettierrc.json --write @hu01Archivos
 node $hu01Prettier --config .prettierrc.json --check @hu01Archivos
 ```
 
-Comprobación final de formato: código 0. Prettier sin plugins no procesa SQL; su sintaxis
-y restricciones se validan ejecutándolo en PostgreSQL, sin instalar un formateador SQL.
-Se contrastan huellas de 004, migraciones previas, migrador, secretos e informes históricos.
-La ficha de revisión recibe únicamente la ampliación de alcance autorizada y formato;
-los informes de analyze, clarify y validaciones anteriores permanecen intactos.
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ## Balance y parada
 
@@ -222,8 +220,7 @@ los once archivos JavaScript del bloque, tasks.md y este informe. Comprobación 
 código 0. `git diff --check` termina con código 0. Los identificadores y dependencias de
 las tareas se conservan; T029/T030/T027 añaden las rutas de sus pruebas efectivas.
 
-Comandos de formato ejecutados con `$hu01Prettier` apuntando al binario de esa versión
-en caché y `$hu01Archivos` conteniendo esos trece archivos, desde la raíz:
+Se comprobó el formato, los enlaces y el alcance de los archivos indicados.
 
 ```powershell
 node $hu01Prettier --config .prettierrc.json --write @hu01Archivos
@@ -242,7 +239,7 @@ Este ajuste se documenta para revisión; el contrato y los documentos comunes pe
 intactos. La alineación de esa redacción queda pendiente de revisión documental.
 
 **T024–T044 completadas** en el alcance local comprobado. T006 y T007 siguen pendientes;
-009 es provisional y no acredita reserva colectiva. No se modifica 004, 009, autenticación,
+009 es documentada y no acredita numeración de la migración. No se modifica 004, 009, autenticación,
 roles, configuración, secretos, módulos ajenos o los informes históricos. Se añaden cinco
 archivos de implementación y cinco de pruebas en donaciones; solo cambian además app.js,
 tasks.md y este informe, conservando íntegro su contenido anterior.
@@ -303,13 +300,13 @@ Mailpit en 8025. STRIPE_SECRET_KEY vacía y sin Checkout real.
 | `npm run semillas`, segunda ejecución | 0 aportaciones nuevas. Recuentos y huella MD5 del contenido de aportaciones y correos_aportacion idénticos entre ejecuciones. |
 
 Las aportaciones sembradas son sintéticas y no tienen identificadores de Stripe: no son
-cobros, y el estado «enviado» de las semillas no acredita ningún envío.
+cobros y el estado «enviado» de las semillas no acredita ningún envío.
 
 Recorridos en el navegador:
 
 - /donar es accesible sin cuenta y el menú muestra el enlace «Donar». Con importe 0,99 y
   campos vacíos aparecen errores junto a cada campo y no se hace ninguna petición a la API.
-- Un envío válido devuelve 503 PASARELA_NO_CONFIGURADA con un mensaje neutro, y se conserva
+- Un envío válido devuelve 503 PASARELA_NO_CONFIGURADA con un mensaje neutro y se conserva
   la aportación pendiente con su operación. Al recargar:
   - se mantiene el mismo UUID en sessionStorage;
   - solo se ofrece «Continuar el pago»;
@@ -322,7 +319,7 @@ Recorridos en el navegador:
 - Vínculo con donante@ong.test:
   - la solicitud devuelve 202 con un aviso genérico y el correo llega a Mailpit;
   - el token va en el fragmento: al abrir la página se retira de la URL y se guarda en
-    sessionStorage, y la base confirma que no se consume;
+    sessionStorage y la base confirma que no se consume;
   - al confirmar por POST, el Donante queda vinculado y el token se marca como usado
     (caducidad de 30 minutos);
   - reutilizar el enlace muestra «El enlace no es válido…»;
@@ -331,7 +328,7 @@ Recorridos en el navegador:
   - el correo llega a Mailpit en UTF-8, con el texto nuevo: «Importe: 50,00 €», «Fecha de
     cobro: 01/11/2026», «Modalidad: Donación puntual», «Destino: Comedor social» y la
     referencia;
-  - la aportación sigue confirmada, con el mismo importe y la misma fecha, y aparece un
+  - la aportación sigue confirmada, con el mismo importe y la misma fecha y aparece un
     único aviso de éxito;
   - para repetir la prueba, el correo sintético se volvió a poner en «fallido» en la base de
     desarrollo.
@@ -438,7 +435,7 @@ cobrada al cerrarse la suscripción) deben comentarse con el revisor de HU-01.
 
 | Comando o recorrido | Resultado |
 | --- | --- |
-| Primera ejecución de la suite de donaciones tras T054–T068 (ong_test_hu01) | 349/350. El fallo era de aislamiento (fixtures.proyecto inactivo); se corrigió en las pruebas sin cambiar el código de producción. |
+| Primera ejecución de la suite de donaciones tras T054–T068 (ong_test_hu01) | 349/350. El fallo era de aislamiento (fixtures.proyecto inactivo); Se corrigió en las pruebas sin cambiar el código de producción. |
 | `npm test -- src/modulos/donaciones --no-file-parallelism` (ong_test_hu01) | 11 archivos; 350 pruebas aprobadas y 0 omitidas: `cuotas.test.js` 26, `servicio.test.js` 24, `rutas.test.js` 11 y `textoCorreo.test.js` 26. Las pruebas de US1 se mantienen. |
 | `src/servicios-comunes/correo.test.js` | 16/16 aprobadas. |
 | `npm run build` (frontend) | Correcto. |
@@ -528,7 +525,7 @@ Comprobación sobre los datos generados en la base de desarrollo y sobre el cód
 - **Esquema:** no hay columnas de tarjeta, IBAN o CVC; la única que contiene «token» es
   token_hash.
 - **Sesiones:** solo guardan usuarioId y cookie, sin NIF, dirección ni token.
-- **Acceso y errores:** que ni la referencia ni el UUID solos den acceso, y que los errores no
+- **Acceso y errores:** que ni la referencia ni el UUID solos den acceso y que los errores no
   revelen otro Donante, lo cubren `autorizacion.test.js`, `rutas.test.js` y
   `servicio.test.js` (S07/S08 y P13–P16), además de los recorridos de T052 y T068.
 - **Registros:** el módulo de donaciones solo emite avisos genéricos (`servicio.js:381` y

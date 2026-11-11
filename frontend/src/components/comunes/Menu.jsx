@@ -6,7 +6,7 @@ import { api } from '../../lib/api.js';
 const ENLACES = [
   { rol: null, href: '/actividades', texto: 'Actividades' }, // spec-005
   { rol: null, href: '/donar', texto: 'Donar' }, // spec-001
-  // { rol: 'donante', href: '/mis-aportaciones', texto: 'Mis aportaciones' },     ← spec-002
+  { rol: 'donante', href: '/mis-aportaciones', texto: 'Mis aportaciones' }, // spec-002
   { rol: 'donante', href: '/mis-certificados', texto: 'Certificados' }, // spec-003
   { rol: 'voluntario', href: '/mi-calendario', texto: 'Mi calendario' }, // spec-006
   { rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }, // spec-008

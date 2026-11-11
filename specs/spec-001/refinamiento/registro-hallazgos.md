@@ -1,5 +1,7 @@
 # Registro de hallazgos — HU-01
 
+> **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. Los estados de preparación y revisión descritos en los apartados fechados corresponden a esas fases anteriores.
+
 **Rama**: spec-001 · **Fecha**: 2026-11-06  
 **Responsable**: Nada · **Revisor**: Rubén
 
@@ -30,7 +32,7 @@ en analyze-2.md. No se modifica ningún informe histórico.
 | Tareas y comprobación prevista | T031/T043/T045/T047/T049/T052; entradas desde las dos páginas, solicitud → correo → confirmación, falta de cuenta/rol, aviso no enumerativo, token de otra cuenta/vencido/usado y GET sin envío/consumo. Matrices FR-013/P11/P12 actualizadas. |
 | Responsable | Nada. |
 | Revisor | Rubén; revisión pendiente. |
-| Estado | Corregido documentalmente en esta rama. Sin implementación ni pruebas; no se atribuye acuerdo colectivo. |
+| Estado | Corregido documentalmente en esta rama. Sin implementación ni pruebas; Se conserva la decisión incorporada en PR #4. |
 
 La ubicación y el circuito están descritos en el [contrato API](../contracts/api-donaciones.md).
 No dependen de HU-02 y no añaden edición de perfil o verificación global del registro/login.
@@ -45,7 +47,7 @@ No dependen de HU-02 y no añaden edición de perfil o verificación global del 
 | Evidencia inicial | analyze-1: UND-001. Incierta se persistía antes del HTTP y podía sobrevivir a una caída; no se identificaba cómo acreditar actividad o reanudar sin otro cuerpo/clave. |
 | Decisión | Preparación con bloqueo transaccional corto y creación con pg_try_advisory_lock por UUID sobre una conexión retenida. Guardar sesión antes de adquirirla; HTTP fuera de transacción. Finalmente desbloquear o destruir el cliente; tras caída, reanudar solo cuando se readquiera, con autorización y plazo. Usar siempre la misma instantánea, UUID, referencia y clave. |
 | Plazo | 23 horas fijas desde creado_en, con reloj real de PostgreSQL y sin renovar por actualizado_en/reintento/reinicio. Margen conservador frente a las 24 horas mínimas de retención documentadas. Sin Session conocida al vencer: revisión requerida y ningún POST nuevo de recuperación. Session conocida solo se consulta/reutiliza. No se inventa estado financiero. |
-| Datos y justificación | Un único campo adicional: operaciones_pago.solicitud_checkout JSONB no nulo e inmutable. La huella no reconstruye URL/descripción tras un reinicio; se conserva el cuerpo efectivo sin NIF/dirección, tarjeta o secretos. Se reutiliza creado_en; no se añade tabla de bloqueo, propietario o lease de creación. La columna pertenece a la ampliación operativa posterior a 004. |
+| Datos y justificación | Un único campo adicional: operaciones_pago.solicitud_checkout JSONB no nulo e inmutable. La huella no reconstruye URL/descripción tras un reinicio; Se conserva el cuerpo efectivo sin NIF/dirección, tarjeta o secretos. Se reutiliza creado_en; no se añade tabla de bloqueo, propietario o lease de creación. La columna pertenece a la ampliación operativa posterior a 004. |
 | Contrato compatible | Preparador puro común y argumento opcional solicitudCheckout en crearSesionPago; consumidores anteriores mantienen la construcción compatible. El cliente solo conserva UUID y puede usar DTO corto autorizado; nunca puede aportar el cuerpo Checkout almacenado. |
 | Documentos afectados | Modelo y plan comunes; plan.md, research.md, data-model.md, contracts/api-donaciones.md, contracts/pasarela-stripe.md, contracts/cambios-comunes.md, quickstart.md y tasks.md. |
 | Tareas y comprobación prevista | T008/T009/T014/T015/T019/T029/T034–T036/T045/T047/T059/T074. Se comprueban exclusión, liberación, pérdida de conexión, reinicio y respuesta tardía; igualdad de cuerpo/clave, DTO corto, umbral temporal, permisos de ocho horas y ausencia de segunda creación. |

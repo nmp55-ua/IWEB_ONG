@@ -1,17 +1,15 @@
 # Guía de validación — HU-01
 
+**Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
+
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
 **Estado**: Procedimientos y ejecuciones identificados en la matriz vigente y sus informes.
 T082–T084 completadas; cierre técnico acreditado en [converge-3](refinamiento/converge-3.md).
-La revisión/aprobación externas y conflictos de incorporación son controles antes de main.
+La revisión e incorporación se registran en PR #4.
 
 ## Condiciones previas
 
-El diseño y la implementación están en spec-001. T006 prepara el paquete de revisión y
-T007 registra la comprobación publicada/elección local de 009; no exigen obtener antes
-aprobación para completar desarrollo o preparar/abrir la PR. El [ajuste autorizado por
-Nada](refinamiento/ajuste-flujo-01.md) mantiene revisión/aprobación de Rubén y conflictos
-como PR-R01/PR-R02 antes de main, sin reserva colectiva ni aprobación atribuida.
+HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva. El [registro de preparación](refinamiento/ajuste-flujo-01.md) conserva la evolución anterior a la incorporación.
 
 004 y la ampliación 009 se validaron en esquemas aislados; resultados en
 [validacion-004-01.md](refinamiento/validacion-004-01.md) y
@@ -269,7 +267,7 @@ Los códigos P01–P21 y S01–S13 son **alias de esta guía**, no nuevos identi
 especificación: P corresponde al escenario numerado de User Story 1 y S al de User Story 2
 de [spec.md](spec.md). Cada caso se repetirá con la aplicación y se complementará con pruebas
 de reglas y API. Las tablas describen los casos previstos; los resultados y sus límites
-se registran en refinamiento/. La prueba adicional P21 se ejecutó y su resultado consta en
+Se registran en refinamiento/. La prueba adicional P21 se ejecutó y su resultado consta en
 [validacion-stripe-01.md](refinamiento/validacion-stripe-01.md#cierre-final-de-t077-primera-confirmación-de-la-prueba-adicional-p21--2026-11-07).
 
 ## Donación puntual y reglas compartidas
@@ -287,7 +285,7 @@ se registran en refinamiento/. La prueba adicional P21 se ejecutó y su resultad
 | P09  | FR-012                        | Restablecer SMTP y reintentar con permiso. Misma referencia, resumen y única aportación; cero llamadas de cobro.                                                                                                                                                                                                                                                             |
 | P10  | FR-012                        | Reintentar con SMTP aún caído. Aviso real de fallo y opción de repetir; no mensaje de éxito ni filas financieras nuevas.                                                                                                                                                                                                                                                     |
 | P11  | FR-011, FR-013                | Abrir «Vincular mis aportaciones a una cuenta» desde formulario y resultado. Sin token, entrar con FormEntrar existente y solicitar el enlace. El 202 muestra el mismo aviso genérico con/sin Donante elegible y no vincula o autoriza por correo coincidente.                                                                                                               |
-| P12  | FR-013                        | Recorrer entrada visible → página sin token → solicitud autenticada → aviso genérico → mensaje Mailpit → abrir token → confirmar POST con la misma cuenta. GET no envía/consume; token caducado/usado u otra cuenta no vinculan, y solicitar otro requiere acción explícita. Sin depender de HU-02.                                                                          |
+| P12  | FR-013                        | Recorrer entrada visible → página sin token → solicitud autenticada → aviso genérico → mensaje Mailpit → abrir token → confirmar POST con la misma cuenta. GET no envía/consume; token caducado/usado u otra cuenta no vinculan y solicitar otro requiere acción explícita. Sin depender de HU-02.                                                                          |
 | P13  | FR-014                        | Mismo correo y otro NIF válido. Rechazo antes de Stripe, mensaje genérico, Donante y aportaciones intactos.                                                                                                                                                                                                                                                                  |
 | P14  | FR-015                        | Nueva donación con todos los datos equivalentes. Reutiliza un Donante sin actualizarlo; nueva operación independiente.                                                                                                                                                                                                                                                       |
 | P15  | FR-015                        | Mismo NIF y otro correo. Se detiene sin pago, nueva identidad o exposición de datos guardados.                                                                                                                                                                                                                                                                               |
@@ -296,7 +294,7 @@ se registran en refinamiento/. La prueba adicional P21 se ejecutó y su resultad
 | P18  | FR-012, FR-016                | Consultar y reintentar correo desde el navegador de origen, permiso vigente. Solo esa operación.                                                                                                                                                                                                                                                                             |
 | P19  | FR-016                        | Otro navegador con referencia, cookie eliminada o permiso vencido: 404 genérico, sin datos ni envío.                                                                                                                                                                                                                                                                         |
 | P20  | FR-016                        | Sesión A intenta resultado y correo de B. Ambos denegados. La sesión invitada tampoco autoriza historial.                                                                                                                                                                                                                                                                    |
-| P21  | FR-010, FR-017                | Completar el pago de prueba en Stripe reteniendo la entrega; acreditar aportación local pendiente y cerrar el navegador antes de recibir su primera notificación válida de cobro. Entregarla con el navegador cerrado, comprobar la primera transición a confirmada y el correo recibido, y reentregar el mismo evento sin duplicados. Véase el procedimiento adicional P21. |
+| P21  | FR-010, FR-017                | Completar el pago de prueba en Stripe reteniendo la entrega; acreditar aportación local pendiente y cerrar el navegador antes de recibir su primera notificación válida de cobro. Entregarla con el navegador cerrado, comprobar la primera transición a confirmada y el correo recibido y reentregar el mismo evento sin duplicados. Véase el procedimiento adicional P21. |
 
 ## Procedimiento adicional P21 — procedimiento y evidencia de ejecución
 
@@ -368,13 +366,13 @@ con el navegador cerrado. No se supone que la coincidencia anterior baste para c
    Checkout y datos sintéticos válidos; si se reutiliza un Donante, conservar sus datos
    equivalentes sin sobrescribirlos. Preparar acceso posterior con cuenta ya vinculada o
    perfil normal de invitado que conserve su cookie. La referencia por sí sola no autoriza.
-4. Nada completa **un solo pago de prueba** de 1,23 € en Checkout. Identificar su PaymentIntent
+4. Se completa **un solo pago de prueba** de 1,23 € en Checkout. Identificar su PaymentIntent
    y su evento auténtico payment_intent.succeeded, sin reutilizar los ID de la donación anterior.
    Solo por consultas de lectura, acreditar simultáneamente: Stripe complete/paid, modo de
    pruebas, EUR/123 céntimos y pertenencia correctos; aportación local pendiente, fecha de
    cobro nula, una operación y ausencia de confirmación por correo. Si ya está confirmada,
    la prueba no cumple este punto: detenerse sin restaurar estados ni fabricar evidencia.
-5. Con ese estado acreditado, Nada cierra el navegador y las páginas de la aplicación. Registrar
+5. Con ese estado acreditado, Se cierra el navegador y las páginas de la aplicación. Registrar
    hora y comprobar ausencia de sus procesos. Mantener backend, PostgreSQL y Mailpit activos.
 6. Cambiar del listener de observación al de forwarding **con la misma --api-key de .env**,
    y repetir la comparación del secreto sin mostrarlo. Si difiere, detenerse y comunicarlo.
@@ -474,7 +472,7 @@ explícitamente; no se modifica el registro, login o el rol.
   base: reanudar tras error no modifica creado_en, huella o snapshot; actualizado_en no
   renueva la ventana. Sin Session, al vencer aparece revisión requerida y cero nuevos
   POST de creación; con Session conocida solo se consulta/reutiliza. El permiso invitado
-  puede caducar antes, a las ocho horas, y no se amplía hasta las 23 horas.
+  puede caducar antes, a las ocho horas y no se amplía hasta las 23 horas.
 - Recargar el formulario conserva solo claveSolicitud en sessionStorage y reanuda mediante
   el DTO corto autorizado. Borrar/cambiar la clave o usar otra sesión no da acceso a la operación original; no hay
   reinicio automático con un UUID distinto para recuperar una preparación incierta.
