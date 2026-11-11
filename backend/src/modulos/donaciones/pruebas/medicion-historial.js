@@ -43,7 +43,10 @@ try {
   }
 } finally {
   entrada.close();
-  console.log(JSON.stringify({ llamadas: await banco.llamadas() }));
-  await banco.cerrar();
-  console.log(JSON.stringify({ recursosCerrados: banco.recursosCerrados() }));
+  try {
+    console.log(JSON.stringify({ llamadas: await banco.llamadas() }));
+  } finally {
+    await banco.cerrar();
+    console.log(JSON.stringify({ recursosCerrados: banco.recursosCerrados() }));
+  }
 }

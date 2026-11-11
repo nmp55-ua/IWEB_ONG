@@ -1,0 +1,17 @@
+
+> ong-backend@0.1.0 test
+> vitest run src/modulos/donaciones/medicion-historial.test.js src/modulos/donaciones/historial-banco.test.js --no-file-parallelism
+
+
+ RUN  v2.1.9 E:/asignaturas/IWeb/Practica grupal/IWEB_ONG/backend
+
+ ✓ src/modulos/donaciones/historial-banco.test.js (9 tests) 12553ms
+   ✓ Banco integrado HU-02, sin navegador > arranca build/proxy/backend reales, usa login comun y limpia solo recursos propios 8305ms
+   ✓ Banco integrado HU-02, sin navegador > un fallo al arrancar Astro cierra el backend, el esquema y los puertos 4224ms
+ ✓ src/modulos/donaciones/medicion-historial.test.js (3 tests) 48ms
+
+ Test Files  2 passed (2)
+      Tests  12 passed (12)
+   Start at  02:20:37
+   Duration  14.68s (transform 213ms, setup 0ms, collect 948ms, tests 12.60s, environment 1ms, prepare 453ms)
+
