@@ -182,7 +182,7 @@ filas y cifras que `GET /api/informes`.
   - celebrada sin asistencias: 1 actividad, 0 voluntarios y `0.00` h;
   - SC-001: horas a la centésima;
   - FR-009: el JSON, el CSV y el PDF no contienen el nombre ni el correo de los voluntarios.
-- [ ] T021 Repetir T016 y recorrer el quickstart completo con `datos-prueba-asistencias.sql` (pasos 2.1–2.12, incluido el cronometraje de SC-002). Anotarlo en `refinamiento/validacion-02.md`.
+- [X] T021 Repetir T016 y recorrer el quickstart completo con `datos-prueba-asistencias.sql` (pasos 2.1–2.12, incluido el cronometraje de SC-002). Anotarlo en `refinamiento/validacion-02.md`.
 
 ---
 
@@ -201,7 +201,7 @@ filas y cifras que `GET /api/informes`.
 - **Fase 5**:
   - T015 se puede hacer en cualquier momento tras aprobar los cambios comunes;
   - T016 y T017 van al final de las fases 1–4.
-- **Fase 6**: bloqueada por HU-08. Dentro de ella: T018, después T019 y T020, y por último T021.
+- **Fase 6**: bloqueada por HU-08 hasta su integración en `main` (11/11/2026). Dentro de ella: T018, después T019 y T020, y por último T021.
 
 ## Parallel Opportunities
 

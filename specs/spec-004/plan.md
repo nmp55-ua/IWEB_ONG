@@ -126,10 +126,10 @@ El controlador valida el formato (400 `DATOS_INVALIDOS`) y, para `/csv` y `/pdf`
   `fecha_cobro`. No se importa su repositorio.
 - **spec-007 (Nicole), integrada en main**: `actividades` (`proyecto_id`, `inicio`, `estado`).
 - **spec-005 (Javi), integrada en main**: `inscripciones` (`actividad_id`, `voluntario_id`).
-- **spec-008 (Nicole), aún no en main**: `asistencias` (`inscripcion_id`, `asistio`, `horas`,
-  migración `007_asistencias.sql`). Bloquea las columnas «Voluntarios» y «Horas» y el escenario 6.
-  Las tareas que la necesitan van en una fase propia. Cuando HU-08 esté en `main`, se hace `merge`
-  de `main` en `spec-004` y se completan. La PR de HU-04 se abre después (R10).
+- **spec-008 (Nicole), integrada en main el 11/11/2026 (PR #7)**: `asistencias` (`inscripcion_id`,
+  `asistio`, `horas`, migración `007_asistencias.sql`). Da las columnas «Voluntarios» y «Horas» y
+  el escenario 6. Sus tareas iban en una fase propia, completada tras hacer `merge` de `main` en
+  `spec-004` (R10).
 - **Servicios comunes**: `fechas.js` (`ahora`, `inicioDia`, `ZONA`), `csv.js` (`generarCsv`),
   `pdf.js` (`generarPdf`). Se usan sin cambios.
 

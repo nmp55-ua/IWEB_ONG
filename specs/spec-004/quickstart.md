@@ -9,9 +9,8 @@ formato de la API está en [contracts/api-informes.md](contracts/api-informes.md
    en `backend/`.
 2. Cargar los datos sintéticos de 2023 (año que las semillas no usan):
    `psql "$DATABASE_URL" -f specs/spec-004/datos-prueba.sql`.
-3. Cuando HU-08 esté en `main` (migración `007_asistencias`), cargar también
-   `psql "$DATABASE_URL" -f specs/spec-004/datos-prueba-asistencias.sql`. Sin él, las columnas
-   «Voluntarios» y «Horas» de la tabla de abajo no se pueden comprobar todavía (research R10).
+3. Cargar las asistencias de esos datos (necesitan la migración `007_asistencias` de HU-08):
+   `psql "$DATABASE_URL" -f specs/spec-004/datos-prueba-asistencias.sql`.
 4. Arrancar backend y frontend (`npm run dev` en cada uno) y entrar como `admin@ong.test`.
 
 ## 1. Cifras esperadas del informe 2023 (sin agrupar)
