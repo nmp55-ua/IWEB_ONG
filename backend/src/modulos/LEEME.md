@@ -84,3 +84,18 @@ Lee `donantes` y `aportaciones` con SQL propio (solo confirmadas, por `fecha_cob
 `rangoAnio`), sin usar el repositorio de donaciones. `tarea.js` (programada en `servidor.js`)
 reconcilia cada hora los ejercicios cerrados; `npm run certificados -- --ejercicio 2025` hace lo
 mismo a mano. Tabla `certificados_fiscales` en `008_certificados.sql`.
+
+## Informes — HU-04 en spec-004
+
+Informe de recaudación y voluntariado para la junta, en pantalla, CSV y PDF. Contrato:
+[api-informes.md](../../../specs/spec-004/contracts/api-informes.md).
+
+| Método y ruta                                                 | Uso                                                              |
+| ------------------------------------------------------------- | ---------------------------------------------------------------- |
+| GET `/api/informes?desde&hasta&proyectoId&agrupacion`         | Informe por proyecto (y periodo), subtotales y total (administrador). |
+| GET `/api/informes/csv?…`                                     | El mismo informe en CSV (`;`, coma decimal, UTF-8 con BOM).      |
+| GET `/api/informes/pdf?…`                                     | El mismo informe en PDF.                                         |
+| GET `/api/informes/proyectos`                                 | Todos los proyectos, también los inactivos, para el filtro.      |
+
+Lee aportaciones, actividades, inscripciones y asistencias con SQL propio y solo cifras
+agregadas; las tres salidas salen de `servicio.generarInforme`. Sin tablas propias.

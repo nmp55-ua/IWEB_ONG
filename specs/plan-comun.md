@@ -187,7 +187,7 @@ Se aplica lo de CONVENCIONES.md §5:
 | donaciones (001) | `POST /api/aportaciones` → URL de pago · `GET /api/aportaciones/referencia/:ref` (confirmación) · `POST /api/pasarela/webhook` | creación sin cuenta / confirmación autorizada por operación / pasarela |
 | donaciones (002) | `GET /api/yo/aportaciones?anio=2025` | donante |
 | certificados-informes (003) | `GET /api/yo/certificados` · `GET /api/yo/certificados/:ejercicio/pdf` · `GET /api/certificados/verificacion?codigo` | donante / público |
-| certificados-informes (004) | `GET /api/informes?desde&hasta&proyectoId&agrupacion` · `…/csv` · `…/pdf` | administrador |
+| certificados-informes (004) | `GET /api/informes?desde&hasta&proyectoId&agrupacion` · `…/csv` · `…/pdf` · `GET /api/informes/proyectos` (todos, también inactivos, para el filtro) | administrador |
 | voluntariado (005) | `GET /api/actividades/disponibles?proyectoId&desde&hasta` · `POST /api/actividades/:id/inscripciones` · `PATCH /api/yo/inscripciones/:id` (cancelar) · `PUT /api/yo/perfil-voluntario` | público / voluntario |
 | voluntariado (006) | `GET /api/yo/calendario?desde&hasta` | voluntario |
 | actividades (007) | `GET/POST /api/actividades` · `PATCH /api/actividades/:id` (editar, publicar, cancelar) · `GET /api/actividades/:id/inscripciones` | coordinador |
@@ -428,9 +428,10 @@ ajustes de HU-01 preparados para revisión. Sus mecanismos técnicos están defi
 plan de esa historia y alineados en esta rama con el modelo común. Las preguntas de las demás specs se conservan a continuación.
 
 PA3.1 y PA3.2 están resueltas en `specs/spec-003/spec.md` (clarify de 2026-11-04 y 2026-11-08).
+PA4.1 está resuelta en `specs/spec-004/spec.md` (clarify de 2026-11-09: solo cifras agregadas).
 
 El plan no las resuelve (principio II); se deciden en `/speckit-clarify` de cada spec y, si
 cambian el modelo, se hace con una migración nueva acordada:
-PA2.1 (correcciones de aportaciones), PA4.1 (el plan ya asume solo cifras agregadas, por el principio V), PA5.1 (edad),
+PA2.1 (correcciones de aportaciones), PA5.1 (edad),
 PA5.2 (solapes), PA6.1 (.ics), PA7.1 (coordinador por proyecto), PA7.2 (plazo de aceptación),
 PA8.1 (plazo de registro) y PA8.2 (asistencias parciales).

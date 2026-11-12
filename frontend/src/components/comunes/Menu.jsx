@@ -11,7 +11,7 @@ const ENLACES = [
   { rol: 'voluntario', href: '/mi-calendario', texto: 'Mi calendario' }, // spec-006
   { rol: 'voluntario', href: '/mis-horas', texto: 'Mis horas' }, // spec-008
   { rol: 'coordinador', href: '/coordinacion/actividades', texto: 'Gestionar actividades' }, // spec-007
-  // { rol: 'administrador', href: '/informes', texto: 'Informes' },               ← spec-004
+  { rol: 'administrador', href: '/informes', texto: 'Informes' }, // spec-004
 ];
 
 export default function Menu() {

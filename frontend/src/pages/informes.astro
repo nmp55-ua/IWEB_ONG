@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Informes from '../components/certificados-informes/Informes.jsx';
+// spec-004. Solo para administración: quien decide el acceso es el servidor (GET /api/informes…).
+---
+
+<Layout titulo="Informes de recaudación y voluntariado">
+  <Informes client:load />
+</Layout>

@@ -1,6 +1,7 @@
 // HU-03: funciones puras del certificado fiscal (código, enmascarado, correo y PDF).
 // Decisiones en specs/spec-003/research.md (R4–R8).
 import { randomInt } from 'node:crypto';
+import { generarCsv } from '../../servicios-comunes/csv.js';
 
 // Crockford base32: sin I, L, O ni U para que se pueda dictar y teclear sin confusiones.
 export const ALFABETO_CODIGO = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
@@ -104,4 +105,108 @@ export function definicionPdf({ ong, donante, certificado, urlFrontend }) {
       { tipo: 'texto', texto: `${urlFrontend}/verificar-certificado?codigo=${certificado.codigoVerificacion}` },
     ],
   };
+}
+
+// ── HU-04: informe de recaudación y voluntariado (specs/spec-004/research.md R4, R6 y R8) ──
+
+export const MENSAJE_INFORME_VACIO = 'No hay aportaciones confirmadas ni actividades celebradas en este periodo.';
+
+const TEXTO_AGRUPACION = { mes: 'Por mes', trimestre: 'Por trimestre', anio: 'Por año' };
+
+// Primer día del periodo («2026-04-01») → «04/2026», «T2 2026» o «2026».
+export function etiquetaPeriodo(agrupacion, inicioPeriodo) {
+  const [anio, mes] = String(inicioPeriodo).split('-');
+  if (agrupacion === 'mes') return `${mes}/${anio}`;
+  if (agrupacion === 'trimestre') return `T${Math.floor((Number(mes) - 1) / 3) + 1} ${anio}`;
+  return anio;
+}
+
+// Las mismas columnas en pantalla, CSV y PDF. «Periodo» solo si se agrupa.
+export function columnasInforme(agrupacion) {
+  return [
+    ...(agrupacion ? [{ clave: 'periodo', titulo: 'Periodo' }] : []),
+    { clave: 'nombre', titulo: 'Proyecto' },
+    { clave: 'recaudadoPuntual', titulo: 'Donaciones puntuales', tipo: 'importe' },
+    { clave: 'recaudadoCuotas', titulo: 'Cuotas de socio', tipo: 'importe' },
+    { clave: 'recaudadoTotal', titulo: 'Total recaudado', tipo: 'importe' },
+    { clave: 'aportaciones', titulo: 'Aportaciones' },
+    { clave: 'actividades', titulo: 'Actividades celebradas' },
+    { clave: 'voluntarios', titulo: 'Voluntarios' },
+    { clave: 'horas', titulo: 'Horas', tipo: 'horas' },
+  ];
+}
+
+// Lo que va en la columna «Proyecto» según el tipo de fila.
+export function nombreFilaInforme(fila) {
+  if (fila.tipo === 'proyecto') return fila.proyecto.nombre;
+  if (fila.tipo === 'fondoGeneral') return 'Fondo general';
+  if (fila.tipo === 'subtotal') return `Subtotal ${fila.periodo.etiqueta}`;
+  return 'Total';
+}
+
+// Horas con un decimal, como en la interfaz (plan-comun §4): «3.50» → «3,5».
+export function horasUnDecimal(horas) {
+  return new Intl.NumberFormat('es-ES', { maximumFractionDigits: 1, useGrouping: false }).format(Number(horas));
+}
+
+export function formatearHorasInforme(horas) {
+  return `${horasUnDecimal(horas)} h`;
+}
+
+export function textoAgrupacion(agrupacion) {
+  return TEXTO_AGRUPACION[agrupacion] ?? 'Sin agrupar';
+}
+
+// Valor de una celda del informe ya preparado para cada salida (las cifras, las mismas).
+function celdasInforme(fila, { importe, horas }) {
+  return {
+    periodo: fila.periodo?.etiqueta ?? '',
+    nombre: nombreFilaInforme(fila),
+    recaudadoPuntual: importe(fila.recaudadoPuntual),
+    recaudadoCuotas: importe(fila.recaudadoCuotas),
+    recaudadoTotal: importe(fila.recaudadoTotal),
+    aportaciones: fila.aportaciones,
+    actividades: fila.actividades,
+    voluntarios: fila.voluntarios,
+    horas: horas(fila.horas),
+  };
+}
+
+// FR-006: CSV común («;», coma decimal, BOM). Importes «1234,50» y horas «3,5»; vacío = solo cabecera.
+export function csvInforme(informe) {
+  const columnas = columnasInforme(informe.filtros.agrupacion);
+  const filas = informe.filas.map((fila) => celdasInforme(fila, { importe: (v) => v, horas: horasUnDecimal }));
+  return generarCsv(columnas, filas);
+}
+
+export function nombreFicheroInforme({ desde, hasta }, extension) {
+  return `informe-${desde}-${hasta}.${extension}`;
+}
+
+// FR-006: definición para generarPdf con el periodo, los filtros y la misma tabla.
+export function definicionPdfInforme(informe) {
+  const { desde, hasta, proyecto, agrupacion } = informe.filtros;
+  const columnas = columnasInforme(agrupacion);
+  const bloques = [
+    {
+      tipo: 'texto',
+      texto:
+        `Periodo: ${formatearFechaDia(desde)} – ${formatearFechaDia(hasta)} · ` +
+        `Proyecto: ${proyecto ? proyecto.nombre : 'Todos'} · Agrupación: ${textoAgrupacion(agrupacion)}`,
+    },
+  ];
+  if (informe.vacio) {
+    bloques.push({ tipo: 'texto', texto: MENSAJE_INFORME_VACIO });
+  } else {
+    bloques.push({
+      tipo: 'tabla',
+      tamanoLetra: 7.5, // 9 columnas en A4 vertical sin partir palabras
+      columnas: columnas.map((c) => c.titulo),
+      filas: informe.filas.map((fila) => {
+        const celdas = celdasInforme(fila, { importe: formatearEuros, horas: formatearHorasInforme });
+        return columnas.map((c) => String(celdas[c.clave]));
+      }),
+    });
+  }
+  return { titulo: 'Informe de recaudación y voluntariado', bloques };
 }
