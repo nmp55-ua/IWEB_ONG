@@ -142,7 +142,23 @@ detectaban: requisitos sin dueño, contradicciones entre documentos y reglas del
 código no cumplía. Volver a la spec o al plan antes de tocar el código hizo que cada corrección quedara
 documentada y no solo «arreglada».
 
-✎ Pendiente (todos): un párrafo breve de cada integrante con su valoración personal.
+#### Valoraciones personales
+
+**Nicole (HU-07 y HU-08).** Lo que más me ha aportado la práctica es entender que, cuando varias
+personas construyen partes de la misma aplicación, el trabajo difícil está en las fronteras. Mis dos
+historias dependían de las inscripciones de Javi, y las dos veces que algo no encajaba —quién promueve
+la lista de espera cuando cancela un voluntario y qué hacer con una migración que necesitaba una tabla
+que aún no existía— la solución no fue cambiar el código, sino hablarlo, acordar un contrato y dejarlo
+escrito en las dos specs antes de implementar. También me ha sorprendido el valor de repetir `analyze`
+y `converge` hasta que salían limpios: encontraron cosas que mis pruebas no veían, como las columnas
+que faltaban en asistencias por un error del propio modelo común. Usar un asistente de IA para generar
+planes, tareas y código me ha permitido iterar muy rápido, pero me he dado cuenta de que mi papel era
+decidir: responder las preguntas de `clarify` con criterio, revisar cada informe antes de aceptarlo y
+comprobar en la aplicación que lo que decía la spec era lo que pasaba de verdad, cronometrando las
+pruebas de SC-001 y SC-002. Si volviera a empezar, acordaría antes con el grupo los datos de prueba
+compartidos, que fueron la fuente de varios conflictos al integrar.
+
+✎ Pendiente (Nada, Rubén y Javi): un párrafo breve de cada uno con su valoración personal.
 
 ### Repositorio y demostración
 
