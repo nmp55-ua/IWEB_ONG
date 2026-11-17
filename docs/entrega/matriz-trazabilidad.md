@@ -132,7 +132,7 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 | FR-009 | Un voluntario MUST poder cancelar su inscripción, confirmada o en lista de espera, hasta el ini… | T006, T014, T017, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
 | FR-010 | El sistema MUST permitir inscribirse en actividades cuyos horarios se solapan; no comprueba sol… | T013 | `servicio.test.js` | sí | Revisado (Javi) · por revisar (Nicole) |
 | FR-011 | La primera vez que un voluntario se inscribe, MUST indicar su nombre, apellidos, correo y teléf… | T005, T013, T015, T018 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | Manual (17/11): 3 pulsaciones desde el listado y API en menos de 60 ms; estimado unos 30–45 s, 1–1,5 min la primera vez (`refinamiento/prueba-manual.md`) | sí | Revisado (Javi) · por revisar (Nicole) |
+| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | Manual: 10 s cronometrados (17/11, `refinamiento/prueba-manual.md`) | sí | Revisado (Javi) · por revisar (Nicole) |
 | SC-002 | En ninguna actividad hay más inscritos confirmados que plazas. | T013, T014 | `servicio.test.js` | sí | Revisado (Javi) · por revisar (Nicole) |
 
 ## spec-006 · HU-06 Calendario del voluntario
