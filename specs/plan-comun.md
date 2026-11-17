@@ -188,7 +188,7 @@ Se aplica lo de CONVENCIONES.md §5:
 | donaciones (002) | `GET /api/yo/aportaciones?anio=2025` | donante |
 | certificados-informes (003) | `GET /api/yo/certificados` · `GET /api/yo/certificados/:ejercicio/pdf` · `GET /api/certificados/verificacion?codigo` | donante / público |
 | certificados-informes (004) | `GET /api/informes?desde&hasta&proyectoId&agrupacion` · `…/csv` · `…/pdf` · `GET /api/informes/proyectos` (todos, también inactivos, para el filtro) | administrador |
-| voluntariado (005) | `GET /api/actividades/disponibles?proyectoId&desde&hasta` · `POST /api/actividades/:id/inscripciones` · `PATCH /api/yo/inscripciones/:id` (cancelar) · `PUT /api/yo/perfil-voluntario` | público / voluntario |
+| voluntariado (005) | `GET /api/actividades/disponibles?proyectoId&desde&hasta` · `POST /api/actividades/:id/inscripciones` · `PATCH /api/yo/inscripciones/:id` (cancelar) · `GET/PUT /api/yo/perfil-voluntario` | público / voluntario |
 | voluntariado (006) | `GET /api/yo/calendario?desde&hasta` | voluntario |
 | actividades (007) | `GET/POST /api/actividades` · `PATCH /api/actividades/:id` (editar, publicar, cancelar) · `GET /api/actividades/:id/inscripciones` | coordinador |
 | actividades (008) | `GET/PUT /api/actividades/:id/asistencias` · `GET /api/yo/horas` | coordinador / voluntario |
@@ -349,9 +349,16 @@ preparación del entorno antes de las pruebas reales, no una decisión abierta d
   posible**, en un pull request pequeño y revisado, aunque el resto de la spec siga en su rama.
   Después, quien depende de ellas hace `merge` de `main` en su rama.
 - Mientras tanto, quien depende trabaja con las semillas comunes, que siguen el modelo de datos.
-- Contratos entre módulos: `voluntariado` expone en su servicio `promoverListaEspera(actividadId)`
-  y `cancelarInscripcionesDeActividad(actividadId)`, que usa `actividades` (Javi ↔ Nicole);
-  `certificados-informes` solo **lee** tablas de otros módulos.
+- Contratos entre módulos (Javi ↔ Nicole): `voluntariado` expone en su servicio
+  `promoverListaEspera(actividadId, cliente)`, que devuelve las inscripciones promovidas
+  (`[{ inscripcionId, nombre, correo }]`), y `cancelarInscripcionesDeActividad(actividadId, cliente)`,
+  que devuelve las canceladas (con `estadoAnterior`); las dos trabajan con el `cliente` de la
+  transacción de quien llama. Las usa `actividades` a través de `actividades/inscripciones.js`,
+  junto con `contarConfirmadas` y `listarInscripcionesDeActividad`. En sentido contrario,
+  `actividades` expone `listar`, `obtener`, `bloquearActividad(id, cliente)` (bloquea la fila
+  hasta el final de la transacción para proteger el aforo) y `avisarPlazaConfirmada`, que
+  `voluntariado` usa solo a través de `voluntariado/actividades.js`. Detalle en los contratos de
+  spec-005 y spec-007. `certificados-informes` solo **lee** tablas de otros módulos.
 
 ### Incorporación de donaciones en dos entregas
 
@@ -387,6 +394,9 @@ ausente. P-05 se prepara solo antes de las pruebas reales de Stripe.
   para HU-02 (bloques 2025 = 80,00 € y 2026), HU-03 (certificado 2025 = 80,00 €) y HU-04.
 - **Actividades**: una de 10 plazas con 9 inscritos, una completa de 2 plazas con 1 en espera,
   una en borrador, una cancelada y una ya celebrada de 10:00 a 13:30 con 2 inscritos confirmados.
+  Para HU-06, cuatro más de «Agua potable» a partir de dentro de 11 días (charla en el instituto,
+  análisis de fuentes, visita a la depuradora y jornadas de reforestación), en
+  `semillas/voluntariado.js`, con las que `voluntario@ong.test` tiene 3 confirmadas y 1 en espera.
 - **Asistencias**: en otra actividad celebrada, de 2 h, para que `voluntario@ong.test` tenga
   horas.
 
