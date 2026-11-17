@@ -1,0 +1,213 @@
+# Matriz de trazabilidad — SI-13 Donaciones y Voluntariado
+
+> **Borrador para revisar.** Generado el 17/11/2026 a partir de `main` (`470b1e1`): requisitos de
+> cada `spec.md`; tareas según la tabla de cobertura del último analyze de cada spec (o, si no la
+> tiene, las tareas de `tasks.md` que citan el requisito); pruebas automáticas que lo nombran; y
+> pasos del `quickstart.md`. Cada responsable revisa sus filas, completa las celdas «⚠ completar»
+> y otra persona revisa (enunciado §5.2, punto 5). No sustituye a las matrices detalladas de cada spec.
+
+## Resumen por historia
+
+| Spec | Historia | Responsable | Revisor | PR | Revisión registrada | Requisitos | Con tareas | Con prueba (automática o manual) |
+|---|---|---|---|---|---|---|---|---|
+| spec-001 | HU-01 Donación puntual o alta como socio | Nada | Rubén | #4 | sin revisión registrada | 23 | 23 | 3 |
+| spec-002 | HU-02 Historial de aportaciones | Nada | Javi | #6 | aprobado | 11 | 11 | 0 |
+| spec-003 | HU-03 Certificado fiscal anual | Rubén | Nada | #5 | aprobado | 14 | 13 | 11 |
+| spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 6 |
+| spec-005 | HU-05 Consulta e inscripción en actividades | Javi | Nicole | #2 | aprobado | 13 | 13 | 12 |
+| spec-006 | HU-06 Calendario del voluntario | Javi | Nada | #3 | comentado (sin «Approve») | 8 | 8 | 3 |
+| spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 13 | 14 |
+| spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | sin revisión registrada | 11 | 11 | 11 |
+
+Las celdas «⚠ completar» no significan que falte la funcionalidad: indican que ninguna tarea o
+prueba **nombra** ese requisito. El responsable debe enlazar la tarea o prueba que lo cubre
+(o la comprobación manual) o justificar que no aplica.
+
+## spec-001 · HU-01 Donación puntual o alta como socio
+
+**Responsable**: Nada · **Revisor**: Rubén · **PR**: #4
+
+Matriz detallada del responsable: [`specs/spec-001/refinamiento/matriz-validacion-01.md`](../../specs/spec-001/refinamiento/matriz-validacion-01.md).
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST ofrecer dos modalidades: donación puntual y socio con periodicidad mensual, tri… | T015, T036, T059–T060, T069 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-002 | El sistema MUST exigir un importe en EUR entre 1,00 € y 999.999,99 €, ambos incluidos, con un m… | T004, T021, T036, T060 | `normalizacion.test.js` | sí | Por revisar (Nada) |
+| FR-003 | El sistema MUST permitir elegir opcionalmente un Proyecto activo como destino; si no se elige, … | T034–T035, T045 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-004 | El sistema MUST pedir nombre y apellidos, NIF/NIE, correo electrónico y dirección postal (solo … | T021, T033, T036, T045 | `normalizacion.test.js` | sí | Por revisar (Nada) |
+| FR-005 | El pago MUST realizarse exclusivamente con tarjeta mediante Stripe Checkout alojado, en EUR; el… | T015–T016, T036, T045 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-006 | Una Aportación MUST quedar «confirmada» solo cuando la pasarela confirma el cobro; en otro caso… | T004, T038–T039, T062 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-007 | Tras la confirmación del cobro, el sistema MUST mostrar y enviar por correo un resumen con impo… | T025–T026, T040, T047, T070 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-008 | Para socios, el sistema MUST registrar una SuscripcionSocio con importe y periodicidad y MUST m… | T058–T059, T062, T066, T069–T070 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-009 | Cada cobro periódico confirmado por la pasarela MUST registrarse como una nueva Aportación de m… | T063–T064 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-010 | Una misma notificación de pago MUST NOT registrar dos aportaciones. | T015, T034–T035, T037–T038, T061, T063–T064 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-011 | El sistema MUST permitir completar tanto una donación puntual como un alta de socio sin crear u… | T023, T035–T036, T043, T059 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-012 | Cuando falle el correo de confirmación de una aportación, puntual o cuota de socio, el sistema … | T026, T041, T047, T070 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-013 | El flujo de donaciones MUST ofrecer una entrada visible a la página de vinculación desde el for… | T042–T045, T047, T049 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-014 | Si el correo facilitado para una donación puntual o un alta de socio ya corresponde a un Donant… | T032–T033, T059 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-015 | En v1, HU-01 MUST NOT permitir modificar el correo, nombre, apellidos ni dirección de un Donant… | T021, T032–T033, T059 | `normalizacion.test.js` | sí | Por revisar (Nada) |
+| FR-016 | Una persona sin cuenta MUST poder consultar el resultado de su pago y reintentar el correo de c… | T023, T040–T041, T068 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-017 | La pérdida o caducidad de la sesión, el cierre del navegador o la ausencia de retorno a la apli… | T037–T039, T061–T062 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-018 | Si falla una cuota posterior al alta como socio, el sistema MUST registrar e informar el fallo,… | T065–T066, T068, T070 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-019 | Tras el fallo de una cuota posterior al alta, el sistema MUST mostrar como próximo cobro únicam… | T067–T068, T070 | ⚠ completar | sí | Por revisar (Nada) |
+| SC-001 | Un donante completa una donación puntual en menos de 3 minutos desde que entra en el formulario… | T045–T047; T079 | ⚠ completar | sí | Por revisar (Nada) |
+| SC-002 | El 100 % de las aportaciones confirmadas deben tener su correo de confirmación enviado satisfac… | T024–T026, T041; T077, T079 | ⚠ completar | sí | Por revisar (Nada) |
+| SC-003 | En ningún dato guardado por la ONG aparece un número de tarjeta. | T014–T016, T045; T074 | ⚠ completar | sí | Por revisar (Nada) |
+| SC-004 | El importe mostrado en la confirmación coincide al céntimo con el cobrado por la pasarela. | T020–T021, T030, T038, T055, T062–T063; T077–T079 | ⚠ completar | sí | Por revisar (Nada) |
+
+## spec-002 · HU-02 Historial de aportaciones
+
+**Responsable**: Nada · **Revisor**: Javi · **PR**: #6
+
+Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacion-01.md`](../../specs/spec-002/refinamiento/matriz-validacion-01.md).
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST mostrar al donante identificado y con vínculo verificado todas sus aportaciones… | T006/T008–T011/T017/T026/T029 | ⚠ completar | — | Por revisar (Nada) |
+| FR-002 | Las aportaciones MUST agruparse por año natural según la fecha de cobro en Europe/Madrid y orde… | T006/T008/T009/T011/T017/T028 | ⚠ completar | sí | Por revisar (Nada) |
+| FR-003 | Cada grupo anual MUST mostrar el total aportado ese año, en euros con 2 decimales. | T006–T009/T011–T016/T017/T028 | ⚠ completar | — | Por revisar (Nada) |
+| FR-004 | Cada aportación MUST mostrar fecha, importe, modalidad y proyecto de destino o «fondo general». | T006/T008/T009/T011/T017/T026/T028 | ⚠ completar | — | Por revisar (Nada) |
+| FR-005 | El sistema MUST permitir filtrar por un año concreto. | T006/T008–T011/T019/T027 | ⚠ completar | — | Por revisar (Nada) |
+| FR-006 | El sistema MUST NOT mostrar aportaciones pendientes, rechazadas o canceladas. | T006/T008/T009/T011/T026 | ⚠ completar | — | Por revisar (Nada) |
+| FR-007 | Un donante MUST poder ver solo las aportaciones del Donante vinculado mediante la verificación … | T005/T008–T012/T018/T025 | ⚠ completar | — | Por revisar (Nada) |
+| FR-008 | Sin vínculo verificado, la página del historial MUST mostrar una explicación y un enlace a /don… | T005/T006/T009/T011/T018/T019/T026/T027 | ⚠ completar | — | Por revisar (Nada) |
+| SC-001 | La suma de los totales anuales coincide al céntimo con la suma de las aportaciones confirmadas … | T006/T011/T012/T014/T016/T028/T029 | ⚠ completar | sí | Por revisar (Nada) |
+| SC-002 | Para un Donante con 60 cuotas mensuales confirmadas repartidas en cinco años, el tiempo desde q… | T003/T017/T021–T024/T029/T030 | ⚠ completar | sí | Por revisar (Nada) |
+| SC-003 | Ningún intento de ver el historial de otra persona tiene éxito. | T005/T011/T025 | ⚠ completar | sí | Por revisar (Nada) |
+
+## spec-003 · HU-03 Certificado fiscal anual
+
+**Responsable**: Rubén · **Revisor**: Nada · **PR**: #5
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST generar automáticamente, a partir del 1 de enero, un CertificadoFiscal del ejer… | T005, T007, T008, T021 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-002 | El total del certificado MUST ser la suma, al céntimo, de las aportaciones confirmadas con fech… | T004, T005, T008 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-003 | El certificado MUST incluir datos de la ONG (nombre, CIF), datos del donante (nombre, apellidos… | T002, T003, T010 | `certificados.test.js`, `textos.test.js` | — | Por revisar (Rubén) |
+| FR-004 | El certificado MUST poder descargarse en PDF desde el área personal del donante. | T010, T011, T016 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-005 | El sistema MUST conservar y permitir descargar los certificados de ejercicios anteriores ya gen… | T013, T016 | ⚠ completar | — | Por revisar (Rubén) |
+| FR-006 | El sistema MUST NOT ofrecer el certificado del ejercicio en curso. | T005, T010, T013, T014 | `certificados.test.js`, `textos.test.js` | — | Por revisar (Rubén) |
+| FR-007 | Un donante MUST poder descargar solo sus propios certificados; la comprobación se hace en el se… | T010, T011, T013 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-008 | Si después de emitir el certificado de un ejercicio cerrado se confirma una aportación con fech… | T005, T008 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-009 | Al emitir o regenerar un certificado, el sistema MUST enviar al Donante un correo que avise de … | T002, T005, T008 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-010 | (Eliminado en la sesión 2026-11-08: HU-01 exige NIF/NIE, no puede existir un Donante sin él.) | ⚠ completar | ⚠ completar | — | Por revisar (Rubén) |
+| FR-011 | El sistema MUST ofrecer una página pública, sin inicio de sesión, donde se introduce un código … | T018, T019, T020 | `certificados.test.js` | — | Por revisar (Rubén) |
+| FR-012 | El certificado MUST generarse aunque el Donante no tenga cuenta de usuario vinculada. El acceso… | T010, T013, T016 | `certificados.test.js` | — | Por revisar (Rubén) |
+| SC-001 | El total de cada certificado coincide al céntimo con el total del mismo año en el historial (HU… | T024 | ⚠ completar | sí | Por revisar (Rubén) |
+| SC-002 | El 1 de enero, el 100 % de los donantes con aportaciones confirmadas del ejercicio anterior tie… | T008, T024 | `certificados.test.js` | sí | Por revisar (Rubén) |
+
+## spec-004 · HU-04 Informes para la junta
+
+**Responsable**: Rubén · **Revisor**: Nicole · **PR**: #8
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST permitir elegir un periodo (fecha de inicio y fin), un Proyecto opcional y una … | T005, T006, T008, T009 | ⚠ completar | — | Por revisar (Rubén) |
+| FR-002 | El sistema MUST rechazar un periodo cuya fecha de fin sea anterior a la de inicio. El periodo i… | T005, T006, T007, T008 | ⚠ completar | — | Por revisar (Rubén) |
+| FR-003 | El dinero recaudado MUST calcularse con las aportaciones confirmadas cuya fecha de cobro está d… | T004, T005, T007 | ⚠ completar | — | Por revisar (Rubén) |
+| FR-004 | El voluntariado MUST calcularse con las asistencias registradas (con asistencia) de actividades… | T004, T005, T007, T019, T020 | `informes.test.js` | — | Por revisar (Rubén) |
+| FR-005 | Sin filtro de proyecto, el informe MUST incluir una fila por proyecto, una de «fondo general» y… | T005, T007 | ⚠ completar | — | Por revisar (Rubén) |
+| FR-006 | El informe MUST poder exportarse a CSV y a PDF con exactamente la misma información que la pant… | T011, T012, T013, T014 | `informes.test.js` | — | Por revisar (Rubén) |
+| FR-007 | Un periodo sin datos MUST mostrar un informe vacío con un mensaje explicativo. Las filas de pro… | T002, T005, T007, T009, T011 | ⚠ completar | — | Por revisar (Rubén) |
+| FR-008 | Solo los usuarios con rol administrador MUST poder acceder a los informes; la comprobación se h… | T006, T007, T012, T013 | `informes.test.js` | — | Por revisar (Rubén) |
+| FR-009 | El informe y sus exportaciones MUST contener solo cifras agregadas: ningún nombre, correo, NIF/… | T004, T007, T011, T020 | `informes.test.js` | sí | Por revisar (Rubén) |
+| SC-001 | Los totales del informe coinciden al céntimo (dinero) y a la décima de hora (voluntariado) con … | T007, T020 | `informes.test.js` | — | Por revisar (Rubén) |
+| SC-002 | El administrador obtiene el informe anual exportado en menos de 1 minuto. | T021 (A2: también T017) | ⚠ completar | sí | Por revisar (Rubén) |
+| SC-003 | Las exportaciones CSV y PDF coinciden al 100 % con la pantalla. | T011, T013 | `informes.test.js` | — | Por revisar (Rubén) |
+
+## spec-005 · HU-05 Consulta e inscripción en actividades
+
+**Responsable**: Javi · **Revisor**: Nicole · **PR**: #2
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST mostrar a cualquier persona las actividades publicadas cuya fecha de inicio es … | T009, T010, T011, T012 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-002 | Cada actividad MUST mostrar título, descripción, fecha y horario de inicio y fin, lugar, proyec… | T009, T010, T011 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-003 | El listado MUST poder filtrarse por proyecto y por fecha. | T009, T010, T011 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-004 | Inscribirse MUST requerir estar identificado con el rol de voluntario y confirmar expresamente … | T013, T015, T016, T018, T019 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-005 | Si hay plazas libres, la Inscripción MUST quedar confirmada y las plazas libres MUST disminuir … | T013, T016 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-006 | El número de inscripciones confirmadas MUST NOT superar las plazas de la actividad, ni siquiera… | T004, T013, T016 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-007 | Si no hay plazas libres, el sistema MUST ofrecer la lista de espera en lugar de la inscripción … | T013, T016, T018, T019 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-008 | Un voluntario MUST NOT tener dos inscripciones activas (confirmada o en lista de espera) en la … | T013, T016 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-009 | Un voluntario MUST poder cancelar su inscripción, confirmada o en lista de espera, hasta el ini… | T006, T014, T017, T019 | `servicio.test.js` | — | Por revisar (Javi) |
+| FR-010 | El sistema MUST permitir inscribirse en actividades cuyos horarios se solapan; no comprueba sol… | T013 | `servicio.test.js` | sí | Por revisar (Javi) |
+| FR-011 | La primera vez que un voluntario se inscribe, MUST indicar su nombre, apellidos, correo y teléf… | T005, T013, T015, T018 | `servicio.test.js` | — | Por revisar (Javi) |
+| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | ⚠ completar | sí | Por revisar (Javi) |
+| SC-002 | En ninguna actividad hay más inscritos confirmados que plazas. | T013, T014 | `servicio.test.js` | sí | Por revisar (Javi) |
+
+## spec-006 · HU-06 Calendario del voluntario
+
+**Responsable**: Javi · **Revisor**: Nada · **PR**: #3
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST ofrecer al voluntario una vista de lista, que es la que se abre primero, y una … | T003, T006, T007, T008 | ⚠ completar | — | Por revisar (Javi) |
+| FR-002 | El calendario MUST incluir solo actividades que aún no han terminado en las que el voluntario t… | T002, T004, T005 | `calendario.test.js` | — | Por revisar (Javi) |
+| FR-003 | Las actividades en lista de espera MUST distinguirse visualmente y con la etiqueta «en lista de… | T004, T006, T007 | ⚠ completar | — | Por revisar (Javi) |
+| FR-004 | Al seleccionar una actividad, el sistema MUST mostrar su detalle y permitir cancelar la inscrip… | T009, T010 | ⚠ completar | — | Por revisar (Javi) |
+| FR-005 | El calendario MUST reflejar inscripciones, cancelaciones y cambios de estado sin que el volunta… | T009, T011 | ⚠ completar | — | Por revisar (Javi) |
+| FR-006 | Un voluntario MUST poder ver solo su propio calendario; la comprobación se hace en el servidor … | T004, T005, T009 | `calendario.test.js` | — | Por revisar (Javi) |
+| SC-001 | El 100 % de las inscripciones activas del voluntario en actividades que aún no han terminado ap… | T004, T014 | `calendario.test.js` | sí | Por revisar (Javi) |
+| SC-002 | El voluntario identifica su siguiente actividad en menos de 10 segundos desde que abre el calen… | T007, T014 | ⚠ completar | sí | Por revisar (Javi) |
+
+## spec-007 · HU-07 Gestión de actividades y lista de espera
+
+**Responsable**: Nicole · **Revisor**: Javi · **PR**: #1
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El coordinador MUST poder crear, editar, publicar y cancelar actividades. | T009–T020 | `servicio.test.js` (crear, publicar, editar, cancelar); prueba manual T026 | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-002 | Cada Actividad MUST tener título, descripción, Proyecto, fecha y hora de inicio y fin, lugar, p… | T001, T015, T017 | `servicio.test.js` | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-003 | Al crear, editar y publicar, el sistema MUST validar que el fin es posterior al inicio, que el … | T006, T009, T011, T012 | `servicio.test.js` | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-004 | Los estados de una Actividad MUST ser borrador, publicada o cancelada; solo las publicadas son … | T001, T012, T013 | `servicio.test.js` (borrador → publicada, cancelar); prueba manual T026 punto 3 | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-005 | Cuando una actividad publicada está completa, las nuevas solicitudes MUST entrar en una lista d… | ⚠ completar | `voluntariado/servicio.test.js` (spec-005, entrar en espera) | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-006 | Al liberarse una plaza (cancelación de un inscrito o aumento de plazas), el sistema MUST confir… | T021, T022, T023 | `servicio.test.js` | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-007 | El sistema MUST NOT permitir reducir las plazas por debajo del número de inscritos confirmados. | T008, T011 | `servicio.test.js` | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-008 | Al cancelar una actividad, el sistema MUST avisar a inscritos y lista de espera y MUST dejar de… | T013, T026 | `servicio.test.js` | sí | Revisado por Nicole; falta revisor (Javi) |
+| FR-009 | El coordinador MUST poder consultar, en cada actividad, los inscritos confirmados y la lista de… | T014, T019 | `servicio.test.js` | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-010 | Solo los usuarios con rol coordinador MUST poder gestionar actividades; cualquier coordinador p… | T007, T008 | `servicio.test.js` | — | Revisado por Nicole; falta revisor (Javi) |
+| FR-011 | Una actividad publicada MUST poder editarse en todos sus campos (con las validaciones de FR-003… | T011, T019, T024 | `servicio.test.js` | sí | Revisado por Nicole; falta revisor (Javi) |
+| SC-001 | Un coordinador crea y publica una actividad en menos de 3 minutos. | T026 | Manual: 1 min 30 s (`refinamiento/prueba-manual-T026.md`) | sí | Revisado por Nicole; falta revisor (Javi) |
+| SC-002 | El 100 % de las plazas liberadas se asignan a la lista de espera sin intervención manual. | T021 | `servicio.test.js` | sí | Revisado por Nicole; falta revisor (Javi) |
+| SC-003 | En ninguna actividad hay más inscritos confirmados que plazas. | T021 | `servicio.test.js` | sí | Revisado por Nicole; falta revisor (Javi) |
+
+## spec-008 · HU-08 Asistencia y horas de voluntariado
+
+**Responsable**: Nicole · **Revisor**: Rubén · **PR**: #7
+
+| Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
+|---|---|---|---|---|---|
+| FR-001 | El sistema MUST permitir registrar asistencia solo en actividades publicadas (no canceladas) cu… | T004, T005, T007, T010 | `asistencias.test.js` | sí | Revisado por Nicole; falta revisor (Rubén) |
+| FR-002 | El coordinador MUST poder marcar cada inscrito confirmado como «asistió» o «no asistió», y corr… | T006–T012 | `asistencias.test.js` («horas»: repetir y corregir); quickstart 1.2–1.4 | — | Revisado por Nicole; falta revisor (Rubén) |
+| FR-003 | Las horas de una actividad MUST ser la diferencia entre su fin y su inicio; en v1 no hay asiste… | T003, T005, T006, T007 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
+| FR-004 | Marcar «asistió» MUST sumar las horas al total del voluntario; cambiar a «no asistió» MUST rest… | T003, T005, T014 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
+| FR-005 | Una misma asistencia MUST NOT sumar horas más de una vez. | T001, T003, T005 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
+| FR-006 | El sistema MUST NOT permitir registrar asistencia de una persona sin inscripción confirmada en … | T005, T007 | `asistencias.test.js` | sí | Revisado por Nicole; falta revisor (Rubén) |
+| FR-007 | El voluntario MUST ver en su perfil (la página /mis-horas) su total de horas y el desglose por … | T013–T019 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
+| FR-008 | Solo los usuarios con rol coordinador MUST poder registrar o corregir asistencias, y cualquiera… | T005, T009, T010, T013, T017 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
+| FR-009 | Desde la hora de inicio de la actividad, una Inscripción confirmada MUST NOT poder cancelarse (… | T022 (solo verificación; el código ya existe en spec-005) | `voluntariado/servicio.test.js` (spec-005 FR-009); comprobado por API (prueba manual T026 de spec-007, punto 8) | sí | Revisado por Nicole; falta revisor (Rubén) |
+| SC-001 | El total de horas del perfil coincide siempre con la suma de sus asistencias marcadas como «asi… | T013, T014, T022 | `asistencias.test.js` | sí | Revisado por Nicole; falta revisor (Rubén) |
+| SC-002 | El coordinador registra la asistencia de una actividad de 20 personas en menos de 2 minutos. | T010, T022 | Manual: 40 s con 20 confirmados (quickstart, T022) | sí | Revisado por Nicole; falta revisor (Rubén) |
+
+## Recorridos completos entre historias (enunciado §5.4)
+
+Propuesta: al menos un recorrido satisfactorio y otro con error, permiso o estado, que conecten
+historias de distintas personas. Rellenar al ejecutarlos.
+
+| # | Recorrido | Historias | Precondiciones y datos | Pasos | Resultado esperado | Resultado observado | Versión |
+|---|---|---|---|---|---|---|---|
+| R1 | Satisfactorio: de la actividad a las horas y al informe | HU-07 → HU-05 → HU-06 → HU-08 → HU-04 | `npm run semillas`; coordinador@, voluntario@, admin@ | El coordinador crea y publica una actividad; el voluntario se inscribe y la ve en su calendario; tras celebrarse, el coordinador pasa lista; el voluntario ve sus horas; el administrador saca el informe del periodo | Horas en `/mis-horas` e informe con esas horas en su proyecto | | |
+| R2 | Estado: lista de espera y plaza liberada | HU-07 → HU-05 | Actividad publicada completa (p. ej. «Reparto de alimentos») | Un voluntario se apunta en espera; un confirmado cancela antes del inicio | El primero en espera pasa a confirmado y recibe el correo «Plaza confirmada» (Mailpit) | | |
+| R3 | Permiso: datos ajenos | HU-02 → HU-03 | donante@ (sin vincular) y donante2@ (vinculado) | Cada uno abre `/mis-aportaciones` y `/mis-certificados` | Cada cuenta ve solo lo suyo; la no vinculada, vacío con su mensaje | | |
+| R4 | Satisfactorio con pago: donación a certificado | HU-01 → HU-02 → HU-03 | Claves de prueba de Stripe y listener (ordenador de Nada) | Donar 20 € puntual; consultar historial; generar certificado del ejercicio | La donación aparece en el historial y suma en el certificado | | |
+
+## Registro mínimo (enunciado §5.4)
+
+| Historia y criterio | Hallazgo o decisión | Comando | Documentos o código afectados | Tarea y commit | Prueba y resultado | Responsable | Revisor | Estado |
+|---|---|---|---|---|---|---|---|---|
+| HU-07 FR-006 | Promoción al cancelar un voluntario acordada con spec-005 | analyze-1 (H1) | spec, plan, tasks, contrato | T023 · `ff7a202` | Cancelación real: entra la primera en espera y llega el correo | Nicole | Javi | Cerrado |
+| HU-07 FR-003 | Motivo concreto al fallar «Publicar» | converge-1 (F1) | `DetalleActividad.jsx` | T027 · `4d923cf` | Proyecto inactivo → «El proyecto no está activo.» | Nicole | Javi | Cerrado |
+| HU-08 modelo de datos | `asistencias` sin `creado_en`/`actualizado_en` | converge-1 (F1) | `007_asistencias.sql`, modelo-datos | T023 · `7d050e7` | Columnas presentes; 111 pruebas | Nicole | Rubén | Cerrado |
+| HU-08 SC-002 | 20 personas en < 2 min | quickstart | — | T022 · `1180fac` | 40 s | Nicole | Rubén | Cerrado |
+| … | (cada responsable añade sus filas) | | | | | | | |
+
