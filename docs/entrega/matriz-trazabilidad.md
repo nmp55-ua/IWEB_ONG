@@ -119,21 +119,23 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 
 **Responsable**: Javi · **Revisor**: Nicole · **PR**: #2
 
+**Revisión cruzada (Nicole, 17/11/2026):** las tareas citadas existen y están cerradas en `tasks.md`; cada requisito se nombra en `voluntariado/servicio.test.js`, que pasa entero (34 pruebas). En la aplicación, por API con usuarios de prueba, se comprobaron FR-003, FR-004, FR-006 (concurrencia en la última plaza) y FR-008; FR-007 y FR-009 quedan cubiertos por el recorrido R2. Sin incidencias. La actividad de prueba se canceló después.
+
 | Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST mostrar a cualquier persona las actividades publicadas cuya fecha de inicio es … | T009, T010, T011, T012 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-002 | Cada actividad MUST mostrar título, descripción, fecha y horario de inicio y fin, lugar, proyec… | T009, T010, T011 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-003 | El listado MUST poder filtrarse por proyecto y por fecha. | T009, T010, T011 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-004 | Inscribirse MUST requerir estar identificado con el rol de voluntario y confirmar expresamente … | T013, T015, T016, T018, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-005 | Si hay plazas libres, la Inscripción MUST quedar confirmada y las plazas libres MUST disminuir … | T013, T016 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-006 | El número de inscripciones confirmadas MUST NOT superar las plazas de la actividad, ni siquiera… | T004, T013, T016 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-007 | Si no hay plazas libres, el sistema MUST ofrecer la lista de espera en lugar de la inscripción … | T013, T016, T018, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-008 | Un voluntario MUST NOT tener dos inscripciones activas (confirmada o en lista de espera) en la … | T013, T016 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-009 | Un voluntario MUST poder cancelar su inscripción, confirmada o en lista de espera, hasta el ini… | T006, T014, T017, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| FR-010 | El sistema MUST permitir inscribirse en actividades cuyos horarios se solapan; no comprueba sol… | T013 | `servicio.test.js` | sí | Revisado (Javi) · por revisar (Nicole) |
-| FR-011 | La primera vez que un voluntario se inscribe, MUST indicar su nombre, apellidos, correo y teléf… | T005, T013, T015, T018 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
-| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | Manual: 10 s cronometrados (17/11, `refinamiento/prueba-manual.md`) | sí | Revisado (Javi) · por revisar (Nicole) |
-| SC-002 | En ninguna actividad hay más inscritos confirmados que plazas. | T013, T014 | `servicio.test.js` | sí | Revisado (Javi) · por revisar (Nicole) |
+| FR-001 | El sistema MUST mostrar a cualquier persona las actividades publicadas cuya fecha de inicio es … | T009, T010, T011, T012 | `servicio.test.js` | — | Revisado por Javi y por Nicole |
+| FR-002 | Cada actividad MUST mostrar título, descripción, fecha y horario de inicio y fin, lugar, proyec… | T009, T010, T011 | `servicio.test.js` | — | Revisado por Javi y por Nicole |
+| FR-003 | El listado MUST poder filtrarse por proyecto y por fecha. | T009, T010, T011 | `servicio.test.js` | — | Revisado por Javi y por Nicole; comprobado por Nicole: filtro por proyecto y fecha, y fecha imposible → 400 |
+| FR-004 | Inscribirse MUST requerir estar identificado con el rol de voluntario y confirmar expresamente … | T013, T015, T016, T018, T019 | `servicio.test.js` | — | Revisado por Javi y por Nicole; comprobado por Nicole: sin aceptar requisitos → 400 con el mensaje junto al campo |
+| FR-005 | Si hay plazas libres, la Inscripción MUST quedar confirmada y las plazas libres MUST disminuir … | T013, T016 | `servicio.test.js` | — | Revisado por Javi y por Nicole |
+| FR-006 | El número de inscripciones confirmadas MUST NOT superar las plazas de la actividad, ni siquiera… | T004, T013, T016 | `servicio.test.js` | — | Revisado por Javi y por Nicole; comprobado por Nicole: dos inscripciones simultáneas a la última plaza → una 201 y otra 409, 1 confirmada en BD |
+| FR-007 | Si no hay plazas libres, el sistema MUST ofrecer la lista de espera en lugar de la inscripción … | T013, T016, T018, T019 | `servicio.test.js` | — | Revisado por Javi y por Nicole; comprobado por Nicole en el recorrido R2 (409 y lista de espera) |
+| FR-008 | Un voluntario MUST NOT tener dos inscripciones activas (confirmada o en lista de espera) en la … | T013, T016 | `servicio.test.js` | — | Revisado por Javi y por Nicole; comprobado por Nicole: segunda inscripción → 409 «Ya estás inscrito o en la lista de espera de esta actividad.» |
+| FR-009 | Un voluntario MUST poder cancelar su inscripción, confirmada o en lista de espera, hasta el ini… | T006, T014, T017, T019 | `servicio.test.js` | — | Revisado por Javi y por Nicole; comprobado por Nicole en R2 (cancelar antes del inicio) y por API (actividad empezada → 409) |
+| FR-010 | El sistema MUST permitir inscribirse en actividades cuyos horarios se solapan; no comprueba sol… | T013 | `servicio.test.js` | sí | Revisado por Javi y por Nicole |
+| FR-011 | La primera vez que un voluntario se inscribe, MUST indicar su nombre, apellidos, correo y teléf… | T005, T013, T015, T018 | `servicio.test.js` | — | Revisado por Javi y por Nicole |
+| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | Manual: 10 s cronometrados (17/11, `refinamiento/prueba-manual.md`) | sí | Revisado por Javi y por Nicole |
+| SC-002 | En ninguna actividad hay más inscritos confirmados que plazas. | T013, T014 | `servicio.test.js` | sí | Revisado por Javi y por Nicole |
 
 ## spec-006 · HU-06 Calendario del voluntario
 
