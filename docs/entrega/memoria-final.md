@@ -109,10 +109,21 @@ incierta (`analyze-1`, UND-001; `converge-1`, CONV-001 y CONV-002).
 Sugerencia: los tres mensajes distintos para «ejercicio sin aportaciones» o el plazo de emisión del
 certificado tras una confirmación tardía (`analyze-1` de spec-003, I1 y A1).
 
-#### ✎ Pendiente (Javi): una iteración de HU-05 o HU-06
+#### Cancelar mientras se promueve la lista de espera (HU-05 y HU-07)
 
-Sugerencia: la concurrencia al cancelar mientras se promueve la lista de espera (`analyze-1` de
-spec-005, S1) o el calendario que perdía el foco al cambiar de mes (`converge-1` de spec-006, F1).
+El primer `analyze` de spec-005 marcó como grave (S1) un caso que el plan no resolvía: para cancelar
+una inscripción hay que leerla primero y, con ella, bloquear su actividad. Si el estado se decidía con
+esa primera lectura y entre medias otra operación promovía a la persona de la lista de espera, la
+cancelación no promovía a nadie y la actividad se quedaba con una plaza libre y gente esperando. La
+salida evidente, bloquear antes la inscripción, invertía el orden de bloqueo que usa spec-007
+(primero la actividad, luego las inscripciones) y podía provocar un interbloqueo entre las dos
+historias. Antes de implementar se fijó en el plan y en la tarea T017 un orden único: leer sin
+bloqueo solo para saber de quién es la inscripción y de qué actividad, bloquear la actividad con
+`bloquearActividad` y volver a leer la inscripción dentro de la misma transacción, decidiendo sobre
+esa segunda lectura. El acuerdo sobre `bloquearActividad`, que es del módulo de Nicole, quedó como
+tarea de coordinación (T021). El registro de hallazgos (`analyze-2`) da S1 por hecho, y el mismo bloqueo es
+el que comprueban las pruebas de concurrencia: dos peticiones a la vez por la última plaza y bajar
+plazas mientras alguien se inscribe.
 
 ### Integración entre historias
 
@@ -158,7 +169,19 @@ comprobar en la aplicación que lo que decía la spec era lo que pasaba de verda
 pruebas de SC-001 y SC-002. Si volviera a empezar, acordaría antes con el grupo los datos de prueba
 compartidos, que fueron la fuente de varios conflictos al integrar.
 
-✎ Pendiente (Nada, Rubén y Javi): un párrafo breve de cada uno con su valoración personal.
+**Javi (HU-05 y HU-06).** Para mí la práctica ha servido sobre todo para ver cómo funciona
+Spec-Driven Development cuando el proyecto es de cuatro personas y no un ejercicio suelto. Con Spec Kit
+cada historia pasaba por `clarify`, `plan`, `tasks`, `analyze` y `converge` antes de darla por
+buena, y al principio me parecía mucho papeleo para dos historias. Cambié de idea con HU-05: el
+`analyze` encontró el fallo de cancelar con lista de espera antes de escribir el código, y el
+`converge` de HU-06 sacó problemas de accesibilidad y de recarga que las pruebas automáticas no
+veían. Como mis historias dependían del módulo de actividades de Nicole, me tocó negociar con ella qué
+funciones usaba cada uno y quién sembraba cada dato, y aprendí que eso tiene que acabar en el plan
+común y no quedarse en un mensaje del grupo. Lo que haría distinto es cerrar antes las tareas de
+coordinación y medir con una persona los criterios de tiempo en cuanto la historia funciona, no al
+final.
+
+✎ Pendiente (Nada y Rubén): un párrafo breve de cada uno con su valoración personal.
 
 ### Repositorio y demostración
 

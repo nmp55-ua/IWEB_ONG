@@ -15,7 +15,7 @@
 | spec-003 | HU-03 Certificado fiscal anual | Rubén | Nada | #5 | aprobado | 14 | 13 | 11 |
 | spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 6 |
 | spec-005 | HU-05 Consulta e inscripción en actividades | Javi | Nicole | #2 | aprobado | 13 | 13 | 12 |
-| spec-006 | HU-06 Calendario del voluntario | Javi | Nada | #3 | comentado (sin «Approve») | 8 | 8 | 3 |
+| spec-006 | HU-06 Calendario del voluntario | Javi | Nada | #3 | comentado (sin «Approve») | 8 | 8 | 8 |
 | spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 13 | 14 |
 | spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | sin revisión registrada | 11 | 11 | 11 |
 
@@ -121,19 +121,19 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 
 | Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST mostrar a cualquier persona las actividades publicadas cuya fecha de inicio es … | T009, T010, T011, T012 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-002 | Cada actividad MUST mostrar título, descripción, fecha y horario de inicio y fin, lugar, proyec… | T009, T010, T011 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-003 | El listado MUST poder filtrarse por proyecto y por fecha. | T009, T010, T011 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-004 | Inscribirse MUST requerir estar identificado con el rol de voluntario y confirmar expresamente … | T013, T015, T016, T018, T019 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-005 | Si hay plazas libres, la Inscripción MUST quedar confirmada y las plazas libres MUST disminuir … | T013, T016 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-006 | El número de inscripciones confirmadas MUST NOT superar las plazas de la actividad, ni siquiera… | T004, T013, T016 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-007 | Si no hay plazas libres, el sistema MUST ofrecer la lista de espera en lugar de la inscripción … | T013, T016, T018, T019 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-008 | Un voluntario MUST NOT tener dos inscripciones activas (confirmada o en lista de espera) en la … | T013, T016 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-009 | Un voluntario MUST poder cancelar su inscripción, confirmada o en lista de espera, hasta el ini… | T006, T014, T017, T019 | `servicio.test.js` | — | Por revisar (Javi) |
-| FR-010 | El sistema MUST permitir inscribirse en actividades cuyos horarios se solapan; no comprueba sol… | T013 | `servicio.test.js` | sí | Por revisar (Javi) |
-| FR-011 | La primera vez que un voluntario se inscribe, MUST indicar su nombre, apellidos, correo y teléf… | T005, T013, T015, T018 | `servicio.test.js` | — | Por revisar (Javi) |
-| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | ⚠ completar | sí | Por revisar (Javi) |
-| SC-002 | En ninguna actividad hay más inscritos confirmados que plazas. | T013, T014 | `servicio.test.js` | sí | Por revisar (Javi) |
+| FR-001 | El sistema MUST mostrar a cualquier persona las actividades publicadas cuya fecha de inicio es … | T009, T010, T011, T012 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-002 | Cada actividad MUST mostrar título, descripción, fecha y horario de inicio y fin, lugar, proyec… | T009, T010, T011 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-003 | El listado MUST poder filtrarse por proyecto y por fecha. | T009, T010, T011 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-004 | Inscribirse MUST requerir estar identificado con el rol de voluntario y confirmar expresamente … | T013, T015, T016, T018, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-005 | Si hay plazas libres, la Inscripción MUST quedar confirmada y las plazas libres MUST disminuir … | T013, T016 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-006 | El número de inscripciones confirmadas MUST NOT superar las plazas de la actividad, ni siquiera… | T004, T013, T016 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-007 | Si no hay plazas libres, el sistema MUST ofrecer la lista de espera en lugar de la inscripción … | T013, T016, T018, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-008 | Un voluntario MUST NOT tener dos inscripciones activas (confirmada o en lista de espera) en la … | T013, T016 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-009 | Un voluntario MUST poder cancelar su inscripción, confirmada o en lista de espera, hasta el ini… | T006, T014, T017, T019 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| FR-010 | El sistema MUST permitir inscribirse en actividades cuyos horarios se solapan; no comprueba sol… | T013 | `servicio.test.js` | sí | Revisado (Javi) · por revisar (Nicole) |
+| FR-011 | La primera vez que un voluntario se inscribe, MUST indicar su nombre, apellidos, correo y teléf… | T005, T013, T015, T018 | `servicio.test.js` | — | Revisado (Javi) · por revisar (Nicole) |
+| SC-001 | Un voluntario encuentra una actividad y se inscribe en menos de 2 minutos. | T022 | Manual: 4 acciones desde el listado (`refinamiento/prueba-manual.md`); falta cronometrarlo con una persona | sí | Falta cronometrar (Javi) · por revisar (Nicole) |
+| SC-002 | En ninguna actividad hay más inscritos confirmados que plazas. | T013, T014 | `servicio.test.js` | sí | Revisado (Javi) · por revisar (Nicole) |
 
 ## spec-006 · HU-06 Calendario del voluntario
 
@@ -141,14 +141,14 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 
 | Requisito | Descripción | Tareas | Prueba automática | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST ofrecer al voluntario una vista de lista, que es la que se abre primero, y una … | T003, T006, T007, T008 | ⚠ completar | — | Por revisar (Javi) |
-| FR-002 | El calendario MUST incluir solo actividades que aún no han terminado en las que el voluntario t… | T002, T004, T005 | `calendario.test.js` | — | Por revisar (Javi) |
-| FR-003 | Las actividades en lista de espera MUST distinguirse visualmente y con la etiqueta «en lista de… | T004, T006, T007 | ⚠ completar | — | Por revisar (Javi) |
-| FR-004 | Al seleccionar una actividad, el sistema MUST mostrar su detalle y permitir cancelar la inscrip… | T009, T010 | ⚠ completar | — | Por revisar (Javi) |
-| FR-005 | El calendario MUST reflejar inscripciones, cancelaciones y cambios de estado sin que el volunta… | T009, T011 | ⚠ completar | — | Por revisar (Javi) |
-| FR-006 | Un voluntario MUST poder ver solo su propio calendario; la comprobación se hace en el servidor … | T004, T005, T009 | `calendario.test.js` | — | Por revisar (Javi) |
-| SC-001 | El 100 % de las inscripciones activas del voluntario en actividades que aún no han terminado ap… | T004, T014 | `calendario.test.js` | sí | Por revisar (Javi) |
-| SC-002 | El voluntario identifica su siguiente actividad en menos de 10 segundos desde que abre el calen… | T007, T014 | ⚠ completar | sí | Por revisar (Javi) |
+| FR-001 | El sistema MUST ofrecer al voluntario una vista de lista, que es la que se abre primero, y una … | T003, T006, T007, T008 | Manual: lista al abrir y vista *Mes* (`prueba-manual.md` 1.1 y 1.4; foco al cambiar de mes en `converge-2.md`, T015) | sí | Revisado (Javi) · por revisar (Nada) |
+| FR-002 | El calendario MUST incluir solo actividades que aún no han terminado en las que el voluntario t… | T002, T004, T005 | `calendario.test.js` | — | Revisado (Javi) · por revisar (Nada) |
+| FR-003 | Las actividades en lista de espera MUST distinguirse visualmente y con la etiqueta «en lista de… | T004, T006, T007 | `calendario.test.js` (estado y posición en espera); manual: estilo y etiqueta (`prueba-manual.md` 1.3) | sí | Revisado (Javi) · por revisar (Nada) |
+| FR-004 | Al seleccionar una actividad, el sistema MUST mostrar su detalle y permitir cancelar la inscrip… | T009, T010 | `calendario.test.js` (cancelar, 404 de otro y 409 en curso); manual: detalle (`prueba-manual.md` 2.1 y 2.2) | sí | Revisado (Javi) · por revisar (Nada) |
+| FR-005 | El calendario MUST reflejar inscripciones, cancelaciones y cambios de estado sin que el volunta… | T009, T011 | `calendario.test.js` (2.2 y 2.3) y `vuelta.test.js`; manual: cambio de pestaña y de ventana (`revision-pr-3.md`, T026) | sí | Revisado (Javi) · por revisar (Nada) |
+| FR-006 | Un voluntario MUST poder ver solo su propio calendario; la comprobación se hace en el servidor … | T004, T005, T009 | `calendario.test.js` | — | Revisado (Javi) · por revisar (Nada) |
+| SC-001 | El 100 % de las inscripciones activas del voluntario en actividades que aún no han terminado ap… | T004, T014 | `calendario.test.js` | sí | Revisado (Javi) · por revisar (Nada) |
+| SC-002 | El voluntario identifica su siguiente actividad en menos de 10 segundos desde que abre el calen… | T007, T014 | Manual: menos de 5 s (`revision-pr-3.md`, T026) | sí | Revisado (Javi) · por revisar (Nada) |
 
 ## spec-007 · HU-07 Gestión de actividades y lista de espera
 
@@ -209,5 +209,10 @@ historias de distintas personas. Rellenar al ejecutarlos.
 | HU-07 FR-003 | Motivo concreto al fallar «Publicar» | converge-1 (F1) | `DetalleActividad.jsx` | T027 · `4d923cf` | Proyecto inactivo → «El proyecto no está activo.» | Nicole | Javi | Cerrado |
 | HU-08 modelo de datos | `asistencias` sin `creado_en`/`actualizado_en` | converge-1 (F1) | `007_asistencias.sql`, modelo-datos | T023 · `7d050e7` | Columnas presentes; 111 pruebas | Nicole | Rubén | Cerrado |
 | HU-08 SC-002 | 20 personas en < 2 min | quickstart | — | T022 · `1180fac` | 40 s | Nicole | Rubén | Cerrado |
+| HU-05 FR-009 | Orden de bloqueo al cancelar con lista de espera: leer, `bloquearActividad` y volver a leer | analyze-1 (S1) | plan, tasks, `voluntariado/servicio.js` | T017 · `c7f701f`, `55ba4c6` | Pruebas de concurrencia de `servicio.test.js` (última plaza y bajar plazas a la vez) | Javi | Nicole | Cerrado |
+| HU-05 FR-002 | La tarjeta seguía diciendo «1 plaza libre» tras un 409 `PLAZAS_AGOTADAS` | prueba manual (2.8) | `TarjetaActividad.jsx`, `ActividadesDisponibles.jsx` | T027 · `8b027c5` | Al cerrar la ventana el listado se recarga | Javi | Nicole | Cerrado |
+| HU-06 FR-001 | El foco se perdía al cambiar de mes en la vista mensual | converge-1 (F1) | `CalendarioVoluntario.jsx`, `MesCalendario.jsx` | T015 · `aa6788b` | El foco sigue en «‹»/«›» y se anuncia el mes (`converge-2.md`) | Javi | Nada | Cerrado |
+| HU-06 FR-005 | No recargaba al volver justo después de otra carga | revisión del PR #3 | `CalendarioVoluntario.jsx`, `vuelta.js` | T025 · `80878c2` | `vuelta.test.js` y cambio real de pestaña y de ventana (T026) | Javi | Nada | Cerrado |
+| HU-06 SC-002 | Cronometrar con una persona | quickstart | — | T026 · `67c7bd1` | Menos de 5 s (< 10 s) | Javi | Nada | Cerrado |
 | … | (cada responsable añade sus filas) | | | | | | | |
 
