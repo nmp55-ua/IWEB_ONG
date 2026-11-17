@@ -54,6 +54,9 @@ Versión: rama `spec-005`, código del commit `dcc696e` y, para T027 y T028, el 
 ## Criterios de éxito
 
 - **SC-001**: desde el listado son 4 acciones (*Inscribirme*, marcar la casilla, *Confirmar inscripción*
-  y ya sale «Estás inscrito»). Falta cronometrarlo a mano con una persona; objetivo < 2 min.
+  y ya sale «Estás inscrito»). Comprobado de nuevo el 17/11/2026 en el navegador, como `voluntario2@` en
+  Limpieza de playa: 3 pulsaciones y respuestas de la API de 19 a 55 ms. Tiempo estimado para una
+  persona: unos 30–45 s con el perfil ya guardado y entre 1 y 1,5 min la primera vez, con los cuatro
+  datos de contacto. Por debajo de 2 min en los dos casos.
 - **SC-002**: en ningún paso hubo más confirmados que plazas (2.6, 2.8 y bordes); la prueba automática de
   peticiones simultáneas también pasa.
