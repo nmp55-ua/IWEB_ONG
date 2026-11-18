@@ -47,7 +47,20 @@
     .tabla { overflow-x: auto; }
     footer { color: var(--suave); font-size: 14px; border-top: 1px solid var(--borde); padding: 18px 0 30px; }
     a { color: var(--acento); }
-  </style>
+  
+    .capitulos { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; }
+    .capitulos button { font:inherit; font-size:14px; border:1px solid var(--borde); background:var(--tarjeta); color:var(--marca);
+      border-radius:999px; padding:4px 12px; cursor:pointer; }
+    .capitulos button:hover { background:var(--chip); }
+    .historia { background:var(--tarjeta); border:1px solid var(--borde); border-radius:10px; padding:18px; margin:18px 0; }
+    .historia h3 { margin:0 0 4px; color:var(--marca); font-size:19px; }
+    .historia .pie { color:var(--suave); font-size:14px; margin-bottom:10px; }
+    .historia .cuerpo { display:grid; gap:18px; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); align-items:start; }
+    .historia video { margin-top:0; box-shadow:none; }
+    .historia ol { margin:0; padding-left:22px; color:var(--texto); font-size:15px; }
+    .historia li { margin-bottom:4px; }
+    @media (max-width: 760px) { .historia .cuerpo { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
   <header>
@@ -59,64 +72,92 @@
   </header>
 
   <main class="contenedor">
-    <video src="demo-ong.mp4" controls preload="metadata"></video>
+    <h2>Demostración completa</h2>
+    <p>Las 8 historias de usuario con 68 escenarios: casos normales, errores de validación, reglas de
+      negocio, permisos y correos. Cada escena se mantiene unos segundos con un rótulo que explica qué
+      se está viendo. Duración: 7:49.</p>
+    <video id="completo" src="demo-ong-completa.mp4" controls preload="metadata"></video>
+    <div class="capitulos"><button data-t="10">HU-07 · 0:10</button><button data-t="112">HU-05 · 1:52</button><button data-t="196">HU-06 · 3:16</button><button data-t="235">HU-08 · 3:55</button><button data-t="288">HU-01 · 4:48</button><button data-t="357">HU-02 · 5:57</button><button data-t="390">HU-03 · 6:30</button><button data-t="424">HU-04 · 7:04</button></div>
 
-    <h2>Qué se ve en la demostración</h2>
-    <p>Un recorrido de unos 2 minutos por las 8 historias de usuario, en el orden en que viajan los
-      datos: una actividad que se crea, se llena de voluntarios y acaba sumando horas, y una donación
-      que se paga, aparece en el historial y llega al informe de la junta. Todo es la aplicación real
-      funcionando en local, con datos de prueba y Stripe en modo de pruebas.</p>
+    <h2>Historia por historia</h2>
+    <p>Cada historia tiene su propio clip y la lista de escenarios que muestra, en el mismo orden.</p>
+    
+    <section class="historia" id="hu-07">
+      <span class="chip">HU-07 · Nicole</span>
+      <h3>Gestión de actividades y lista de espera</h3>
+      <div class="pie">15 escenarios · clip de 1:42 · en el vídeo completo desde el <a href="#" data-t="10">0:10</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-07.mp4" controls preload="metadata"></video>
+        <ol><li>El coordinador ve todas las actividades con su estado y sus plazas libres</li><li>Nueva actividad: formulario vacío</li><li>Error de validación: al guardar vacío, cada campo obligatorio explica qué falta</li><li>También el proyecto, las fechas, el lugar y las plazas (número entero mayor que cero)</li><li>Error de coherencia: el fin no puede ser anterior al inicio</li><li>Con los datos correctos, la actividad se crea en borrador (aún no es visible para los voluntarios)</li><li>Al publicarla pasa a «Publicada» y aparece en el listado público</li><li>Editar una actividad publicada con 9 inscritos: «Limpieza de playa»</li><li>Regla de negocio: no se pueden dejar menos plazas que inscritos confirmados</li><li>El coordinador consulta los inscritos confirmados y la lista de espera en orden</li><li>Una actividad ya celebrada no se puede editar ni cancelar; solo registrar asistencia</li><li>Cancelar una actividad pide confirmación: se cancelan las inscripciones y se avisa por correo</li><li>Actividad cancelada: nunca se borra, cambia de estado</li><li>El voluntario inscrito recibe el aviso «Actividad cancelada» (Mailpit)</li><li>Estado: no se puede publicar un borrador si su proyecto está desactivado, y se explica el motivo</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-05">
+      <span class="chip">HU-05 · Javi</span>
+      <h3>Consulta e inscripción en actividades</h3>
+      <div class="pie">12 escenarios · clip de 1:24 · en el vídeo completo desde el <a href="#" data-t="112">1:52</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-05.mp4" controls preload="metadata"></video>
+        <ol><li>Listado público de actividades: cualquiera ve fechas, lugar, plazas libres y requisitos, sin iniciar sesión</li><li>Filtro por proyecto: solo las actividades de «Comedor social». Una completa ofrece la lista de espera</li><li>Sin sesión, «Inscribirme» lleva a identificarse y después vuelve a las actividades</li><li>El voluntario abre la inscripción: se muestran los requisitos de la actividad</li><li>Error: no se puede inscribir sin confirmar que cumple los requisitos</li><li>Inscripción confirmada: «Estás inscrito» y la plaza se descuenta (1 de 2)</li><li>Sin plazas libres: el voluntario solo puede apuntarse a la lista de espera</li><li>El aviso explica que, si se libera una plaza, quedará inscrito automáticamente</li><li>En lista de espera, posición 1, con opción de salir</li><li>Otro voluntario cancela su inscripción: se avisa de que la plaza pasará a la lista de espera</li><li>La plaza no queda libre: pasa directamente a la primera persona en espera</li><li>Quien estaba en espera recibe el correo «Plaza confirmada»</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-06">
+      <span class="chip">HU-06 · Javi</span>
+      <h3>Calendario del voluntario</h3>
+      <div class="pie">6 escenarios · clip de 0:39 · en el vídeo completo desde el <a href="#" data-t="196">3:16</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-06.mp4" controls preload="metadata"></video>
+        <ol><li>Mi calendario en vista de lista: la siguiente actividad aparece destacada</li><li>Las actividades en lista de espera se distinguen y muestran su posición</li><li>La plaza promovida ya figura como confirmada</li><li>Detalle de una actividad: proyecto, requisitos y opción de salir de la lista</li><li>Cambio a la vista mensual</li><li>En el mes, confirmadas en azul y en espera con borde discontinuo</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-08">
+      <span class="chip">HU-08 · Nicole</span>
+      <h3>Asistencia y horas de voluntariado</h3>
+      <div class="pie">8 escenarios · clip de 0:53 · en el vídeo completo desde el <a href="#" data-t="235">3:55</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-08.mp4" controls preload="metadata"></video>
+        <ol><li>Un voluntario que intenta pasar lista recibe un aviso de falta de permisos</li><li>Sin asistencias registradas, Mis horas muestra 0 h y un mensaje vacío</li><li>Actividad futura: el coordinador ve la lista, pero no puede registrar todavía</li><li>Actividad celebrada (3,5 h): asistencia ya registrada, se puede corregir sin plazo</li><li>Corrección: Marta pasa de «No asistió» a «Asistió»</li><li>Asistencia guardada</li><li>Otra actividad celebrada de 2 h, con la opción «Marcar todos como asistentes»</li><li>Mis horas suma la duración de cada actividad asistida: 3,5 h + 2 h = 5,5 h</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-01">
+      <span class="chip">HU-01 · Nada</span>
+      <h3>Donación puntual o alta como socio</h3>
+      <div class="pie">11 escenarios · clip de 1:09 · en el vídeo completo desde el <a href="#" data-t="288">4:48</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-01.mp4" controls preload="metadata"></video>
+        <ol><li>Formulario de donación: modalidad, importe, destino y datos fiscales</li><li>Validación: importe 0 fuera de rango y destino sin elegir</li><li>Campos fiscales obligatorios marcados</li><li>Como socio, la periodicidad es obligatoria</li><li>NIF con letra de control incorrecta: se rechaza</li><li>Si los datos fiscales no coinciden con los del donante de la cuenta, no se continúa</li><li>Alta como socio: cuota mensual de 10 € al Comedor social</li><li>Pago en Stripe Checkout (entorno de prueba) con la tarjeta 4242</li><li>Confirmada por la notificación firmada de Stripe: cuota de socio activa</li><li>Periodicidad, suscripción activa y próximo cobro</li><li>Correo «Confirmación de aportación» con todos los datos</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-02">
+      <span class="chip">HU-02 · Nada</span>
+      <h3>Historial de aportaciones</h3>
+      <div class="pie">5 escenarios · clip de 0:33 · en el vídeo completo desde el <a href="#" data-t="357">5:57</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-02.mp4" controls preload="metadata"></video>
+        <ol><li>Mis aportaciones: la cuota recién pagada aparece la primera, con el total del año</li><li>Agrupadas por año, cada uno con su total</li><li>Filtro por año: solo 2025</li><li>Un año sin aportaciones muestra un mensaje claro</li><li>Una cuenta sin aportaciones vinculadas no ve nada: primero debe verificar su correo</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-03">
+      <span class="chip">HU-03 · Rubén</span>
+      <h3>Certificado fiscal anual</h3>
+      <div class="pie">5 escenarios · clip de 0:34 · en el vídeo completo desde el <a href="#" data-t="390">6:30</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-03.mp4" controls preload="metadata"></video>
+        <ol><li>Mis certificados fiscales: ejercicio 2025, importe, fecha de emisión y código</li><li>El ejercicio en curso todavía no tiene certificado: se genera el 1 de enero</li><li>Un ejercicio sin aportaciones confirmadas no tiene certificado</li><li>Verificación pública, sin sesión: el código es auténtico</li><li>Un código inventado o sustituido no es válido</li></ol>
+      </div>
+    </section>
+    <section class="historia" id="hu-04">
+      <span class="chip">HU-04 · Rubén</span>
+      <h3>Informes para la junta</h3>
+      <div class="pie">6 escenarios · clip de 0:41 · en el vídeo completo desde el <a href="#" data-t="424">7:04</a></div>
+      <div class="cuerpo">
+        <video src="clips/hu-04.mp4" controls preload="metadata"></video>
+        <ol><li>Un coordinador no puede ver los informes: acceso solo para administración</li><li>La administración elige periodo, proyecto y agrupación</li><li>Informe de 2026 por proyecto: recaudación, voluntarios y horas, con fila de totales y exportación a CSV y PDF</li><li>Agrupado por trimestre</li><li>Un periodo sin datos muestra un mensaje en lugar de una tabla vacía</li><li>Fechas incoherentes: la fecha de fin no puede ser anterior a la de inicio</li></ol>
+      </div>
+    </section>
 
-    <div class="rejilla">
-      <article class="tarjeta">
-        <span class="chip">HU-07 · Nicole</span>
-        <h3>Gestión de actividades</h3>
-        <div class="minuto">0:03</div>
-        <p>El coordinador crea «Taller de huerto urbano» (8 plazas, requisitos), queda en borrador y la publica.</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-05 · Javi</span>
-        <h3>Consulta e inscripción</h3>
-        <div class="minuto">0:14</div>
-        <p>El voluntario ve plazas libres y requisitos, confirma que los cumple y queda inscrito (7 de 8 plazas).</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-06 · Javi</span>
-        <h3>Calendario del voluntario</h3>
-        <div class="minuto">0:30</div>
-        <p>La actividad aparece en «Mi calendario», en vista de lista y vista mensual.</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-08 · Nicole</span>
-        <h3>Asistencia y horas</h3>
-        <div class="minuto">0:36</div>
-        <p>En una actividad ya celebrada, el coordinador usa «Marcar todos», cambia a una persona a «no asistió» y guarda. El voluntario ve 5,5 h en «Mis horas».</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-01 · Nada</span>
-        <h3>Donación con Stripe</h3>
-        <div class="minuto">1:01</div>
-        <p>Donación puntual de 25 € a «Agua potable», pagada en Stripe Checkout (modo de prueba) con la tarjeta 4242 y confirmada por la notificación firmada de Stripe.</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-02 · Nada</span>
-        <h3>Historial de aportaciones</h3>
-        <div class="minuto">1:35</div>
-        <p>La donación aparece la primera del año, y el total de 2026 sube a 190,00 €.</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-03 · Rubén</span>
-        <h3>Certificado fiscal</h3>
-        <div class="minuto">1:37</div>
-        <p>El certificado del ejercicio cerrado (2025, 60,00 €) con su código de verificación y descarga en PDF.</p>
-      </article>
-      <article class="tarjeta">
-        <span class="chip">HU-04 · Rubén</span>
-        <h3>Informes para la junta</h3>
-        <div class="minuto">1:42</div>
-        <p>Recaudación y voluntariado de 2026 por proyecto, con la fila de totales y la exportación a CSV y PDF.</p>
-      </article>
-    </div>
+    <h2>Resumen rápido</h2>
+    <p>Recorrido de 2 minutos por las 8 historias, en el orden en que viajan los datos.</p>
+    <video src="demo-ong.mp4" controls preload="none"></video>
 
     <h2>Recorridos completos comprobados</h2>
     <div class="tabla">
@@ -145,7 +186,13 @@ cd frontend &amp;&amp; npm run dev        # http://localhost:4321</pre>
   </main>
 
   <footer class="contenedor">
-    Código y documentación: <a href="https://github.com/nmp55-ua/IWEB_ONG">github.com/nmp55-ua/IWEB_ONG</a> · Vídeo grabado el 18/11/2026 sobre <code>main</code>.
+    Código y documentación: <a href="https://github.com/nmp55-ua/IWEB_ONG">github.com/nmp55-ua/IWEB_ONG</a> · Vídeos grabados el 18/11/2026 sobre <code>main</code>, con la aplicación en local y Stripe en modo de pruebas.
   </footer>
+  <script>
+    const v = document.getElementById('completo');
+    document.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', e => {{
+      e.preventDefault(); v.currentTime = +b.dataset.t; v.scrollIntoView({{behavior: 'smooth'}}); v.play();
+    }}));
+  </script>
 </body>
 </html>
