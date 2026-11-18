@@ -99,10 +99,15 @@ bases de datos con estructuras distintas según el orden en que se aplicaran las
 lugar, se pidió a Javi que adelantara su migración 006, como preveía el plan común, y la 007 crea siempre
 la relación.
 
-#### ✎ Pendiente (Nada): una iteración de HU-01 o HU-02
+#### Iteración de HU-02: corregir el cierre del banco y alinear el plan
 
-Sugerencia a partir de sus informes: el reintento de correo y la recuperación de una operación de pago
-incierta (`analyze-1`, UND-001; `converge-1`, CONV-001 y CONV-002).
+El primer `converge` de HU-02 detectó dos problemas: si fallaba la lectura de contadores, el banco de
+medición podía no cerrar sus recursos; además, el plan atribuía la transacción a una capa distinta de la
+que realmente la implementaba. Se corrigieron en T036–T037 y se añadieron regresiones para el error y la
+liberación de recursos. La segunda revisión contrastó los cambios con el código y las evidencias
+conservadas y no encontró nuevas brechas accionables (`spec-002/refinamiento/converge-1.md` y
+`converge-2.md`). Las pruebas citadas son las ejecuciones registradas en esos informes, no una nueva
+ejecución de esta entrega.
 
 #### ✎ Pendiente (Rubén): una iteración de HU-03 o HU-04
 
@@ -181,7 +186,14 @@ común y no quedarse en un mensaje del grupo. Lo que haría distinto es cerrar a
 coordinación y medir con una persona los criterios de tiempo en cuanto la historia funciona, no al
 final.
 
-✎ Pendiente (Nada y Rubén): un párrafo breve de cada uno con su valoración personal.
+**Nada (HU-01 y HU-02).** En mis historias procuré conservar la diferencia entre lo que acreditan las
+pruebas locales y lo que se comprobó realmente con la pasarela o en el navegador. En HU-02, `converge`
+también me llevó a revisar el propio banco de pruebas y la coherencia entre el plan y el código, no solo
+el resultado de la consulta. Los intentos de rendimiento que no cumplieron el umbral quedaron registrados
+junto con sus límites; el cierre cita el intento que sí lo cumplió sin borrar los anteriores. De esta
+iteración me llevo que cada afirmación de cierre debe poder remontarse a una evidencia concreta. Si
+repitiera el trabajo, dejaría preparada antes la instrumentación y el registro de resultados para dedicar
+más tiempo a revisar cada hallazgo con el equipo.
 
 ### Repositorio y demostración
 
