@@ -20,15 +20,15 @@
 
 | Spec | Decisiones de clarify | Informes de analyze | Hallazgos por pasada | Informes de converge | Tareas añadidas por converge | Tareas cerradas | Requisitos con prueba | Revisión de la matriz | PR |
 |---|---|---|---|---|---|---|---|---|---|
-| spec-001 | 8 | 2 | ver informes | 3 | 3 | 84/84 | 23/23 | ⏳ falta el revisor (Rubén) | #4 ⏳ sin revisión registrada |
+| spec-001 | 8 | 2 | ver informes | 3 | 3 | 84/84 | 23/23 | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
 | spec-002 | 2 | 1 | ver informes | 2 | 2 | 37/37 | 11/11 | ✅ Nada y Javi | #6 ✅ aprobado |
 | spec-003 | 8 | 2 | ver informes | 2 | 1 | 26/26 | 11/14 | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
 | spec-004 | 5 | 2 | ver informes | 2 | 0 | 21/21 | 6/12 | ⏳ falta el revisor (Nicole), tras completar Rubén sus celdas | #8 ✅ aprobado |
 | spec-005 | 4 | 2 | ver informes | 2 | 6 | 28/28 | 13/13 | ✅ Javi y Nicole | #2 ✅ aprobado |
 | spec-006 | 4 | 2 | ver informes | 2 | 10 | 26/26 | 8/8 | ✅ Javi y Nada | #3 ✅ aprobado |
 | spec-007 | 5 | 3 | 10 → 3 → 0 | 2 | 3 | 29/29 | 14/14 | ✅ Nicole y Javi | #1 ✅ aprobado |
-| spec-008 | 5 | 4 | 15 → 7 → 2 → 0 | 3 | 3 | 25/25 | 11/11 | ⏳ falta el revisor (Rubén) | #7 ⏳ sin revisión registrada |
-| **Total** | **41** | **18** | — | **18** | **28** | **276/276** | **97/106** | 4/8 completas | 6/8 aprobados |
+| spec-008 | 5 | 4 | 15 → 7 → 2 → 0 | 3 | 3 | 25/25 | 11/11 | ⏳ falta el revisor (Rubén) | #7 ✅ aprobado |
+| **Total** | **41** | **18** | — | **18** | **28** | **276/276** | **97/106** | 4/8 completas | 8/8 aprobados |
 
 **Lectura del balance:**
 
@@ -55,14 +55,14 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
 
 | Spec | Responsable | Revisor | Revisión en la matriz | PR |
 |---|---|---|---|---|
-| spec-001 | Nada | Rubén | ⏳ falta el revisor (Rubén) | #4 ⏳ sin revisión registrada |
+| spec-001 | Nada | Rubén | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
 | spec-002 | Nada | Javi | ✅ Nada y Javi | #6 ✅ aprobado |
 | spec-003 | Rubén | Nada | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
 | spec-004 | Rubén | Nicole | ⏳ falta el revisor (Nicole), tras completar Rubén sus celdas | #8 ✅ aprobado |
 | spec-005 | Javi | Nicole | ✅ Javi y Nicole | #2 ✅ aprobado |
 | spec-006 | Javi | Nada | ✅ Javi y Nada | #3 ✅ aprobado |
 | spec-007 | Nicole | Javi | ✅ Nicole y Javi | #1 ✅ aprobado |
-| spec-008 | Nicole | Rubén | ⏳ falta el revisor (Rubén) | #7 ⏳ sin revisión registrada |
+| spec-008 | Nicole | Rubén | ⏳ falta el revisor (Rubén) | #7 ✅ aprobado |
 
 Revisiones documentadas con detalle: spec-005 por Nicole (FR-003, FR-004, FR-006 con peticiones
 simultáneas, FR-008), spec-006 por Nada ([revision-pr-3.md](../../specs/spec-006/refinamiento/revision-pr-3.md))
