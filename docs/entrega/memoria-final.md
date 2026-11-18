@@ -251,10 +251,16 @@ en el plan y en las tareas, con una fase propia, y no resolverse fusionando una 
 que haría distinto es acordar antes con el grupo el orden de integración y revisar desde el principio
 los límites de los datos que recibo de otros módulos, para no descubrirlos en la revisión.
 
-### Repositorio y demostración
+### Repositorio, demostración y anexos
 
 El código fuente, con el historial de commits y pull requests que permite seguir las iteraciones, está
 en https://github.com/nmp55-ua/IWEB_ONG. El `README.md` explica cómo arrancar la aplicación en local con
-Docker. La matriz de trazabilidad de las ocho historias está en
-`docs/entrega/matriz-trazabilidad.md`, y los informes de clarify, analyze y converge de cada historia, en
-`specs/spec-00N/refinamiento/`.
+Docker. Documentos que acompañan a esta memoria, en `docs/entrega/`:
+
+- **Historias de usuario y especificaciones finales** (entregable 1): `historias-usuario-final.pdf`.
+- **Dossier de refinamiento** (entregable 7): `dossier-refinamiento.pdf`, con la versión de la
+  herramienta, el balance de la iteración, la revisión entre compañeros y el índice de las evidencias
+  de clarify, analyze y converge de cada historia (`specs/spec-00N/refinamiento/`).
+- **Matriz de trazabilidad**, recorridos completos R1–R4 y registro mínimo: `matriz-trazabilidad.md`.
+- **Vídeo de la demostración** (unos 2 minutos, las 8 historias): `demo/demo-ong.mp4`, con su página
+  explicativa `demo/index.html`.
