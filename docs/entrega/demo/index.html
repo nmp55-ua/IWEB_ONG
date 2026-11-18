@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo SI-13 ONG</title>
+  <style>
+    :root {
+      --fondo: #eef5fb; --tarjeta: #ffffff; --texto: #1b2733; --suave: #4a5b6b;
+      --marca: #1f4e79; --acento: #2e75b6; --borde: #d5e3f0; --chip: #deeaf6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --fondo: #0f1a24; --tarjeta: #17242f; --texto: #e6eef5; --suave: #a9bac9;
+        --marca: #7fb3e0; --acento: #9cc6ec; --borde: #2a3b4a; --chip: #1f3344;
+      }
+    }
+    :root[data-theme="dark"] {
+      --fondo: #0f1a24; --tarjeta: #17242f; --texto: #e6eef5; --suave: #a9bac9;
+      --marca: #7fb3e0; --acento: #9cc6ec; --borde: #2a3b4a; --chip: #1f3344;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--fondo); color: var(--texto);
+           font: 16px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif; }
+    header { background: var(--marca); color: #fff; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) header { background: #1f4e79; } }
+    .contenedor { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+    header .contenedor { padding-top: 28px; padding-bottom: 28px; }
+    header p { margin: 0; opacity: .85; font-size: 14px; }
+    h1 { margin: 6px 0 4px; font-size: clamp(24px, 4vw, 34px); }
+    h2 { color: var(--marca); font-size: 22px; margin: 36px 0 12px; }
+    main { padding-bottom: 48px; }
+    video { width: 100%; border-radius: 10px; background: #000; display: block;
+            box-shadow: 0 6px 24px rgba(0,0,0,.15); margin-top: 24px; }
+    .rejilla { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 10px; padding: 16px 18px; }
+    .tarjeta h3 { margin: 0 0 4px; font-size: 17px; color: var(--marca); }
+    .chip { display: inline-block; background: var(--chip); color: var(--marca); border-radius: 999px;
+            padding: 1px 10px; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .tarjeta p { margin: 6px 0 0; color: var(--suave); font-size: 15px; }
+    .tarjeta .minuto { font-size: 13px; color: var(--acento); }
+    table { width: 100%; border-collapse: collapse; background: var(--tarjeta); border-radius: 10px; overflow: hidden; font-size: 15px; }
+    th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--borde); }
+    th { background: var(--marca); color: #fff; font-weight: 600; }
+    code { background: var(--chip); padding: 1px 6px; border-radius: 4px; font-size: 14px; }
+    pre { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 10px; padding: 14px; overflow-x: auto; font-size: 14px; }
+    .tabla { overflow-x: auto; }
+    footer { color: var(--suave); font-size: 14px; border-top: 1px solid var(--borde); padding: 18px 0 30px; }
+    a { color: var(--acento); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="contenedor">
+      <p>Ingeniería Web · Práctica Spec-Driven Development · Sistema de Información 13</p>
+      <h1>Gestión de Donaciones y Voluntariado para una ONG</h1>
+      <p>Nada · Rubén · Javi · Nicole — Astro + React · Node.js/Express · PostgreSQL · Tailwind CSS</p>
+    </div>
+  </header>
+
+  <main class="contenedor">
+    <video src="demo-ong.mp4" controls preload="metadata"></video>
+
+    <h2>Qué se ve en la demostración</h2>
+    <p>Un recorrido de unos 2 minutos por las 8 historias de usuario, en el orden en que viajan los
+      datos: una actividad que se crea, se llena de voluntarios y acaba sumando horas, y una donación
+      que se paga, aparece en el historial y llega al informe de la junta. Todo es la aplicación real
+      funcionando en local, con datos de prueba y Stripe en modo de pruebas.</p>
+
+    <div class="rejilla">
+      <article class="tarjeta">
+        <span class="chip">HU-07 · Nicole</span>
+        <h3>Gestión de actividades</h3>
+        <div class="minuto">0:03</div>
+        <p>El coordinador crea «Taller de huerto urbano» (8 plazas, requisitos), queda en borrador y la publica.</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-05 · Javi</span>
+        <h3>Consulta e inscripción</h3>
+        <div class="minuto">0:14</div>
+        <p>El voluntario ve plazas libres y requisitos, confirma que los cumple y queda inscrito (7 de 8 plazas).</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-06 · Javi</span>
+        <h3>Calendario del voluntario</h3>
+        <div class="minuto">0:30</div>
+        <p>La actividad aparece en «Mi calendario», en vista de lista y vista mensual.</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-08 · Nicole</span>
+        <h3>Asistencia y horas</h3>
+        <div class="minuto">0:36</div>
+        <p>En una actividad ya celebrada, el coordinador usa «Marcar todos», cambia a una persona a «no asistió» y guarda. El voluntario ve 5,5 h en «Mis horas».</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-01 · Nada</span>
+        <h3>Donación con Stripe</h3>
+        <div class="minuto">1:01</div>
+        <p>Donación puntual de 25 € a «Agua potable», pagada en Stripe Checkout (modo de prueba) con la tarjeta 4242 y confirmada por la notificación firmada de Stripe.</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-02 · Nada</span>
+        <h3>Historial de aportaciones</h3>
+        <div class="minuto">1:35</div>
+        <p>La donación aparece la primera del año, y el total de 2026 sube a 190,00 €.</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-03 · Rubén</span>
+        <h3>Certificado fiscal</h3>
+        <div class="minuto">1:37</div>
+        <p>El certificado del ejercicio cerrado (2025, 60,00 €) con su código de verificación y descarga en PDF.</p>
+      </article>
+      <article class="tarjeta">
+        <span class="chip">HU-04 · Rubén</span>
+        <h3>Informes para la junta</h3>
+        <div class="minuto">1:42</div>
+        <p>Recaudación y voluntariado de 2026 por proyecto, con la fila de totales y la exportación a CSV y PDF.</p>
+      </article>
+    </div>
+
+    <h2>Recorridos completos comprobados</h2>
+    <div class="tabla">
+      <table>
+        <thead><tr><th>Recorrido</th><th>Historias</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr><td>R1 · De la actividad a las horas y al informe</td><td>HU-07 → HU-05 → HU-06 → HU-08 → HU-04</td><td>✅ 2 h en Mis horas y en el informe de noviembre</td></tr>
+          <tr><td>R2 · Lista de espera y plaza liberada</td><td>HU-07 → HU-05</td><td>✅ Entra el primero en espera y recibe el correo</td></tr>
+          <tr><td>R3 · Cada uno ve solo lo suyo</td><td>HU-02 → HU-03</td><td>✅ Sin acceso a datos ajenos (401, 403, 404)</td></tr>
+          <tr><td>R4 · De la donación al certificado</td><td>HU-01 → HU-02 → HU-03</td><td>✅ El certificado suma la donación pagada en Stripe</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>El detalle de cada paso, los datos y los resultados está en
+      <a href="../matriz-trazabilidad.md">matriz-trazabilidad.md</a>.</p>
+
+    <h2>Cómo arrancarla para la demostración en directo</h2>
+    <pre>docker compose up -d
+cd backend  &amp;&amp; npm run migrar &amp;&amp; npm run semillas &amp;&amp; npm run dev
+cd frontend &amp;&amp; npm run dev        # http://localhost:4321</pre>
+    <p>Usuarios de prueba: <code>coordinador@ong.test</code>, <code>voluntario2@ong.test</code>,
+      <code>donante2@ong.test</code> y <code>admin@ong.test</code>, con la contraseña de
+      <code>CONTRASENA_SEMILLAS</code> del <code>.env</code>. Para pagar, cada persona usa sus propias
+      claves de prueba de Stripe en su <code>.env</code> y la Stripe CLI reenviando a
+      <code>/api/pasarela/webhook</code> (ver README).</p>
+  </main>
+
+  <footer class="contenedor">
+    Código y documentación: <a href="https://github.com/nmp55-ua/IWEB_ONG">github.com/nmp55-ua/IWEB_ONG</a> · Vídeo grabado el 18/11/2026 sobre <code>main</code>.
+  </footer>
+</body>
+</html>
