@@ -54,8 +54,17 @@ pasarela** (webhook), nunca por la página de retorno del navegador, y que la ap
 datos de tarjeta. La tercera, que **el aforo se protege con un bloqueo de la fila de la actividad**,
 para que dos voluntarios no puedan ocupar a la vez la última plaza.
 
-✎ Pendiente (Rubén): revisar este apartado y añadir lo que falte de certificados e informes (tarea
-horaria de emisión, verificación pública por código).
+Los certificados y los informes (HU-03 y HU-04) comparten el módulo `certificados-informes`, que
+**solo lee** las tablas de los demás módulos con su propio SQL y no importa sus repositorios. El
+certificado fiscal se emite con una **tarea horaria** (`node-cron`, en hora de Madrid) que se ejecuta
+dentro del back-end: la primera pasada del año, el 1 de enero a las 00:05, emite los certificados del
+ejercicio cerrado, y las siguientes regeneran el certificado si se confirma tarde un cobro de ese
+ejercicio, sin tocar el código de donaciones. Cada certificado lleva un **código de verificación**
+que un tercero puede comprobar en una página pública sin iniciar sesión; al regenerarlo, el código
+anterior deja de ser válido. El PDF no se guarda: se genera al descargarlo con los datos guardados,
+así que siempre sale igual. El informe para la junta calcula en una sola consulta por tipo de dato
+(`GROUPING SETS`) las filas por proyecto y periodo, los subtotales y el total, y **una única función
+alimenta la pantalla, el CSV y el PDF**, de modo que las tres salidas no pueden descuadrarse.
 
 ### Reparto de responsabilidades individuales
 
@@ -109,10 +118,43 @@ conservadas y no encontró nuevas brechas accionables (`spec-002/refinamiento/co
 `converge-2.md`). Las pruebas citadas son las ejecuciones registradas en esos informes, no una nueva
 ejecución de esta entrega.
 
-#### ✎ Pendiente (Rubén): una iteración de HU-03 o HU-04
+#### El certificado debía regenerarse «en ese momento» sin depender de donaciones (HU-03)
 
-Sugerencia: los tres mensajes distintos para «ejercicio sin aportaciones» o el plazo de emisión del
-certificado tras una confirmación tardía (`analyze-1` de spec-003, I1 y A1).
+El primer `analyze` de spec-003 detectó una ambigüedad (A1): la spec decía que, si se confirmaba tarde
+un cobro de un ejercicio ya cerrado, el certificado se emitía «en ese momento», pero el plan lo
+resolvía con una tarea horaria que lo hace, como mucho, una hora después. La alternativa literal era
+que el módulo de donaciones avisara a HU-03 al confirmar cada pago, lo que obligaba a cambiar el código
+de Nada y acoplaba los dos módulos. Se mantuvo la tarea horaria, que compara cada hora los totales
+guardados con los confirmados, y se dejó escrito en el research (R3) y en el quickstart que «en ese
+momento» se cumple en la siguiente ejecución o al lanzar la orden manual: lo que la spec descarta es
+esperar al 1 de enero siguiente. El mismo informe unificó los tres textos distintos que había para un
+ejercicio sin aportaciones (I1) y detectó que las pruebas de donaciones solo pasan en su base aislada
+(T1), por lo que la validación se hizo con dos bases en el mismo PostgreSQL desechable.
+
+#### La revisión cruzada encontró un total que podía desbordarse (HU-03)
+
+Al revisar el PR #5, Nada detectó que el total anual del certificado se guardaba como
+`NUMERIC(10,2)`, igual que el importe de una sola aportación. Como una aportación puede llegar a
+999.999,99 €, un donante con 101 aportaciones máximas en un año superaría el límite y la emisión
+fallaría. Las pruebas no lo veían porque ninguna llegaba a esas cifras. Se amplió la columna a
+`NUMERIC(15,2)` en la migración 008, se corrigió también `modelo-datos.md`, avisando al grupo del cambio en lo común, y
+se añadió una prueba de regresión con 101 aportaciones de 999.999,99 € más una de 1 €, que se
+comprobó que fallaba con el tipo anterior y pasaba con el nuevo. Es un ejemplo de lo que aporta la
+revisión de otra persona: el fallo estaba en una suposición que el responsable no se había planteado.
+
+#### El informe dependía de una tabla que aún no estaba en `main` (HU-04)
+
+Al planificar spec-004, la tabla `asistencias` de HU-08 (migración 007) solo existía en la rama de
+Nicole. Fusionar esa rama sin revisar arrastraba trabajo ajeno a la PR, y crear la tabla solo para
+las pruebas duplicaba su migración. Se decidió construir ya todo lo que no dependía de ella y dejar
+voluntarios y horas en una fase propia de `tasks.md`, bloqueada hasta que HU-08 llegara a `main`
+(research R10). El primer `converge` lo reflejó como parcial, ya planificado, y la PR no se abrió
+hasta completar esa fase, porque la constitución da una historia por terminada solo cuando cumple
+todos sus criterios. Cuando HU-08 se integró, se trajo `main` a la rama sin conflictos, se completó la
+consulta con seis pruebas nuevas (entre ellas, que un voluntario en dos proyectos cuenta una sola vez
+en el total, como se fijó en `clarify`) y el segundo `converge` salió limpio. Durante la validación
+también se vio que el PDF común solapaba las filas de una tabla cuando una celda ocupaba dos líneas;
+se corrigió en `pdf.js` tras acordarlo, comprobando que el certificado de HU-03 seguía igual.
 
 #### Cancelar mientras se promueve la lista de espera (HU-05 y HU-07)
 
@@ -194,6 +236,20 @@ junto con sus límites; el cierre cita el intento que sí lo cumplió sin borrar
 iteración me llevo que cada afirmación de cierre debe poder remontarse a una evidencia concreta. Si
 repitiera el trabajo, dejaría preparada antes la instrumentación y el registro de resultados para dedicar
 más tiempo a revisar cada hallazgo con el equipo.
+
+**Rubén (HU-03 y HU-04).** Para mí la práctica ha servido sobre todo para ver cómo funciona
+Spec-Driven Development cuando tus historias dependen por completo de las de los demás. El certificado
+y el informe no tienen datos propios: se calculan con las aportaciones de Nada y con las actividades,
+inscripciones y asistencias de Nicole y Javi, y al principio pensaba que bastaría con leer sus tablas y
+sumar. Cambié de idea con HU-03: el `analyze` encontró que la spec pedía regenerar el certificado «en
+ese momento» y el plan lo hacía con una tarea horaria, y la revisión de Nada sacó un total anual que
+podía desbordarse y que mis pruebas no alcanzaban. En HU-04, el `clarify` me hizo decidir cómo contar
+los voluntarios en subtotales y totales, y al validar el PDF vi que las filas se solapaban, lo que
+acabó en un cambio en el `pdf.js` común que tuve que proponer antes al grupo. Como el informe
+necesitaba la tabla de asistencias de Nicole, aprendí que una dependencia así tiene que quedar escrita
+en el plan y en las tareas, con una fase propia, y no resolverse fusionando una rama sin revisar. Lo
+que haría distinto es acordar antes con el grupo el orden de integración y revisar desde el principio
+los límites de los datos que recibo de otros módulos, para no descubrirlos en la revisión.
 
 ### Repositorio y demostración
 
