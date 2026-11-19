@@ -1,56 +1,57 @@
-# Regresión final · c959fe5 · 19/11/2026 22:00
+# Regresión final · de7a4eb + mensajes de zod en español · 19/11/2026 22:11
 ## Backend sin donaciones (ong_test)
 
  RUN  v2.1.9 C:/Users/peiro/OneDrive/Documentos/5ºCURSO/1ºCUATRI/IWEB/PRACTICA/Practica grupo/ong-donaciones/backend
 
- ✓ src/modulos/certificados-informes/informes.test.js (27 tests) 4055ms
- ✓ src/modulos/certificados-informes/certificados.test.js (33 tests) 3471ms
- ✓ src/modulos/voluntariado/servicio.test.js (34 tests) 2215ms
- ✓ src/modulos/actividades/servicio.test.js (44 tests | 3 skipped) 1151ms
- ✓ src/modulos/voluntariado/calendario.test.js (13 tests) 1353ms
- ✓ src/modulos/actividades/asistencias.test.js (23 tests) 1588ms
- ✓ src/modulos/certificados-informes/textos.test.js (24 tests) 15ms
- ✓ src/servicios-comunes/correo.test.js (16 tests) 46ms
- ✓ src/servicios-comunes/comunes.test.js (9 tests) 59ms
- ✓ src/app.test.js (6 tests) 65ms
+ ✓ src/modulos/certificados-informes/informes.test.js (27 tests) 3944ms
+ ✓ src/modulos/certificados-informes/certificados.test.js (33 tests) 3212ms
+ ✓ src/modulos/voluntariado/servicio.test.js (34 tests) 2083ms
+ ✓ src/modulos/actividades/servicio.test.js (44 tests | 3 skipped) 1001ms
+ ✓ src/modulos/voluntariado/calendario.test.js (13 tests) 1274ms
+ ✓ src/modulos/actividades/asistencias.test.js (23 tests) 1516ms
+ ✓ src/modulos/certificados-informes/textos.test.js (24 tests) 32ms
+ ✓ src/servicios-comunes/correo.test.js (16 tests) 48ms
+ ✓ src/servicios-comunes/comunes.test.js (9 tests) 62ms
+ ✓ src/app.test.js (6 tests) 70ms
+ ✓ src/middleware/errores.test.js (3 tests) 12ms
  ✓ src/modulos/certificados-informes/tarea.test.js (3 tests) 6ms
 
- Test Files  11 passed (11)
-      Tests  229 passed | 3 skipped (232)
-   Start at  22:00:32
-   Duration  19.29s (transform 370ms, setup 0ms, collect 2.57s, tests 14.02s, environment 2ms, prepare 1.02s)
+ Test Files  12 passed (12)
+      Tests  232 passed | 3 skipped (235)
+   Start at  22:11:35
+   Duration  19.11s (transform 363ms, setup 0ms, collect 2.69s, tests 13.26s, environment 2ms, prepare 1.20s)
 
 ## Donaciones (ong_test_hu01)
 
  RUN  v2.1.9 C:/Users/peiro/OneDrive/Documentos/5ºCURSO/1ºCUATRI/IWEB/PRACTICA/Practica grupo/ong-donaciones/backend
 
- ✓ src/modulos/donaciones/migraciones.test.js (68 tests) 3256ms
-   ✓ HU-01 · soporte de integración T019 > dos procesos nuevos conservan sesión/base/secreto y comparten el simulador por clave 869ms
- ✓ src/modulos/donaciones/cuotas.test.js (38 tests) 2712ms
- ✓ src/modulos/donaciones/servicio.test.js (24 tests) 1771ms
-   ✓ reanuda desde otro proceso con sesión, instantánea y simulador persistentes 384ms
+ ✓ src/modulos/donaciones/migraciones.test.js (68 tests) 2929ms
+   ✓ HU-01 · soporte de integración T019 > dos procesos nuevos conservan sesión/base/secreto y comparten el simulador por clave 834ms
+ ✓ src/modulos/donaciones/cuotas.test.js (38 tests) 2321ms
+ ✓ src/modulos/donaciones/servicio.test.js (24 tests) 1642ms
+   ✓ reanuda desde otro proceso con sesión, instantánea y simulador persistentes 347ms
 stderr | src/modulos/donaciones/rutas.test.js > solicitud de vínculo no enumera, exige cuenta/rol y el cliente no elige destinatario
 No se aceptó el correo de verificación de donaciones.
 
- ✓ src/modulos/donaciones/rutas.test.js (12 tests) 1478ms
- ✓ src/modulos/donaciones/historial.test.js (38 tests) 1902ms
-   ✓ Preparacion HU-02 > comprueba limpieza limitada al esquema propio 401ms
- ✓ src/modulos/donaciones/pasarela.test.js (37 tests) 345ms
- ✓ src/modulos/donaciones/eventos.test.js (21 tests) 892ms
+ ✓ src/modulos/donaciones/rutas.test.js (12 tests) 1125ms
+ ✓ src/modulos/donaciones/historial.test.js (38 tests) 1703ms
+   ✓ Preparacion HU-02 > comprueba limpieza limitada al esquema propio 389ms
+ ✓ src/modulos/donaciones/pasarela.test.js (37 tests) 353ms
+ ✓ src/modulos/donaciones/eventos.test.js (21 tests) 820ms
  ✓ src/modulos/donaciones/autorizacion.test.js (35 tests) 16ms
- ✓ src/modulos/donaciones/textoCorreo.test.js (26 tests) 31ms
- ✓ src/modulos/donaciones/historial-banco.test.js (9 tests) 4392ms
-   ✓ Banco integrado HU-02, sin navegador > arranca build/proxy/backend reales, usa login comun y limpia solo recursos propios 2682ms
-   ✓ Banco integrado HU-02, sin navegador > un fallo al arrancar Astro cierra el backend, el esquema y los puertos 1686ms
- ✓ src/modulos/donaciones/registro.test.js (3 tests) 2891ms
-   ✓ ejecuta dos veces el registro conjunto de semillas en un esquema exclusivo sin duplicar datos 2253ms
- ✓ src/modulos/donaciones/confirmaciones.test.js (7 tests) 978ms
- ✓ src/modulos/donaciones/normalizacion.test.js (102 tests) 26ms
- ✓ src/modulos/donaciones/validacion-local.test.js (6 tests) 1168ms
- ✓ src/modulos/donaciones/medicion-historial.test.js (3 tests) 27ms
+ ✓ src/modulos/donaciones/textoCorreo.test.js (26 tests) 26ms
+ ✓ src/modulos/donaciones/historial-banco.test.js (9 tests) 4099ms
+   ✓ Banco integrado HU-02, sin navegador > arranca build/proxy/backend reales, usa login comun y limpia solo recursos propios 2589ms
+   ✓ Banco integrado HU-02, sin navegador > un fallo al arrancar Astro cierra el backend, el esquema y los puertos 1492ms
+ ✓ src/modulos/donaciones/registro.test.js (3 tests) 2150ms
+   ✓ ejecuta dos veces el registro conjunto de semillas en un esquema exclusivo sin duplicar datos 1574ms
+ ✓ src/modulos/donaciones/confirmaciones.test.js (7 tests) 580ms
+ ✓ src/modulos/donaciones/normalizacion.test.js (102 tests) 23ms
+ ✓ src/modulos/donaciones/validacion-local.test.js (6 tests) 779ms
+ ✓ src/modulos/donaciones/medicion-historial.test.js (3 tests) 29ms
 
  Test Files  15 passed (15)
       Tests  429 passed (429)
-   Start at  22:00:53
-   Duration  32.05s (transform 507ms, setup 0ms, collect 5.67s, tests 21.88s, environment 3ms, prepare 1.82s)
+   Start at  22:11:56
+   Duration  27.77s (transform 378ms, setup 0ms, collect 4.96s, tests 18.60s, environment 3ms, prepare 1.58s)
 

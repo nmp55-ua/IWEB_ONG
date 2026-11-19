@@ -3,241 +3,241 @@ TAP version 13
 # Subtest: un ejercicio con certificado está disponible
 ok 1 - un ejercicio con certificado está disponible
   ---
-  duration_ms: 0.8898
+  duration_ms: 1.0437
   type: 'test'
   ...
 # Subtest: escenario 5: el ejercicio en curso se generará a partir del 1 de enero siguiente
 ok 2 - escenario 5: el ejercicio en curso se generará a partir del 1 de enero siguiente
   ---
-  duration_ms: 1.1847
+  duration_ms: 1.1245
   type: 'test'
   ...
 # Subtest: escenario 4: un ejercicio cerrado sin certificado no tiene aportaciones
 ok 3 - escenario 4: un ejercicio cerrado sin certificado no tiene aportaciones
   ---
-  duration_ms: 0.2123
+  duration_ms: 0.1661
   type: 'test'
   ...
 # Subtest: se puede consultar del ejercicio en curso a diez años atrás
 ok 4 - se puede consultar del ejercicio en curso a diez años atrás
   ---
-  duration_ms: 0.2783
+  duration_ms: 0.2213
   type: 'test'
   ...
 # Subtest: normaliza el código como el servidor
 ok 5 - normaliza el código como el servidor
   ---
-  duration_ms: 0.5207
+  duration_ms: 0.4136
   type: 'test'
   ...
 # Subtest: el periodo necesita las dos fechas y el fin no puede ser anterior al inicio
 ok 6 - el periodo necesita las dos fechas y el fin no puede ser anterior al inicio
   ---
-  duration_ms: 2.0434
+  duration_ms: 2.3164
   type: 'test'
   ...
 # Subtest: la consulta omite los filtros vacíos
 ok 7 - la consulta omite los filtros vacíos
   ---
-  duration_ms: 1.0942
+  duration_ms: 1.2414
   type: 'test'
   ...
 # Subtest: las exportaciones usan los mismos filtros que el informe en pantalla
 ok 8 - las exportaciones usan los mismos filtros que el informe en pantalla
   ---
-  duration_ms: 0.4585
+  duration_ms: 0.5292
   type: 'test'
   ...
 # Subtest: nombra las filas y marca subtotales y total
 ok 9 - nombra las filas y marca subtotales y total
   ---
-  duration_ms: 0.5421
+  duration_ms: 0.6135
   type: 'test'
   ...
 # Subtest: formato exacto del total 0.00
 ok 10 - formato exacto del total 0.00
   ---
-  duration_ms: 1.9091
+  duration_ms: 1.4879
   type: 'test'
   ...
 # Subtest: formato exacto del total 80.00
 ok 11 - formato exacto del total 80.00
   ---
-  duration_ms: 0.2771
+  duration_ms: 0.2081
   type: 'test'
   ...
 # Subtest: formato exacto del total 1999999.98
 ok 12 - formato exacto del total 1999999.98
   ---
-  duration_ms: 0.1599
+  duration_ms: 0.1111
   type: 'test'
   ...
 # Subtest: formato exacto del total 9007199254740993.01
 ok 13 - formato exacto del total 9007199254740993.01
   ---
-  duration_ms: 0.1668
+  duration_ms: 0.1002
   type: 'test'
   ...
 # Subtest: formato exacto del total 123456789012345678901234567890.99
 ok 14 - formato exacto del total 123456789012345678901234567890.99
   ---
-  duration_ms: 0.282
+  duration_ms: 0.1944
   type: 'test'
   ...
 # Subtest: una respuesta anterior no sobrescribe el filtro mas reciente
 ok 15 - una respuesta anterior no sobrescribe el filtro mas reciente
   ---
-  duration_ms: 1.951
+  duration_ms: 1.3864
   type: 'test'
   ...
 # Subtest: desmontar impide actualizar estado o iniciar nuevas consultas
 ok 16 - desmontar impide actualizar estado o iniciar nuevas consultas
   ---
-  duration_ms: 0.4644
+  duration_ms: 0.3543
   type: 'test'
   ...
 # Subtest: un error anterior tampoco sustituye una respuesta actual
 ok 17 - un error anterior tampoco sustituye una respuesta actual
   ---
-  duration_ms: 0.403
+  duration_ms: 0.2989
   type: 'test'
   ...
 # Subtest: fallo y reintento conservan la consulta sin mostrar datos anteriores
 ok 18 - fallo y reintento conservan la consulta sin mostrar datos anteriores
   ---
-  duration_ms: 0.8441
+  duration_ms: 0.6161
   type: 'test'
   ...
 # Subtest: una respuesta monetaria mal formada produce error, sin cero o exito falsos
 ok 19 - una respuesta monetaria mal formada produce error, sin cero o exito falsos
   ---
-  duration_ms: 0.8537
+  duration_ms: 0.6143
   type: 'test'
   ...
 # Subtest: valida contrato, filtro y BIGINT textual sin convertirlo a Number
 ok 20 - valida contrato, filtro y BIGINT textual sin convertirlo a Number
   ---
-  duration_ms: 1.862
+  duration_ms: 0.7071
   type: 'test'
   ...
 # Subtest: rechaza total no canonico null
 ok 21 - rechaza total no canonico null
   ---
-  duration_ms: 0.1796
+  duration_ms: 0.9524
   type: 'test'
   ...
 # Subtest: rechaza total no canonico undefined
 ok 22 - rechaza total no canonico undefined
   ---
-  duration_ms: 0.0984
+  duration_ms: 0.0998
   type: 'test'
   ...
 # Subtest: rechaza total no canonico 20
 ok 23 - rechaza total no canonico 20
   ---
-  duration_ms: 0.0777
+  duration_ms: 0.0689
   type: 'test'
   ...
 # Subtest: rechaza total no canonico ""
 ok 24 - rechaza total no canonico ""
   ---
-  duration_ms: 0.0767
+  duration_ms: 0.0678
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "20"
 ok 25 - rechaza total no canonico "20"
   ---
-  duration_ms: 0.0746
+  duration_ms: 0.0607
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "20.0"
 ok 26 - rechaza total no canonico "20.0"
   ---
-  duration_ms: 0.0811
+  duration_ms: 0.0625
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "20.000"
 ok 27 - rechaza total no canonico "20.000"
   ---
-  duration_ms: 0.0826
+  duration_ms: 0.0644
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "-1.00"
 ok 28 - rechaza total no canonico "-1.00"
   ---
-  duration_ms: 0.0765
+  duration_ms: 0.0613
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "+1.00"
 ok 29 - rechaza total no canonico "+1.00"
   ---
-  duration_ms: 0.0797
+  duration_ms: 0.0601
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "01.00"
 ok 30 - rechaza total no canonico "01.00"
   ---
-  duration_ms: 0.0774
+  duration_ms: 0.0625
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "1,00"
 ok 31 - rechaza total no canonico "1,00"
   ---
-  duration_ms: 0.0755
+  duration_ms: 0.0585
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "1e3"
 ok 32 - rechaza total no canonico "1e3"
   ---
-  duration_ms: 0.2089
+  duration_ms: 0.1905
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "NaN"
 ok 33 - rechaza total no canonico "NaN"
   ---
-  duration_ms: 0.0918
+  duration_ms: 0.0695
   type: 'test'
   ...
 # Subtest: rechaza total no canonico " 1.00"
 ok 34 - rechaza total no canonico " 1.00"
   ---
-  duration_ms: 0.0892
+  duration_ms: 0.06
   type: 'test'
   ...
 # Subtest: rechaza total no canonico "1.00\\n"
 ok 35 - rechaza total no canonico "1.00\\n"
   ---
-  duration_ms: 0.0761
+  duration_ms: 0.0585
   type: 'test'
   ...
 # Subtest: volver justo después de una carga también recarga (revisión del PR \#3)
 ok 36 - volver justo después de una carga también recarga (revisión del PR \#3)
   ---
-  duration_ms: 0.9077
+  duration_ms: 1.0747
   type: 'test'
   ...
 # Subtest: «visibilitychange» y «focus» seguidos al volver dan una sola recarga
 ok 37 - «visibilitychange» y «focus» seguidos al volver dan una sola recarga
   ---
-  duration_ms: 0.1732
+  duration_ms: 0.1958
   type: 'test'
   ...
 # Subtest: un «focus» sin haber salido no recarga (la carga inicial ya está en marcha)
 ok 38 - un «focus» sin haber salido no recarga (la carga inicial ya está en marcha)
   ---
-  duration_ms: 0.1192
+  duration_ms: 0.1417
   type: 'test'
   ...
 # Subtest: cada salida y vuelta recarga una vez, aunque sean muy seguidas
 ok 39 - cada salida y vuelta recarga una vez, aunque sean muy seguidas
   ---
-  duration_ms: 0.1224
+  duration_ms: 0.1669
   type: 'test'
   ...
 # Subtest: si la página se abrió en segundo plano, recarga la primera vez que se ve
 ok 40 - si la página se abrió en segundo plano, recarga la primera vez que se ve
   ---
-  duration_ms: 0.2094
+  duration_ms: 0.2414
   type: 'test'
   ...
 1..40
@@ -248,4 +248,4 @@ ok 40 - si la página se abrió en segundo plano, recarga la primera vez que se 
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 152.1461
+# duration_ms 160.4176

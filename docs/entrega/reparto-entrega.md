@@ -12,8 +12,9 @@
   - **Nada**: pulsar «Approve» en el **PR #3** (spec-006, Javi) o dejar un comentario de visto bueno.
   - **Javi**: cerrar **T021** de spec-005 (visto bueno de Nicole a `bloquearActividad`, ya dado) y
     **T013** de spec-006 (aviso de las actividades de prueba de «Agua potable»).
-- Pendiente común propuesto: traducir una sola vez, en `backend/src/middleware/errores.js`, los
-  mensajes por defecto de zod para que ninguna API devuelva textos en inglés.
+- ✅ Hecho (19/11/2026): los mensajes por defecto de zod se traducen una sola vez en
+  `backend/src/middleware/errores.js` (`z.setErrorMap`), con su prueba en `errores.test.js`; los
+  mensajes propios de cada esquema siguen teniendo prioridad y ninguna API devuelve textos en inglés.
 
 ## 1. Memoria final (entregable 5)
 
