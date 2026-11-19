@@ -13,7 +13,7 @@
 | spec-001 | HU-01 Donación puntual o alta como socio | Nada | Rubén | #4 | aprobado | 23 | 23 | 23 |
 | spec-002 | HU-02 Historial de aportaciones | Nada | Javi | #6 | aprobado | 11 | 11 | 11 |
 | spec-003 | HU-03 Certificado fiscal anual | Rubén | Nada | #5 | aprobado | 14 | 13 (FR-010 eliminado) | 13 (FR-010 eliminado) |
-| spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 12 (SC-002 parcial) |
+| spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 12 |
 | spec-005 | HU-05 Consulta e inscripción en actividades | Javi | Nicole | #2 | aprobado | 13 | 13 | 12 |
 | spec-006 | HU-06 Calendario del voluntario | Javi | Nada | #3 | aprobado | 8 | 8 | 8 |
 | spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 14 | 14 |
@@ -106,21 +106,23 @@ Revisión del responsable (Rubén, 19/11/2026): `certificados.test.js` (33), `te
 
 | Requisito | Descripción | Tareas | Prueba (automática o manual) | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST permitir elegir un periodo (fecha de inicio y fin), un Proyecto opcional y una … | T005, T006, T008, T009 | `informes.test.js` (escenario 3: filtro de proyecto; escenario 4 y «por mes y por año»: agrupación); frontend `informes.test.js` (periodo y filtros de la consulta) | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-002 | El sistema MUST rechazar un periodo cuya fecha de fin sea anterior a la de inicio. El periodo i… | T005, T006, T007, T008 | `informes.test.js` («errores: fin anterior al inicio», «un solo día cuenta completo», escenario 8: 400 junto a su campo); frontend `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-003 | El dinero recaudado MUST calcularse con las aportaciones confirmadas cuya fecha de cobro está d… | T004, T005, T007 | `informes.test.js` (escenarios 1 y 2: puntuales, cuotas y n.º de aportaciones; escenario 5: solo confirmadas y dentro del periodo, hora de Madrid) | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-004 | El voluntariado MUST calcularse con las asistencias registradas (con asistencia) de actividades… | T004, T005, T007, T019, T020 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-005 | Sin filtro de proyecto, el informe MUST incluir una fila por proyecto, una de «fondo general» y… | T005, T007 | `informes.test.js` (escenarios 1 y 2: filas por proyecto, fondo general y total; escenario 4: por trimestre y proyecto, subtotales y total) | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-006 | El informe MUST poder exportarse a CSV y a PDF con exactamente la misma información que la pant… | T011, T012, T013, T014 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-007 | Un periodo sin datos MUST mostrar un informe vacío con un mensaje explicativo. Las filas de pro… | T002, T005, T007, T009, T011 | `informes.test.js` (escenario 7: informe vacío; casos límite: el proyecto sin datos se omite; el vacío también se exporta); `textos.test.js` (mensaje del informe vacío) | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-008 | Solo los usuarios con rol administrador MUST poder acceder a los informes; la comprobación se h… | T006, T007, T012, T013 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
-| FR-009 | El informe y sus exportaciones MUST contener solo cifras agregadas: ningún nombre, correo, NIF/… | T004, T007, T011, T020 | `informes.test.js` | sí | Revisado por Rubén; falta revisor (Nicole) |
-| SC-001 | Los totales del informe coinciden al céntimo (dinero) y a la décima de hora (voluntariado) con … | T007, T020 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
-| SC-002 | El administrador obtiene el informe anual exportado en menos de 1 minuto. | T021 (A2: también T017) | Parcial: PDF anual por trimestres en 0,09 s en la API (`specs/spec-004/refinamiento/validacion-02.md`, 2.12); falta cronometrarlo en la página | sí | Revisado por Rubén; parcial: falta cronometrar en la página; falta revisor (Nicole) |
-| SC-003 | Las exportaciones CSV y PDF coinciden al 100 % con la pantalla. | T011, T013 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-001 | El sistema MUST permitir elegir un periodo (fecha de inicio y fin), un Proyecto opcional y una … | T005, T006, T008, T009 | `informes.test.js` (escenario 3: filtro de proyecto; escenario 4 y «por mes y por año»: agrupación); frontend `informes.test.js` (periodo y filtros de la consulta) | — | Revisado por Rubén y por Nicole |
+| FR-002 | El sistema MUST rechazar un periodo cuya fecha de fin sea anterior a la de inicio. El periodo i… | T005, T006, T007, T008 | `informes.test.js` («errores: fin anterior al inicio», «un solo día cuenta completo», escenario 8: 400 junto a su campo); frontend `informes.test.js` | — | Revisado por Rubén y por Nicole |
+| FR-003 | El dinero recaudado MUST calcularse con las aportaciones confirmadas cuya fecha de cobro está d… | T004, T005, T007 | `informes.test.js` (escenarios 1 y 2: puntuales, cuotas y n.º de aportaciones; escenario 5: solo confirmadas y dentro del periodo, hora de Madrid) | — | Revisado por Rubén y por Nicole |
+| FR-004 | El voluntariado MUST calcularse con las asistencias registradas (con asistencia) de actividades… | T004, T005, T007, T019, T020 | `informes.test.js` | — | Revisado por Rubén y por Nicole |
+| FR-005 | Sin filtro de proyecto, el informe MUST incluir una fila por proyecto, una de «fondo general» y… | T005, T007 | `informes.test.js` (escenarios 1 y 2: filas por proyecto, fondo general y total; escenario 4: por trimestre y proyecto, subtotales y total) | — | Revisado por Rubén y por Nicole |
+| FR-006 | El informe MUST poder exportarse a CSV y a PDF con exactamente la misma información que la pant… | T011, T012, T013, T014 | `informes.test.js` | — | Revisado por Rubén y por Nicole |
+| FR-007 | Un periodo sin datos MUST mostrar un informe vacío con un mensaje explicativo. Las filas de pro… | T002, T005, T007, T009, T011 | `informes.test.js` (escenario 7: informe vacío; casos límite: el proyecto sin datos se omite; el vacío también se exporta); `textos.test.js` (mensaje del informe vacío) | — | Revisado por Rubén y por Nicole |
+| FR-008 | Solo los usuarios con rol administrador MUST poder acceder a los informes; la comprobación se h… | T006, T007, T012, T013 | `informes.test.js` | — | Revisado por Rubén y por Nicole |
+| FR-009 | El informe y sus exportaciones MUST contener solo cifras agregadas: ningún nombre, correo, NIF/… | T004, T007, T011, T020 | `informes.test.js` | sí | Revisado por Rubén y por Nicole |
+| SC-001 | Los totales del informe coinciden al céntimo (dinero) y a la décima de hora (voluntariado) con … | T007, T020 | `informes.test.js` | — | Revisado por Rubén y por Nicole |
+| SC-002 | El administrador obtiene el informe anual exportado en menos de 1 minuto. | T021 (A2: también T017) | Manual: 0,14 s en generar el informe anual por trimestres en la página y 0,10 s en obtener su PDF (Nicole, 19/11/2026); en la API, 0,09 s (`specs/spec-004/refinamiento/validacion-02.md`, 2.12) | sí | Revisado por Rubén y por Nicole (cronometrado en la página) |
+| SC-003 | Las exportaciones CSV y PDF coinciden al 100 % con la pantalla. | T011, T013 | `informes.test.js` | — | Revisado por Rubén y por Nicole |
 
 Revisión del responsable (Rubén, 19/11/2026): `informes.test.js` (27) y `textos.test.js` en verde en
 `entrega-documentacion` `704722c`. SC-002 sigue sin cronometrarse en la página (`quickstart.md`, 2.12).
+
+**Revisión cruzada (Nicole, 19/11/2026):** las tareas citadas existen y están cerradas en `tasks.md`. Cada requisito tiene al menos una prueba con su nombre en `informes.test.js`, que pasa entero (27 pruebas sobre `ong_test`), junto con `textos.test.js` y `tarea.test.js` (87 pruebas del módulo en total) y las 4 de `frontend/src/components/certificados-informes/informes.test.js`. En la aplicación, como administración, se comprobaron FR-001 (agrupación por trimestre), FR-002 (fin anterior al inicio), FR-005 (filas por proyecto, fondo general y total), FR-006 (CSV y PDF con las mismas cifras que la pantalla), FR-007 (periodo de 2019 vacío) y FR-008 (el coordinador ve «Acceso denegado»); se ven en el clip de HU-04 de la demo. SC-002 queda cronometrado en la página: 0,14 s en generar el informe anual por trimestres y 0,10 s en el PDF, frente al minuto permitido; el tiempo se midió con el navegador sobre el servidor de desarrollo, sin contar lo que tarda una persona en elegir los filtros. Sin incidencias.
 
 ## spec-005 · HU-05 Consulta e inscripción en actividades
 

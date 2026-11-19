@@ -22,20 +22,20 @@
 |---|---|---|---|---|---|---|---|---|---|
 | spec-001 | 8 | 2 | ver informes | 3 | 3 | 84/84 | 23/23 | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
 | spec-002 | 2 | 1 | ver informes | 2 | 2 | 37/37 | 11/11 | ✅ Nada y Javi | #6 ✅ aprobado |
-| spec-003 | 8 | 2 | ver informes | 2 | 1 | 26/26 | 11/14 | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
-| spec-004 | 5 | 2 | ver informes | 2 | 0 | 21/21 | 6/12 | ⏳ falta el revisor (Nicole), tras completar Rubén sus celdas | #8 ✅ aprobado |
+| spec-003 | 8 | 2 | ver informes | 2 | 1 | 26/26 | 14/14 | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
+| spec-004 | 5 | 2 | ver informes | 2 | 0 | 21/21 | 12/12 | ✅ Rubén y Nicole | #8 ✅ aprobado |
 | spec-005 | 4 | 2 | ver informes | 2 | 6 | 28/28 | 13/13 | ✅ Javi y Nicole | #2 ✅ aprobado |
 | spec-006 | 4 | 2 | ver informes | 2 | 10 | 26/26 | 8/8 | ✅ Javi y Nada | #3 ✅ aprobado |
 | spec-007 | 5 | 3 | 10 → 3 → 0 | 2 | 3 | 29/29 | 14/14 | ✅ Nicole y Javi | #1 ✅ aprobado |
-| spec-008 | 5 | 4 | 15 → 7 → 2 → 0 | 3 | 3 | 25/25 | 11/11 | ⏳ falta el revisor (Rubén) | #7 ✅ aprobado |
-| **Total** | **41** | **18** | — | **18** | **28** | **276/276** | **97/106** | 4/8 completas | 8/8 aprobados |
+| spec-008 | 5 | 4 | 15 → 7 → 2 → 0 | 3 | 3 | 25/25 | 11/11 | ✅ Nicole y Rubén | #7 ✅ aprobado |
+| **Total** | **41** | **18** | — | **18** | **28** | **276/276** | **106/106** | 6/8 completas | 8/8 aprobados |
 
 **Lectura del balance:**
 
 - **Ambigüedades resueltas**: 41 decisiones de clarify, todas incorporadas a su `spec.md`; no queda ninguna pregunta abierta en las especificaciones.
 - **Hallazgos documentales**: 18 informes de analyze (incluidos los registros de decisiones de algunas specs). En todas las specs, la última pasada no deja hallazgos críticos ni altos abiertos.
 - **Brechas de implementación**: 18 informes de converge, que añadieron 28 tareas de corrección; todas están cerradas y la última pasada de cada spec no deja brechas accionables del código.
-- **Criterios verificados**: 97 de 106 requisitos y criterios de éxito tienen una prueba automática o manual enlazada en la matriz. Los que faltan son de spec-003 y spec-004 y los completa su responsable.
+- **Criterios verificados**: 106 de 106 requisitos y criterios de éxito tienen una prueba automática o manual enlazada en la matriz. FR-010 de spec-003 se cuenta como «no aplica» porque se eliminó en clarify.
 - **Tareas**: 276 de 276 cerradas.
 - **Recorridos completos entre historias**: 4 de 4 satisfactorios (R1–R4), uno de ellos con pago real en Stripe de prueba.
 - **Regresión**: tras cada integración en `main` se ejecutó la suite completa; las pruebas de donaciones sobre su base aislada (`ong_test_hu01`) y el resto sobre `ong_test`.
@@ -58,15 +58,15 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
 | spec-001 | Nada | Rubén | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
 | spec-002 | Nada | Javi | ✅ Nada y Javi | #6 ✅ aprobado |
 | spec-003 | Rubén | Nada | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
-| spec-004 | Rubén | Nicole | ⏳ falta el revisor (Nicole), tras completar Rubén sus celdas | #8 ✅ aprobado |
+| spec-004 | Rubén | Nicole | ✅ Rubén y Nicole | #8 ✅ aprobado |
 | spec-005 | Javi | Nicole | ✅ Javi y Nicole | #2 ✅ aprobado |
 | spec-006 | Javi | Nada | ✅ Javi y Nada | #3 ✅ aprobado |
 | spec-007 | Nicole | Javi | ✅ Nicole y Javi | #1 ✅ aprobado |
-| spec-008 | Nicole | Rubén | ⏳ falta el revisor (Rubén) | #7 ✅ aprobado |
+| spec-008 | Nicole | Rubén | ✅ Nicole y Rubén | #7 ✅ aprobado |
 
 Revisiones documentadas con detalle: spec-005 por Nicole (FR-003, FR-004, FR-006 con peticiones
 simultáneas, FR-008), spec-006 por Nada ([revision-pr-3.md](../../specs/spec-006/refinamiento/revision-pr-3.md))
-y spec-007 por Javi (filas de la matriz).
+spec-007 por Javi (filas de la matriz) y spec-004 por Nicole (pruebas, comprobación en la aplicación y SC-002 cronometrado en la página).
 
 ## 5. Evidencias por historia (§5.1–§5.3)
 
