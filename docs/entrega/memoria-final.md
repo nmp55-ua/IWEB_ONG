@@ -4,9 +4,6 @@
 
 *Nada · Rubén · Javi · Nicole · Pila tecnológica: Astro + React (islas) · Node.js/Express · PostgreSQL · Tailwind CSS*
 
-> **Borrador para revisar en grupo.** Los párrafos marcados con «✎ Pendiente» debe escribirlos
-> o confirmarlos la persona indicada.
-
 ### Resumen del sistema construido
 
 El grupo ha desarrollado una aplicación web funcional para una ONG que se sostiene con dos tipos de
@@ -262,5 +259,7 @@ Docker. Documentos que acompañan a esta memoria, en `docs/entrega/`:
   herramienta, el balance de la iteración, la revisión entre compañeros y el índice de las evidencias
   de clarify, analyze y converge de cada historia (`specs/spec-00N/refinamiento/`).
 - **Matriz de trazabilidad**, recorridos completos R1–R4 y registro mínimo: `matriz-trazabilidad.md`.
-- **Vídeo de la demostración** (unos 2 minutos, las 8 historias): `demo/demo-ong.mp4`, con su página
-  explicativa `demo/index.html`.
+- **Vídeos de la demostración**, en la página `demo/index.html`: la demostración completa
+  (`demo/demo-ong-completa.mp4`, unos 8 minutos, con 70 escenarios de las 8 historias: casos normales,
+  errores de validación, reglas de negocio, permisos y correos), un clip por historia (`demo/clips/`) y
+  un resumen de unos 2 minutos (`demo/demo-ong.mp4`).
