@@ -237,19 +237,19 @@ iteración me llevo que cada afirmación de cierre debe poder remontarse a una e
 repitiera el trabajo, dejaría preparada antes la instrumentación y el registro de resultados para dedicar
 más tiempo a revisar cada hallazgo con el equipo.
 
-**Rubén (HU-03 y HU-04).** Para mí la práctica ha servido sobre todo para ver cómo funciona
-Spec-Driven Development cuando tus historias dependen por completo de las de los demás. El certificado
-y el informe no tienen datos propios: se calculan con las aportaciones de Nada y con las actividades,
-inscripciones y asistencias de Nicole y Javi, y al principio pensaba que bastaría con leer sus tablas y
-sumar. Cambié de idea con HU-03: el `analyze` encontró que la spec pedía regenerar el certificado «en
-ese momento» y el plan lo hacía con una tarea horaria, y la revisión de Nada sacó un total anual que
-podía desbordarse y que mis pruebas no alcanzaban. En HU-04, el `clarify` me hizo decidir cómo contar
-los voluntarios en subtotales y totales, y al validar el PDF vi que las filas se solapaban, lo que
-acabó en un cambio en el `pdf.js` común que tuve que proponer antes al grupo. Como el informe
-necesitaba la tabla de asistencias de Nicole, aprendí que una dependencia así tiene que quedar escrita
-en el plan y en las tareas, con una fase propia, y no resolverse fusionando una rama sin revisar. Lo
-que haría distinto es acordar antes con el grupo el orden de integración y revisar desde el principio
-los límites de los datos que recibo de otros módulos, para no descubrirlos en la revisión.
+**Rubén (HU-03 y HU-04).** Mis dos historias son las últimas de la cadena: el certificado y el
+informe no guardan datos propios, sino que se calculan con las aportaciones de Nada y con las
+actividades, inscripciones y asistencias de Nicole y Javi. Di por hecho que mi trabajo sería leer esas
+tablas y sumar, y me equivoqué: casi todos los problemas aparecieron justo en lo que recibía de otros.
+En HU-03 la revisión de Nada encontró un total anual que podía desbordarse con importes que mis
+pruebas nunca usaban, y el `analyze` señaló que la spec pedía regenerar el certificado «en ese
+momento» mientras el plan lo hacía con una tarea cada hora; tuve que decidir cuál de los dos cambiaba
+y dejarlo escrito. En HU-04 fue el `clarify` el que me obligó a fijar cómo se cuenta un voluntario que
+aparece en dos proyectos, y al validar el PDF a mano vi filas solapadas que acabaron en un cambio del
+`pdf.js` común, que propuse al grupo antes de tocarlo. La dependencia con la tabla de asistencias de
+Nicole me enseñó que algo así necesita su propia fase en el plan y en las tareas; fusionar su rama sin
+más no basta. En otra iteración fijaría con el grupo el orden de integración desde el primer día y
+probaría desde el principio los valores extremos de los datos que llegan de otros módulos.
 
 ### Repositorio, demostración y anexos
 
