@@ -105,6 +105,22 @@ bases de datos con estructuras distintas según el orden en que se aplicaran las
 lugar, se pidió a Javi que adelantara su migración 006, como preveía el plan común, y la 007 crea siempre
 la relación.
 
+#### Un pago interrumpido no podía acabar en dos cobros (HU-01)
+
+El primer `analyze` de spec-001 marcó como hallazgo UND-001 un caso que el plan no resolvía: la
+aplicación guardaba la operación de pago antes de pedir a Stripe la sesión de Checkout, pero si esa
+petición se cortaba (un tiempo de espera, una caída del servidor o dos pestañas pulsando a la vez) no
+había forma de saber si la sesión se había llegado a crear ni de reanudarla sin arriesgarse a abrir una
+segunda. Antes de escribir código se fijó el protocolo en el contrato de la pasarela: la creación se
+protege con un bloqueo de PostgreSQL por operación, se guarda una sola vez la solicitud exacta que se
+envía a Stripe (sin NIF, dirección ni datos de tarjeta) y cualquier reintento reutiliza la misma
+referencia, el mismo cuerpo y la misma clave de idempotencia. Una operación sin sesión conocida tiene
+un plazo fijo de 23 horas, por debajo de las 24 que Stripe conserva esa clave; pasado el plazo queda
+para revisión y nunca se crea otra. Las pruebas de `servicio.test.js` y `pasarela.test.js` comprueban
+el tiempo de espera, el reinicio y la reanudación desde otro proceso, y en la demostración se ve el
+resultado: al volver al formulario aparece «Tienes una donación en preparación» y una solicitud con
+datos distintos se rechaza en lugar de abrir un segundo pago.
+
 #### Iteración de HU-02: corregir el cierre del banco y alinear el plan
 
 El primer `converge` de HU-02 detectó dos problemas: si fallaba la lectura de contadores, el banco de
@@ -168,6 +184,24 @@ esa segunda lectura. El acuerdo sobre `bloquearActividad`, que es del módulo de
 tarea de coordinación (T021). El registro de hallazgos (`analyze-2`) da S1 por hecho, y el mismo bloqueo es
 el que comprueban las pruebas de concurrencia: dos peticiones a la vez por la última plaza y bajar
 plazas mientras alguien se inscribe.
+
+#### El calendario funcionaba, pero no para todo el mundo (HU-06)
+
+Con las 13 pruebas de `calendario.test.js` en verde, el primer `converge` de spec-006 contrastó el
+código con la spec y el research y encontró siete diferencias, ninguna grave, que las pruebas no podían
+ver porque estaban en la interfaz. La más importante (F1) era de accesibilidad: al pasar de mes se
+desmontaba toda la vista mensual, también el botón pulsado, y quien usa el teclado volvía al principio
+de la página y tenía que recorrer otra vez el menú para avanzar cada mes. Otras dos contradecían lo que
+decía el research: una recarga que fallaba al volver a la pestaña vaciaba el calendario (F2), y tras
+intentar cancelar una actividad que ya había empezado la tarjeta seguía ofreciendo cancelar (F3). El
+resto eran contrastes por debajo de 4,5:1 (F4), un error de fechas que daba un segundo mensaje falso
+(F5), un cálculo del día que dependía del idioma del navegador (F6) y un paso del quickstart que no
+coincidía con la pantalla (F7). Se añadieron las tareas T015–T021, junto con tres más de la prueba
+manual (orden de encabezados, pestañas en el aviso de permiso y etiquetas recortadas), y el segundo
+`converge` volvió a comprobar cada una en la aplicación con su «antes» y «después»: por ejemplo, el
+foco se queda ahora en «Mes siguiente» y el mes nuevo se anuncia. Solo quedó una cosa fuera de la
+historia: el color común `aviso`, que usan también HU-05 y otros componentes, sigue en 4,2:1, y el
+cambio a un tono más oscuro se propuso al grupo en lugar de tocarlo desde una sola rama.
 
 ### Integración entre historias
 
