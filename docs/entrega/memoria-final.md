@@ -318,6 +318,9 @@ Docker. Documentos que acompañan a esta memoria, en `docs/entrega/`:
   herramienta, el balance de la iteración, la revisión entre compañeros y el índice de las evidencias
   de clarify, analyze y converge de cada historia (`specs/spec-00N/refinamiento/`).
 - **Matriz de trazabilidad**, recorridos completos R1–R4 y registro mínimo: `matriz-trazabilidad.md`.
+- **Tres situaciones por historia** (recorrido habitual, entrada inválida o caso límite y permisos o
+  estado), con su escena del vídeo y su prueba automática: `situaciones-por-historia.md`.
+- **Regresión final** de la suite completa: `regresion/backend.txt` y `regresion/frontend.txt`.
 - **Vídeos de la demostración**, en la página `demo/index.html`: la demostración completa
   (`demo/demo-ong-completa.mp4`, unos 8 minutos, con 70 escenarios de las 8 historias: casos normales,
   errores de validación, reglas de negocio, permisos y correos), un clip por historia (`demo/clips/`) y

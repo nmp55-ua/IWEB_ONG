@@ -49,6 +49,7 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
 - **Registro mínimo** (historia y criterio, hallazgo, comando, documentos, tarea y commit, prueba,
   responsable, revisor y estado): [matriz-trazabilidad.md, «Registro mínimo»](matriz-trazabilidad.md#registro-mínimo-enunciado-54).
 - **Matriz de trazabilidad de las 8 historias**: [matriz-trazabilidad.md](matriz-trazabilidad.md), con la decisión del plan, las tareas y la prueba de cada requisito.
+- **Tres situaciones por historia** (§5.1, punto 1): recorrido habitual, entrada inválida o caso límite y permisos o estado de las 8 historias, con su escena del vídeo y su prueba: [situaciones-por-historia.md](situaciones-por-historia.md).
 - **Vídeo de la demostración**: [demo/index.html](demo/index.html).
 
 ## 4. Revisión entre compañeros (§5.2)
