@@ -200,8 +200,9 @@ coincidía con la pantalla (F7). Se añadieron las tareas T015–T021, junto con
 manual (orden de encabezados, pestañas en el aviso de permiso y etiquetas recortadas), y el segundo
 `converge` volvió a comprobar cada una en la aplicación con su «antes» y «después»: por ejemplo, el
 foco se queda ahora en «Mes siguiente» y el mes nuevo se anuncia. Solo quedó una cosa fuera de la
-historia: el color común `aviso`, que usan también HU-05 y otros componentes, sigue en 4,2:1, y el
-cambio a un tono más oscuro se propuso al grupo en lugar de tocarlo desde una sola rama.
+historia: el color común `aviso`, que usan también HU-05 y el componente común de avisos, se quedaba
+en 4,2:1. En lugar de cambiarlo desde una sola rama se propuso al grupo un tono más oscuro, y se
+aplicó en la base común antes de la entrega (`#9A5B00`, 5,4:1 sobre blanco).
 
 ### Integración entre historias
 

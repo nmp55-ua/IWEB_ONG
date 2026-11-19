@@ -13,7 +13,7 @@ export default {
           900: '#13304B',
         },
         exito: '#2E7D32',
-        aviso: '#B26A00',
+        aviso: '#9A5B00',
         peligro: '#C62828',
       },
       fontFamily: {
