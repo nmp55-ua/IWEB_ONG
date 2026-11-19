@@ -38,7 +38,7 @@
 - **Criterios verificados**: 106 de 106 requisitos y criterios de éxito tienen una prueba automática o manual enlazada en la matriz. FR-010 de spec-003 se cuenta como «no aplica» porque se eliminó en clarify.
 - **Tareas**: 276 de 276 cerradas.
 - **Recorridos completos entre historias**: 4 de 4 satisfactorios (R1–R4), uno de ellos con pago real en Stripe de prueba.
-- **Regresión**: tras cada integración en `main` se ejecutó la suite completa; las pruebas de donaciones sobre su base aislada (`ong_test_hu01`) y el resto sobre `ong_test`.
+- **Regresión**: tras cada integración en `main` se ejecutó la suite completa; las pruebas de donaciones sobre su base aislada (`ong_test_hu01`) y el resto sobre `ong_test`. Regresión final sobre `entrega-documentacion` (19/11/2026): backend 229 + 429 pruebas en verde (3 saltadas, las `it.skip` de HU-07 que dependían de spec-005) y frontend 40 de 40; salidas completas en [regresion/backend.txt](regresion/backend.txt) y [regresion/frontend.txt](regresion/frontend.txt).
 
 Estos indicadores describen la mejora conseguida; no se buscó encontrar más defectos (§5.4).
 
@@ -48,7 +48,7 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
   [matriz-trazabilidad.md, «Recorridos completos entre historias»](matriz-trazabilidad.md#recorridos-completos-entre-historias-enunciado-54).
 - **Registro mínimo** (historia y criterio, hallazgo, comando, documentos, tarea y commit, prueba,
   responsable, revisor y estado): [matriz-trazabilidad.md, «Registro mínimo»](matriz-trazabilidad.md#registro-mínimo-enunciado-54).
-- **Matriz de trazabilidad de las 8 historias**: [matriz-trazabilidad.md](matriz-trazabilidad.md).
+- **Matriz de trazabilidad de las 8 historias**: [matriz-trazabilidad.md](matriz-trazabilidad.md), con la decisión del plan, las tareas y la prueba de cada requisito.
 - **Vídeo de la demostración**: [demo/index.html](demo/index.html).
 
 ## 4. Revisión entre compañeros (§5.2)

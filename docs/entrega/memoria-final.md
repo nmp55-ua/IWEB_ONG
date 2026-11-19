@@ -204,6 +204,30 @@ historia: el color común `aviso`, que usan también HU-05 y el componente comú
 en 4,2:1. En lugar de cambiarlo desde una sola rama se propuso al grupo un tono más oscuro, y se
 aplicó en la base común antes de la entrega (`#9A5B00`, 5,4:1 sobre blanco).
 
+### Registro mínimo de hallazgos y decisiones
+
+Una fila por cada hallazgo o decisión relevante de las ocho historias (enunciado §5.4). Las salidas
+completas de los comandos están en `specs/spec-00N/refinamiento/`, y la trazabilidad de todos los
+requisitos, en `docs/entrega/matriz-trazabilidad.md`.
+
+| Historia y criterio | Hallazgo o decisión | Comando | Documentos o código afectados | Tarea y commit | Prueba y resultado | Responsable | Revisor | Estado |
+|---|---|---|---|---|---|---|---|---|
+| HU-07 FR-006 | Promoción al cancelar un voluntario acordada con spec-005 | analyze-1 (H1) | spec, plan, tasks, contrato | T023 · `ff7a202` | Cancelación real: entra la primera en espera y llega el correo | Nicole | Javi | Cerrado |
+| HU-07 FR-003 | Motivo concreto al fallar «Publicar» | converge-1 (F1) | `DetalleActividad.jsx` | T027 · `4d923cf` | Proyecto inactivo → «El proyecto no está activo.» | Nicole | Javi | Cerrado |
+| HU-08 modelo de datos | `asistencias` sin `creado_en`/`actualizado_en` | converge-1 (F1) | `007_asistencias.sql`, modelo-datos | T023 · `7d050e7` | Columnas presentes; 111 pruebas | Nicole | Rubén | Cerrado |
+| HU-08 SC-002 | 20 personas en < 2 min | quickstart | — | T022 · `1180fac` | 40 s | Nicole | Rubén | Cerrado |
+| HU-05 FR-009 | Orden de bloqueo al cancelar con lista de espera: leer, `bloquearActividad` y volver a leer | analyze-1 (S1) | plan, tasks, `voluntariado/servicio.js` | T017 · `c7f701f`, `55ba4c6` | Pruebas de concurrencia de `servicio.test.js` (última plaza y bajar plazas a la vez) | Javi | Nicole | Cerrado |
+| HU-05 FR-002 | La tarjeta seguía diciendo «1 plaza libre» tras un 409 `PLAZAS_AGOTADAS` | prueba manual (2.8) | `TarjetaActividad.jsx`, `ActividadesDisponibles.jsx` | T027 · `8b027c5` | Al cerrar la ventana el listado se recarga | Javi | Nicole | Cerrado |
+| HU-06 FR-001 | El foco se perdía al cambiar de mes en la vista mensual | converge-1 (F1) | `CalendarioVoluntario.jsx`, `MesCalendario.jsx` | T015 · `aa6788b` | El foco sigue en «‹»/«›» y se anuncia el mes (`converge-2.md`) | Javi | Nada | Cerrado |
+| HU-06 FR-005 | No recargaba al volver justo después de otra carga | revisión del PR #3 | `CalendarioVoluntario.jsx`, `vuelta.js` | T025 · `80878c2` | `vuelta.test.js` y cambio real de pestaña y de ventana (T026) | Javi | Nada | Cerrado |
+| HU-06 SC-002 | Cronometrar con una persona | quickstart | — | T026 · `67c7bd1` | Menos de 5 s (< 10 s) | Javi | Nada | Cerrado |
+| HU-01 FR-006/FR-010 | Pago interrumpido sin forma segura de reanudarlo: bloqueo por operación, solicitud guardada y misma clave de idempotencia (23 h) | analyze-1 (UND-001) | contrato de la pasarela, plan, tasks, `009_operativa_donaciones.sql`, `donaciones/servicio.js`, `repositorio.js` | T034–T036 · `edc621c` | `servicio.test.js` (tiempo de espera, reinicio, reanudación desde otro proceso) y `pasarela.test.js` (misma clave) | Nada | Rubén | Cerrado |
+| HU-02 SC-002 | El banco de medición podía no cerrar sus recursos si fallaban los contadores; plan desalineado con la transacción | converge-1 (CONV-001/002) | `pruebas/medicion-historial.js`, plan | T036–T037 · `88db908` | Regresión dirigida; `converge-2.md` sin brechas | Nada | Javi | Cerrado |
+| HU-03 FR-002 | El total anual en `NUMERIC(10,2)` podía desbordarse | revisión del PR #5 | `008_certificados.sql`, modelo-datos | `223fd54` | `certificados.test.js`: 101 aportaciones de 999.999,99 € + 1 € (falla con el tipo anterior, pasa con el nuevo) | Rubén | Nada | Cerrado |
+| HU-03 FR-008 | «En ese momento» frente a la tarea horaria: se mantiene la tarea y se precisa en research y quickstart | analyze-1 (A1) | research R3, quickstart | `d754a75` | Regeneración en la siguiente ejecución o con la orden manual (`certificados.test.js`) | Rubén | Nada | Cerrado |
+| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
+| HU-04 SC-002 | Informe anual exportado en menos de 1 minuto | quickstart y revisión | — | T021 | Página: 0,14 s el informe y 0,10 s el PDF (19/11/2026) | Rubén | Nicole | Cerrado |
+
 ### Integración entre historias
 
 Integrar el trabajo de cuatro personas generó tres tipos de problemas, todos resueltos sin rehacer
