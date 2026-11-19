@@ -10,14 +10,14 @@
 
 | Spec | Historia | Responsable | Revisor | PR | Revisión registrada | Requisitos | Con tareas | Con prueba (automática o manual) |
 |---|---|---|---|---|---|---|---|---|
-| spec-001 | HU-01 Donación puntual o alta como socio | Nada | Rubén | #4 | sin revisión registrada | 23 | 23 | 23 |
+| spec-001 | HU-01 Donación puntual o alta como socio | Nada | Rubén | #4 | aprobado | 23 | 23 | 23 |
 | spec-002 | HU-02 Historial de aportaciones | Nada | Javi | #6 | aprobado | 11 | 11 | 11 |
-| spec-003 | HU-03 Certificado fiscal anual | Rubén | Nada | #5 | aprobado | 14 | 13 | 11 |
-| spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 6 |
+| spec-003 | HU-03 Certificado fiscal anual | Rubén | Nada | #5 | aprobado | 14 | 13 (FR-010 eliminado) | 13 (FR-010 eliminado) |
+| spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 12 (SC-002 parcial) |
 | spec-005 | HU-05 Consulta e inscripción en actividades | Javi | Nicole | #2 | aprobado | 13 | 13 | 12 |
 | spec-006 | HU-06 Calendario del voluntario | Javi | Nada | #3 | aprobado | 8 | 8 | 8 |
 | spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 14 | 14 |
-| spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | sin revisión registrada | 11 | 11 | 11 |
+| spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | aprobado | 11 | 11 | 11 |
 
 Las celdas «⚠ completar» no significan que falte la funcionalidad: indican que ninguna tarea o
 prueba **nombra** ese requisito. El responsable debe enlazar la tarea o prueba que lo cubre
@@ -81,20 +81,24 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 
 | Requisito | Descripción | Tareas | Prueba (automática o manual) | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST generar automáticamente, a partir del 1 de enero, un CertificadoFiscal del ejer… | T005, T007, T008, T021 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-002 | El total del certificado MUST ser la suma, al céntimo, de las aportaciones confirmadas con fech… | T004, T005, T008 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-003 | El certificado MUST incluir datos de la ONG (nombre, CIF), datos del donante (nombre, apellidos… | T002, T003, T010 | `certificados.test.js`, `textos.test.js` | — | Por revisar (Rubén) |
-| FR-004 | El certificado MUST poder descargarse en PDF desde el área personal del donante. | T010, T011, T016 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-005 | El sistema MUST conservar y permitir descargar los certificados de ejercicios anteriores ya gen… | T013, T016 | ⚠ completar | — | Por revisar (Rubén) |
-| FR-006 | El sistema MUST NOT ofrecer el certificado del ejercicio en curso. | T005, T010, T013, T014 | `certificados.test.js`, `textos.test.js` | — | Por revisar (Rubén) |
-| FR-007 | Un donante MUST poder descargar solo sus propios certificados; la comprobación se hace en el se… | T010, T011, T013 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-008 | Si después de emitir el certificado de un ejercicio cerrado se confirma una aportación con fech… | T005, T008 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-009 | Al emitir o regenerar un certificado, el sistema MUST enviar al Donante un correo que avise de … | T002, T005, T008 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-010 | (Eliminado en la sesión 2026-11-08: HU-01 exige NIF/NIE, no puede existir un Donante sin él.) | ⚠ completar | ⚠ completar | — | Por revisar (Rubén) |
-| FR-011 | El sistema MUST ofrecer una página pública, sin inicio de sesión, donde se introduce un código … | T018, T019, T020 | `certificados.test.js` | — | Por revisar (Rubén) |
-| FR-012 | El certificado MUST generarse aunque el Donante no tenga cuenta de usuario vinculada. El acceso… | T010, T013, T016 | `certificados.test.js` | — | Por revisar (Rubén) |
-| SC-001 | El total de cada certificado coincide al céntimo con el total del mismo año en el historial (HU… | T024 | ⚠ completar | sí | Por revisar (Rubén) |
-| SC-002 | El 1 de enero, el 100 % de los donantes con aportaciones confirmadas del ejercicio anterior tie… | T008, T024 | `certificados.test.js` | sí | Por revisar (Rubén) |
+| FR-001 | El sistema MUST generar automáticamente, a partir del 1 de enero, un CertificadoFiscal del ejer… | T005, T007, T008, T021 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-002 | El total del certificado MUST ser la suma, al céntimo, de las aportaciones confirmadas con fech… | T004, T005, T008 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-003 | El certificado MUST incluir datos de la ONG (nombre, CIF), datos del donante (nombre, apellidos… | T002, T003, T010 | `certificados.test.js`, `textos.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-004 | El certificado MUST poder descargarse en PDF desde el área personal del donante. | T010, T011, T016 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-005 | El sistema MUST conservar y permitir descargar los certificados de ejercicios anteriores ya gen… | T013, T016 | `certificados.test.js` («escenarios 1 y 6»: la cuenta vinculada sigue viendo los de 2024 y 2025; descarga del PDF de 2025, ejercicio cerrado) | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-006 | El sistema MUST NOT ofrecer el certificado del ejercicio en curso. | T005, T010, T013, T014 | `certificados.test.js`, `textos.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-007 | Un donante MUST poder descargar solo sus propios certificados; la comprobación se hace en el se… | T010, T011, T013 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-008 | Si después de emitir el certificado de un ejercicio cerrado se confirma una aportación con fech… | T005, T008 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-009 | Al emitir o regenerar un certificado, el sistema MUST enviar al Donante un correo que avise de … | T002, T005, T008 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-010 | (Eliminado en la sesión 2026-11-08: HU-01 exige NIF/NIE, no puede existir un Donante sin él.) | No aplica (eliminado) | No aplica: eliminado en clarify (2026-11-08) | — | Revisado por Rubén (no aplica); falta revisor (Nada) |
+| FR-011 | El sistema MUST ofrecer una página pública, sin inicio de sesión, donde se introduce un código … | T018, T019, T020 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| FR-012 | El certificado MUST generarse aunque el Donante no tenga cuenta de usuario vinculada. El acceso… | T010, T013, T016 | `certificados.test.js` | — | Revisado por Rubén; falta revisor (Nada) |
+| SC-001 | El total de cada certificado coincide al céntimo con el total del mismo año en el historial (HU… | T024 | Recorridos R3 (2025: 60,00 € en historial y en certificado) y R4 (2026: 165,00 € en ambos tras la donación con Stripe) | sí | Revisado por Rubén; falta revisor (Nada) |
+| SC-002 | El 1 de enero, el 100 % de los donantes con aportaciones confirmadas del ejercicio anterior tie… | T008, T024 | `certificados.test.js` | sí | Revisado por Rubén; falta revisor (Nada) |
+
+Revisión del responsable (Rubén, 19/11/2026): `certificados.test.js` (33), `textos.test.js` (24) y
+`tarea.test.js` (3) en verde contra una base de pruebas local con las migraciones, en
+`entrega-documentacion` `704722c`.
 
 ## spec-004 · HU-04 Informes para la junta
 
@@ -102,18 +106,21 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 
 | Requisito | Descripción | Tareas | Prueba (automática o manual) | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST permitir elegir un periodo (fecha de inicio y fin), un Proyecto opcional y una … | T005, T006, T008, T009 | ⚠ completar | — | Por revisar (Rubén) |
-| FR-002 | El sistema MUST rechazar un periodo cuya fecha de fin sea anterior a la de inicio. El periodo i… | T005, T006, T007, T008 | ⚠ completar | — | Por revisar (Rubén) |
-| FR-003 | El dinero recaudado MUST calcularse con las aportaciones confirmadas cuya fecha de cobro está d… | T004, T005, T007 | ⚠ completar | — | Por revisar (Rubén) |
-| FR-004 | El voluntariado MUST calcularse con las asistencias registradas (con asistencia) de actividades… | T004, T005, T007, T019, T020 | `informes.test.js` | — | Por revisar (Rubén) |
-| FR-005 | Sin filtro de proyecto, el informe MUST incluir una fila por proyecto, una de «fondo general» y… | T005, T007 | ⚠ completar | — | Por revisar (Rubén) |
-| FR-006 | El informe MUST poder exportarse a CSV y a PDF con exactamente la misma información que la pant… | T011, T012, T013, T014 | `informes.test.js` | — | Por revisar (Rubén) |
-| FR-007 | Un periodo sin datos MUST mostrar un informe vacío con un mensaje explicativo. Las filas de pro… | T002, T005, T007, T009, T011 | ⚠ completar | — | Por revisar (Rubén) |
-| FR-008 | Solo los usuarios con rol administrador MUST poder acceder a los informes; la comprobación se h… | T006, T007, T012, T013 | `informes.test.js` | — | Por revisar (Rubén) |
-| FR-009 | El informe y sus exportaciones MUST contener solo cifras agregadas: ningún nombre, correo, NIF/… | T004, T007, T011, T020 | `informes.test.js` | sí | Por revisar (Rubén) |
-| SC-001 | Los totales del informe coinciden al céntimo (dinero) y a la décima de hora (voluntariado) con … | T007, T020 | `informes.test.js` | — | Por revisar (Rubén) |
-| SC-002 | El administrador obtiene el informe anual exportado en menos de 1 minuto. | T021 (A2: también T017) | ⚠ completar | sí | Por revisar (Rubén) |
-| SC-003 | Las exportaciones CSV y PDF coinciden al 100 % con la pantalla. | T011, T013 | `informes.test.js` | — | Por revisar (Rubén) |
+| FR-001 | El sistema MUST permitir elegir un periodo (fecha de inicio y fin), un Proyecto opcional y una … | T005, T006, T008, T009 | `informes.test.js` (escenario 3: filtro de proyecto; escenario 4 y «por mes y por año»: agrupación); frontend `informes.test.js` (periodo y filtros de la consulta) | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-002 | El sistema MUST rechazar un periodo cuya fecha de fin sea anterior a la de inicio. El periodo i… | T005, T006, T007, T008 | `informes.test.js` («errores: fin anterior al inicio», «un solo día cuenta completo», escenario 8: 400 junto a su campo); frontend `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-003 | El dinero recaudado MUST calcularse con las aportaciones confirmadas cuya fecha de cobro está d… | T004, T005, T007 | `informes.test.js` (escenarios 1 y 2: puntuales, cuotas y n.º de aportaciones; escenario 5: solo confirmadas y dentro del periodo, hora de Madrid) | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-004 | El voluntariado MUST calcularse con las asistencias registradas (con asistencia) de actividades… | T004, T005, T007, T019, T020 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-005 | Sin filtro de proyecto, el informe MUST incluir una fila por proyecto, una de «fondo general» y… | T005, T007 | `informes.test.js` (escenarios 1 y 2: filas por proyecto, fondo general y total; escenario 4: por trimestre y proyecto, subtotales y total) | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-006 | El informe MUST poder exportarse a CSV y a PDF con exactamente la misma información que la pant… | T011, T012, T013, T014 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-007 | Un periodo sin datos MUST mostrar un informe vacío con un mensaje explicativo. Las filas de pro… | T002, T005, T007, T009, T011 | `informes.test.js` (escenario 7: informe vacío; casos límite: el proyecto sin datos se omite; el vacío también se exporta); `textos.test.js` (mensaje del informe vacío) | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-008 | Solo los usuarios con rol administrador MUST poder acceder a los informes; la comprobación se h… | T006, T007, T012, T013 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+| FR-009 | El informe y sus exportaciones MUST contener solo cifras agregadas: ningún nombre, correo, NIF/… | T004, T007, T011, T020 | `informes.test.js` | sí | Revisado por Rubén; falta revisor (Nicole) |
+| SC-001 | Los totales del informe coinciden al céntimo (dinero) y a la décima de hora (voluntariado) con … | T007, T020 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+| SC-002 | El administrador obtiene el informe anual exportado en menos de 1 minuto. | T021 (A2: también T017) | Parcial: PDF anual por trimestres en 0,09 s en la API (`specs/spec-004/refinamiento/validacion-02.md`, 2.12); falta cronometrarlo en la página | sí | Revisado por Rubén; parcial: falta cronometrar en la página; falta revisor (Nicole) |
+| SC-003 | Las exportaciones CSV y PDF coinciden al 100 % con la pantalla. | T011, T013 | `informes.test.js` | — | Revisado por Rubén; falta revisor (Nicole) |
+
+Revisión del responsable (Rubén, 19/11/2026): `informes.test.js` (27) y `textos.test.js` en verde en
+`entrega-documentacion` `704722c`. SC-002 sigue sin cronometrarse en la página (`quickstart.md`, 2.12).
 
 ## spec-005 · HU-05 Consulta e inscripción en actividades
 
@@ -179,17 +186,23 @@ Matriz detallada del responsable: [`specs/spec-002/refinamiento/matriz-validacio
 
 | Requisito | Descripción | Tareas | Prueba (automática o manual) | Quickstart | Estado |
 |---|---|---|---|---|---|
-| FR-001 | El sistema MUST permitir registrar asistencia solo en actividades publicadas (no canceladas) cu… | T004, T005, T007, T010 | `asistencias.test.js` | sí | Revisado por Nicole; falta revisor (Rubén) |
-| FR-002 | El coordinador MUST poder marcar cada inscrito confirmado como «asistió» o «no asistió», y corr… | T006–T012 | `asistencias.test.js` («horas»: repetir y corregir); quickstart 1.2–1.4 | — | Revisado por Nicole; falta revisor (Rubén) |
-| FR-003 | Las horas de una actividad MUST ser la diferencia entre su fin y su inicio; en v1 no hay asiste… | T003, T005, T006, T007 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
-| FR-004 | Marcar «asistió» MUST sumar las horas al total del voluntario; cambiar a «no asistió» MUST rest… | T003, T005, T014 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
-| FR-005 | Una misma asistencia MUST NOT sumar horas más de una vez. | T001, T003, T005 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
-| FR-006 | El sistema MUST NOT permitir registrar asistencia de una persona sin inscripción confirmada en … | T005, T007 | `asistencias.test.js` | sí | Revisado por Nicole; falta revisor (Rubén) |
-| FR-007 | El voluntario MUST ver en su perfil (la página /mis-horas) su total de horas y el desglose por … | T013–T019 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
-| FR-008 | Solo los usuarios con rol coordinador MUST poder registrar o corregir asistencias, y cualquiera… | T005, T009, T010, T013, T017 | `asistencias.test.js` | — | Revisado por Nicole; falta revisor (Rubén) |
-| FR-009 | Desde la hora de inicio de la actividad, una Inscripción confirmada MUST NOT poder cancelarse (… | T022 (solo verificación; el código ya existe en spec-005) | `voluntariado/servicio.test.js` (spec-005 FR-009); comprobado por API (prueba manual T026 de spec-007, punto 8) | sí | Revisado por Nicole; falta revisor (Rubén) |
-| SC-001 | El total de horas del perfil coincide siempre con la suma de sus asistencias marcadas como «asi… | T013, T014, T022 | `asistencias.test.js` | sí | Revisado por Nicole; falta revisor (Rubén) |
-| SC-002 | El coordinador registra la asistencia de una actividad de 20 personas en menos de 2 minutos. | T010, T022 | Manual: 40 s con 20 confirmados (quickstart, T022) | sí | Revisado por Nicole; falta revisor (Rubén) |
+| FR-001 | El sistema MUST permitir registrar asistencia solo en actividades publicadas (no canceladas) cu… | T004, T005, T007, T010 | `asistencias.test.js` | sí | Revisado por Nicole y por Rubén |
+| FR-002 | El coordinador MUST poder marcar cada inscrito confirmado como «asistió» o «no asistió», y corr… | T006–T012 | `asistencias.test.js` («horas»: repetir y corregir); quickstart 1.2–1.4 | — | Revisado por Nicole y por Rubén |
+| FR-003 | Las horas de una actividad MUST ser la diferencia entre su fin y su inicio; en v1 no hay asiste… | T003, T005, T006, T007 | `asistencias.test.js` | — | Revisado por Nicole y por Rubén |
+| FR-004 | Marcar «asistió» MUST sumar las horas al total del voluntario; cambiar a «no asistió» MUST rest… | T003, T005, T014 | `asistencias.test.js` | — | Revisado por Nicole y por Rubén |
+| FR-005 | Una misma asistencia MUST NOT sumar horas más de una vez. | T001, T003, T005 | `asistencias.test.js` | — | Revisado por Nicole y por Rubén |
+| FR-006 | El sistema MUST NOT permitir registrar asistencia de una persona sin inscripción confirmada en … | T005, T007 | `asistencias.test.js` | sí | Revisado por Nicole y por Rubén |
+| FR-007 | El voluntario MUST ver en su perfil (la página /mis-horas) su total de horas y el desglose por … | T013–T019 | `asistencias.test.js` | — | Revisado por Nicole y por Rubén |
+| FR-008 | Solo los usuarios con rol coordinador MUST poder registrar o corregir asistencias, y cualquiera… | T005, T009, T010, T013, T017 | `asistencias.test.js` | — | Revisado por Nicole y por Rubén |
+| FR-009 | Desde la hora de inicio de la actividad, una Inscripción confirmada MUST NOT poder cancelarse (… | T022 (solo verificación; el código ya existe en spec-005) | `voluntariado/servicio.test.js` (spec-005 FR-009); comprobado por API (prueba manual T026 de spec-007, punto 8) | sí | Revisado por Nicole y por Rubén |
+| SC-001 | El total de horas del perfil coincide siempre con la suma de sus asistencias marcadas como «asi… | T013, T014, T022 | `asistencias.test.js` | sí | Revisado por Nicole y por Rubén |
+| SC-002 | El coordinador registra la asistencia de una actividad de 20 personas en menos de 2 minutos. | T010, T022 | Manual: 40 s con 20 confirmados (quickstart, T022) | sí | Revisado por Nicole y por Rubén (evidencia manual leída, no repetida) |
+
+Revisión de Rubén (19/11/2026): `asistencias.test.js` (23) y `voluntariado/servicio.test.js` (34) en
+verde contra una base de pruebas local, en `entrega-documentacion` `704722c`. Criterios comprobados
+leyendo la prueba y su resultado: FR-005 («repetir el PUT no duplica y corregir conserva la fila») y
+SC-001 («total 5,5 con desglose, sin contar “no asistió”, y coincide con la suma»). SC-002 es manual
+(40 s) y no se repitió.
 
 ## Recorridos completos entre historias (enunciado §5.4)
 
