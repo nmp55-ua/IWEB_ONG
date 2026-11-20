@@ -25,9 +25,9 @@ Las ubicaciones de las tablas siguientes son relativas a `specs/spec-002/`, salv
 
 ## 2. Procedimiento aplicado
 
-Se aplica directamente el [SKILL local de speckit-analyze](../../../.claude/skills/speckit-analyze/SKILL.md); Se aplica el procedimiento correspondiente del repositorio.
+Se aplica directamente el [SKILL local de speckit-analyze](../../../.claude/skills/speckit-analyze/SKILL.md).
 
-El procedimiento local prescribe un análisis sin escrituras. La única excepción es la creación de este informe, solicitada expresamente; los documentos analizados no se corrigen ni se marcan tareas.
+El procedimiento local prescribe un análisis sin escrituras. La única excepción es la creación de este informe; los documentos analizados no se corrigen ni se marcan tareas.
 
 Se inspecciona `check-prerequisites.ps1`: fuera de `PathsOnly` llama a la resolución de funcionalidad con persistencia. Para conservar la selección existente, se reproducen las comprobaciones necesarias en lectura mediante `Get-FeaturePathsEnv -NoPersist`, con `SPECIFY_FEATURE_DIRECTORY` y `SPECIFY_FEATURE` limitadas al proceso de la terminal. Se comprueba la existencia real de spec, plan y tasks y se confirma `FEATURE_DIR = specs/spec-002`. No se ejecuta el comando completo que podría escribir `feature.json` ni se presenta como ejecutado.
 

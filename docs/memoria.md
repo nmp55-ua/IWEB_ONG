@@ -12,7 +12,7 @@ Grupo G10 · Ingeniería Web, Proyecto SDD Parte I · Universidad de Alicante, c
 | Nicole | `nmp55-ua` | HU-07, HU-08 |
 
 Fecha de la memoria: 20 de noviembre de 2026 · Estado del código: rama `entrega-documentacion`,
-que se integra en `main` con el pull request de entrega (el commit exacto es el del zip entregado).
+que se integra en `main` con el pull request de entrega.
 
 ---
 
@@ -439,9 +439,11 @@ Los criterios de tiempo se cronometraron con una persona en la aplicación:
 
 | Criterio | Objetivo | Medido |
 |---|---|---|
+| HU-01 SC-001 · completar una donación | < 3 min | 61 s |
 | HU-04 SC-002 · informe anual exportado | < 1 min | 0,14 s el informe y 0,10 s el PDF |
 | HU-05 SC-001 · encontrar e inscribirse | < 2 min | 10 s |
 | HU-06 SC-002 · encontrar la siguiente actividad | < 10 s | menos de 5 s |
+| HU-07 SC-001 · crear y publicar una actividad | < 3 min | 1 min 30 s |
 | HU-08 SC-002 · pasar lista a 20 personas | < 2 min | 40 s |
 
 El resto de escenarios se comprobó siguiendo el `quickstart.md` de cada spec; los resultados están en
@@ -559,7 +561,8 @@ aportaciones de 2025 y 2026, actividades en todos los estados y asistencias con 
    ([`agrupamiento.md`](agrupamiento.md)).
 3. **Ciclo completo en cada historia**: `clarify` → `plan` → `tasks` → `analyze` → `implement` →
    `converge`, repitiendo `analyze` y `converge` hasta no dejar hallazgos graves ni brechas.
-4. **Pull request con revisión cruzada**: a `main` solo se llega con la aprobación del revisor.
+4. **Pull request con revisión cruzada**: cada historia llega a `main` con un pull request revisado por otra
+   persona. En tres (PR #3, #4 y #7) la aprobación formal en GitHub se registró después de mezclar, el 18/11.
 5. **Cambios comunes con acuerdo**: cualquier cambio en el plan, el modelo o los componentes comunes se
    proponía al grupo y se aplicaba en todas las specs afectadas.
 
@@ -635,7 +638,8 @@ y la diferencia entre la spec anterior y la revisada en cada `clarify` es su pro
 | #8 | spec-004 | Rubén | Nicole | 12/11/2026 |
 | #9 | spec-002 (análisis final de HU-02) | Nada | Javi | 20/11/2026 |
 
-Los pull requests de las ocho historias tienen la aprobación de su revisor. La coordinación entre historias se hizo
+Los pull requests de las ocho historias tienen la aprobación de su revisor; en los PR #3, #4 y #7 se registró
+en GitHub el 18/11, después de mezclarlos. La coordinación entre historias se hizo
 con tareas de coordinación dentro de cada `tasks.md` (por ejemplo, T021 de spec-005 y T023 de
 spec-007) en lugar de issues.
 
@@ -723,8 +727,8 @@ Las valoraciones personales de cada integrante están en
 
 ## 11. Demo
 
-La demostración está en [`entrega/demo/index.html`](entrega/demo/index.html), una página desde la que
-se accede a los vídeos:
+La demostración se entrega en `DemoSSD_G10.zip` (abrir `demo/index.html`) y está publicada en
+<https://demo-ong-g10.vercel.app>. Es una página desde la que se accede a los vídeos:
 
 - **Demostración completa** (`demo-ong-completa.mp4`, 11:27): grabación real de la aplicación, paso a
   paso, con 76 escenarios de las ocho historias: casos normales, errores de validación, reglas de
@@ -747,6 +751,7 @@ repetir en directo con los mismos datos (apartado 8).
 
 | Spec | Documentos |
 |---|---|
+| Versión inicial | Las ocho specs del `specify` conjunto del 28/10, antes de repartirlas: [`borradores-specs/`](borradores-specs/) |
 | Común | [constitución](../.specify/memory/constitution.md) · [plan común](../specs/plan-comun.md) · [modelo de datos](../specs/modelo-datos.md) · [convenciones](../CONVENCIONES.md) |
 | spec-001 · HU-01 | [spec](../specs/spec-001/spec.md) · [plan](../specs/spec-001/plan.md) · [tasks](../specs/spec-001/tasks.md) · [refinamiento](../specs/spec-001/refinamiento/) |
 | spec-002 · HU-02 | [spec](../specs/spec-002/spec.md) · [plan](../specs/spec-002/plan.md) · [tasks](../specs/spec-002/tasks.md) · [refinamiento](../specs/spec-002/refinamiento/) |

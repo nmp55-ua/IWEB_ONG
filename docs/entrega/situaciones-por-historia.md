@@ -2,13 +2,13 @@
 
 > Para cada historia se revisaron el recorrido habitual, una entrada inválida o un caso límite y una
 > condición de permisos o de estado. La columna «En el vídeo» remite a los pasos numerados (con su rótulo)
-> del vídeo de cada historia, en [`demo/index.html`](demo/index.html); la columna «Prueba», a la prueba automática que la
+> del vídeo de cada historia (en `DemoSSD_G10.zip` y en https://demo-ong-g10.vercel.app); la columna «Prueba», a la prueba automática que la
 > respalda. Todas las categorías aplican a las ocho historias, así que no ha hecho falta sustituir ninguna.
 > Recopilado el 19/11/2026 y actualizado el 20/11/2026 con los vídeos nuevos, grabados con la aplicación en local y Stripe en modo de pruebas.
 
 ## HU-01 · Donación puntual o alta como socio (Nada)
 
-Vídeo: [`demo/clips/hu-01.mp4`](demo/clips/hu-01.mp4).
+Vídeo: [hu-01.mp4](https://demo-ong-g10.vercel.app/clips/hu-01.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -18,7 +18,7 @@ Vídeo: [`demo/clips/hu-01.mp4`](demo/clips/hu-01.mp4).
 
 ## HU-02 · Historial de aportaciones (Nada)
 
-Vídeo: [`demo/clips/hu-02.mp4`](demo/clips/hu-02.mp4).
+Vídeo: [hu-02.mp4](https://demo-ong-g10.vercel.app/clips/hu-02.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -28,7 +28,7 @@ Vídeo: [`demo/clips/hu-02.mp4`](demo/clips/hu-02.mp4).
 
 ## HU-03 · Certificado fiscal anual (Rubén)
 
-Vídeo: [`demo/clips/hu-03.mp4`](demo/clips/hu-03.mp4).
+Vídeo: [hu-03.mp4](https://demo-ong-g10.vercel.app/clips/hu-03.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -38,7 +38,7 @@ Vídeo: [`demo/clips/hu-03.mp4`](demo/clips/hu-03.mp4).
 
 ## HU-04 · Informes para la junta (Rubén)
 
-Vídeo: [`demo/clips/hu-04.mp4`](demo/clips/hu-04.mp4).
+Vídeo: [hu-04.mp4](https://demo-ong-g10.vercel.app/clips/hu-04.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -48,7 +48,7 @@ Vídeo: [`demo/clips/hu-04.mp4`](demo/clips/hu-04.mp4).
 
 ## HU-05 · Consulta e inscripción en actividades (Javi)
 
-Vídeo: [`demo/clips/hu-05.mp4`](demo/clips/hu-05.mp4).
+Vídeo: [hu-05.mp4](https://demo-ong-g10.vercel.app/clips/hu-05.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -58,7 +58,7 @@ Vídeo: [`demo/clips/hu-05.mp4`](demo/clips/hu-05.mp4).
 
 ## HU-06 · Calendario del voluntario (Javi)
 
-Vídeo: [`demo/clips/hu-06.mp4`](demo/clips/hu-06.mp4).
+Vídeo: [hu-06.mp4](https://demo-ong-g10.vercel.app/clips/hu-06.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -68,7 +68,7 @@ Vídeo: [`demo/clips/hu-06.mp4`](demo/clips/hu-06.mp4).
 
 ## HU-07 · Gestión de actividades y lista de espera (Nicole)
 
-Vídeo: [`demo/clips/hu-07.mp4`](demo/clips/hu-07.mp4).
+Vídeo: [hu-07.mp4](https://demo-ong-g10.vercel.app/clips/hu-07.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|
@@ -78,7 +78,7 @@ Vídeo: [`demo/clips/hu-07.mp4`](demo/clips/hu-07.mp4).
 
 ## HU-08 · Asistencia y horas de voluntariado (Nicole)
 
-Vídeo: [`demo/clips/hu-08.mp4`](demo/clips/hu-08.mp4).
+Vídeo: [hu-08.mp4](https://demo-ong-g10.vercel.app/clips/hu-08.mp4).
 
 | Situación | Qué se comprueba | En el vídeo de la historia | Prueba automática | Resultado |
 |---|---|---|---|---|

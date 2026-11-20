@@ -10,7 +10,7 @@ Grupo G10 · Sistema de Información 13 (Donaciones y Voluntariado para una ONG)
 | **D** | Nicole (`nmp55-ua`) | HU-07 + HU-08 | [spec-007](../specs/spec-007/spec.md), [spec-008](../specs/spec-008/spec.md) | Coordinador: actividades, lista de espera y asistencia | HU-04, HU-05 |
 
 Cada historia se desarrolló en su rama (`spec-001` a `spec-008`) y llegó a `main` con un pull
-request aprobado por su revisor:
+request revisado por su revisor (en los PR #3, #4 y #7 la aprobación formal se registró después de mezclar):
 
 | Spec | Historia | Responsable | Revisor | PR |
 |---|---|---|---|---|
@@ -71,5 +71,5 @@ siguió las dependencias:
 4. HU-02 (PR #6, 11/11), HU-08 (PR #7, 11/11) y HU-04 (PR #8, 12/11): historial, asistencia y,
    la última, el informe, que necesita los datos de todas las demás.
 
-El detalle de responsabilidades, iteraciones y valoraciones de cada integrante está en
-[`memoria.md`](memoria.md).
+El detalle de responsabilidades e iteraciones está en [`memoria.md`](memoria.md), y las valoraciones personales de
+cada integrante, en [`entrega/memoria-final.md`](entrega/memoria-final.md#valoraciones-personales).

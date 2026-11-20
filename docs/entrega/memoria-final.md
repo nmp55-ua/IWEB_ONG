@@ -324,7 +324,7 @@ Docker. Documentos que acompañan a esta memoria, en `docs/entrega/`:
 - **Tres situaciones por historia** (recorrido habitual, entrada inválida o caso límite y permisos o
   estado), con el paso del vídeo donde se ve y su prueba automática: `situaciones-por-historia.md`.
 - **Regresión final** de la suite completa: `regresion/backend.txt` y `regresion/frontend.txt`.
-- **Vídeos de la demostración**, en la página `demo/index.html`: grabación real de la aplicación, paso
+- **Vídeos de la demostración**, en `DemoSSD_G10.zip` (página `demo/index.html`) y en https://demo-ong-g10.vercel.app: grabación real de la aplicación, paso
   a paso, con la demostración completa (`demo/demo-ong-completa.mp4`, 11:27, 76 escenarios de las 8
   historias: casos normales, errores de validación, reglas de negocio, permisos, correos, descargas y un
   pago real en Stripe de prueba) y un vídeo por historia (`demo/clips/`).

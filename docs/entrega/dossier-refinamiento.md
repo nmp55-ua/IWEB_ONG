@@ -34,12 +34,12 @@
 **Lectura del balance:**
 
 - **Ambigüedades resueltas**: 41 decisiones de clarify, todas incorporadas a su `spec.md`; no queda ninguna pregunta abierta en las especificaciones.
-- **Hallazgos documentales**: 19 informes de analyze (incluidos los registros de decisiones de algunas specs). En todas las specs, la última pasada no deja hallazgos críticos ni altos abiertos.
+- **Hallazgos documentales**: 19 informes de analyze. En todas las specs, la última pasada no deja hallazgos críticos ni altos abiertos.
 - **Brechas de implementación**: 18 informes de converge, que añadieron 28 tareas de corrección; todas están cerradas y la última pasada de cada spec no deja brechas accionables del código.
 - **Criterios verificados**: 105 de 105 requisitos y criterios de éxito vigentes tienen una prueba automática o manual enlazada en la matriz (FR-010 de spec-003 se eliminó en clarify y figura como «no aplica»). En tres requisitos de spec-007 (FR-003, FR-010 y FR-011) la prueba es parcial, y así consta en la matriz.
 - **Tareas**: 276 de 276 cerradas.
 - **Recorridos completos entre historias**: 4 de 4 satisfactorios (R1–R4), uno de ellos con pago real en Stripe de prueba.
-- **Regresión**: tras cada integración en `main` se ejecutó la suite completa; las pruebas de donaciones sobre su base aislada (`ong_test_hu01`) y el resto sobre `ong_test`. Regresión final sobre `entrega-documentacion` (19/11/2026): backend 232 + 429 pruebas en verde (3 saltadas, las `it.skip` de HU-07 que dependían de spec-005) y frontend 40 de 40; salidas completas en [regresion/backend.txt](regresion/backend.txt) y [regresion/frontend.txt](regresion/frontend.txt).
+- **Regresión**: tras cada integración en `main` se ejecutó la suite completa; las pruebas de donaciones sobre su base aislada (`ong_test_hu01`) y el resto sobre `ong_test`. Regresión final sobre `entrega-documentacion` (20/11/2026): 704 pruebas en verde y ninguna fallida ni saltada (232 del back-end común, 432 de donaciones y 40 del front-end); salidas completas en [regresion/backend.txt](regresion/backend.txt) y [regresion/frontend.txt](regresion/frontend.txt).
 
 Estos indicadores describen la mejora conseguida; no se buscó encontrar más defectos (§5.4).
 
@@ -51,7 +51,7 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
   responsable, revisor y estado): [matriz-trazabilidad.md, «Registro mínimo»](matriz-trazabilidad.md#registro-mínimo-enunciado-54).
 - **Matriz de trazabilidad de las 8 historias**: [matriz-trazabilidad.md](matriz-trazabilidad.md), con la decisión del plan, las tareas y la prueba de cada requisito.
 - **Tres situaciones por historia** (§5.1, punto 1): recorrido habitual, entrada inválida o caso límite y permisos o estado de las 8 historias, con el paso del vídeo donde se ve y su prueba: [situaciones-por-historia.md](situaciones-por-historia.md).
-- **Vídeo de la demostración**: [demo/index.html](demo/index.html).
+- **Vídeo de la demostración**: se entrega en `DemoSSD_G10.zip` (abrir `demo/index.html`) y está publicado en https://demo-ong-g10.vercel.app.
 
 ## 4. Revisión entre compañeros (§5.2)
 
@@ -67,7 +67,7 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
 | spec-008 | Nicole | Rubén | ✅ Nicole y Rubén | #7 ✅ aprobado |
 
 Revisiones documentadas con detalle: spec-005 por Nicole (FR-003, FR-004, FR-006 con peticiones
-simultáneas, FR-008), spec-006 por Nada ([revision-pr-3.md](../../specs/spec-006/refinamiento/revision-pr-3.md))
+simultáneas, FR-008), spec-006 por Nada ([revision-pr-3.md](../../specs/spec-006/refinamiento/revision-pr-3.md)),
 spec-007 por Javi (filas de la matriz) y spec-004 por Nicole (pruebas, comprobación en la aplicación y SC-002 cronometrado en la página).
 
 ## 5. Evidencias por historia (§5.1–§5.3)

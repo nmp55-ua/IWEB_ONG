@@ -120,7 +120,7 @@ Revisión del responsable (Rubén, 19/11/2026): `certificados.test.js` (33), `te
 | SC-003 | Las exportaciones CSV y PDF coinciden al 100 % con la pantalla. | research R2: una sola función para pantalla, CSV y PDF | T011, T013 | `informes.test.js` | — | Revisado por Rubén y por Nicole |
 
 Revisión del responsable (Rubén, 19/11/2026): `informes.test.js` (27) y `textos.test.js` en verde en
-`entrega-documentacion` `704722c`. SC-002 sigue sin cronometrarse en la página (`quickstart.md`, 2.12).
+`entrega-documentacion` `704722c`.
 
 **Revisión cruzada (Nicole, 19/11/2026):** las tareas citadas existen y están cerradas en `tasks.md`. Cada requisito tiene al menos una prueba con su nombre en `informes.test.js`, que pasa entero (27 pruebas sobre `ong_test`), junto con `textos.test.js` y `tarea.test.js` (87 pruebas del módulo en total) y las 4 de `frontend/src/components/certificados-informes/informes.test.js`. En la aplicación, como administración, se comprobaron FR-001 (agrupación por trimestre), FR-002 (fin anterior al inicio), FR-005 (filas por proyecto, fondo general y total), FR-006 (CSV y PDF con las mismas cifras que la pantalla), FR-007 (periodo de 2019 vacío) y FR-008 (el coordinador ve «Acceso denegado»); se ven en el clip de HU-04 de la demo. SC-002 queda cronometrado en la página: 0,14 s en generar el informe anual por trimestres y 0,10 s en el PDF, frente al minuto permitido; el tiempo se midió con el navegador sobre el servidor de desarrollo, sin contar lo que tarda una persona en elegir los filtros. Sin incidencias.
 
