@@ -6,9 +6,9 @@
   <title>Demostración · Donaciones y Voluntariado para una ONG</title>
   <style>
     :root {
-      --tinta: #24152b; --suave: #6d5f73; --linea: #ebe4ee; --fondo: #ffffff; --niebla: #f7f3f8;
-      --morado: #2b163a; --morado-2: #3b2150; --morado-3: #4e2d67; --claro: #f4ecf8; --claro-2: #cdb9d8;
-      --azafran: #f5b22d; --coral: #ff6b5e;
+      --tinta: #13243a; --suave: #5b6b7e; --linea: #e3e9f0; --fondo: #ffffff; --niebla: #f3f7fb;
+      --morado: #0c2745; --morado-2: #153a62; --morado-3: #1d4c7e; --claro: #e6eff9; --claro-2: #a8c1db;
+      --azafran: #f5b22d; --coral: #5fb0ee;
       color-scheme: light;
     }
     * { box-sizing: border-box; }
@@ -21,12 +21,12 @@
     .ancho { max-width: 1220px; margin: 0 auto; padding-inline: 28px; }
     h1, h2, h3 { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; }
 
-    /* Portada: un cartel morado con el vídeo dentro. */
-    .portada { background: var(--morado); color: #fff; padding: 64px 0 72px; position: relative; overflow: hidden; }
-    .portada::before { content: ""; position: absolute; width: 560px; height: 560px; border-radius: 50%;
-                       right: -240px; top: -300px; background: var(--azafran); }
-    .portada::after { content: ""; position: absolute; width: 170px; height: 170px; border-radius: 50%;
-                      right: 150px; top: 200px; background: var(--coral); }
+    /* Portada: azul marino con el vídeo dentro. */
+    .portada { background: radial-gradient(1200px 600px at 85% -10%, #1b4f86 0%, transparent 60%), linear-gradient(170deg, #0a2140 0%, #0f3158 100%); color: #fff; padding: 64px 0 72px; position: relative; overflow: hidden; }
+    .portada::before { content: ""; position: absolute; width: 440px; height: 440px; border-radius: 50%;
+                       right: -150px; top: -230px; background: var(--azafran); }
+    .portada::after { content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%;
+                      right: -60px; top: -140px; border: 2px solid rgba(168, 193, 219, .28); }
     .portada .ancho { position: relative; z-index: 1; }
     .curso { margin: 0 0 18px; color: var(--claro-2); font-size: 15px; }
     h1 { margin: 0; max-width: 9.6em; font-size: clamp(40px, 6.4vw, 84px); line-height: .98; font-weight: 800; letter-spacing: -0.035em; }
@@ -38,8 +38,8 @@
     .equipo span.hu { color: var(--claro-2); }
 
     .sala { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 1fr) 340px; background: var(--morado-2);
-            border-radius: 22px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(10, 2, 18, .7); }
-    .sala video { width: 100%; display: block; background: #12091a; aspect-ratio: 16 / 9; }
+            border-radius: 22px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(2, 10, 22, .75); }
+    .sala video { width: 100%; display: block; background: #08182b; aspect-ratio: 16 / 9; }
     .indice { position: relative; min-height: 0; }
     .indice-dentro { position: absolute; inset: 0; display: flex; flex-direction: column; }
     .indice-cab { padding: 20px 22px 10px; }
@@ -81,8 +81,8 @@
     .historia-resumen { margin: 0 0 16px; }
     .historia-meta { margin: 0; font-size: 15px; color: var(--suave); }
     .historia-meta a { display: inline-block; margin-top: 6px; color: var(--tinta); font-weight: 600; }
-    .historia video { grid-area: video; width: 100%; display: block; border-radius: 16px; background: #12091a; aspect-ratio: 16 / 9;
-                      box-shadow: 0 18px 40px -22px rgba(36, 21, 43, .55); position: sticky; top: 24px; }
+    .historia video { grid-area: video; width: 100%; display: block; border-radius: 16px; background: #08182b; aspect-ratio: 16 / 9;
+                      box-shadow: 0 18px 40px -22px rgba(12, 39, 69, .55); position: sticky; top: 24px; }
     .pasos { grid-area: pasos; margin: 0; padding: 0; list-style: none; counter-reset: paso; font-size: 15px; line-height: 1.5; }
     .pasos li { counter-increment: paso; position: relative; padding: 8px 0 8px 44px; border-top: 1px solid var(--linea); }
     .pasos li::before { content: counter(paso); position: absolute; left: 0; top: 7px; width: 28px; height: 28px; border-radius: 50%;
@@ -106,7 +106,7 @@
       .ancho { padding-inline: 18px; }
       .portada { padding: 42px 0 48px; }
       .portada::before { width: 190px; height: 190px; right: -80px; top: -90px; }
-      .portada::after { width: 64px; height: 64px; right: 70px; top: 70px; }
+      .portada::after { width: 250px; height: 250px; right: -40px; top: -60px; }
       .curso { max-width: 80%; }
       .entradilla { font-size: 16px; }
       .sala { border-radius: 16px; margin-top: 34px; }
