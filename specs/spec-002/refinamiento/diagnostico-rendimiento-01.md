@@ -12,7 +12,7 @@ La [traza 01](evidencias-medicion-01/intento-01-traza.json) es Performance Timel
 
 El puente anterior añade un servidor Node, otro salto HTTP y un segundo almacenamiento del HTML antes de entregar la respuesta. Su coste no está separado en la traza: no se inventa un tiempo ni se descuenta. Tampoco se interpreta el tiempo HTTP de la consulta como tiempo SQL, pues incluye red local, sesión, autorización y servidor.
 
-La consulta de procesos del entorno restringido solo mostró su propia terminal y no sirve para describir el equipo completo. La consulta posterior de solo lectura fuera de ese ámbito observó unos 1.520 MB de memoria comprimida, Firefox con unos 1.152 MB y ChatGPT con unos 1.120 MB de working set. El nuevo banco registra **205.488.128 bytes libres de 8.441.491.456 bytes** al arrancar. Hay presión de recursos compatible con el error previo; no prueba su causa exacta ni autoriza a cerrar aplicaciones ajenas. No se confunde la suma de working sets con memoria física exclusiva.
+La consulta de procesos desde la terminal de pruebas solo mostró esa terminal y no sirve para describir el equipo completo. La consulta posterior de solo lectura fuera de ese ámbito observó unos 1.520 MB de memoria comprimida, y dos aplicaciones de escritorio con algo más de 1.100 MB de working set cada una. El nuevo banco registra **205.488.128 bytes libres de 8.441.491.456 bytes** al arrancar. Hay presión de recursos compatible con el error previo; no prueba su causa exacta ni autoriza a cerrar aplicaciones ajenas. No se confunde la suma de working sets con memoria física exclusiva.
 
 ## Preparación de una única nueva navegación
 

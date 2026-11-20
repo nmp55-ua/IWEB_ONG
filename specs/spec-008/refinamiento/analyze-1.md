@@ -56,12 +56,3 @@ No hay problemas críticos y todos los requisitos tienen tareas. Conviene resolv
 ### Siguientes pasos
 
 No hay ningún bloqueo formal para ejecutar `/speckit-implement`, pero recomiendo resolver antes U1 e I4, porque cambian el diseño y el MVP. Los demás hallazgos son ediciones pequeñas en `spec.md`, `plan.md`, `tasks.md`, `research.md` y `quickstart.md`.
-
-## Extension Hooks
-
-**Optional Hook**: git
-Command: `/speckit-git-commit`
-Description: Auto-commit after analysis
-
-Prompt: Commit analysis results?
-To execute: `/speckit-git-commit`

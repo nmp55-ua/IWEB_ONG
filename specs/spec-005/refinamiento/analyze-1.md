@@ -3,7 +3,7 @@
 Informe inicial de `/speckit-analyze` (solo lectura) sobre `spec.md`, `plan.md`, `research.md`,
 `data-model.md`, `contracts/`, `quickstart.md` y `tasks.md` del commit `d137a2d`, contrastados también
 con plan-comun, modelo-datos, CONVENCIONES, spec-007 (contrato y código) y spec-008 (rama
-`origin/spec-008`). Se guarda sin corregir nada; las decisiones están en [analyze-2.md](analyze-2.md).
+`origin/spec-008`). Se guarda sin corregir nada; las decisiones y su estado final están en [registro-hallazgos.md](registro-hallazgos.md), y la segunda pasada en [analyze-final.md](analyze-final.md).
 
 **Resultado: 0 CRITICAL, 3 HIGH, 8 MEDIUM, 14 LOW.** Cobertura del 100 % (11 FR y 2 SC con tareas).
 Los problemas están casi todos en la frontera con Nicole (semillas, concurrencia, propiedad de

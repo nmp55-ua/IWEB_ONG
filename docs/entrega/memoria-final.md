@@ -117,9 +117,9 @@ envía a Stripe (sin NIF, dirección ni datos de tarjeta) y cualquier reintento 
 referencia, el mismo cuerpo y la misma clave de idempotencia. Una operación sin sesión conocida tiene
 un plazo fijo de 23 horas, por debajo de las 24 que Stripe conserva esa clave; pasado el plazo queda
 para revisión y nunca se crea otra. Las pruebas de `servicio.test.js` y `pasarela.test.js` comprueban
-el tiempo de espera, el reinicio y la reanudación desde otro proceso, y en la demostración se ve el
-resultado: al volver al formulario aparece «Tienes una donación en preparación» y una solicitud con
-datos distintos se rechaza en lugar de abrir un segundo pago.
+el tiempo de espera, el reinicio y la reanudación desde otro proceso: al volver al formulario aparece
+«Tienes una donación en preparación» y una solicitud con datos distintos se rechaza en lugar de abrir
+un segundo pago.
 
 #### Iteración de HU-02: corregir el cierre del banco y alinear el plan
 
@@ -128,8 +128,8 @@ medición podía no cerrar sus recursos; además, el plan atribuía la transacci
 que realmente la implementaba. Se corrigieron en T036–T037 y se añadieron regresiones para el error y la
 liberación de recursos. La segunda revisión contrastó los cambios con el código y las evidencias
 conservadas y no encontró nuevas brechas accionables (`spec-002/refinamiento/converge-1.md` y
-`converge-2.md`). Las pruebas citadas son las ejecuciones registradas en esos informes, no una nueva
-ejecución de esta entrega.
+`converge-2.md`). Las pruebas citadas son las ejecuciones registradas en esos informes; la regresión
+final de la entrega (`regresion/`) las vuelve a pasar todas.
 
 #### El certificado debía regenerarse «en ese momento» sin depender de donaciones (HU-03)
 
@@ -181,7 +181,7 @@ historias. Antes de implementar se fijó en el plan y en la tarea T017 un orden 
 bloqueo solo para saber de quién es la inscripción y de qué actividad, bloquear la actividad con
 `bloquearActividad` y volver a leer la inscripción dentro de la misma transacción, decidiendo sobre
 esa segunda lectura. El acuerdo sobre `bloquearActividad`, que es del módulo de Nicole, quedó como
-tarea de coordinación (T021). El registro de hallazgos (`analyze-2`) da S1 por hecho, y el mismo bloqueo es
+tarea de coordinación (T021). El registro de hallazgos (`registro-hallazgos.md`) da S1 por hecho, y el informe final (`analyze-final.md`) no deja hallazgos altos, y el mismo bloqueo es
 el que comprueban las pruebas de concurrencia: dos peticiones a la vez por la última plaza y bajar
 plazas mientras alguien se inscribe.
 
@@ -278,7 +278,10 @@ cada historia pasaba por `clarify`, `plan`, `tasks`, `analyze` y `converge` ante
 buena, y al principio me parecía mucho papeleo para dos historias. Cambié de idea con HU-05: el
 `analyze` encontró el fallo de cancelar con lista de espera antes de escribir el código, y el
 `converge` de HU-06 sacó problemas de accesibilidad y de recarga que las pruebas automáticas no
-veían. Como mis historias dependían del módulo de actividades de Nicole, me tocó negociar con ella qué
+veían. Una decisión que defiendo es la de PA5.1 en `clarify`: el voluntario declara que cumple los
+requisitos y el sistema no los comprueba, porque son texto libre («mayor de edad», «traer guantes») y
+comprobarlos obligaría a pedir y guardar datos personales que la constitución nos pide evitar. Como mis
+historias dependían del módulo de actividades de Nicole, me tocó negociar con ella qué
 funciones usaba cada uno y quién sembraba cada dato, y aprendí que eso tiene que acabar en el plan
 común y no quedarse en un mensaje del grupo. Lo que haría distinto es cerrar antes las tareas de
 coordinación y medir con una persona los criterios de tiempo en cuanto la historia funciona, no al
@@ -313,15 +316,15 @@ El código fuente, con el historial de commits y pull requests que permite segui
 en https://github.com/nmp55-ua/IWEB_ONG. El `README.md` explica cómo arrancar la aplicación en local con
 Docker. Documentos que acompañan a esta memoria, en `docs/entrega/`:
 
-- **Historias de usuario y especificaciones finales** (entregable 1): `historias-usuario-final.pdf`.
-- **Dossier de refinamiento** (entregable 7): `dossier-refinamiento.pdf`, con la versión de la
+- **Historias de usuario y especificaciones finales**: `historias-usuario-final.md` (y su PDF).
+- **Dossier de refinamiento**: `dossier-refinamiento.md` (y su PDF), con la versión de la
   herramienta, el balance de la iteración, la revisión entre compañeros y el índice de las evidencias
   de clarify, analyze y converge de cada historia (`specs/spec-00N/refinamiento/`).
 - **Matriz de trazabilidad**, recorridos completos R1–R4 y registro mínimo: `matriz-trazabilidad.md`.
 - **Tres situaciones por historia** (recorrido habitual, entrada inválida o caso límite y permisos o
-  estado), con su escena del vídeo y su prueba automática: `situaciones-por-historia.md`.
+  estado), con el paso del vídeo donde se ve y su prueba automática: `situaciones-por-historia.md`.
 - **Regresión final** de la suite completa: `regresion/backend.txt` y `regresion/frontend.txt`.
-- **Vídeos de la demostración**, en la página `demo/index.html`: la demostración completa
-  (`demo/demo-ong-completa.mp4`, unos 8 minutos, con 70 escenarios de las 8 historias: casos normales,
-  errores de validación, reglas de negocio, permisos y correos), un clip por historia (`demo/clips/`) y
-  un resumen de unos 2 minutos (`demo/demo-ong.mp4`).
+- **Vídeos de la demostración**, en la página `demo/index.html`: grabación real de la aplicación, paso
+  a paso, con la demostración completa (`demo/demo-ong-completa.mp4`, 11:27, 76 escenarios de las 8
+  historias: casos normales, errores de validación, reglas de negocio, permisos, correos, descargas y un
+  pago real en Stripe de prueba) y un vídeo por historia (`demo/clips/`).

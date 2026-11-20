@@ -1,4 +1,4 @@
-T023 y T024 se cumplen, pero queda un hueco pequeño en T024 y lo he añadido a [tasks.md](specs/spec-008/tasks.md) como T025, en la Phase 7: Convergence. No he tocado código y `tasks.md` está sin commit.
+T023 y T024 se cumplen, pero queda un hueco pequeño en T024 y lo he añadido a [tasks.md](../tasks.md) como T025, en la Phase 7: Convergence. No he tocado código y `tasks.md` está sin commit.
 
 | ID | Tipo | Severidad | Origen | Problema | Tarea |
 |----|------|-----------|--------|----------|-------|
@@ -13,13 +13,4 @@ T023 y T024 se cumplen, pero queda un hueco pequeño en T024 y lo he añadido a 
 
 **Sin hallazgos nuevos:** los criterios de aceptación de las dos historias, los errores 400, 404 y 409, los permisos 401 y 403, y el uso de la sesión en `/api/yo/horas` siguen como en la revisión anterior.
 
-T022 sigue abierta solo por tu cronometrado de SC-002.
-
-## Extension Hooks
-
-**Optional Hook**: git
-Command: `/speckit-git-commit`
-Description: Auto-commit after converge
-
-Prompt: Commit convergence changes?
-To execute: `/speckit-git-commit`
+T022 sigue abierta solo por el cronometrado manual de SC-002.

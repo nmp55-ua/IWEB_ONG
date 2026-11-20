@@ -2,8 +2,17 @@
 
 **Sistema de Información 13 · Aplicación web para gestionar las donaciones y el voluntariado de una ONG**
 
-Grupo G10: Nada, Rubén, Javi y Nicole · Ingeniería Web, Proyecto SDD Parte I · Fecha de la memoria:
-20 de noviembre de 2026 · Estado del código: rama `main`
+Grupo G10 · Ingeniería Web, Proyecto SDD Parte I · Universidad de Alicante, curso 2026-27
+
+| Integrante | Cuenta de GitHub | Historias |
+|---|---|---|
+| Nada | `nb97-ua` | HU-01, HU-02 |
+| Rubén | `rlo7-ua` | HU-03, HU-04 |
+| Javi | `jms153-ua` | HU-05, HU-06 |
+| Nicole | `nmp55-ua` | HU-07, HU-08 |
+
+Fecha de la memoria: 20 de noviembre de 2026 · Estado del código: rama `entrega-documentacion`,
+que se integra en `main` con el pull request de entrega (el commit exacto es el del zip entregado).
 
 ---
 
@@ -43,9 +52,10 @@ inscripción con lista de espera, calendario, asistencia y horas acumuladas).
 
 **Resultado.** Las ocho historias de usuario (HU-01 a HU-08), cada una con su especificación en
 `specs/spec-001` a `specs/spec-008`, están implementadas sobre una base común en Astro + React,
-Express y PostgreSQL. Las **276 tareas** de las ocho specs están cerradas y los **106 requisitos y
-criterios de éxito** tienen una prueba automática o manual enlazada en la matriz de trazabilidad. En la
-regresión final del 19/11/2026 pasan **701 pruebas automáticas** (232 del back-end común, 429 del
+Express y PostgreSQL. Las **276 tareas** de las ocho specs están cerradas y los **105 requisitos y
+criterios de éxito vigentes** (de 106; uno se eliminó en `clarify`) tienen una prueba automática o manual
+enlazada en la matriz de trazabilidad. En la
+regresión final del 20/11/2026 pasan **704 pruebas automáticas** (232 del back-end común, 432 del
 módulo de donaciones y 40 del front-end; 3 omitidas a propósito) y los cuatro recorridos completos
 entre historias (R1–R4), uno de ellos con un pago real en Stripe de prueba.
 
@@ -376,14 +386,14 @@ Cada spec detalla los cuerpos de petición y respuesta en su carpeta `contracts/
 
 ### 7.2 Resultados de las pruebas automáticas
 
-Regresión final del 19/11/2026 ([`entrega/regresion/`](entrega/regresion/)):
+Regresión final del 20/11/2026 ([`entrega/regresion/`](entrega/regresion/)):
 
 | Conjunto | Ficheros | Pruebas |
 |---|---|---|
 | Back-end común (`ong_test`) | 12 | 232 pasan, 3 omitidas |
-| Donaciones (`ong_test_hu01`) | 15 | 429 pasan |
+| Donaciones (`ong_test_hu01`) | 15 | 432 pasan |
 | Front-end | 4 | 40 pasan |
-| **Total** | **31** | **701 pasan, 0 fallan** |
+| **Total** | **31** | **704 pasan, 0 fallan** |
 
 ### 7.3 Pruebas de concurrencia y de reglas críticas
 
@@ -397,7 +407,12 @@ Regresión final del 19/11/2026 ([`entrega/regresion/`](entrega/regresion/)):
 - 101 aportaciones de 999.999,99 € más una de 1 € en un año: el certificado no se desborda.
 - Horas de una actividad de 10:00 a 13:30 = 3,5 h; repetir el guardado no duplica y corregir resta.
 
-### 7.4 Recorridos completos entre historias
+### 7.4 Pruebas de extremo a extremo
+
+No hay una batería de pruebas de extremo a extremo automatizada en el repositorio (no se usa Playwright
+en las pruebas del proyecto). Su papel lo cumplen dos cosas:
+
+- **Recorridos completos entre historias**, ejecutados a mano en la aplicación con los datos comunes:
 
 | # | Recorrido | Historias | Resultado |
 |---|---|---|---|
@@ -408,6 +423,12 @@ Regresión final del 19/11/2026 ([`entrega/regresion/`](entrega/regresion/)):
 
 Precondiciones, pasos y resultados observados en
 [`entrega/matriz-trazabilidad.md`](entrega/matriz-trazabilidad.md#recorridos-completos-entre-historias-enunciado-54).
+
+- **La demostración grabada** (apartado 11): los vídeos se grabaron manejando el navegador con
+  Playwright sobre la aplicación real, con la base de datos recién sembrada antes de cada historia, así
+  que cada vídeo es también un recorrido de extremo a extremo de esa historia (incluido un pago real en
+  Stripe de prueba en HU-01).
+
 Además, para cada historia se revisaron tres situaciones (recorrido habitual, entrada inválida y
 permisos o estado), con su escena del vídeo y su prueba:
 [`entrega/situaciones-por-historia.md`](entrega/situaciones-por-historia.md).
@@ -424,13 +445,21 @@ Los criterios de tiempo se cronometraron con una persona en la aplicación:
 | HU-08 SC-002 · pasar lista a 20 personas | < 2 min | 40 s |
 
 El resto de escenarios se comprobó siguiendo el `quickstart.md` de cada spec; los resultados están en
-la carpeta `refinamiento/` de cada una.
+la carpeta `refinamiento/` de cada una. La matriz
+([`entrega/matriz-trazabilidad.md`](entrega/matriz-trazabilidad.md)) enlaza los 106 requisitos y
+criterios (105 vigentes: FR-010 de HU-03 se eliminó en `clarify`) con su decisión del plan, sus tareas
+y su prueba, y recoge la revisión del responsable y de su revisor. En tres requisitos de HU-07 (FR-003,
+FR-010 y FR-011) la prueba es parcial, y así consta en la matriz.
 
-### 7.6 Trazabilidad
+### 7.6 Rendimiento
 
-La matriz ([`entrega/matriz-trazabilidad.md`](entrega/matriz-trazabilidad.md)) enlaza cada uno de los
-106 requisitos y criterios con su decisión del plan, sus tareas y su prueba, y recoge la revisión del
-responsable y de su revisor.
+| Criterio | Objetivo | Medido |
+|---|---|---|
+| HU-02 SC-002 · historial de 60 cuotas en cinco años | < 2 s | 638,20 ms (`specs/spec-002/refinamiento/cierre-t030-01.md`) |
+| HU-04 SC-002 · informe anual y su PDF | < 1 min | 0,14 s y 0,10 s |
+
+El volumen es el de una ONG pequeña (miles de aportaciones, cientos de actividades); las sumas se hacen
+en SQL sobre `NUMERIC` y los totales del informe salen de una sola consulta por tipo de dato.
 
 ---
 
@@ -471,6 +500,11 @@ Para probar pagos se añaden `STRIPE_SECRET_KEY` y `STRIPE_WEBHOOK_SECRET` al `.
 `stripe listen` hacia `/api/pasarela/webhook` (procedimiento en el
 [quickstart de HU-01](../specs/spec-001/quickstart.md)). Tarjeta de prueba: `4242 4242 4242 4242`.
 
+`.env.example` lista todas las variables sin valores reales: conexión a la base (`DATABASE_URL`,
+`DB_PORT`), sesión (`SESSION_SECRET`), contraseña de las semillas, `FRONTEND_URL`, datos de la ONG para
+el certificado (`ONG_NOMBRE`, `ONG_CIF`, `ONG_DIRECCION`), correo (`SMTP_*`), Stripe (`STRIPE_*`) y el
+reloj simulado (`AHORA_SIMULADO`, solo en pruebas).
+
 ### 8.3 Comandos útiles
 
 | Comando (en `backend/`) | Qué hace |
@@ -482,12 +516,12 @@ Para probar pagos se añaden `STRIPE_SECRET_KEY` y `STRIPE_WEBHOOK_SECRET` al `.
 
 En `frontend/`: `npm run dev`, `npm run build` y `npm test`.
 
-### 8.4 Variables de entorno
+### 8.4 Integración continua
 
-`.env.example` lista todas las variables sin valores reales: conexión a la base (`DATABASE_URL`,
-`DB_PORT`), sesión (`SESSION_SECRET`), contraseña de las semillas, `FRONTEND_URL`, datos de la ONG para
-el certificado (`ONG_NOMBRE`, `ONG_CIF`, `ONG_DIRECCION`), correo (`SMTP_*`), Stripe (`STRIPE_*`) y el
-reloj simulado (`AHORA_SIMULADO`, solo en pruebas).
+El proyecto no tiene integración continua configurada (no hay flujos de GitHub Actions). En su lugar,
+antes de fusionar cada pull request se traía la última versión de `main` a la rama y se ejecutaba la
+suite completa a mano, en dos bases (`ong_test` y `ong_test_hu01`). La salida de la regresión final se
+guarda en [`entrega/regresion/`](entrega/regresion/).
 
 ### 8.5 Usuarios de ejemplo
 
@@ -577,12 +611,12 @@ Algunas iteraciones de loop engineering, una o dos por persona:
 - **Asistencias sin columnas de auditoría (HU-08, Nicole).** El `converge` de spec-008 vio que faltaban
   `creado_en` y `actualizado_en`; el error venía del modelo común y se corrigió en los dos sitios.
 
-El relato completo de cada iteración y el registro mínimo de hallazgos están en
-[`entrega/memoria-final.md`](entrega/memoria-final.md) y en la carpeta `refinamiento/` de cada spec.
+El relato completo de cada iteración está en [`entrega/memoria-final.md`](entrega/memoria-final.md) y
+en la carpeta `refinamiento/` de cada spec.
 
 ### 9.4 Historial de commits
 
-Casi 200 commits entre el 14/10 y el 20/11/2026, firmados por cada integrante con su cuenta de GitHub
+Más de 200 commits entre el 14/10 y el 20/11/2026, firmados por cada integrante con su cuenta de GitHub
 y con el identificador de la historia al principio del mensaje (`HU-05: ...`), como pide la
 constitución. El historial de cada rama `spec-00N` permite seguir las versiones sucesivas de su spec,
 y la diferencia entre la spec anterior y la revisada en cada `clarify` es su propio commit.
@@ -599,10 +633,46 @@ y la diferencia entre la spec anterior y la revisada en cada `clarify` es su pro
 | #6 | spec-002 | Nada | Javi | 11/11/2026 |
 | #7 | spec-008 | Nicole | Rubén | 11/11/2026 |
 | #8 | spec-004 | Rubén | Nicole | 12/11/2026 |
+| #9 | spec-002 (análisis final de HU-02) | Nada | Javi | 20/11/2026 |
 
-Los ocho pull requests tienen la aprobación de su revisor. La coordinación entre historias se hizo
+Los pull requests de las ocho historias tienen la aprobación de su revisor. La coordinación entre historias se hizo
 con tareas de coordinación dentro de cada `tasks.md` (por ejemplo, T021 de spec-005 y T023 de
 spec-007) en lugar de issues.
+
+### 9.6 Balance de la iteración y registro mínimo
+
+Indicadores de la mejora conseguida (enunciado §5.4), sobre el total de cada cosa:
+
+| Indicador | Resultado |
+|---|---|
+| Ambigüedades resueltas en `clarify` | 41 de 41 decisiones incorporadas a su `spec.md`, con su justificación en el registro de cada spec |
+| Hallazgos de `analyze` | Todos cerrados o aceptados con justificación; ningún hallazgo crítico ni alto abierto en el informe final de cada spec |
+| Brechas de `converge` | 28 tareas añadidas, 28 cerradas; la última pasada de cada spec no deja brechas accionables |
+| Criterios verificados | 105 de 105 requisitos y criterios vigentes con prueba automática o manual (3 de HU-07 con prueba parcial) |
+| Tareas | 276 de 276 cerradas |
+| Recorridos entre historias | 4 de 4 satisfactorios (R1–R4) |
+
+Registro mínimo: una fila por hallazgo o decisión relevante. La trazabilidad completa de cada requisito
+está en la [matriz](entrega/matriz-trazabilidad.md) y las salidas de los comandos, en
+`specs/spec-00N/refinamiento/`.
+
+| Historia y criterio | Hallazgo o decisión | Comando | Documentos o código afectados | Tarea y commit | Prueba y resultado | Responsable | Revisor | Estado |
+|---|---|---|---|---|---|---|---|---|
+| HU-07 FR-006 | Promoción al cancelar un voluntario acordada con spec-005 | analyze-1 (H1) | spec, plan, tasks, contrato | T023 · `ff7a202` | Cancelación real: entra la primera en espera y llega el correo | Nicole | Javi | Cerrado |
+| HU-07 FR-003 | Motivo concreto al fallar «Publicar» | converge-1 (F1) | `DetalleActividad.jsx` | T027 · `4d923cf` | Proyecto inactivo → «El proyecto no está activo.» | Nicole | Javi | Cerrado |
+| HU-08 modelo de datos | `asistencias` sin `creado_en`/`actualizado_en` | converge-1 (F1) | `007_asistencias.sql`, modelo-datos | T023 · `7d050e7` | Columnas presentes; 111 pruebas | Nicole | Rubén | Cerrado |
+| HU-08 SC-002 | 20 personas en < 2 min | quickstart | — | T022 · `1180fac` | 40 s | Nicole | Rubén | Cerrado |
+| HU-05 FR-009 | Orden de bloqueo al cancelar con lista de espera: leer, `bloquearActividad` y volver a leer | analyze-1 (S1) | plan, tasks, `voluntariado/servicio.js` | T017 · `c7f701f`, `55ba4c6` | Pruebas de concurrencia de `servicio.test.js` (última plaza y bajar plazas a la vez) | Javi | Nicole | Cerrado |
+| HU-05 FR-002 | La tarjeta seguía diciendo «1 plaza libre» tras un 409 `PLAZAS_AGOTADAS` | prueba manual (2.8) | `TarjetaActividad.jsx`, `ActividadesDisponibles.jsx` | T027 · `8b027c5` | Al cerrar la ventana el listado se recarga | Javi | Nicole | Cerrado |
+| HU-06 FR-001 | El foco se perdía al cambiar de mes en la vista mensual | converge-1 (F1) | `CalendarioVoluntario.jsx`, `MesCalendario.jsx` | T015 · `aa6788b` | El foco sigue en «‹»/«›» y se anuncia el mes (`converge-2.md`) | Javi | Nada | Cerrado |
+| HU-06 FR-005 | No recargaba al volver justo después de otra carga | revisión del PR #3 | `CalendarioVoluntario.jsx`, `vuelta.js` | T025 · `80878c2` | `vuelta.test.js` y cambio real de pestaña y de ventana (T026) | Javi | Nada | Cerrado |
+| HU-06 SC-002 | Cronometrar con una persona | quickstart | — | T026 · `67c7bd1` | Menos de 5 s (< 10 s) | Javi | Nada | Cerrado |
+| HU-01 FR-006/FR-010 | Pago interrumpido sin forma segura de reanudarlo: bloqueo por operación, solicitud guardada y misma clave de idempotencia (23 h) | analyze-1 (UND-001) | contrato de la pasarela, plan, tasks, `009_operativa_donaciones.sql`, `donaciones/servicio.js`, `repositorio.js` | T034–T036 · `edc621c` | `servicio.test.js` (tiempo de espera, reinicio, reanudación desde otro proceso) y `pasarela.test.js` (misma clave) | Nada | Rubén | Cerrado |
+| HU-02 SC-002 | El banco de medición podía no cerrar sus recursos si fallaban los contadores; plan desalineado con la transacción | converge-1 (CONV-001/002) | `pruebas/medicion-historial.js`, plan | T036–T037 · `88db908` | Regresión dirigida; `converge-2.md` sin brechas | Nada | Javi | Cerrado |
+| HU-03 FR-002 | El total anual en `NUMERIC(10,2)` podía desbordarse | revisión del PR #5 | `008_certificados.sql`, modelo-datos | `223fd54` | `certificados.test.js`: 101 aportaciones de 999.999,99 € + 1 € (falla con el tipo anterior, pasa con el nuevo) | Rubén | Nada | Cerrado |
+| HU-03 FR-008 | «En ese momento» frente a la tarea horaria: se mantiene la tarea y se precisa en research y quickstart | analyze-1 (A1) | research R3, quickstart | `d754a75` | Regeneración en la siguiente ejecución o con la orden manual (`certificados.test.js`) | Rubén | Nada | Cerrado |
+| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
+| HU-04 SC-002 | Informe anual exportado en menos de 1 minuto | quickstart y revisión | — | T021 | Página: 0,14 s el informe y 0,10 s el PDF (19/11/2026) | Rubén | Nicole | Cerrado |
 
 ---
 
@@ -612,11 +682,11 @@ spec-007) en lugar de issues.
 
 - Una sola aplicación con las ocho historias funcionando, aunque la construyeron cuatro personas en
   paralelo.
-- Todos los requisitos con una prueba enlazada y todas las tareas cerradas.
+- Todos los requisitos vigentes con una prueba enlazada y todas las tareas cerradas.
 - Los totales cuadran al céntimo entre historial, certificado e informe, y el aforo nunca se supera.
 - Cada decisión importante está escrita en una spec, un plan o un informe, no solo en el código.
 
-### 10.2 Problemas encontrados
+### 10.2 Problemas encontrados y lecciones aprendidas
 
 - **Las fronteras entre historias** fueron lo más costoso: quién es dueño de cada tabla, qué devuelve
   cada función que usa otro módulo y en qué orden se integra cada rama.
@@ -627,7 +697,7 @@ spec-007) en lugar de issues.
 - **Datos de prueba compartidos**: las semillas de unas historias rompían los escenarios de otras (por
   ejemplo, las inscripciones de «Recogida de ropa», que usan HU-05 y HU-08).
 
-### 10.3 Lecciones aprendidas
+Lo que aprendimos:
 
 - `analyze` y `converge` encontraron problemas reales que las pruebas no veían: requisitos sin dueño,
   contradicciones entre documentos y reglas del modelo común que el código no cumplía.
@@ -640,7 +710,7 @@ spec-007) en lugar de issues.
 Las valoraciones personales de cada integrante están en
 [`entrega/memoria-final.md`](entrega/memoria-final.md#valoraciones-personales).
 
-### 10.4 Trabajo futuro
+### 10.3 Trabajo futuro
 
 - Recuperar el acceso a una donación hecha sin cuenta si se pierde la sesión (limitación aceptada de v1
   en HU-01).
@@ -656,10 +726,14 @@ Las valoraciones personales de cada integrante están en
 La demostración está en [`entrega/demo/index.html`](entrega/demo/index.html), una página desde la que
 se accede a los vídeos:
 
-- **Demostración completa** (`demo-ong-completa.mp4`, unos 8 minutos): 70 escenarios de las ocho
-  historias, con casos normales, errores de validación, reglas de negocio, permisos y correos.
-- **Un clip por historia** (`clips/hu-01.mp4` a `clips/hu-08.mp4`).
-- **Resumen** (`demo-ong.mp4`, unos 2 minutos).
+- **Demostración completa** (`demo-ong-completa.mp4`, 11:27): grabación real de la aplicación, paso a
+  paso, con 76 escenarios de las ocho historias: casos normales, errores de validación, reglas de
+  negocio, permisos, correos (en Mailpit), descargas de PDF y CSV y un pago real en Stripe de prueba.
+  Cada paso lleva un rótulo que explica qué se está viendo, y la página permite saltar a cada historia.
+- **Un vídeo por historia** (`clips/hu-01.mp4` a `clips/hu-08.mp4`), con su lista de escenarios.
+
+Cada historia se grabó partiendo de la base de datos recién sembrada, así que los vídeos se pueden
+repetir en directo con los mismos datos (apartado 8).
 
 ---
 

@@ -4,7 +4,7 @@
 
 *Pila tecnológica: Astro + React (islas) · Node.js/Express · PostgreSQL · Tailwind CSS*
 
-Entregable 1. Recoge las ocho historias de usuario identificadas a partir de la descripción narrativa, con su especificación final (después de clarify, analyze y converge) y sus criterios de aceptación. Cada historia indica el integrante responsable y su revisor. La fuente de cada capítulo es `specs/spec-00N/spec.md` en el repositorio.
+Recoge las ocho historias de usuario identificadas a partir de la descripción narrativa, con su especificación final (después de clarify, analyze y converge) y sus criterios de aceptación. Cada historia indica el integrante responsable y su revisor. La fuente de cada capítulo es `specs/spec-00N/spec.md` en el repositorio.
 
 ### Reparto de historias
 

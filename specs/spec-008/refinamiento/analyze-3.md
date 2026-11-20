@@ -43,12 +43,3 @@ No hay problemas críticos, altos ni medios, y los 7 hallazgos de la segunda pas
 ### Siguientes pasos
 
 Ya puedes ejecutar `/speckit-implement`. Ninguno de los dos hallazgos lo bloquea y ambos son ediciones de una línea. Los cambios de los documentos de spec-008 siguen sin commit, así que conviene confirmarlos antes de implementar para separarlos del código.
-
-## Extension Hooks
-
-**Optional Hook**: git
-Command: `/speckit-git-commit`
-Description: Auto-commit after analysis
-
-Prompt: Commit analysis results?
-To execute: `/speckit-git-commit`

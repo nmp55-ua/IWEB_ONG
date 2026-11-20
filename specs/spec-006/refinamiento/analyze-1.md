@@ -5,7 +5,7 @@ Informe inicial de `/speckit-analyze` (solo lectura) sobre `spec.md`, `plan.md`,
 del commit `a80e217`, contrastados también con la constitución, CONVENCIONES, plan-comun, modelo-datos,
 spec-005 (research, contrato, quickstart y código de `voluntariado`), spec-007 (contrato, quickstart y
 código de `actividades`), las semillas, los componentes del front-end que se reutilizan y la rama
-`origin/spec-008`. Se guarda sin corregir nada; las decisiones irán en [analyze-2.md](analyze-2.md).
+`origin/spec-008`. Se guarda sin corregir nada; las decisiones irán en [registro-hallazgos.md](registro-hallazgos.md).
 
 **Resultado: 0 CRITICAL, 1 HIGH, 4 MEDIUM, 11 LOW.** Cobertura del 100 % (6 FR y 2 SC con tareas).
 El diseño del servidor cuadra con el código: `obtener(id)` ya existe y basta reexportarlo,

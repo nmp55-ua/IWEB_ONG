@@ -5,7 +5,7 @@
 > de la spec o del plan común), las **tareas** que lo cubren según el último analyze o `tasks.md`, la
 > **prueba** automática o manual que lo verifica y el paso del `quickstart.md`. La columna «Estado»
 > recoge la revisión del responsable y la de otra persona. No sustituye a las matrices detalladas de
-> cada spec. Actualizada el 19/11/2026 en `entrega-documentacion`.
+> cada spec. Actualizada el 20/11/2026 en `entrega-documentacion`.
 
 ## Resumen por historia
 
@@ -20,9 +20,8 @@
 | spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 14 | 14 |
 | spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | aprobado | 11 | 11 | 11 |
 
-Las celdas «⚠ completar» no significan que falte la funcionalidad: indican que ninguna tarea o
-prueba **nombra** ese requisito. El responsable debe enlazar la tarea o prueba que lo cubre
-(o la comprobación manual) o justificar que no aplica.
+Los 106 requisitos y criterios tienen enlazada su tarea y su prueba (automática o manual); FR-010 de
+HU-03 se eliminó en `clarify` y consta como «no aplica».
 
 ## spec-001 · HU-01 Donación puntual o alta como socio
 
@@ -209,8 +208,8 @@ SC-001 («total 5,5 con desglose, sin contar “no asistió”, y coincide con l
 
 ## Recorridos completos entre historias (enunciado §5.4)
 
-Propuesta: al menos un recorrido satisfactorio y otro con error, permiso o estado, que conecten
-historias de distintas personas. Rellenar al ejecutarlos.
+Cuatro recorridos que conectan historias de distintas personas: tres satisfactorios (uno de ellos con
+un pago real en Stripe de prueba) y uno de permisos.
 
 | # | Recorrido | Historias | Precondiciones y datos | Pasos | Resultado esperado | Resultado observado | Versión |
 |---|---|---|---|---|---|---|---|

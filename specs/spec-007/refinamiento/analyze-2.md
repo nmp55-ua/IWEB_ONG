@@ -1,6 +1,6 @@
 ## Segundo análisis de spec-007
 
-He revisado `spec.md`, `plan.md` y `tasks.md` tal como están ahora, sin commit, incluidos tus cambios de «acordado con Javi». Es solo lectura: no he cambiado nada. Los hallazgos de la primera ronda (H1–H3, M2–M4, L1–L3) están resueltos, y no hay problemas críticos ni importantes.
+He revisado `spec.md`, `plan.md` y `tasks.md` tal como están ahora, sin commit, incluidos los cambios de «acordado con Javi». Es solo lectura: no he cambiado nada. Los hallazgos de la primera ronda (H1–H3, M2–M4, L1–L3) están resueltos, y no hay problemas críticos ni importantes.
 
 | ID | Gravedad | Dónde | Problema | Propuesta |
 |---|---|---|---|---|

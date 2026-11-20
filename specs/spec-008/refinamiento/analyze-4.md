@@ -44,12 +44,3 @@ T018 conserva su `[P]`: es el primer paso de su pareja y no depende de T019.
 ### Siguientes pasos
 
 Ya puedes ejecutar `/speckit-implement`. Solo `tasks.md` y `checklists/requirements.md` tienen cambios sin commit, así que conviene confirmarlos antes para separarlos del código. Como no hay hallazgos, no hay correcciones que proponer.
-
-## Extension Hooks
-
-**Optional Hook**: git
-Command: `/speckit-git-commit`
-Description: Auto-commit after analysis
-
-Prompt: Commit analysis results?
-To execute: `/speckit-git-commit`
