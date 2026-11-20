@@ -31,4 +31,4 @@
 
 ## Notes
 
-- Las preguntas abiertas PAn.m se conservan en la sección "Open Questions" como pendientes de `/speckit-clarify`; no son marcadores [NEEDS CLARIFICATION].
+- Las preguntas abiertas PAn.m de la sección "Open Questions" ya se resolvieron en `/speckit-clarify` (PA2.2 y PA2.3 en "Clarifications" de spec.md; PA2.1, como alineación de alcance, en la propia sección "Open Questions"); no eran marcadores [NEEDS CLARIFICATION].

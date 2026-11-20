@@ -22,8 +22,8 @@ los controles de incorporación son controles pendientes antes de main, sin bloq
 
 La comprobación inicial confirma spec-001 y el commit local **ba1410d**, «HU-01: alinea el
 estado documental y completa T084». T084 y su informe de validación están registrados,
-no son cambios pendientes de la sesión anterior. Solo  está sin
-seguimiento. No se consulta ni se presupone la publicación de los commits locales.
+no son cambios pendientes de la sesión anterior. Solo queda sin seguimiento un fichero de
+configuración local del entorno de desarrollo. No se consulta ni se presupone la publicación de los commits locales.
 
 Desde la raíz se ejecuta exclusivamente la resolución de selección sin persistencia:
 

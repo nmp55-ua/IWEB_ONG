@@ -45,7 +45,7 @@ puede usar el servicio de otro, nunca su repositorio. Así, por ejemplo, el mód
 gestiona la lista de espera a través de las funciones que expone el servicio de voluntariado.
 
 Se tomaron tres decisiones técnicas que conviene destacar. La primera, que **valores como las plazas
-libres o las horas de un voluntario se calculan y no se guardan**, de forma que nunca se descuadran ni
+libres o el total de horas de un voluntario se calculan y no se guardan** (cada asistencia guarda solo sus horas), de forma que nunca se descuadran ni
 se duplican al corregir. La segunda, que **el pago solo se confirma por la notificación firmada de la
 pasarela** (webhook), nunca por la página de retorno del navegador, y que la aplicación nunca recibe
 datos de tarjeta. La tercera, que **el aforo se protege con un bloqueo de la fila de la actividad**,
@@ -225,7 +225,7 @@ requisitos, en `docs/entrega/matriz-trazabilidad.md`.
 | HU-02 SC-002 | El banco de medición podía no cerrar sus recursos si fallaban los contadores; plan desalineado con la transacción | converge-1 (CONV-001/002) | `pruebas/medicion-historial.js`, plan | T036–T037 · `88db908` | Regresión dirigida; `converge-2.md` sin brechas | Nada | Javi | Cerrado |
 | HU-03 FR-002 | El total anual en `NUMERIC(10,2)` podía desbordarse | revisión del PR #5 | `008_certificados.sql`, modelo-datos | `223fd54` | `certificados.test.js`: 101 aportaciones de 999.999,99 € + 1 € (falla con el tipo anterior, pasa con el nuevo) | Rubén | Nada | Cerrado |
 | HU-03 FR-008 | «En ese momento» frente a la tarea horaria: se mantiene la tarea y se precisa en research y quickstart | analyze-1 (A1) | research R3, quickstart | `d754a75` | Regeneración en la siguiente ejecución o con la orden manual (`certificados.test.js`) | Rubén | Nada | Cerrado |
-| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
+| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `servicios-comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
 | HU-04 SC-002 | Informe anual exportado en menos de 1 minuto | quickstart y revisión | — | T021 | Página: 0,14 s el informe y 0,10 s el PDF (19/11/2026) | Rubén | Nicole | Cerrado |
 
 ### Integración entre historias

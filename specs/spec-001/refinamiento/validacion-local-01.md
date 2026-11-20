@@ -12,7 +12,7 @@
 Se comprueba carpeta limpia y último commit «HU-01: añade funciones y pruebas de autorización».
 009_operativa_donaciones.sql es una propuesta local autorizada, **como elección de numeración de HU-01**.
 Su número debe coordinarse en T007 y la revisión real de Rubén de T006 sigue pendiente.
-Ambas condiciones preceden a la incorporación compartida; Se conserva la decisión incorporada en PR #4.
+Ambas condiciones preceden a la incorporación compartida; se conserva la decisión incorporada en PR #4.
 La condición documentada consta en [LEEME](../../../backend/src/db/migraciones/LEEME.md)
 y [ficha de revisión](revision-tecnica-01.md).
 
@@ -56,7 +56,7 @@ implementar esos servicios o afirmar que sus reglas ya funcionan.
 - Usuarios con hashes bcrypt comprobados, donantes propios/ajenos e invitado, proyecto
   y aportaciones pendientes. Son fixtures sintéticos, no un alta o vinculación funcional.
 - Sesiones separadas persistidas en sesiones, con IDs distintos y datos aislados.
-- Pool acotado y conexiones controladas; Se verifica aislamiento de una transacción
+- Pool acotado y conexiones controladas; se verifica aislamiento de una transacción
   entre dos conexiones y rollback. La eliminación de una tabla dentro de otra transacción
   comprueba el fallo por esquema incompleto y se revierte.
 - Recursos canónicos Acacia correlacionados de Session, PaymentIntent, Invoice y
@@ -435,7 +435,7 @@ cobrada al cerrarse la suscripción) deben comentarse con el revisor de HU-01.
 
 | Comando o recorrido | Resultado |
 | --- | --- |
-| Primera ejecución de la suite de donaciones tras T054–T068 (ong_test_hu01) | 349/350. El fallo era de aislamiento (fixtures.proyecto inactivo); Se corrigió en las pruebas sin cambiar el código de producción. |
+| Primera ejecución de la suite de donaciones tras T054–T068 (ong_test_hu01) | 349/350. El fallo era de aislamiento (fixtures.proyecto inactivo); se corrigió en las pruebas sin cambiar el código de producción. |
 | `npm test -- src/modulos/donaciones --no-file-parallelism` (ong_test_hu01) | 11 archivos; 350 pruebas aprobadas y 0 omitidas: `cuotas.test.js` 26, `servicio.test.js` 24, `rutas.test.js` 11 y `textoCorreo.test.js` 26. Las pruebas de US1 se mantienen. |
 | `src/servicios-comunes/correo.test.js` | 16/16 aprobadas. |
 | `npm run build` (frontend) | Correcto. |

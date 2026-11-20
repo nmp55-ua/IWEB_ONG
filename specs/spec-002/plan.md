@@ -37,7 +37,7 @@ Las versiones mayores corresponden a los manifiestos y al entorno documentado; n
 | III: verificabilidad            | Nueve escenarios y tres SC identificados   | Casos de API, interfaz, paridad fiscal y medición completa descritos en quickstart |
 | IV: español, euros y fechas     | Se conservan las convenciones              | Fecha Madrid, dos decimales y totales exactos sin conversión a flotante            |
 | V–VI: privacidad y conservación | Sin acceso por coincidencia de correo      | Propiedad en servidor, respuesta sin datos fiscales y transacción de solo lectura  |
-| VII–IX: pila y aplicación común | Se inspeccionan los componentes existentes | Se amplía donaciones; Se reutilizan autenticación y contratos comunes              |
+| VII–IX: pila y aplicación común | Se inspeccionan los componentes existentes | Se amplía donaciones; se reutilizan autenticación y contratos comunes              |
 | X–XII: revisión y colaboración  | Nada/Javi, rama propia                     | Revisión pendiente; no se alteran reglas comunes ni módulos ajenos                 |
 
 No se identifican excepciones a la constitución ni decisiones funcionales bloqueantes. Las comprobaciones ejecutadas y sus límites constan en la [matriz de aceptación](refinamiento/matriz-validacion-01.md). La comprobación final consta en [converge-2.md](refinamiento/converge-2.md).

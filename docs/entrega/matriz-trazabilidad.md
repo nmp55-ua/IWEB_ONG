@@ -5,7 +5,7 @@
 > de la spec o del plan común), las **tareas** que lo cubren según el último analyze o `tasks.md`, la
 > **prueba** automática o manual que lo verifica y el paso del `quickstart.md`. La columna «Estado»
 > recoge la revisión del responsable y la de otra persona. No sustituye a las matrices detalladas de
-> cada spec. Actualizada el 20/11/2026 en `entrega-documentacion`.
+> cada spec. Actualizada el 20/11/2026; la entrega está en `main` (PR #12).
 
 ## Resumen por historia
 
@@ -20,8 +20,8 @@
 | spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 14 | 14 |
 | spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | aprobado | 11 | 11 | 11 |
 
-Los 106 requisitos y criterios tienen enlazada su tarea y su prueba (automática o manual); FR-010 de
-HU-03 se eliminó en `clarify` y consta como «no aplica».
+Los 105 requisitos y criterios vigentes tienen enlazada su tarea y su prueba (automática o manual); FR-010
+de HU-03 se eliminó en `clarify` y consta como «no aplica».
 
 ## spec-001 · HU-01 Donación puntual o alta como socio
 
@@ -208,8 +208,7 @@ SC-001 («total 5,5 con desglose, sin contar “no asistió”, y coincide con l
 
 ## Recorridos completos entre historias (enunciado §5.4)
 
-Cuatro recorridos que conectan historias de distintas personas: tres satisfactorios (uno de ellos con
-un pago real en Stripe de prueba) y uno de permisos.
+Cuatro recorridos que conectan historias de distintas personas, cuatro de cuatro con el resultado esperado: dos satisfactorios (R1, y R4 con un pago real en Stripe de prueba), uno de estado (R2) y uno de permisos (R3).
 
 | # | Recorrido | Historias | Precondiciones y datos | Pasos | Resultado esperado | Resultado observado | Versión |
 |---|---|---|---|---|---|---|---|
@@ -235,7 +234,7 @@ un pago real en Stripe de prueba) y uno de permisos.
 | HU-02 SC-002 | El banco de medición podía no cerrar sus recursos si fallaban los contadores; plan desalineado con la transacción | converge-1 (CONV-001/002) | `pruebas/medicion-historial.js`, plan | T036–T037 · `88db908` | Regresión dirigida; `converge-2.md` sin brechas | Nada | Javi | Cerrado |
 | HU-03 FR-002 | El total anual en `NUMERIC(10,2)` podía desbordarse | revisión del PR #5 | `008_certificados.sql`, modelo-datos | `223fd54` | `certificados.test.js`: 101 aportaciones de 999.999,99 € + 1 € (falla con el tipo anterior, pasa con el nuevo) | Rubén | Nada | Cerrado |
 | HU-03 FR-008 | «En ese momento» frente a la tarea horaria: se mantiene la tarea y se precisa en research y quickstart | analyze-1 (A1) | research R3, quickstart | `d754a75` | Regeneración en la siguiente ejecución o con la orden manual (`certificados.test.js`) | Rubén | Nada | Cerrado |
-| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
+| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `servicios-comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
 | HU-04 SC-002 | Informe anual exportado en menos de 1 minuto | quickstart y revisión | — | T021 | Página: 0,14 s el informe y 0,10 s el PDF (19/11/2026) | Rubén | Nicole | Cerrado |
 
 

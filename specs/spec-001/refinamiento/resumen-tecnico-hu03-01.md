@@ -114,7 +114,7 @@ fallida de 480,836 s se conserva íntegra. No es una garantía universal ni audi
 
 Renovaciones, primer fallo, fallos posteriores, alta sin cuenta y primer cobro de socio
 sin retorno y cancelación después de un fallo no cuentan con recorrido real completo
-de Stripe; Se conservan sus pruebas locales/simuladas. Las semillas no prueban cobros
+de Stripe; se conservan sus pruebas locales/simuladas. Las semillas no prueban cobros
 o recepción. Los avisos SMTP y registros de errores comunes observados en T074 quedan
 para revisión; no se ocultan como una auditoría nueva.
 

@@ -118,7 +118,7 @@ fallido; correo de socio: un intento, fallido. Estos contadores son del simulado
 no una comprobación de idempotencia o facturación real de Stripe.
 
 Se cerró la instancia temporal al finalizar. El proxy devolvió una respuesta
-interrumpida al cerrarse; Se verificó posteriormente por SQL que su esquema
+interrumpida al cerrarse; se verificó posteriormente por SQL que su esquema
 `hu01_integracion_51b86385362145de9105c51ab29b9c09` ya no existía. Se eliminó
 también el esquema residual del primer proceso, identificado exclusivamente por
 su referencia sintética, tras verificar `current_database() = ong_test_hu01`.

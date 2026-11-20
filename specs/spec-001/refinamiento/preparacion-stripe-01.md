@@ -9,7 +9,7 @@
 ## Estado inicial y perímetro
 
 HEAD 5eb2e1d, con T073–T074 registradas. El único archivo local sin seguimiento era
-; Se conserva, al igual que .env. No se ejecutan pagos, reenvíos de
+; se conserva, al igual que .env. No se ejecutan pagos, reenvíos de
 eventos, cambios de cuenta o configuración. No se consulta ni modifica la base de desarrollo
 ni la operación DON-47619c0b-0cb7-4149-9a80-29e2b133829c. Su estado pendiente de 15,75 €,
 destino Agua potable y Checkout abierto procede del contexto aportado; no se presenta
@@ -35,7 +35,7 @@ fija Stripe-Version: 2026-10-28.endive y el [objeto Invoice](https://docs.stripe
 muestran parent en vez de subscription superior. El [cambio de Basil](https://docs.stripe.com/changelog/basil/2025-03-31/adds-new-parent-field-to-invoicing-objects)
 documenta parent.subscription_details.subscription y su discriminador parent.type. Las
 URLs de referencia con el parámetro explícito api-version=endive no resultaron accesibles
-en la herramienta de consulta; Se contrastaron la referencia actual, su ejemplo versionado
+en la herramienta de consulta; se contrastaron la referencia actual, su ejemplo versionado
 y el cambio oficial, sin atribuir al SDK antiguo tipos endive.
 
 Se admite únicamente el sobre de avisos snapshot acacia y 2026-10-28.endive, con los tipos
@@ -70,7 +70,7 @@ npm test -- src/modulos/donaciones/eventos.test.js src/modulos/donaciones/cuotas
 npm test -- src/modulos/donaciones --no-file-parallelism
 ```
 
-- Antes de implementar: 5 fallos y 46 pruebas aprobadas; Se reproducen el rechazo de endive
+- Antes de implementar: 5 fallos y 46 pruebas aprobadas; se reproducen el rechazo de endive
   y la dependencia incorrecta de subscription en el evento.
 - Regresión dirigida tras el cambio: 94 pruebas aprobadas, código 0.
 - Regresión completa: 11 archivos y **367 pruebas aprobadas**, código 0, duración 37,97 s.
@@ -84,7 +84,7 @@ Prettier 3.6.2 se comprueba solo en los archivos modificados y este informe; el 
 adicional del repositorio no altera otras reglas. No se ejecuta la suite de otros módulos
 ni se utiliza la base de desarrollo. Los informes históricos permanecen intactos.
 Comprobaciones finales de formato y `git diff --check`: código 0. Las huellas de .env y
- coinciden con las iniciales; Se conservan los trece informes anteriores
+ coinciden con las iniciales; se conservan los trece informes anteriores
 y el índice de Git sigue intacto. Solo cambia la marca de T075.
 
 ## Tareas y revisión pendiente
@@ -259,7 +259,7 @@ de suscripciones y facturas iniciales con el adaptador acacia, sin generalizar a
 recorridos de Billing o a la estructura completa de eventos endive.
 
 Se canceló solo la anual inmediatamente y sin reembolso desde el panel de pruebas.
-El customer.subscription.deleted obtuvo 200 según las líneas aportadas; Se contrastó
+El customer.subscription.deleted obtuvo 200 según las líneas aportadas; se contrastó
 canceled en Stripe, cancelada localmente, previsión nula, aportación confirmada intacta,
 ausencia de factura adicional, amount_refunded=0 y confirmación original conservada. Nada
 comprobó el resultado anual. Mensual y trimestral no se cancelaron.

@@ -57,6 +57,7 @@ Versión: rama `spec-005`, código del commit `dcc696e` y, para T027 y T028, el 
   y ya sale «Estás inscrito»). Cronometrado a mano el 17/11/2026 como `voluntario2@` (perfil ya guardado), desde el
   listado de actividades hasta «Estás inscrito» en Charla sobre el agua en el instituto: **10 s**
   (objetivo, < 2 min): **cumple**. Las respuestas de la API van de 19 a 55 ms. La primera vez se
-  añaden los cuatro datos de contacto, que no cambian el resultado.
+  añaden los cuatro datos de contacto. Esa primera inscripción (paso 2.11, cuenta nueva) no se
+  cronometró: que siga muy por debajo de 2 min es una estimación, no una medida.
 - **SC-002**: en ningún paso hubo más confirmados que plazas (2.6, 2.8 y bordes); la prueba automática de
   peticiones simultáneas también pasa.

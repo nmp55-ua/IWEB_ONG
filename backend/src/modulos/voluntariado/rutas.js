@@ -11,9 +11,9 @@ export const rutasVoluntariado = Router();
 const conSesion = requiereRol();
 
 rutasVoluntariado.get('/actividades/disponibles', asincrono(controlador.disponibles));
-rutasVoluntariado.post('/actividades/:id(\\d+)/inscripciones', conSesion, asincrono(controlador.inscribir));
+rutasVoluntariado.post('/actividades/:id(\\d{1,15})/inscripciones', conSesion, asincrono(controlador.inscribir));
 rutasVoluntariado.patch(
-  '/yo/inscripciones/:id(\\d+)',
+  '/yo/inscripciones/:id(\\d{1,15})',
   conSesion,
   asincrono(controlador.modificarInscripcion),
 );

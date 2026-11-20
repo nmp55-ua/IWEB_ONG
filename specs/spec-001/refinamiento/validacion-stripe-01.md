@@ -276,7 +276,7 @@ operación anterior de 15,75 € y se conservan sus fallos, recuperación y reen
    de confirmación local, todavía no producida.
 3. Se cerraron las páginas de aplicación y Checkout. Se comprobó con la herramienta de
    navegador que el integrado no tenía pestañas abiertas y cerró también la única pestaña
-   restante de Mailpit. Firefox conservaba otras páginas ajenas; Se confirmó que no
+   restante de Mailpit. Firefox conservaba otras páginas ajenas; se confirmó que no
    quedaban páginas de la aplicación en Firefox. **No se afirma cierre total de Firefox ni
    ausencia de todos sus procesos.** El cliente de la aplicación permaneció cerrado durante
    la primera confirmación y las comprobaciones posteriores indicadas.
@@ -358,12 +358,13 @@ estado, Mailpit y control de entrega proceden del registro previo según el enca
 propias de esta revisión se limitan a rama/HEAD/estado local, lectura y contraste de los
 documentos y revisión de formato y alcance. No se repiten suites ni consultas externas,
 pagos, reenvíos o cambios de configuración. El estado inicial era spec-001, HEAD 789e154,
-con los tres documentos de preparación modificados y  sin seguimiento.
+con los tres documentos de preparación modificados y un fichero de configuración local sin
+seguimiento.
 
 ## Bloque real de socios — cierre de T078 y evidencia parcial de T079–T080 · 2026-11-07
 
-Estado inicial de esta revisión: spec-001, HEAD cbafeef, únicamente  sin
-seguimiento. Se ejecutaron las altas y la cancelación descritas; Se contrastó por
+Estado inicial de esta revisión: spec-001, HEAD cbafeef, con un único fichero sin
+seguimiento, de configuración local. Se ejecutaron las altas y la cancelación descritas; se contrastó por
 lectura PostgreSQL, Stripe con API acacia y Mailpit. Se comunicó las confirmaciones en
 pantalla y aportó las líneas del listener. La revisión actual no repite esos comandos o
 consultas: contrasta las evidencias comunicadas con T078, contratos y escenarios y actualiza
@@ -372,7 +373,7 @@ documentación. No se modifican las donaciones puntuales anteriores de 15,75 €
 ### Tres altas independientes y primeras facturas
 
 Todas son cuotas iniciales en EUR, fondo general y modo de pruebas. Se comunicó las tres
-confirmaciones en pantalla; Se comunicó la aportación de una captura mensual. No se añaden
+confirmaciones en pantalla; se comunicó la aportación de una captura mensual. No se añaden
 archivos de capturas que no se hayan recibido en este bloque documental ni se afirma que
 esta revisión haya inspeccionado directamente esas pantallas.
 
@@ -392,7 +393,7 @@ esta revisión haya inspeccionado directamente esas pantallas.
 Se comprobó en las tres altas: Invoice paid, billing_reason=subscription_create,
 amount_paid=111/122/133, relación factura–suscripción–PaymentIntent correcta y pago succeeded.
 Las fechas locales de alta y cobro coinciden con Invoice.status_transitions.paid_at.
-Las suscripciones quedaron inicialmente activas; Se conserva una cuota inicial y una
+Las suscripciones quedaron inicialmente activas; se conserva una cuota inicial y una
 operación por alta. Cada confirmación tiene estado enviado, un intento y una coincidencia
 de su referencia en Mailpit. La próxima fecha anual de la tabla es la previsión inicial;
 queda anulada después de la cancelación descrita abajo, sin reescribir la historia del alta.
@@ -458,7 +459,7 @@ de origen íntegramente con Stripe: se conserva el balance pendiente siguiente.
 | S02: renovación                                         | No realizada                                                                     | Requiere otra factura real subscription_cycle; existe cobertura simulada en cuotas.test.js                             |
 | S03: primer cobro fallido                               | No realizado                                                                     | Las tres altas aquí fueron satisfactorias; la evidencia previa es simulada                                             |
 | S04: alta sin cuenta                                    | No acreditada por los datos de este bloque                                       | No se infiere ausencia de cuenta de que el formulario permita invitados; requiere evidencia del recorrido              |
-| S05–S06: fallo y reintento del correo de socio          | No realizados aquí                                                               | En estos casos el primer envío fue satisfactorio; Se conservan las pruebas locales, sin atribuir un fallo SMTP real    |
+| S05–S06: fallo y reintento del correo de socio          | No realizados aquí                                                               | En estos casos el primer envío fue satisfactorio; se conservan las pruebas locales, sin atribuir un fallo SMTP real    |
 | S07–S08: conflictos de identidad                        | Sin nueva evidencia de Stripe en este bloque                                     | Su balance local y documental se revisará en T080; estas altas no prueban conflictos                                   |
 | S09: primer cobro sin retorno/cierre del cliente        | No acreditado para socios                                                        | P21 puntual no acredita automáticamente la activación de un alta de socio en esas condiciones                          |
 | S10: fallo de cuota posterior                           | No realizado                                                                     | Requiere ciclo fallido real; cobertura simulada previa, no otra primera factura                                        |
@@ -500,7 +501,7 @@ Se conservan las evidencias anteriores y sus límites como evolución. Las actua
 Las observaciones y consultas registradas no se presentan como ejecuciones de esta revisión. Aquí solo
 se comprueban rama/HEAD/estado, documentos y formato. No se repiten suites o consultas
 externas, ni se ejecutan altas, pagos, cancelaciones, reenvíos, configuración o Git de escritura.
-T006, T007, T079 y siguientes, converge y coordinación de 009 permanecen pendientes; Se conserva
+T006, T007, T079 y siguientes, converge y coordinación de 009 permanecen pendientes; se conserva
 la revisión de Rubén sin atribuir aprobación colectiva.
 
 ## Segunda medición puntual y cierre T079–T080 · 2026-11-07

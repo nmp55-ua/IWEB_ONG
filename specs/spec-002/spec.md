@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-28
 
-**Status**: Draft
+**Status**: Implementada
 
 **Responsable**: *Nada* · **Revisor**: *Javi*
 
@@ -15,7 +15,7 @@
 ### Session 2026-11-10
 
 - Q: ¿Qué debe mostrar el historial cuando la cuenta de donante todavía no tiene un vínculo verificado con sus aportaciones? (PA2.2) → A: Mostrar una explicación y un enlace a `/donar/vincular`, sin mostrar aportaciones ni afirmar si existen. Para cuentas vinculadas, distinguir historial vacío de año sin resultados: en el primer caso, mensaje y enlace para donar; en el segundo, aviso del año sin aportaciones y opción de quitar el filtro.
-- Q: ¿Entre qué momentos debe medirse el límite de dos segundos para mostrar cinco años de cuotas mensuales? (PA2.3) → A: Desde que una cuenta ya identificada y vinculada abre el historial hasta que se muestran las 60 cuotas, los grupos anuales y sus totales. Se incluyen la obtención de datos y su presentación; Se excluyen login y vinculación previos.
+- Q: ¿Entre qué momentos debe medirse el límite de dos segundos para mostrar cinco años de cuotas mensuales? (PA2.3) → A: Desde que una cuenta ya identificada y vinculada abre el historial hasta que se muestran las 60 cuotas, los grupos anuales y sus totales. Se incluyen la obtención de datos y su presentación; se excluyen login y vinculación previos.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -88,7 +88,7 @@ Desde su área personal, el donante identificado y vinculado mediante la verific
 
 ## Open Questions (para `/speckit-clarify`)
 
-No quedan preguntas funcionales bloqueantes identificadas en esta ronda. La revisión de Javi y las fases posteriores no se dan por realizadas.
+No quedan preguntas funcionales bloqueantes identificadas en esta ronda. Javi revisó HU-02 y aprobó la PR #6 el 11/11.
 
 - **PA2.1 — alineación con el alcance vigente**: La pregunta original presuponía reasignar una aportación confirmada. HU-01 mantiene inmutables esas aportaciones; HU-02 muestra el destino asociado y no incorpora reasignación ni correcciones. No se reabre esa decisión común ni se añade otra definición de las entidades.
 - **PA2.2 — resuelta**: Se distinguen cuenta sin vínculo, historial vinculado vacío y año sin resultados conforme a FR-008.

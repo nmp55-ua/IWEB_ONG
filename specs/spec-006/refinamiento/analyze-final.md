@@ -20,6 +20,12 @@ Segunda pasada de `/speckit-analyze` (solo lectura) e informe final. El informe 
   `voluntariado/calendario.test.js` 13 de 13 y la batería sin donaciones 232 pasan y 3 saltadas. Front-end:
   `npm test` en `frontend/` repetido para este informe, 40 de 40 (las 5 de `vuelta.test.js` incluidas).
 
+> **Nota posterior (20/11/2026)**: la regresión final de la entrega (`docs/entrega/regresion/backend.txt`)
+> ya no tiene pruebas saltadas. Desde `4af4d04`, las tres `it.skip` de `actividades/servicio.test.js` son un
+> comentario que remite a `voluntariado/servicio.test.js`, donde esos casos se prueban con el servicio real.
+> La cabecera de `spec.md` ya dice «Status: Implementada». Este informe no se ha reescrito; lo que se decidió con cada hallazgo está en
+> [registro-hallazgos.md](registro-hallazgos.md), «Decisiones sobre el analyze final (20/11/2026)».
+
 ## Resultado
 
 **0 CRITICAL · 0 HIGH · 0 MEDIUM · 8 LOW.** Cobertura del 100 %: los 6 FR y los 2 SC tienen tareas y

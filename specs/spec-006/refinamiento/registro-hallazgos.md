@@ -31,7 +31,26 @@ persona, spec-006 no lo cambia: queda dicho aquí y en T013.
 
 - **Resueltos**: 13 de 16, entre ellos el único HIGH (I1) y los cuatro MEDIUM.
 - **Resueltos en spec-006 con una parte pendiente en ficheros de spec-007** (I6 y D1): el contrato de
-  spec-007 no nombra `listar`, `obtener` ni `bloquearActividad` (sí lo hace plan-comun §7), y el `enMadrid`
+  spec-007 no nombra `listar`, `obtener` ni `bloquearActividad` (sí lo hace plan-comun §7; `bloquearActividad`
+  está en ese contrato desde `4af4d04`, 20/11), y el `enMadrid`
   de `semillas/actividades.js` sigue con el desfase del cambio de hora.
 - **Sin resolver** (I3, LOW): el quickstart de spec-007 sigue sin nombrar Reparto de alimentos en 1.6 y 2.3.
 - Ningún hallazgo crítico o alto queda abierto. Ningún hallazgo era un falso positivo.
+
+## Decisiones sobre el analyze final (20/11/2026)
+
+Qué se hizo con cada hallazgo de [analyze-final.md](analyze-final.md). Se comprobó el 20/11/2026 con
+`git log` y leyendo los ficheros citados. Los cambios en spec-006 están en la rama `entrega-documentacion`.
+
+| ID | Gravedad | Decisión | Dónde o por qué | Estado |
+|---|---|---|---|---|
+| G1 | LOW | Aceptado | No se repite la prueba manual antes de la entrega: el servidor vuelve a leer cada actividad en cada petición, así que un cambio de fecha llega por el mismo camino que el de lugar; la recarga al volver se comprobó a mano en un navegador normal (2.3, [revision-pr-3.md](revision-pr-3.md) §2) y la cubre `vuelta.test.js`, y la cancelación por el coordinador tiene prueba automática en `calendario.test.js`. | Aceptado |
+| I1 | LOW | Corregido | tasks.md: «Independent Test» y «Checkpoint» de la fase 4 y paso 3 de «Implementation Strategy» dicen ahora «2.1–2.4». | Cerrado |
+| I2 | LOW | Corregido | quickstart.md: fila de Banco de alimentos (de spec-008, celebrada, con 2 h de asistencia) en la tabla de Preparación y en el paso 1.2; research R7 la nombra junto a Recogida de ropa. | Cerrado |
+| I3 | LOW | Corregido (la parte común, aceptada) | plan.md: ejecutor de pruebas de Node en el Technical Context, `vuelta.js`, `vuelta.test.js` y `frontend/package.json` en Source Code y Structure Decision; quickstart.md: `npm test` en `frontend/`. La línea de plan-comun «Testing» no se cambia desde spec-006 (documento común, principio XII); lo propio de HU-06 ya queda escrito en su plan y su quickstart. | Cerrado |
+| I4 | LOW | Corregido | tasks.md, nota de cierre de T013: hubo conflicto en `Menu.jsx` en el merge `c4b414c` (10/11) y se resolvió conservando las dos líneas. | Cerrado |
+| I5 | LOW | Corregido | tasks.md (notas de T013 y T018) y converge-2.md (F4): el color común `aviso` pasó a `#9A5B00` el 19/11 (`c959fe5`). No se vuelve a pasar Lighthouse: el cambio solo sube el contraste (de 4,2:1 a 5,4:1), así que no empeora la cifra de 96 de converge-2. | Cerrado |
+| C1 | LOW | Corregido | plan.md, Constitution Check: filas VII, IX, X y XI con su comprobación (pila, CONVENCIONES §2, §4 y §9, rama `spec-006` y commits «HU-06:», PR #3 revisado por Nada). | Cerrado |
+| K1 | LOW | Aceptado | Son ficheros de Nicole (principios X y XII) y no cambian lo que hace HU-06. `bloquearActividad` ya está en su contrato desde `4af4d04` (20/11) y `listar` y `obtener`, en plan-comun §7; sus pasos 1.6 y 2.3 y su `enMadrid` siguen como pendientes de spec-007, ya traspasados en T013. | Aceptado |
+
+Resultado: 8 de 8 decididos, 6 corregidos y 2 aceptados con justificación. Ninguno queda abierto.

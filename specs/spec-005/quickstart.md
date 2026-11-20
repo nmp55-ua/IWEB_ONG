@@ -15,6 +15,7 @@ Datos de prueba (plan-comun §8 y `db/semillas/voluntariado.js`), con la contras
 | Limpieza de playa · Agua potable · dentro de 14 días · 10 plazas · «Traer guantes.» | publicada | 9 confirmadas (`voluntario3`…`voluntario11@ong.test`) |
 | Reparto de alimentos · Comedor social · dentro de 7 días · 2 plazas | publicada | confirmadas `voluntario3` y `voluntario4`; en espera `voluntario5` |
 | Recogida de ropa · hace 3 días, de 10:00 a 13:30 | celebrada | confirmadas `voluntario@` y `voluntario2` (las usa spec-008) |
+| Banco de alimentos · Comedor social · hace 10 días, de 17:00 a 19:00 (la añade spec-008) | celebrada | confirmada `voluntario@`, con su asistencia de 2 h (`db/semillas/asistencias.js`) |
 | Taller de reciclaje / Mercadillo solidario | borrador / cancelada | — |
 | Charla sobre el agua en el instituto, Análisis de fuentes, Visita a la depuradora y Jornadas de reforestación · Agua potable · dentro de 11 a 17 días (las añade spec-006) | publicadas | las del calendario de `voluntario@` (ver el [quickstart de spec-006](../spec-006/quickstart.md#preparación)) |
 
@@ -29,7 +30,7 @@ quickstart de spec-007; nunca contra la base de desarrollo).
 | # | Pasos | Resultado esperado |
 |---|---|---|
 | 1.1 | Sin sesión, abrir *Actividades* (`/actividades`) | Las seis publicadas futuras por fecha, entre ellas Limpieza de playa y Reparto de alimentos, con título, descripción, día y horario, lugar, proyecto, «1 plaza libre de 10» / «0 plazas libres de 2» y requisitos («Sin requisitos» si no hay). Las otras cuatro son las de spec-006 |
-| 1.2 | En el mismo listado | No salen el borrador, la cancelada ni la celebrada |
+| 1.2 | En el mismo listado | No salen el borrador, la cancelada ni las celebradas (Recogida de ropa y Banco de alimentos) |
 | 1.3 | Filtrar *Proyecto* = Comedor social; después *Hasta* = dentro de 10 días con *Proyecto* = Agua potable | Solo Reparto de alimentos; después ninguna, con el mensaje de lista vacía |
 
 ## Historia 2 — Inscribirme y cancelar

@@ -11,8 +11,8 @@ Grupo G10 · Ingeniería Web, Proyecto SDD Parte I · Universidad de Alicante, c
 | Javi | `jms153-ua` | HU-05, HU-06 |
 | Nicole | `nmp55-ua` | HU-07, HU-08 |
 
-Fecha de la memoria: 20 de noviembre de 2026 · Estado del código: rama `entrega-documentacion`,
-que se integra en `main` con el pull request de entrega.
+Fecha de la memoria: 20 de noviembre de 2026 · Estado del código: rama `main`, con la entrega
+integrada mediante el PR #12 (aprobado por Nada).
 
 ---
 
@@ -55,7 +55,7 @@ inscripción con lista de espera, calendario, asistencia y horas acumuladas).
 Express y PostgreSQL. Las **276 tareas** de las ocho specs están cerradas y los **105 requisitos y
 criterios de éxito vigentes** (de 106; uno se eliminó en `clarify`) tienen una prueba automática o manual
 enlazada en la matriz de trazabilidad. En la
-regresión final del 20/11/2026 pasan **704 pruebas automáticas** (232 del back-end común, 432 del
+regresión final del 20/11/2026 pasan **706 pruebas automáticas** (234 del back-end común, 432 del
 módulo de donaciones y 40 del front-end) y los cuatro recorridos completos
 entre historias (R1–R4), uno de ellos con un pago real en Stripe de prueba.
 
@@ -281,7 +281,7 @@ Cada spec detalla los cuerpos de petición y respuesta en su carpeta `contracts/
 | SQL con `pg`, sin ORM | Menos piezas y control de los `NUMERIC` | Prisma o Sequelize |
 | Stripe Checkout alojado | La tarjeta no pasa por la aplicación; tiene modo de pruebas y suscripciones | Formulario propio con Elements; Redsys |
 | Confirmar el pago solo por webhook firmado | La página de retorno del navegador no prueba el cobro | Confiar en la URL de éxito |
-| Plazas libres y horas calculadas, no guardadas | Nunca se descuadran ni se duplican al corregir | Contadores guardados |
+| Plazas libres y total de horas calculados al consultar; cada asistencia guarda solo sus horas (fin − inicio) | Nunca se descuadran ni se duplican al corregir | Contadores guardados |
 | `SELECT … FOR UPDATE` sobre la actividad | Garantiza el aforo con peticiones simultáneas | Aislamiento serializable con reintentos |
 | pdfkit y CSV hecho a mano | Ligeros, sin navegador sin interfaz | Puppeteer; librerías de CSV |
 | Tarea horaria con `node-cron` dentro del back-end | Un único proceso emite y regenera los certificados | Cron del sistema operativo |
@@ -316,7 +316,7 @@ Cada spec detalla los cuerpos de petición y respuesta en su carpeta `contracts/
 │                                   tasks, checklists y refinamiento/ (clarify, analyze, converge)
 ├── docs/
 │   ├── agrupamiento.md  memoria.md
-│   └── entrega/                 ← historias finales, dossier, matriz, regresión y demo
+│   └── entrega/                 ← historias finales, dossier, matriz y regresión (la demo, en DemoSSD_G10.zip)
 ├── backend/src/
 │   ├── app.js  config.js  servidor.js
 │   ├── db/ (pool.js, migraciones/001…009, semillas/)
@@ -344,8 +344,8 @@ Cada spec detalla los cuerpos de petición y respuesta en su carpeta `contracts/
   cambiar de mes y recarga al volver a la pestaña.
 - **Gestión de actividades (HU-07, `actividades/servicio.js`)**: estados borrador → publicada →
   cancelada o celebrada; avisa por correo si cambian fecha, hora o lugar.
-- **Asistencia y horas (HU-08)**: las horas son fin − inicio y se calculan al consultar, así que
-  repetir el guardado no duplica y corregir resta.
+- **Asistencia y horas (HU-08)**: cada asistencia guarda sus horas (fin − inicio) y el total de cada
+  voluntario se suma al consultar, así que repetir el guardado no duplica y corregir resta.
 - **Certificado e informe (HU-03 y HU-04, `certificados-informes/`)**: la tarea horaria emite y
   regenera certificados con código de verificación; el informe se calcula con `GROUPING SETS` (filas,
   subtotales y total en una consulta) y una sola función alimenta pantalla, CSV y PDF.
@@ -390,10 +390,10 @@ Regresión final del 20/11/2026 ([`entrega/regresion/`](entrega/regresion/)):
 
 | Conjunto | Ficheros | Pruebas |
 |---|---|---|
-| Back-end común (`ong_test`) | 12 | 232 pasan |
+| Back-end común (`ong_test`) | 12 | 234 pasan |
 | Donaciones (`ong_test_hu01`) | 15 | 432 pasan |
 | Front-end | 4 | 40 pasan |
-| **Total** | **31** | **704 pasan, 0 fallan** |
+| **Total** | **31** | **706 pasan, 0 fallan** |
 
 ### 7.3 Pruebas de concurrencia y de reglas críticas
 
@@ -619,9 +619,9 @@ en la carpeta `refinamiento/` de cada spec.
 
 ### 9.4 Historial de commits
 
-Más de 200 commits entre el 14/10 y el 20/11/2026, firmados por cada integrante con su cuenta de GitHub
-y con el identificador de la historia al principio del mensaje (`HU-05: ...`), como pide la
-constitución. El historial de cada rama `spec-00N` permite seguir las versiones sucesivas de su spec,
+Más de 200 commits entre el 14/10 y el 20/11/2026, firmados por cada integrante con su cuenta de GitHub.
+Los de cada historia empiezan por su identificador (`HU-05: ...`), como pide la constitución; los de
+documentación común de la entrega, por «Entrega:» o «Demo:». El historial de cada rama `spec-00N` permite seguir las versiones sucesivas de su spec,
 y la diferencia entre la spec anterior y la revisada en cada `clarify` es su propio commit.
 
 ### 9.5 Issues y pull requests
@@ -637,6 +637,8 @@ y la diferencia entre la spec anterior y la revisada en cada `clarify` es su pro
 | #7 | spec-008 | Nicole | Rubén | 11/11/2026 |
 | #8 | spec-004 | Rubén | Nicole | 12/11/2026 |
 | #9 | spec-002 (análisis final de HU-02) | Nada | Javi | 20/11/2026 |
+| #11 | entrega-documentacion | Javi | — | Mezclado por error sin revisión y deshecho el mismo día |
+| #12 | entrega-documentacion (entrega) | Javi | Nada | 20/11/2026 |
 
 Los pull requests de las ocho historias tienen la aprobación de su revisor; en los PR #3, #4 y #7 se registró
 en GitHub el 18/11, después de mezclarlos. La coordinación entre historias se hizo
@@ -654,7 +656,7 @@ Indicadores de la mejora conseguida (enunciado §5.4), sobre el total de cada co
 | Brechas de `converge` | 28 tareas añadidas, 28 cerradas; la última pasada de cada spec no deja brechas accionables |
 | Criterios verificados | 105 de 105 requisitos y criterios vigentes con prueba automática o manual (3 de HU-07 con prueba parcial) |
 | Tareas | 276 de 276 cerradas |
-| Recorridos entre historias | 4 de 4 satisfactorios (R1–R4) |
+| Recorridos entre historias | Cuatro de cuatro con el resultado esperado: dos satisfactorios (R1, y R4 con un pago real en Stripe de prueba), uno de estado (R2) y uno de permisos (R3) |
 
 Registro mínimo: una fila por hallazgo o decisión relevante. La trazabilidad completa de cada requisito
 está en la [matriz](entrega/matriz-trazabilidad.md) y las salidas de los comandos, en
@@ -675,7 +677,7 @@ está en la [matriz](entrega/matriz-trazabilidad.md) y las salidas de los comand
 | HU-02 SC-002 | El banco de medición podía no cerrar sus recursos si fallaban los contadores; plan desalineado con la transacción | converge-1 (CONV-001/002) | `pruebas/medicion-historial.js`, plan | T036–T037 · `88db908` | Regresión dirigida; `converge-2.md` sin brechas | Nada | Javi | Cerrado |
 | HU-03 FR-002 | El total anual en `NUMERIC(10,2)` podía desbordarse | revisión del PR #5 | `008_certificados.sql`, modelo-datos | `223fd54` | `certificados.test.js`: 101 aportaciones de 999.999,99 € + 1 € (falla con el tipo anterior, pasa con el nuevo) | Rubén | Nada | Cerrado |
 | HU-03 FR-008 | «En ese momento» frente a la tarea horaria: se mantiene la tarea y se precisa en research y quickstart | analyze-1 (A1) | research R3, quickstart | `d754a75` | Regeneración en la siguiente ejecución o con la orden manual (`certificados.test.js`) | Rubén | Nada | Cerrado |
-| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
+| HU-04 FR-006 | El PDF común solapaba filas cuando una celda ocupaba dos líneas | validación manual | `servicios-comunes/pdf.js` | T011–T014 · `d203246` | PDF del informe sin solapes; certificado de HU-03 igual | Rubén | Nicole | Cerrado |
 | HU-04 SC-002 | Informe anual exportado en menos de 1 minuto | quickstart y revisión | — | T021 | Página: 0,14 s el informe y 0,10 s el PDF (19/11/2026) | Rubén | Nicole | Cerrado |
 
 ---
@@ -715,6 +717,17 @@ Las valoraciones personales de cada integrante están en
 [`entrega/memoria-final.md`](entrega/memoria-final.md#valoraciones-personales).
 
 ### 10.3 Trabajo futuro
+
+Limitaciones conocidas de esta versión, detectadas en la revisión final del código:
+
+- **Identidad del donante**: la ficha del donante se crea al preparar el pago, antes de cobrar, como dicen FR-014 y
+  FR-015 de HU-01 (en v1 no hay corrección de datos). Alguien podría usar el NIF de otra persona sin llegar a pagar y
+  bloquearlo, y la respuesta 409 revela que ese NIF ya existe. Lo natural sería crear la ficha al confirmar el pago.
+- **Duración de las actividades**: las horas de una asistencia se guardan en `NUMERIC(5,2)`; una actividad de más de
+  999 horas no podría registrar asistencia. Bastaría con limitar la duración al crearla.
+- **Inicio de sesión**: no limita los intentos por tiempo. Habría que añadir un límite de peticiones.
+
+Y en cuanto a funciones:
 
 - Recuperar el acceso a una donación hecha sin cuenta si se pierde la sesión (limitación aceptada de v1
   en HU-01).

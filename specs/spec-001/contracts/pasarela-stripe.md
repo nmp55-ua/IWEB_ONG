@@ -154,7 +154,7 @@ La aplicación conserva la clave de solicitud en sessionStorage por operación, 
 allí datos fiscales. Puede reanudar mediante el DTO corto autorizado definido en el contrato
 API, que referencia la solicitud original sin aportar otra. No ofrece un botón de reiniciar
 el pago con otro UUID para resolver incertidumbre. Una sesión perdida no se recupera
-por conocer esa clave; Se mantiene PA1.7.
+por conocer esa clave; se mantiene PA1.7.
 
 **Necesidad de datos**: se añade solo solicitud_checkout JSONB al registro operativo ya
 previsto. La huella anterior no permite reconstruir después de un reinicio el cuerpo exacto
@@ -233,7 +233,7 @@ con ella. La Subscription debe corresponder a la suscripción local y a la refer
 alta; una coincidencia de importe sin esas relaciones no acredita pertenencia.
 
 - `billing_reason = 'subscription_create'`: `Subscription.metadata.referencia` localiza
-  la aportación pendiente del alta; Se le asignan factura, pago y suscripción externa.
+  la aportación pendiente del alta; se le asignan factura, pago y suscripción externa.
 - `billing_reason = 'subscription_cycle'`: se busca por `pasarela_factura_id`; si no existe,
   se crea una sola cuota del mismo Donante, destino e importe de la suscripción.
 - Otros motivos, como cambios de suscripción o facturación manual, se registran como
@@ -248,7 +248,7 @@ El PaymentIntent conocido no se sustituye por otro identificador sin revisar la 
 Si una factura de ciclo llega antes de la notificación de la primera cuota y esta aún no
 consta confirmada, se recupera la factura inicial mediante `Checkout Session.invoice` de
 la operación del alta. Si falta el ID de Session por una respuesta incierta, se consulta
-Session por `subscription`, con límite 2 y comprobación de referencia; Se exige una única
+Session por `subscription`, con límite 2 y comprobación de referencia; se exige una única
 coincidencia. Estos campos y filtro existen en los
 [tipos Session](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Checkout/Sessions.d.ts)
 y [parámetros de listado](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Checkout/SessionsResource.d.ts).

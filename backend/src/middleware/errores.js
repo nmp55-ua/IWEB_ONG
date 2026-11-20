@@ -88,6 +88,9 @@ export function rutaNoEncontrada(req, res, next) {
 export function manejadorErrores(error, req, res, next) {
   let errorApi = error;
   if (error instanceof ZodError) errorApi = errorDeValidacion(error);
+  // Errores del lector de JSON de Express: no son fallos del servidor.
+  if (error?.type === 'entity.parse.failed') errorApi = new ErrorApi(400, 'DATOS_INVALIDOS', 'El cuerpo de la petición no es un JSON válido.');
+  if (error?.type === 'entity.too.large') errorApi = new ErrorApi(413, 'DEMASIADO_GRANDE', 'La petición es demasiado grande.');
   if (!(errorApi instanceof ErrorApi)) {
     console.error(error);
     errorApi = new ErrorApi(500, 'ERROR_INTERNO', 'Ha ocurrido un error inesperado. Inténtalo de nuevo.');

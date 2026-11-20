@@ -157,7 +157,7 @@ correo.
 En una actividad celebrada, el coordinador pasa lista («Registrar asistencia») y puede corregirla sin
 plazo. Cada voluntario ve en `/mis-horas` su total y el desglose por actividad.
 
-La demostración grabada de las ocho historias está en `docs/entrega/demo/index.html` y publicada en https://demo-ong-g10.vercel.app.
+La demostración grabada de las ocho historias está publicada en https://demo-ong-g10.vercel.app; en el repositorio está en `docs/entrega/demo/` y en la entrega, en `DemoSSD_G10.zip`.
 
 ## Documentos
 

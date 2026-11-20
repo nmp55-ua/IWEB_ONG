@@ -23,7 +23,9 @@ tablas ni migraciones nuevas: el calendario es una vista sobre `inscripciones` (
 
 Todo según [plan-comun.md](../plan-comun.md#technical-context): JavaScript ES modules en
 Node.js 22, Express 4 + `pg` + `zod`, PostgreSQL 16, Astro 5 + React 19 + Tailwind 3,
-Vitest + Supertest. No se añade ninguna dependencia (ni librería de calendario: research R6).
+Vitest + Supertest. No se añade ninguna dependencia (ni librería de calendario: research R6). Las
+pruebas del front-end (`vuelta.test.js`, T025) usan el ejecutor de pruebas de Node (`node --test`), sin
+instalar nada.
 
 **Performance Goals**: SC-002 (la siguiente actividad en menos de 10 s): la lista se abre primero
 y empieza por la siguiente.
@@ -48,7 +50,11 @@ No queda ningún NEEDS CLARIFICATION: PA6.1 y las otras tres preguntas se resolv
 | IV. Español | Fechas dd/mm/aaaa y horas con `formatearFecha` y `formatearHora`; semana de lunes a domingo; días de Madrid. |
 | V. Seguridad y datos | Ruta personal `/yo/...` con `requiereRol('voluntario')`; el servicio busca a partir de `req.usuario.id` y no acepta el identificador de nadie; la respuesta no lleva datos de otros voluntarios. |
 | VI. Nada se borra | Cancelar desde el calendario es la cancelación de HU-05 (cambio de estado). |
+| VII. Pila tecnológica | Astro con islas de React y Tailwind en el front-end, Express en el back-end y PostgreSQL, como en el Technical Context; sin dependencias nuevas. |
 | VIII. Una sola aplicación | `Layout`, `Menu`, componentes comunes, `lib/api.js`, `lib/formato.js`; reutiliza `CancelarInscripcion.jsx`, `listarActivasDeUsuario` y la validación de días de HU-05. |
+| IX. Convenciones obligatorias | Commits con `HU-06:` (CONVENCIONES §9, citado en [tasks.md](tasks.md)); errores 401 y 403 con el middleware común (CONVENCIONES §4) y nada nuevo en `lib/` (CONVENCIONES §2), según [research.md](research.md). |
+| X. Responsable, revisor y ramas | Responsable Javi y revisora Nada; trabajo en la rama `spec-006`, con commits que empiezan por «HU-06:» (salvo `b930d76`, de HU-05, que viajó en el mismo PR). |
+| XI. Revisión antes de `main` | Entró en `main` con el PR #3, revisado por Nada ([revision-pr-3.md](refinamiento/revision-pr-3.md), T025), que registró la aprobación en GitHub el 18/11/2026. |
 | XII. Cambios comunes con acuerdo | Solo se tocan dos cosas compartidas: la línea de `Menu.jsx` reservada para spec-006 y los datos de prueba, con 4 actividades nuevas en `semillas/voluntariado.js` (de Javi). Se avisa al grupo, porque otras specs usan las actividades de prueba, y en especial a Nicole, que es la dueña de `actividades` (research R7, T013). |
 
 ## Project Structure
@@ -87,14 +93,19 @@ frontend/src/
 ├── components/voluntariado/MesCalendario.jsx         ← cuadrícula del mes y actividades del día elegido
 ├── components/voluntariado/ActividadCalendario.jsx   ← resumen, detalle y cancelar (reutiliza CancelarInscripcion)
 ├── components/voluntariado/fechas.js                 ← días de Madrid, semanas del mes y horario
+├── components/voluntariado/vuelta.js                 ← cuándo recargar al volver a la pestaña o la ventana (R5, T025)
+├── components/voluntariado/vuelta.test.js            ← sus 5 pruebas, con `node --test` (T025)
 ├── components/voluntariado/TarjetaActividad.jsx      ← importa horario() de fechas.js en vez de tenerlo dentro
 └── components/comunes/Menu.jsx                       ← descomentar el enlace «Mi calendario»
+
+frontend/package.json                                 ← + script "test": "node --test" (T025)
 ```
 
 **Structure Decision**: aplicación web de plan-comun §1; todo dentro del módulo `voluntariado`.
 Fuera de él solo cambian la línea del enlace en `Menu.jsx` (ya reservada para spec-006), los datos de
-prueba comunes (desde el fichero de semillas de Javi) y el texto del quickstart de spec-005, que es de
-Javi (research R7).
+prueba comunes (desde el fichero de semillas de Javi), el texto del quickstart de spec-005, que es de
+Javi (research R7), y el script `test` de `frontend/package.json`, añadido en la revisión del PR #3
+(T025) y usado después también por HU-02, HU-03 y HU-04.
 
 ## Reglas de `servicio.js`
 

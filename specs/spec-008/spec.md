@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-28
 
-**Status**: Draft
+**Status**: Implementada
 
 **Responsable**: *Nicole* · **Revisor**: *Rubén*
 

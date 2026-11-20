@@ -28,7 +28,7 @@ alcance autorizado. No se ejecuta plan ni se implementa.
 
 | Pregunta | Decisión | Justificación registrada | Trazabilidad |
 |---|---|---|---|
-| PA1.1 | Modificar la cuota y darse de baja desde la aplicación quedan fuera de v1; Se conservan alta y cobros periódicos. | Mantener el alcance de los criterios actuales, centrados en donaciones y altas. | FR-008 y FR-009; alta como socio. |
+| PA1.1 | Modificar la cuota y darse de baja desde la aplicación quedan fuera de v1; se conservan alta y cobros periódicos. | Mantener el alcance de los criterios actuales, centrados en donaciones y altas. | FR-008 y FR-009; alta como socio. |
 | PA1.2 | Donación puntual y alta de socio sin cuenta. El historial requiere sesión con una cuenta del mismo correo, sin considerar esa coincidencia prueba de titularidad. | Permitir colaborar sin registro previo y mantener el historial privado. | FR-011; donación puntual, escenario 7; alta de socio, escenario 4. |
 | PA1.3 | Abrir un enlace enviado al correo utilizado al donar antes de vincular las aportaciones a una cuenta. Comprobación limitada a donaciones; no cambia el registro ni el inicio de sesión generales. | Proteger el historial frente a cuentas creadas con correos ajenos. | FR-013; donación puntual, escenarios 11 y 12; entidad Donante y dependencia de vinculación. |
 | PA1.4 | Conservar el pago confirmado y su resumen ante un fallo de correo; avisar y permitir reintentar solo el envío, sin otro cobro ni aportación. | Recuperar el correo sin duplicar pagos ni confundir un aviso con el envío; coherencia expresamente solicitada con FR-007 y SC-002. | FR-007 y FR-012; SC-002; donación puntual, escenarios 6 y 8–10; socio, escenarios 5 y 6. |

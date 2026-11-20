@@ -46,7 +46,7 @@ No queda ningún NEEDS CLARIFICATION: PA5.1, PA5.2 y las otras dos preguntas se 
 | V. Seguridad y datos | Inscribirse exige sesión y rol voluntario, comprobado en el servidor; cancelar solo las propias (404 si no es suya); del voluntario solo se piden los datos de contacto. |
 | VI. Nada se borra | Cancelar cambia el estado a `cancelada`; no hay `DELETE`. |
 | VIII. Una sola aplicación | `Layout`, componentes comunes, `lib/api.js`, `ErrorApi`, `transaccion()`; avisos de plaza con `avisarPlazaConfirmada` de spec-007. |
-| XII. Cambios comunes con acuerdo | `bloquearActividad` en el servicio de `actividades` y `vitest.config.js` se proponen a Nicole y al grupo, y solo entran en `main` con su revisión (R2, R7). |
+| XII. Cambios comunes con acuerdo | `bloquearActividad` en el servicio de `actividades` y `vitest.config.js` se propusieron a Nicole y al grupo, y entraron en `main` con su revisión (R2, R7): Nicole aprobó el PR #2 el 05/11/2026 y el grupo dio el visto bueno el 17/11 (T021). |
 
 ## Project Structure
 
@@ -119,7 +119,8 @@ editar plazas y cancelar la actividad se ejecutan de una en una por actividad.
   de espera en la misma transacción y avisa con `avisarPlazaConfirmada`.
 - **spec-008 (Nicole)**: `listarConfirmadasDeActividad` y `listarInscripcionesDeUsuario`
   (su research R3, pedidas el 04/11). La migración 006 va antes a `main` en un PR propio
-  (PR #2), porque `asistencias` tiene una FK a `inscripciones`.
+  (PR #2), porque `asistencias` tiene una FK a `inscripciones`. Al final el PR #2 llevó toda la
+  spec, no solo la migración: Nicole lo aprobó el 05/11/2026 y se fusionó el 06/11 (`f67d459`).
 - **spec-006 (Javi)**: usa las inscripciones y reutiliza `CancelarInscripcion.jsx`.
 
 ## Complexity Tracking

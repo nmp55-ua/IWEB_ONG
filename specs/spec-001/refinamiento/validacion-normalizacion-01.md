@@ -113,7 +113,7 @@ mostradas por Vitest; los fallos de recolección no cuentan como pruebas funcion
 | Después de corregir la tabla de casos | 18:32:01 | 0 | Un archivo y 102 pruebas aprobados; 0 fallidos y 0 omitidos. Duración 1,43 s, 66 ms de pruebas. |
 | Comprobación final tras ajustar formato de los archivos nuevos | 18:34:44 | 0 | Un archivo y 102 pruebas aprobados; 0 fallidos y 0 omitidos. Duración 2,73 s, 64 ms de pruebas. |
 
-El caso BigInt se conserva como entrada inválida; Se cambia únicamente el formato del
+El caso BigInt se conserva como entrada inválida; se cambia únicamente el formato del
 rótulo. Los valores array se pasan como un único argumento de la tabla para que se
 compruebe realmente su rechazo. No se eliminan casos para obtener el resultado final.
 

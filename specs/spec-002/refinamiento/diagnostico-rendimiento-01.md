@@ -16,19 +16,19 @@ La consulta de procesos desde la terminal de pruebas solo mostró esa terminal y
 
 ## Preparación de una única nueva navegación
 
-Se amplía solo la instrumentación del banco: opciones `puertoProxy` y `trazaNavegador`, con los valores anteriores por defecto. `traza-navegador.js` conserva la función de exportación del puente anterior; Se ejecuta en el HTML del banco, después del observador original, sin cambiar su cálculo. `medicion-historial.js` prepara el banco en **127.0.0.1:44326**, sin arrancar los proxies 44324/44325. El build de producto no se reconstruye ni modifica: SHA-256 de entry.mjs `40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`.
+Se amplía solo la instrumentación del banco: opciones `puertoProxy` y `trazaNavegador`, con los valores anteriores por defecto. `traza-navegador.js` conserva la función de exportación del puente anterior; se ejecuta en el HTML del banco, después del observador original, sin cambiar su cálculo. `medicion-historial.js` prepara el banco en **127.0.0.1:44326**, sin arrancar los proxies 44324/44325. El build de producto no se reconstruye ni modifica: SHA-256 de entry.mjs `40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`.
 
 Base exclusiva ong_test_hu01; esquema propio `hu01_integracion_ccc2d9c68f344643b733e10abfb1d9fc`. Consulta previa de solo lectura: cuenta periodico activa, rol donante, vínculo por usuario_id; años 2025–2021, doce cuotas por grupo y 120.00 por año, 60 cuotas y 600.00 en total. No se consulta ni se precarga su historial mediante HTTP.
 
 El inventario del navegador conservaba tres referencias a pestañas de los bancos anteriores (44324, 44322 y 44325). El intento de obtenerlas para cerrarlas terminó por timeout de asociación de la vista. No se afirma que estuvieran operativas, consumieran una cantidad determinada de memoria o quedaran cerradas. Siguiendo la recuperación documentada se crea una sola pestaña nueva operativa, sin reiniciar el navegador ni cerrar páginas del usuario.
 
-Se inicia sesión mediante el formulario real, se espera la hidratación y se confirma «Hola, periodico» en portada. [Captura previa](evidencias-medicion-01/intento-03-previa.png). El origen nuevo evita reutilizar la caché del historial de otros puertos; Se mantiene caché normal y el login puede cargar recursos comunes. No se abre el historial antes de medir. El viewport efectivo de esta nueva pestaña es **442×524**, frente a 1280×720 antes: se registra como cambio de entorno, sin afirmar equivalencia geométrica entre intentos.
+Se inicia sesión mediante el formulario real, se espera la hidratación y se confirma «Hola, periodico» en portada. [Captura previa](evidencias-medicion-01/intento-03-previa.png). El origen nuevo evita reutilizar la caché del historial de otros puertos; se mantiene caché normal y el login puede cargar recursos comunes. No se abre el historial antes de medir. El viewport efectivo de esta nueva pestaña es **442×524**, frente a 1280×720 antes: se registra como cambio de entorno, sin afirmar equivalencia geométrica entre intentos.
 
 ## Resultado del intento 03
 
 Una sola navegación completa a `/mis-aportaciones?medir=1`, desde portada y con sesión identificada, registra **4.258,90 ms**. El observador declara `registrada`, pestaña visible, 60 IDs distintos, cinco grupos descendentes, doce filas por grupo, importes 10,00 €, totales 120,00 €, fechas y modalidad/destino correctos. No cumple el límite estricto.
 
-[Traza íntegra](evidencias-medicion-01/intento-03-traza.json) y [captura visible](evidencias-medicion-01/intento-03-visible.png). La captura completa falló con `Unable to capture screenshot`; Se conserva [el error](evidencias-medicion-01/intento-03-captura-error.txt). Una captura posterior de viewport sí se guardó e inspeccionó: muestra usuario, filtro, total y primeras filas. No se presenta como captura completa de las 60 filas. La traza conserva las 60 filas renderizadas y los cinco grupos. Paint Timing está vacío en esta traza; no se inventan FCP ni un perfil de tareas de CPU.
+[Traza íntegra](evidencias-medicion-01/intento-03-traza.json) y [captura visible](evidencias-medicion-01/intento-03-visible.png). La captura completa falló con `Unable to capture screenshot`; se conserva [el error](evidencias-medicion-01/intento-03-captura-error.txt). Una captura posterior de viewport sí se guardó e inspeccionó: muestra usuario, filtro, total y primeras filas. No se presenta como captura completa de las 60 filas. La traza conserva las 60 filas renderizadas y los cinco grupos. Paint Timing está vacío en esta traza; no se inventan FCP ni un perfil de tareas de CPU.
 
 | Etapa                       | Intento 01, con puente | Intento 03, sin puente |
 | --------------------------- | ---------------------- | ---------------------- |
@@ -51,7 +51,7 @@ Si se confirma que la ruta cliente domina también en ese entorno, se propone **
 
 ## Comandos y cierre
 
-Desde backend, con las variables de pruebas seleccionadas según quickstart y sin sobrescribir .env: `node src/modulos/donaciones/pruebas/medicion-historial.js`. El comando `cerrar` termina ese banco; Se obtiene Stripe 0 / SMTP 0 y `recursosCerrados: true`. Se cierra la nueva pestaña creada para esta ejecución. No se detienen servicios compartidos ni se alteran datos reales de pruebas de Stripe.
+Desde backend, con las variables de pruebas seleccionadas según quickstart y sin sobrescribir .env: `node src/modulos/donaciones/pruebas/medicion-historial.js`. El comando `cerrar` termina ese banco; se obtiene Stripe 0 / SMTP 0 y `recursosCerrados: true`. Se cierra la nueva pestaña creada para esta ejecución. No se detienen servicios compartidos ni se alteran datos reales de pruebas de Stripe.
 
 **T030 pendiente; SC-002 no acreditada.** No se marca ninguna tarea adicional, no se modifica el producto y no se ejecuta T031. Se conserva la medición fallida como diagnóstico, sin rebajar criterios.
 

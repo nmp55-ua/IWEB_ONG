@@ -19,6 +19,12 @@ converge ([converge-1.md](converge-1.md), [converge-2.md](converge-2.md)) y de l
   `voluntariado/servicio.test.js` 34 pruebas en verde; en total, 232 pasan y 3 se saltan (las `it.skip`
   de `actividades/servicio.test.js`, ver G1).
 
+> **Nota posterior (20/11/2026)**: la regresión final de la entrega (`docs/entrega/regresion/backend.txt`)
+> ya no tiene pruebas saltadas. Desde `4af4d04`, las tres `it.skip` de `actividades/servicio.test.js` son un
+> comentario que remite a `voluntariado/servicio.test.js`, donde esos casos se prueban con el servicio real.
+> Este informe no se ha reescrito; lo que se decidió con cada hallazgo está en
+> [registro-hallazgos.md](registro-hallazgos.md), «Decisiones sobre el analyze final (20/11/2026)».
+
 **Resultado: 0 CRITICAL, 0 HIGH, 1 MEDIUM, 8 LOW.** Cobertura del 100 %: los 11 FR y los 2 SC tienen
 tarea y prueba (automática o manual). No queda ninguna contradicción crítica ni alta. El código coincide
 con el plan y el contrato en reglas, códigos de error, mensajes y orden de bloqueo; la migración 006

@@ -75,7 +75,7 @@ npm test -- src/modulos/donaciones src/servicios-comunes/correo.test.js --no-fil
 Esperaban seis nombres registrados; el migrador integrado registra correctamente siete,
 incluyendo 006_voluntariado.sql. La expectativa de HU-01 no contemplaba la migración
 publicada de Javi. Es un desfase de la prueba, no un fallo o cambio del migrador/SQL.
-La evidencia inicial se conserva aquí; Se completará el resultado total al finalizar.
+La evidencia inicial se conserva aquí; se completará el resultado total al finalizar.
 
 **Resultado total de esa primera ejecución:** salida 1; 393 aprobadas y 2 fallidas,
 395 casos en 13 archivos, sin omisiones. Inicio 07:38:46, duración 52,96 s. El diff de la
@@ -113,7 +113,7 @@ salir de espera y concurrencia plazas/inscripción. No se activan ni presentan c
 aprobadas. La suite HU-05 ejecuta integración real con actividades y correo simulado.
 
 Las ejecuciones de suites son secuenciales. Al terminar se comprueba que la base temporal
-conserva el mismo nombre/OID y no tiene conexiones; Se elimina sin FORCE. No se elimina
+conserva el mismo nombre/OID y no tiene conexiones; se elimina sin FORCE. No se elimina
 ninguna base anterior, volumen o esquema ajeno. Los esquemas de HU-01 se limpian mediante
 su soporte verificado; sus pruebas de migraciones conservan el inventario previo de public.
 
@@ -160,7 +160,7 @@ Javi proceden de origin/main, sin correcciones propias en sus módulos.
 
 ## Estado de 009 y controles pendientes
 
-El árbol actualizado y fijado de origin/main no contiene 009; Se integra 006 sin colisión
+El árbol actualizado y fijado de origin/main no contiene 009; se integra 006 sin colisión
 con 004/009. Esto acredita ausencia en ese destino exacto, numeración definitiva ni
 disponibilidad garantizada frente a trabajo sin publicar o futuros commits. No se renombra,
 reaplica en entornos existentes o edita una migración para resolver la integración.
@@ -254,7 +254,7 @@ M backend/src/modulos/donaciones/registro.test.js
 ```
 
 **Sin seguimiento:** este informe, specs/spec-001/refinamiento/integracion-main-01.md,
-y  conservado. .env sigue ignorado y fuera del índice. El informe y
+y un fichero de configuración local del entorno de desarrollo, que se conserva. .env sigue ignorado y fuera del índice. El informe y
 las pruebas añadidas no se seleccionan, porque la autorización de git add se limita a
 marcar los conflictos; el índice actual por sí solo no incluye esas evidencias nuevas.
 

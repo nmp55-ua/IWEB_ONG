@@ -6,7 +6,7 @@
 
 ## Preparación — T001/T002
 
-El estado inicial contiene únicamente  sin seguimiento y el índice vacío. El commit `24282d5` registra plan, tareas y primer analyze; Se conservan todos esos documentos e informes. La selección temporal mediante `check-prerequisites.ps1 -Json -PathsOnly` resuelve `specs/spec-002` sin escribir configuración.
+El estado inicial solo tiene sin seguimiento un fichero de configuración local, con el índice vacío. El commit `24282d5` registra plan, tareas y primer analyze; se conservan todos esos documentos e informes. La selección temporal mediante `check-prerequisites.ps1 -Json -PathsOnly` resuelve `specs/spec-002` sin escribir configuración.
 
 Se aplica el procedimiento local `speckit-implement` directamente.
  El checklist requirements contiene 16 marcas y cero pendientes; no se modifica. El hook anterior de commit es opcional y se omite; no hay un hook posterior de implementación configurado. Las exclusiones Git protegen `.env`, node_modules y dist. El formato se aplicará por rutas explícitas, sin crear o modificar configuración de herramientas.
@@ -136,7 +136,7 @@ Comprobación final: Prettier aprueba los ocho archivos JS/JSX/Markdown del bloq
 
 ## Validación final y preparación de revisión — T031–T035 · 2026-11-10
 
-Base de esta entrega: **0cc28b1e44a1d932cf1da61cdc869883652693c4**, rama spec-002, con T001–T030 registradas. El árbol seguido estaba limpio; Se conservan output/ y tmp/ sin seguimiento. No se repiten sus bloques, commits o navegaciones. La selección temporal mediante SPECIFY_FEATURE_DIRECTORY/SPECIFY_FEATURE y `check-prerequisites.ps1 -Json -PathsOnly` resuelve specs/spec-002 sin persistir configuración. Checklist requirements: 16 marcadas, cero pendientes.
+Base de esta entrega: **0cc28b1e44a1d932cf1da61cdc869883652693c4**, rama spec-002, con T001–T030 registradas. El árbol seguido estaba limpio; se conservan output/ y tmp/ sin seguimiento. No se repiten sus bloques, commits o navegaciones. La selección temporal mediante SPECIFY_FEATURE_DIRECTORY/SPECIFY_FEATURE y `check-prerequisites.ps1 -Json -PathsOnly` resuelve specs/spec-002 sin persistir configuración. Checklist requirements: 16 marcadas, cero pendientes.
 
 Se aplica el procedimiento local de implementación limitado a estas cinco tareas. Se aplica el procedimiento local del repositorio. La comprobación se adapta con PathsOnly y validación directa de spec, plan y tasks para evitar la escritura de selección del modo general. Los hooks de Git antes/después son opcionales y no se ejecutan. El alcance no incluye converge ni revisión externa.
 
@@ -171,9 +171,9 @@ Pruebas: **26/26 aprobadas**, código 0, duración del ejecutor **210,10 ms**; [
 
 Build: código **0**, Astro **11,08 s**; [salida](evidencias-finales-01/build-frontend.txt). Se reconstruye con el código de 0cc28b1, sin cambios funcionales posteriores. La medición de T030 conserva su build y traza propios; los hashes se contrastan sin repetir la navegación. El build incluye páginas de la aplicación completa, pero no acredita casos de aceptación de otras historias.
 
-El nuevo entry.mjs tiene SHA-256 `9DD2042E7E2D1F330ED7D09F2A6372ED83BB19C440B4D5EB52480EBBA6EEE58C`, distinto del artefacto medido en T030 (`40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`). No se afirma identidad binaria ni se atribuye a este build una medición no ejecutada. La isla fuente conserva SHA-256 `79AFE5C1C27EB655736CA40008EA69CB3C7353DF47EDBC78F279B0631F094030`; Se reutiliza aceptación del mismo código de 0cc28b1, con el artefacto original identificado en su informe.
+El nuevo entry.mjs tiene SHA-256 `9DD2042E7E2D1F330ED7D09F2A6372ED83BB19C440B4D5EB52480EBBA6EEE58C`, distinto del artefacto medido en T030 (`40598C4CBE40217E5FCD8C2B1A29543557D0FF990EBF168AB36E64416B4E50AB`). No se afirma identidad binaria ni se atribuye a este build una medición no ejecutada. La isla fuente conserva SHA-256 `79AFE5C1C27EB655736CA40008EA69CB3C7353DF47EDBC78F279B0631F094030`; se reutiliza aceptación del mismo código de 0cc28b1, con el artefacto original identificado en su informe.
 
-Prettier se ejecuta desde el binario ya instalado en la caché local, con .prettierrc.json y rutas explícitas, sin instalaciones o cambios de configuración. Se comprueban archivos JS/JSX de HU-02 y la documentación actualizada. La página Astro se verifica mediante build y lectura; Se mantiene la limitación documentada del parser sin instalar un plugin. El resultado de formato y enlaces se registra al finalizar este apartado.
+Prettier se ejecuta desde el binario ya instalado en la caché local, con .prettierrc.json y rutas explícitas, sin instalaciones o cambios de configuración. Se comprueban archivos JS/JSX de HU-02 y la documentación actualizada. La página Astro se verifica mediante build y lectura; se mantiene la limitación documentada del parser sin instalar un plugin. El resultado de formato y enlaces se registra al finalizar este apartado.
 
 ### T033–T035 — documentación y balance
 

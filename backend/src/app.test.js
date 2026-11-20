@@ -24,6 +24,20 @@ function appDePrueba(usuario) {
   return app;
 }
 
+describe('cuerpos que no se pueden leer', () => {
+  it('un JSON mal formado da 400 DATOS_INVALIDOS, no 500', async () => {
+    const res = await request(appDePrueba(null)).post('/validar').set('Content-Type', 'application/json').send('{"importe":');
+    expect(res.status).toBe(400);
+    expect(res.body.error.codigo).toBe('DATOS_INVALIDOS');
+  });
+
+  it('un cuerpo de más de 100 kB da 413', async () => {
+    const res = await request(appDePrueba(null)).post('/validar').set('Content-Type', 'application/json').send(JSON.stringify({ importe: 'x'.repeat(120000) }));
+    expect(res.status).toBe(413);
+    expect(res.body.error.codigo).toBe('DEMASIADO_GRANDE');
+  });
+});
+
 describe('control de acceso', () => {
   it('401 sin sesión', async () => {
     const res = await request(appDePrueba(null)).get('/solo-coordinador');

@@ -96,7 +96,7 @@ Archivo: [pasarela.test.js](../../../backend/src/modulos/donaciones/pasarela.tes
 El mock utiliza el constructor real de Stripe 17.7.0 y sustituye los seis métodos que
 realizan peticiones: create/retrieve/list de Session y retrieve de PaymentIntent, Invoice
 y Subscription. La configuración, las claves y los recursos son sintéticos.
-Los métodos de firma permanecen reales; Se generan y verifican cabeceras localmente.
+Los métodos de firma permanecen reales; se generan y verifican cabeceras localmente.
 No se carga .env ni se contacta Stripe.
 
 Se comprueban cuerpos completos, propagación y protección de metadatos, recurrencias,
