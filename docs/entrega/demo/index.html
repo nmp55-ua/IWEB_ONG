@@ -3,205 +3,323 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Demo SI-13 ONG</title>
+  <title>Demostración · Donaciones y Voluntariado para una ONG</title>
   <style>
     :root {
-      --fondo: #eef5fb; --tarjeta: #ffffff; --texto: #1b2733; --suave: #4a5b6b;
-      --marca: #1f4e79; --acento: #2e75b6; --borde: #d5e3f0; --chip: #deeaf6;
+      --tinta: #15263b; --suave: #56677a; --linea: #d9e2ec; --papel: #f5f8fb; --blanco: #ffffff;
+      --azul: #1f4e79; --azul-claro: #e3edf7; --verde: #22704f; --verde-claro: #e2f1ea;
+      --radio: 14px;
+      color-scheme: light dark;
     }
     @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) {
-        --fondo: #0f1a24; --tarjeta: #17242f; --texto: #e6eef5; --suave: #a9bac9;
-        --marca: #7fb3e0; --acento: #9cc6ec; --borde: #2a3b4a; --chip: #1f3344;
-      }
-    }
-    :root[data-theme="dark"] {
-      --fondo: #0f1a24; --tarjeta: #17242f; --texto: #e6eef5; --suave: #a9bac9;
-      --marca: #7fb3e0; --acento: #9cc6ec; --borde: #2a3b4a; --chip: #1f3344;
+      :root { --tinta: #e7eef6; --suave: #a3b3c4; --linea: #2a3b4d; --papel: #0f1b28; --blanco: #162536;
+              --azul: #8dbbe6; --azul-claro: #1c3249; --verde: #7fcfa8; --verde-claro: #183a2c; }
     }
     * { box-sizing: border-box; }
-    body { margin: 0; background: var(--fondo); color: var(--texto);
-           font: 16px/1.55 "Segoe UI", system-ui, -apple-system, sans-serif; }
-    header { background: var(--marca); color: #fff; }
-    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) header { background: #1f4e79; } }
-    .contenedor { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
-    header .contenedor { padding-top: 28px; padding-bottom: 28px; }
-    header p { margin: 0; opacity: .85; font-size: 14px; }
-    h1 { margin: 6px 0 4px; font-size: clamp(24px, 4vw, 34px); }
-    h2 { color: var(--marca); font-size: 22px; margin: 36px 0 12px; }
-    main { padding-bottom: 48px; }
-    video { width: 100%; border-radius: 10px; background: #000; display: block;
-            box-shadow: 0 6px 24px rgba(0,0,0,.15); margin-top: 24px; }
-    .rejilla { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-    .tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 10px; padding: 16px 18px; }
-    .tarjeta h3 { margin: 0 0 4px; font-size: 17px; color: var(--marca); }
-    .chip { display: inline-block; background: var(--chip); color: var(--marca); border-radius: 999px;
-            padding: 1px 10px; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .tarjeta p { margin: 6px 0 0; color: var(--suave); font-size: 15px; }
-    .tarjeta .minuto { font-size: 13px; color: var(--acento); }
-    table { width: 100%; border-collapse: collapse; background: var(--tarjeta); border-radius: 10px; overflow: hidden; font-size: 15px; }
-    th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--borde); }
-    th { background: var(--marca); color: #fff; font-weight: 600; }
-    code { background: var(--chip); padding: 1px 6px; border-radius: 4px; font-size: 14px; }
-    pre { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 10px; padding: 14px; overflow-x: auto; font-size: 14px; }
-    .tabla { overflow-x: auto; }
-    footer { color: var(--suave); font-size: 14px; border-top: 1px solid var(--borde); padding: 18px 0 30px; }
-    a { color: var(--acento); }
-  
-    .capitulos { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; }
-    .capitulos button { font:inherit; font-size:14px; border:1px solid var(--borde); background:var(--tarjeta); color:var(--marca);
-      border-radius:999px; padding:4px 12px; cursor:pointer; }
-    .capitulos button:hover { background:var(--chip); }
-    .historia { background:var(--tarjeta); border:1px solid var(--borde); border-radius:10px; padding:18px; margin:18px 0; }
-    .historia h3 { margin:0 0 4px; color:var(--marca); font-size:19px; }
-    .historia .pie { color:var(--suave); font-size:14px; margin-bottom:10px; }
-    .historia .cuerpo { display:grid; gap:18px; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); align-items:start; }
-    .historia video { margin-top:0; box-shadow:none; }
-    .historia ol { margin:0; padding-left:22px; color:var(--texto); font-size:15px; }
-    .historia li { margin-bottom:4px; }
-    @media (max-width: 760px) { .historia .cuerpo { grid-template-columns: 1fr; } }
-</style>
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+    body { margin: 0; background: var(--papel); color: var(--tinta);
+           font: 400 17px/1.6 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
+    a { color: var(--azul); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible, video:focus-visible { outline: 3px solid var(--azul); outline-offset: 3px; border-radius: 6px; }
+    .ancho { max-width: 1200px; margin: 0 auto; padding-inline: 24px; }
+
+    /* Cabecera: el título es el protagonista, sin adornos. */
+    .portada { padding-top: 52px; padding-bottom: 34px; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px 56px; align-items: end; }
+    .portada-texto { min-width: 0; }
+    @media (max-width: 760px) { .salto { display: none; } }
+    .portada .curso { margin: 0 0 14px; color: var(--suave); font-size: 15px; }
+    .portada h1 { margin: 0; font: 700 clamp(32px, 4.2vw, 54px)/1.06 "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+                  letter-spacing: -0.02em; }
+    .portada .entradilla { margin: 18px 0 0; max-width: 62ch; color: var(--suave); font-size: 18px; }
+    .equipo { margin: 0; padding: 14px 0 0; list-style: none; font-size: 15px; border-top: 2px solid var(--tinta); }
+    .equipo li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--linea); }
+    .equipo b { font-weight: 600; }
+    .equipo span { color: var(--suave); font-variant-numeric: tabular-nums; }
+    .equipo-titulo { margin: 0 0 4px; font-size: 14px; color: var(--suave); }
+
+    /* Reproductor con índice de historias: lo memorable de la página. */
+    .sala { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 0; background: var(--blanco);
+            border: 1px solid var(--linea); border-radius: var(--radio); overflow: hidden;
+            box-shadow: 0 18px 50px -24px rgba(21, 38, 59, .35); }
+    .sala video { width: 100%; display: block; background: #0d1824; aspect-ratio: 16 / 9; }
+    .indice { border-left: 1px solid var(--linea); position: relative; min-height: 0; }
+    .indice-dentro { position: absolute; inset: 0; display: flex; flex-direction: column; }
+    .indice-cab { padding: 16px 20px 8px; }
+    .indice-cab h2 { margin: 0; font-size: 17px; }
+    .indice-cab p { margin: 2px 0 0; font-size: 14px; color: var(--suave); }
+    .indice ol { list-style: none; margin: 0; padding: 4px 10px 14px; overflow: auto; flex: 1; min-height: 0; }
+    .cap { display: grid; grid-template-columns: 52px 1fr auto; align-items: baseline; gap: 10px; padding: 7px 12px;
+           border-radius: 10px; color: var(--tinta); text-decoration: none; transition: background-color .2s; }
+    .cap:hover { background: var(--papel); }
+    .cap-hu { font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .cap-donaciones .cap-hu { color: var(--azul); }
+    .cap-voluntariado .cap-hu { color: var(--verde); }
+    .cap-nombre { font-size: 15px; line-height: 1.35; }
+    .cap-t { font-size: 13px; color: var(--suave); font-variant-numeric: tabular-nums; }
+    .cap[aria-current="true"] { background: var(--azul-claro); }
+    .cap-voluntariado[aria-current="true"] { background: var(--verde-claro); }
+    .cap[aria-current="true"] .cap-nombre { font-weight: 600; }
+    .sala-pie { margin: 12px 4px 0; font-size: 14px; color: var(--suave); }
+
+    /* Historias, agrupadas por área. */
+    main { padding-bottom: 72px; }
+    .area { margin-top: 72px; }
+    .area-cab { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: baseline;
+                padding-bottom: 18px; border-bottom: 2px solid var(--azul); }
+    .area-voluntariado .area-cab { border-color: var(--verde); }
+    .area-cab h2 { margin: 0; font-size: 30px; letter-spacing: -0.01em; }
+    .area-donaciones .area-cab h2 { color: var(--azul); }
+    .area-voluntariado .area-cab h2 { color: var(--verde); }
+    .area-cab p { margin: 0; color: var(--suave); max-width: 60ch; }
+    .historia { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding: 34px 0;
+                border-bottom: 1px solid var(--linea); scroll-margin-top: 20px; }
+    .historia-hu { margin: 0; font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
+    .historia-donaciones .historia-hu { color: var(--azul); }
+    .historia-voluntariado .historia-hu { color: var(--verde); }
+    .historia h3 { margin: 4px 0 10px; font-size: 22px; line-height: 1.25; }
+    .historia-resumen { margin: 0 0 12px; font-size: 15px; }
+    .historia-meta { margin: 0; font-size: 14px; color: var(--suave); }
+    .historia-cuerpo { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+    .historia-cuerpo video { width: 100%; display: block; border-radius: 10px; background: #0d1824; aspect-ratio: 16 / 9;
+                             border: 1px solid var(--linea); }
+    .pasos { margin: 0; padding-left: 26px; font-size: 15px; line-height: 1.5; }
+    .pasos li { margin: 0 0 7px; padding-left: 4px; }
+    .pasos li::marker { color: var(--suave); font-variant-numeric: tabular-nums; }
+
+    footer { border-top: 1px solid var(--linea); padding: 26px 0 40px; font-size: 14px; color: var(--suave); }
+    footer p { margin: 0 0 4px; }
+
+    @media (max-width: 980px) {
+      .sala { grid-template-columns: 1fr; }
+      .indice { border-left: 0; border-top: 1px solid var(--linea); }
+      .indice-dentro { position: static; }
+      .portada { grid-template-columns: 1fr; align-items: start; }
+      .area-cab, .historia { grid-template-columns: 1fr; gap: 10px; }
+      .historia-cuerpo { grid-template-columns: 1fr; gap: 18px; }
+    }
+    @media (max-width: 560px) {
+      body { font-size: 16px; }
+      .ancho { padding-inline: 16px; }
+      .portada .entradilla { font-size: 16px; }
+      .portada { gap: 26px; }
+      .portada { padding-top: 34px; }
+      .sala { border-radius: 10px; }
+      .cap { grid-template-columns: 46px 1fr auto; padding: 9px 8px; }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="contenedor">
-      <p>Ingeniería Web · Práctica Spec-Driven Development · Sistema de Información 13 · Grupo G10</p>
-      <h1>Gestión de Donaciones y Voluntariado para una ONG</h1>
-      <p>Nada · Rubén · Javi · Nicole — Astro + React · Node.js/Express · PostgreSQL · Tailwind CSS</p>
+  <header class="portada ancho">
+    <div class="portada-texto">
+    <p class="curso">Ingeniería Web, Universidad de Alicante. Proyecto SDD, parte I, grupo G10.</p>
+    <h1>Donaciones y Voluntariado <br class="salto">para una ONG</h1>
+    <p class="entradilla">Grabación de la aplicación funcionando, paso a paso: las 8 historias de usuario y sus
+      76 escenarios, con los casos habituales, los errores de validación, los permisos, los correos y un pago
+      real en Stripe en modo de pruebas. Cada paso lleva un rótulo que explica lo que se ve.</p>
+    </div>
+    <div>
+    <p class="equipo-titulo">Equipo y reparto</p>
+    <ul class="equipo">
+      <li><b>Nada</b> <span>HU-01 y HU-02</span></li>
+      <li><b>Rubén</b> <span>HU-03 y HU-04</span></li>
+      <li><b>Javi</b> <span>HU-05 y HU-06</span></li>
+      <li><b>Nicole</b> <span>HU-07 y HU-08</span></li>
+    </ul>
     </div>
   </header>
 
-  <main class="contenedor">
-    <h2>Demostración completa</h2>
-    <p>Grabación real de la aplicación funcionando, paso a paso: las 8 historias de usuario con 76
-      escenarios (casos normales, errores de validación, reglas de negocio, permisos y correos). Cada paso
-      lleva un rótulo que explica qué se está viendo. Duración: 11:27.</p>
-    <video id="completo" src="demo-ong-completa.mp4" controls preload="metadata"></video>
-    <p class="enlace">Si el vídeo no se reproduce aquí, <a href="demo-ong-completa.mp4">ábrelo directamente</a>.</p>
-    <div class="capitulos">
-      <button type="button" data-t="0">HU-01 · 0:00</button>
-      <button type="button" data-t="107">HU-02 · 1:47</button>
-      <button type="button" data-t="184">HU-03 · 3:04</button>
-      <button type="button" data-t="249">HU-04 · 4:09</button>
-      <button type="button" data-t="329">HU-05 · 5:29</button>
-      <button type="button" data-t="411">HU-06 · 6:51</button>
-      <button type="button" data-t="475">HU-07 · 7:55</button>
-      <button type="button" data-t="598">HU-08 · 9:58</button>
-    </div>
-
-    <h2>Historia por historia</h2>
-    <p>Cada historia tiene su propio vídeo y la lista de escenarios que muestra, en el mismo orden.</p>
-    <section class="historia" id="hu-01">
-      <span class="chip">HU-01 · Nada</span>
-      <h3>Donación puntual o alta como socio</h3>
-      <div class="pie">12 escenarios · vídeo de 1:47 · en el vídeo completo desde el <a href="#" data-t="0">0:00</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-01.mp4" controls preload="metadata"></video><a href="clips/hu-01.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Formulario de donación: modalidad, importe, destino y datos fiscales</li><li>Validación: un importe de 0 € está fuera de rango y el destino es obligatorio</li><li>Los datos fiscales también son obligatorios y se marcan uno a uno</li><li>Como socio, hay que elegir cada cuánto se cobra la cuota</li><li>Un NIF con la letra de control incorrecta se rechaza</li><li>Si el NIF existe pero es de otro donante, no del de esta cuenta, se rechaza sin revelar de quién es</li><li>Con sus datos fiscales correctos: alta como socio, 10 € al mes para el Comedor social</li><li>Pago en Stripe Checkout (modo de pruebas) con la tarjeta de prueba 4242 4242 4242 4242</li><li>La aportación se confirma con la notificación firmada de Stripe, no con la vuelta del navegador</li><li>Resumen: importe, destino, referencia, periodicidad, suscripción activa y próximo cobro</li><li>Le llega el correo «Confirmación de aportación» con todos los datos</li><li>Y la cuota aparece ya en «Mis aportaciones», la primera del año</li></ol>
+  <main class="ancho">
+    <section id="ver" aria-label="Demostración completa">
+      <div class="sala">
+        <video id="completo" src="demo-ong-completa.mp4" poster="demo-ong-completa.jpg" controls preload="metadata" playsinline aria-label="Demostración completa"></video>
+        <nav class="indice" aria-label="Historias del vídeo completo">
+          <div class="indice-dentro">
+          <div class="indice-cab">
+            <h2>Demostración completa</h2>
+            <p>11:27 en total. Elige una historia para saltar a su minuto.</p>
+          </div>
+          <ol>
+          <li><a class="cap cap-donaciones" href="#hu-01" data-t="0" data-fin="107">
+            <span class="cap-hu">HU-01</span>
+            <span class="cap-nombre">Donación puntual o alta como socio</span>
+            <span class="cap-t">0:00</span>
+          </a></li>
+          <li><a class="cap cap-donaciones" href="#hu-02" data-t="107" data-fin="184">
+            <span class="cap-hu">HU-02</span>
+            <span class="cap-nombre">Historial de aportaciones</span>
+            <span class="cap-t">1:47</span>
+          </a></li>
+          <li><a class="cap cap-donaciones" href="#hu-03" data-t="184" data-fin="249">
+            <span class="cap-hu">HU-03</span>
+            <span class="cap-nombre">Certificado fiscal anual</span>
+            <span class="cap-t">3:04</span>
+          </a></li>
+          <li><a class="cap cap-donaciones" href="#hu-04" data-t="249" data-fin="329">
+            <span class="cap-hu">HU-04</span>
+            <span class="cap-nombre">Informes para la junta</span>
+            <span class="cap-t">4:09</span>
+          </a></li>
+          <li><a class="cap cap-voluntariado" href="#hu-05" data-t="329" data-fin="411">
+            <span class="cap-hu">HU-05</span>
+            <span class="cap-nombre">Consulta e inscripción en actividades</span>
+            <span class="cap-t">5:29</span>
+          </a></li>
+          <li><a class="cap cap-voluntariado" href="#hu-06" data-t="411" data-fin="475">
+            <span class="cap-hu">HU-06</span>
+            <span class="cap-nombre">Calendario del voluntario</span>
+            <span class="cap-t">6:51</span>
+          </a></li>
+          <li><a class="cap cap-voluntariado" href="#hu-07" data-t="475" data-fin="598">
+            <span class="cap-hu">HU-07</span>
+            <span class="cap-nombre">Gestión de actividades y lista de espera</span>
+            <span class="cap-t">7:55</span>
+          </a></li>
+          <li><a class="cap cap-voluntariado" href="#hu-08" data-t="598" data-fin="687">
+            <span class="cap-hu">HU-08</span>
+            <span class="cap-nombre">Asistencia y horas de voluntariado</span>
+            <span class="cap-t">9:58</span>
+          </a></li>
+          </ol>
+          </div>
+        </nav>
       </div>
-    </section>
-    <section class="historia" id="hu-02">
-      <span class="chip">HU-02 · Nada</span>
-      <h3>Historial de aportaciones</h3>
-      <div class="pie">8 escenarios · vídeo de 1:17 · en el vídeo completo desde el <a href="#" data-t="107">1:47</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-02.mp4" controls preload="metadata"></video><a href="clips/hu-02.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Mis aportaciones: solo las confirmadas, de la más reciente a la más antigua, con su destino</li><li>Agrupadas por año, cada uno con su total</li><li>Filtro por año: solo 2025</li><li>Un año sin aportaciones muestra un mensaje claro</li><li>Una cuenta sin vincular no ve ninguna aportación, aunque su correo coincida: primero debe verificarlo</li><li>Pide el enlace de verificación…</li><li>Al abrir el enlace confirma la vinculación</li><li>Ahora ya ve sus aportaciones confirmadas, con el total del año</li></ol>
-      </div>
-    </section>
-    <section class="historia" id="hu-03">
-      <span class="chip">HU-03 · Rubén</span>
-      <h3>Certificado fiscal anual</h3>
-      <div class="pie">7 escenarios · vídeo de 1:04 · en el vídeo completo desde el <a href="#" data-t="184">3:04</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-03.mp4" controls preload="metadata"></video><a href="clips/hu-03.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Mis certificados fiscales: ejercicio 2025, importe total, fecha de emisión y código de verificación</li><li>Descarga el certificado en PDF, con los datos de la ONG, su NIF, el ejercicio y el total</li><li>El ejercicio en curso todavía no tiene certificado: se generará a partir del 1 de enero</li><li>Un ejercicio sin aportaciones confirmadas no tiene certificado</li><li>Verificación pública, sin iniciar sesión: el código del certificado es auténtico</li><li>Un código inventado o cambiado no es válido y no muestra ningún dato</li><li>Una cuenta no vinculada a sus donaciones no ve certificados: primero debe verificar su correo</li></ol>
-      </div>
-    </section>
-    <section class="historia" id="hu-04">
-      <span class="chip">HU-04 · Rubén</span>
-      <h3>Informes para la junta</h3>
-      <div class="pie">8 escenarios · vídeo de 1:20 · en el vídeo completo desde el <a href="#" data-t="249">4:09</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-04.mp4" controls preload="metadata"></video><a href="clips/hu-04.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Un coordinador no puede ver los informes: son solo para la administración</li><li>La administración elige el periodo, el proyecto y la agrupación</li><li>Informe de 2026 por proyecto: dinero recaudado, voluntarios y horas, con la fila de totales</li><li>El mismo informe agrupado por trimestre, con un subtotal por periodo</li><li>«Exportar CSV» descarga el informe con «;» y decimales con coma, listo para Excel</li><li>«Exportar PDF» genera el mismo informe con los datos de la ONG y el periodo</li><li>Un periodo sin datos muestra un mensaje en lugar de una tabla vacía</li><li>Fechas incoherentes: la fecha de fin no puede ser anterior a la de inicio</li></ol>
-      </div>
-    </section>
-    <section class="historia" id="hu-05">
-      <span class="chip">HU-05 · Javi</span>
-      <h3>Consulta e inscripción en actividades</h3>
-      <div class="pie">12 escenarios · vídeo de 1:22 · en el vídeo completo desde el <a href="#" data-t="329">5:29</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-05.mp4" controls preload="metadata"></video><a href="clips/hu-05.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Listado público: cualquiera ve fechas, lugar, plazas libres y requisitos sin iniciar sesión</li><li>Filtro por proyecto: solo las actividades de «Comedor social»</li><li>Sin sesión, «Inscribirme» lleva a identificarse y después vuelve a las actividades</li><li>Al inscribirse se muestran los requisitos de la actividad</li><li>Error: no se puede inscribir sin confirmar que cumple los requisitos</li><li>Inscripción confirmada: «Estás inscrito» y se descuenta la plaza (de 7 a 6 libres)</li><li>«Reparto de alimentos» no tiene plazas libres: solo se puede apuntar a la lista de espera</li><li>El aviso explica que, si se libera una plaza, quedará inscrito automáticamente</li><li>En lista de espera, posición 1, con la opción de salir</li><li>Ana, inscrita en «Reparto de alimentos», cancela su plaza</li><li>La plaza no queda libre: pasa directamente a quien estaba en espera (sigue 0 de 2)</li><li>Jorge, que estaba en espera, recibe el correo «Plaza confirmada»</li></ol>
-      </div>
-    </section>
-    <section class="historia" id="hu-06">
-      <span class="chip">HU-06 · Javi</span>
-      <h3>Calendario del voluntario</h3>
-      <div class="pie">7 escenarios · vídeo de 1:03 · en el vídeo completo desde el <a href="#" data-t="411">6:51</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-06.mp4" controls preload="metadata"></video><a href="clips/hu-06.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Mi calendario, en vista de lista: la siguiente actividad aparece destacada</li><li>La plaza que le pasó desde la lista de espera («Reparto de alimentos») ya figura como confirmada</li><li>Las actividades en lista de espera se distinguen con borde discontinuo y muestran su posición</li><li>Detalle de una actividad: proyecto, requisitos, descripción y la opción de salir de la lista</li><li>Cambio a la vista mensual: cada actividad aparece en su día</li><li>En diciembre: confirmadas en azul, en espera con borde discontinuo; las de varios días ocupan todos sus días</li><li>Desde el calendario también puede salir de la lista de espera…</li></ol>
-      </div>
-    </section>
-    <section class="historia" id="hu-07">
-      <span class="chip">HU-07 · Nicole</span>
-      <h3>Gestión de actividades y lista de espera</h3>
-      <div class="pie">15 escenarios · vídeo de 2:03 · en el vídeo completo desde el <a href="#" data-t="475">7:55</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-07.mp4" controls preload="metadata"></video><a href="clips/hu-07.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>El coordinador ve todas las actividades con su estado y sus plazas libres</li><li>Nueva actividad: formulario vacío</li><li>Guardar sin rellenar: cada campo obligatorio explica qué falta</li><li>Las plazas tienen que ser un número entero mayor que cero</li><li>Error de coherencia: el fin no puede ser anterior al inicio</li><li>Con los datos correctos, la actividad se crea en borrador</li><li>Al publicarla pasa a «Publicada»…</li><li>Editar una actividad publicada con 9 inscritos: «Limpieza de playa»</li><li>Regla de negocio: no se pueden dejar menos plazas que inscritos confirmados</li><li>El coordinador consulta los inscritos confirmados y la lista de espera en orden</li><li>Una actividad ya celebrada no se puede editar ni cancelar: solo registrar asistencia</li><li>Cancelar una actividad pide confirmación y avisa por correo a los inscritos</li><li>La actividad cancelada no se borra: cambia de estado</li><li>El voluntario inscrito recibe el aviso «Actividad cancelada» (Mailpit)</li><li>No se puede publicar un borrador si su proyecto está desactivado, y se explica el motivo</li></ol>
-      </div>
-    </section>
-    <section class="historia" id="hu-08">
-      <span class="chip">HU-08 · Nicole</span>
-      <h3>Asistencia y horas de voluntariado</h3>
-      <div class="pie">7 escenarios · vídeo de 1:29 · en el vídeo completo desde el <a href="#" data-t="598">9:58</a></div>
-      <div class="cuerpo">
-        <div><video src="clips/hu-08.mp4" controls preload="metadata"></video><a href="clips/hu-08.mp4" style="font-size:14px">Abrir el vídeo</a></div>
-        <ol><li>Un voluntario que intenta pasar lista recibe un aviso de falta de permisos</li><li>Jorge todavía no tiene asistencias: «Mis horas» muestra 0 h</li><li>Actividad futura: el coordinador ve la lista, pero aún no puede registrar</li><li>«Recogida de ropa» ya se celebró (de 10:00 a 13:30, 3,5 h): se puede pasar lista</li><li>Corrección sin plazo: Jorge sí vino, pasa de «No asistió» a «Asistió»</li><li>Las horas se suman solas: Marta tiene 3,5 h + 2 h = 5,5 h</li><li>Y Jorge, tras la corrección, sus 3,5 h de «Recogida de ropa»</li></ol>
-      </div>
+      <p class="sala-pie">Si el vídeo no se reproduce en el navegador, <a href="demo-ong-completa.mp4">ábrelo directamente</a>.
+        Debajo, cada historia tiene su propio vídeo con la lista de pasos que muestra.</p>
     </section>
 
-    <h2>Recorridos completos comprobados</h2>
-    <div class="tabla">
-      <table>
-        <thead><tr><th>Recorrido</th><th>Historias</th><th>Resultado</th></tr></thead>
-        <tbody>
-          <tr><td>R1 · De la actividad a las horas y al informe</td><td>HU-07 → HU-05 → HU-06 → HU-08 → HU-04</td><td>✅ 2 h en Mis horas y en el informe de noviembre</td></tr>
-          <tr><td>R2 · Lista de espera y plaza liberada</td><td>HU-07 → HU-05</td><td>✅ Entra el primero en espera y recibe el correo</td></tr>
-          <tr><td>R3 · Cada uno ve solo lo suyo</td><td>HU-02 → HU-03</td><td>✅ Sin acceso a datos ajenos (401, 403, 404)</td></tr>
-          <tr><td>R4 · De la donación al certificado</td><td>HU-01 → HU-02 → HU-03</td><td>✅ El certificado suma la donación pagada en Stripe</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>El detalle de cada paso, los datos y los resultados está en
-      <a href="https://github.com/nmp55-ua/IWEB_ONG/blob/main/docs/entrega/matriz-trazabilidad.md">matriz-trazabilidad.md</a>.</p>
+    <section class="area area-donaciones" aria-labelledby="t-donaciones">
+      <div class="area-cab">
+        <h2 id="t-donaciones">Donaciones</h2>
+        <p>El dinero que entra: donar, consultar lo aportado, el certificado fiscal y los informes para la junta.</p>
+      </div>
+      <article class="historia historia-donaciones" id="hu-01">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-01</p>
+          <h3>Donación puntual o alta como socio</h3>
+          <p class="historia-resumen">Un donante dona o se hace socio y paga en Stripe; la aportación se confirma con la notificación firmada.</p>
+          <p class="historia-meta">Responsable: Nada. Vídeo de 1:47, 12 pasos. En el vídeo completo, desde el <a href="#ver" data-t="0">0:00</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-01.mp4" poster="clips/hu-01.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-01"></video>
+          <ol class="pasos"><li>Formulario de donación: modalidad, importe, destino y datos fiscales</li><li>Validación: un importe de 0 € está fuera de rango y el destino es obligatorio</li><li>Los datos fiscales también son obligatorios y se marcan uno a uno</li><li>Como socio, hay que elegir cada cuánto se cobra la cuota</li><li>Un NIF con la letra de control incorrecta se rechaza</li><li>Si el NIF existe pero es de otro donante, no del de esta cuenta, se rechaza sin revelar de quién es</li><li>Con sus datos fiscales correctos: alta como socio, 10 € al mes para el Comedor social</li><li>Pago en Stripe Checkout (modo de pruebas) con la tarjeta de prueba 4242 4242 4242 4242</li><li>La aportación se confirma con la notificación firmada de Stripe, no con la vuelta del navegador</li><li>Resumen: importe, destino, referencia, periodicidad, suscripción activa y próximo cobro</li><li>Le llega el correo «Confirmación de aportación» con todos los datos</li><li>Y la cuota aparece ya en «Mis aportaciones», la primera del año</li></ol>
+        </div>
+      </article>
+      <article class="historia historia-donaciones" id="hu-02">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-02</p>
+          <h3>Historial de aportaciones</h3>
+          <p class="historia-resumen">Cada donante ve sus aportaciones confirmadas por año, solo si su cuenta está vinculada.</p>
+          <p class="historia-meta">Responsable: Nada. Vídeo de 1:17, 8 pasos. En el vídeo completo, desde el <a href="#ver" data-t="107">1:47</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-02.mp4" poster="clips/hu-02.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-02"></video>
+          <ol class="pasos"><li>Mis aportaciones: solo las confirmadas, de la más reciente a la más antigua, con su destino</li><li>Agrupadas por año, cada uno con su total</li><li>Filtro por año: solo 2025</li><li>Un año sin aportaciones muestra un mensaje claro</li><li>Una cuenta sin vincular no ve ninguna aportación, aunque su correo coincida: primero debe verificarlo</li><li>Pide el enlace de verificación…</li><li>Al abrir el enlace confirma la vinculación</li><li>Ahora ya ve sus aportaciones confirmadas, con el total del año</li></ol>
+        </div>
+      </article>
+      <article class="historia historia-donaciones" id="hu-03">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-03</p>
+          <h3>Certificado fiscal anual</h3>
+          <p class="historia-resumen">El certificado del ejercicio en PDF, con un código que cualquiera puede verificar.</p>
+          <p class="historia-meta">Responsable: Rubén. Vídeo de 1:04, 7 pasos. En el vídeo completo, desde el <a href="#ver" data-t="184">3:04</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-03.mp4" poster="clips/hu-03.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-03"></video>
+          <ol class="pasos"><li>Mis certificados fiscales: ejercicio 2025, importe total, fecha de emisión y código de verificación</li><li>Descarga el certificado en PDF, con los datos de la ONG, su NIF, el ejercicio y el total</li><li>El ejercicio en curso todavía no tiene certificado: se generará a partir del 1 de enero</li><li>Un ejercicio sin aportaciones confirmadas no tiene certificado</li><li>Verificación pública, sin iniciar sesión: el código del certificado es auténtico</li><li>Un código inventado o cambiado no es válido y no muestra ningún dato</li><li>Una cuenta no vinculada a sus donaciones no ve certificados: primero debe verificar su correo</li></ol>
+        </div>
+      </article>
+      <article class="historia historia-donaciones" id="hu-04">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-04</p>
+          <h3>Informes para la junta</h3>
+          <p class="historia-resumen">Recaudación y voluntariado por proyecto y periodo, exportables a CSV y PDF.</p>
+          <p class="historia-meta">Responsable: Rubén. Vídeo de 1:20, 8 pasos. En el vídeo completo, desde el <a href="#ver" data-t="249">4:09</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-04.mp4" poster="clips/hu-04.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-04"></video>
+          <ol class="pasos"><li>Un coordinador no puede ver los informes: son solo para la administración</li><li>La administración elige el periodo, el proyecto y la agrupación</li><li>Informe de 2026 por proyecto: dinero recaudado, voluntarios y horas, con la fila de totales</li><li>El mismo informe agrupado por trimestre, con un subtotal por periodo</li><li>«Exportar CSV» descarga el informe con «;» y decimales con coma, listo para Excel</li><li>«Exportar PDF» genera el mismo informe con los datos de la ONG y el periodo</li><li>Un periodo sin datos muestra un mensaje en lugar de una tabla vacía</li><li>Fechas incoherentes: la fecha de fin no puede ser anterior a la de inicio</li></ol>
+        </div>
+      </article>
+    </section>
 
-    
-    
-    <h2>Cómo arrancarla para la demostración en directo</h2>
-    <pre>docker compose up -d
-cd backend  &amp;&amp; npm run migrar &amp;&amp; npm run semillas &amp;&amp; npm run dev
-cd frontend &amp;&amp; npm run dev        # http://localhost:4321</pre>
-    <p>Usuarios de prueba: <code>coordinador@ong.test</code>, <code>voluntario2@ong.test</code>,
-      <code>donante2@ong.test</code> y <code>admin@ong.test</code>, con la contraseña de
-      <code>CONTRASENA_SEMILLAS</code> del <code>.env</code>. Para pagar, cada persona usa sus propias
-      claves de prueba de Stripe en su <code>.env</code> y la Stripe CLI reenviando a
-      <code>/api/pasarela/webhook</code> (ver README).</p>
-  
-  
+    <section class="area area-voluntariado" aria-labelledby="t-voluntariado">
+      <div class="area-cab">
+        <h2 id="t-voluntariado">Voluntariado</h2>
+        <p>El tiempo que se dedica: apuntarse a actividades, organizarlas y contar las horas de cada persona.</p>
+      </div>
+      <article class="historia historia-voluntariado" id="hu-05">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-05</p>
+          <h3>Consulta e inscripción en actividades</h3>
+          <p class="historia-resumen">Actividades con plazas libres, inscripción con requisitos y lista de espera que avanza sola.</p>
+          <p class="historia-meta">Responsable: Javi. Vídeo de 1:22, 12 pasos. En el vídeo completo, desde el <a href="#ver" data-t="329">5:29</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-05.mp4" poster="clips/hu-05.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-05"></video>
+          <ol class="pasos"><li>Listado público: cualquiera ve fechas, lugar, plazas libres y requisitos sin iniciar sesión</li><li>Filtro por proyecto: solo las actividades de «Comedor social»</li><li>Sin sesión, «Inscribirme» lleva a identificarse y después vuelve a las actividades</li><li>Al inscribirse se muestran los requisitos de la actividad</li><li>Error: no se puede inscribir sin confirmar que cumple los requisitos</li><li>Inscripción confirmada: «Estás inscrito» y se descuenta la plaza (de 7 a 6 libres)</li><li>«Reparto de alimentos» no tiene plazas libres: solo se puede apuntar a la lista de espera</li><li>El aviso explica que, si se libera una plaza, quedará inscrito automáticamente</li><li>En lista de espera, posición 1, con la opción de salir</li><li>Ana, inscrita en «Reparto de alimentos», cancela su plaza</li><li>La plaza no queda libre: pasa directamente a quien estaba en espera (sigue 0 de 2)</li><li>Jorge, que estaba en espera, recibe el correo «Plaza confirmada»</li></ol>
+        </div>
+      </article>
+      <article class="historia historia-voluntariado" id="hu-06">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-06</p>
+          <h3>Calendario del voluntario</h3>
+          <p class="historia-resumen">Las próximas actividades del voluntario, en lista o por meses.</p>
+          <p class="historia-meta">Responsable: Javi. Vídeo de 1:03, 7 pasos. En el vídeo completo, desde el <a href="#ver" data-t="411">6:51</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-06.mp4" poster="clips/hu-06.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-06"></video>
+          <ol class="pasos"><li>Mi calendario, en vista de lista: la siguiente actividad aparece destacada</li><li>La plaza que le pasó desde la lista de espera («Reparto de alimentos») ya figura como confirmada</li><li>Las actividades en lista de espera se distinguen con borde discontinuo y muestran su posición</li><li>Detalle de una actividad: proyecto, requisitos, descripción y la opción de salir de la lista</li><li>Cambio a la vista mensual: cada actividad aparece en su día</li><li>En diciembre: confirmadas en azul, en espera con borde discontinuo; las de varios días ocupan todos sus días</li><li>Desde el calendario también puede salir de la lista de espera…</li></ol>
+        </div>
+      </article>
+      <article class="historia historia-voluntariado" id="hu-07">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-07</p>
+          <h3>Gestión de actividades y lista de espera</h3>
+          <p class="historia-resumen">El coordinador crea, publica, edita y cancela actividades.</p>
+          <p class="historia-meta">Responsable: Nicole. Vídeo de 2:03, 15 pasos. En el vídeo completo, desde el <a href="#ver" data-t="475">7:55</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-07.mp4" poster="clips/hu-07.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-07"></video>
+          <ol class="pasos"><li>El coordinador ve todas las actividades con su estado y sus plazas libres</li><li>Nueva actividad: formulario vacío</li><li>Guardar sin rellenar: cada campo obligatorio explica qué falta</li><li>Las plazas tienen que ser un número entero mayor que cero</li><li>Error de coherencia: el fin no puede ser anterior al inicio</li><li>Con los datos correctos, la actividad se crea en borrador</li><li>Al publicarla pasa a «Publicada»…</li><li>Editar una actividad publicada con 9 inscritos: «Limpieza de playa»</li><li>Regla de negocio: no se pueden dejar menos plazas que inscritos confirmados</li><li>El coordinador consulta los inscritos confirmados y la lista de espera en orden</li><li>Una actividad ya celebrada no se puede editar ni cancelar: solo registrar asistencia</li><li>Cancelar una actividad pide confirmación y avisa por correo a los inscritos</li><li>La actividad cancelada no se borra: cambia de estado</li><li>El voluntario inscrito recibe el aviso «Actividad cancelada» (Mailpit)</li><li>No se puede publicar un borrador si su proyecto está desactivado, y se explica el motivo</li></ol>
+        </div>
+      </article>
+      <article class="historia historia-voluntariado" id="hu-08">
+        <header class="historia-cab">
+          <p class="historia-hu">HU-08</p>
+          <h3>Asistencia y horas de voluntariado</h3>
+          <p class="historia-resumen">Pasar lista en una actividad celebrada y sumar las horas de cada voluntario.</p>
+          <p class="historia-meta">Responsable: Nicole. Vídeo de 1:29, 7 pasos. En el vídeo completo, desde el <a href="#ver" data-t="598">9:58</a>.</p>
+        </header>
+        <div class="historia-cuerpo">
+          <video src="clips/hu-08.mp4" poster="clips/hu-08.jpg" controls preload="metadata" playsinline aria-label="Vídeo de HU-08"></video>
+          <ol class="pasos"><li>Un voluntario que intenta pasar lista recibe un aviso de falta de permisos</li><li>Jorge todavía no tiene asistencias: «Mis horas» muestra 0 h</li><li>Actividad futura: el coordinador ve la lista, pero aún no puede registrar</li><li>«Recogida de ropa» ya se celebró (de 10:00 a 13:30, 3,5 h): se puede pasar lista</li><li>Corrección sin plazo: Jorge sí vino, pasa de «No asistió» a «Asistió»</li><li>Las horas se suman solas: Marta tiene 3,5 h + 2 h = 5,5 h</li><li>Y Jorge, tras la corrección, sus 3,5 h de «Recogida de ropa»</li></ol>
+        </div>
+      </article>
+    </section>
   </main>
 
-  <footer class="contenedor">
-    Código y documentación: <a href="https://github.com/nmp55-ua/IWEB_ONG">github.com/nmp55-ua/IWEB_ONG</a> · Vídeos grabados el 20/11/2026 con la aplicación en local, los datos de prueba comunes, Mailpit para los correos y Stripe en modo de pruebas.
+  <footer class="ancho">
+    <p>Código y documentación en <a href="https://github.com/nmp55-ua/IWEB_ONG">github.com/nmp55-ua/IWEB_ONG</a>.</p>
+    <p>Vídeos grabados el 20 de noviembre de 2026 con la aplicación en local, los datos de prueba comunes, Mailpit para los correos y Stripe en modo de pruebas.</p>
   </footer>
+
   <script>
     const v = document.getElementById('completo');
-    document.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', e => {
-      e.preventDefault(); v.currentTime = +b.dataset.t; v.scrollIntoView({behavior: 'smooth'}); v.play();
+    const caps = [...document.querySelectorAll('.cap')];
+    document.querySelectorAll('[data-t]').forEach((el) => el.addEventListener('click', (e) => {
+      e.preventDefault();
+      v.currentTime = +el.dataset.t;
+      document.getElementById('ver').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      v.play().catch(() => {});
     }));
+    // Marca en el índice la historia que se está viendo.
+    const marcar = () => {
+      const t = v.currentTime;
+      caps.forEach((c) => c.setAttribute('aria-current', String(t >= +c.dataset.t && t < +c.dataset.fin)));
+    };
+    v.addEventListener('timeupdate', marcar);
+    v.addEventListener('seeked', marcar);
   </script>
 </body>
 </html>
