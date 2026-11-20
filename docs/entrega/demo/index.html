@@ -6,117 +6,126 @@
   <title>Demostración · Donaciones y Voluntariado para una ONG</title>
   <style>
     :root {
-      --tinta: #13243a; --suave: #5b6b7e; --linea: #e3e9f0; --fondo: #ffffff; --niebla: #f3f7fb;
-      --morado: #0c2745; --morado-2: #153a62; --morado-3: #1d4c7e; --claro: #e6eff9; --claro-2: #a8c1db;
-      --azafran: #f5b22d; --coral: #5fb0ee;
+      --tinta: #102238; --suave: #5a6b80; --linea: #e2e9f1; --fondo: #ffffff; --niebla: #f4f7fb;
+      --noche: #0a1d36; --noche-2: #10294a; --claro: #e8f0fa; --claro-2: #9fb6d1;
+      --azafran: #f5b22d; --azafran-2: #ffcf6b;
       color-scheme: light;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
-    body { margin: 0; background: var(--fondo); color: var(--tinta);
-           font: 400 17px/1.6 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
-    a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 4px; }
-    :focus-visible { outline: 3px solid var(--azafran); outline-offset: 3px; border-radius: 6px; }
-    .ancho { max-width: 1220px; margin: 0 auto; padding-inline: 28px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+    body { margin: 0; background: var(--fondo); color: var(--tinta); -webkit-font-smoothing: antialiased;
+           font: 400 17px/1.65 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
+    a { color: inherit; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+    :focus-visible { outline: 3px solid var(--azafran); outline-offset: 3px; border-radius: 8px; }
+    .ancho { max-width: 1200px; margin: 0 auto; padding-inline: 28px; }
     h1, h2, h3 { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; }
 
-    /* Portada: azul marino con el vídeo dentro. */
-    .portada { background: radial-gradient(1200px 600px at 85% -10%, #1b4f86 0%, transparent 60%), linear-gradient(170deg, #0a2140 0%, #0f3158 100%); color: #fff; padding: 64px 0 72px; position: relative; overflow: hidden; }
-    .portada::before { content: ""; position: absolute; width: 440px; height: 440px; border-radius: 50%;
-                       right: -150px; top: -230px; background: var(--azafran); }
-    .portada::after { content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%;
-                      right: -60px; top: -140px; border: 2px solid rgba(168, 193, 219, .28); }
+    /* Portada: noche azul con brillos suaves y una retícula que se desvanece. */
+    .portada { position: relative; overflow: hidden; color: #fff; padding: 76px 0 84px;
+      background:
+        radial-gradient(700px 420px at 82% -8%, rgba(245, 178, 45, .22), transparent 70%),
+        radial-gradient(900px 560px at 8% -20%, rgba(64, 140, 222, .40), transparent 65%),
+        linear-gradient(180deg, #0c2546 0%, var(--noche) 70%); }
+    .portada::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 60% 10%, #000 20%, transparent 75%);
+      mask-image: radial-gradient(ellipse 70% 60% at 60% 10%, #000 20%, transparent 75%); }
     .portada .ancho { position: relative; z-index: 1; }
-    .curso { margin: 0 0 18px; color: var(--claro-2); font-size: 15px; }
-    h1 { margin: 0; max-width: 9.6em; font-size: clamp(40px, 6.4vw, 84px); line-height: .98; font-weight: 800; letter-spacing: -0.035em; }
-    .entradilla { margin: 22px 0 0; max-width: 58ch; color: var(--claro); font-size: 18px; }
-    .equipo { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 0; padding: 0; list-style: none; }
-    .equipo li { background: var(--morado-2); border-radius: 999px; padding: 6px 14px 6px 6px; font-size: 15px; display: flex; align-items: center; gap: 10px; }
-    .equipo .ini { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: var(--tinta); }
-    .equipo .d, .equipo .v { background: var(--azafran); }
+    .curso { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 26px; padding: 6px 14px 6px 10px; border-radius: 999px;
+             background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); color: var(--claro); font-size: 14px; }
+    .curso::before { content: ""; flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--azafran); box-shadow: 0 0 0 4px rgba(245,178,45,.2); }
+    h1 { margin: 0; max-width: 13em; font-size: clamp(40px, 6vw, 78px); line-height: 1.02; font-weight: 800; letter-spacing: -0.035em;
+         background: linear-gradient(180deg, #ffffff 35%, #c6d8ee 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .entradilla { margin: 24px 0 0; max-width: 60ch; color: var(--claro-2); font-size: 18.5px; }
+    .equipo { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0 0; padding: 0; list-style: none; }
+    .equipo li { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 5px 14px 5px 5px;
+                 font-size: 15px; display: flex; align-items: center; gap: 10px; }
+    .equipo .ini { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px;
+                   color: var(--tinta); background: linear-gradient(135deg, var(--azafran-2), var(--azafran)); }
     .equipo span.hu { color: var(--claro-2); }
 
-    .sala { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 1fr) 340px; background: var(--morado-2);
-            border-radius: 22px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(2, 10, 22, .75); }
-    .sala video { width: 100%; display: block; background: #08182b; aspect-ratio: 16 / 9; }
-    .indice { position: relative; min-height: 0; }
+    .sala { margin-top: 52px; display: grid; grid-template-columns: minmax(0, 1fr) 340px; border-radius: 24px; overflow: hidden;
+            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+            box-shadow: 0 40px 100px -40px rgba(0, 0, 0, .8), 0 0 0 8px rgba(255,255,255,.03); }
+    .sala video { width: 100%; display: block; background: #071426; aspect-ratio: 16 / 9; }
+    .indice { position: relative; min-height: 0; background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)); }
     .indice-dentro { position: absolute; inset: 0; display: flex; flex-direction: column; }
-    .indice-cab { padding: 20px 22px 10px; }
-    .indice-cab h2 { margin: 0; font-size: 18px; }
-    .indice-cab p { margin: 2px 0 0; font-size: 14px; color: var(--claro-2); }
-    .indice ol { list-style: none; margin: 0; padding: 4px 12px 14px; overflow: auto; flex: 1; min-height: 0; }
-    .cap { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 10px; padding: 7px 10px;
-           border-radius: 12px; color: #fff; text-decoration: none; transition: background-color .2s, color .2s; }
-    .cap:hover { background: var(--morado-3); }
-    .cap-num { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px;
-               color: var(--tinta); font-variant-numeric: tabular-nums; }
-    .cap-donaciones .cap-num { background: var(--azafran); }
-    .cap-voluntariado .cap-num { background: var(--azafran); }
-    .cap-nombre { font-size: 15px; line-height: 1.3; }
-    .cap-t { font-size: 13px; color: var(--claro-2); font-variant-numeric: tabular-nums; }
-    .cap[aria-current="true"] { background: #fff; color: var(--tinta); }
-    .cap[aria-current="true"] .cap-t { color: var(--suave); }
-    .sala-pie { margin: 16px 2px 0; font-size: 14px; color: var(--claro-2); }
+    .indice-cab { padding: 20px 22px 12px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .indice-cab h2 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
+    .indice-cab p { margin: 2px 0 0; font-size: 13.5px; color: var(--claro-2); }
+    .indice ol { list-style: none; margin: 0; padding: 8px 10px 12px; overflow: auto; flex: 1; min-height: 0; }
+    .cap { display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 12px; padding: 7px 10px;
+           border-radius: 12px; color: #fff; text-decoration: none; transition: background-color .2s; }
+    .cap:hover { background: rgba(255,255,255,.07); }
+    .cap-num { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; font-weight: 700; font-size: 12.5px;
+               font-variant-numeric: tabular-nums; color: var(--azafran-2); background: rgba(245,178,45,.12); border: 1px solid rgba(245,178,45,.3); }
+    .cap-nombre { font-size: 14.5px; line-height: 1.3; }
+    .cap-t { font-size: 12.5px; color: var(--claro-2); font-variant-numeric: tabular-nums; }
+    .cap[aria-current="true"] { background: rgba(245,178,45,.14); }
+    .cap[aria-current="true"] .cap-num { background: var(--azafran); color: var(--tinta); border-color: var(--azafran); }
+    .sala-pie { margin: 18px 2px 0; font-size: 14px; color: var(--claro-2); }
 
-    /* Franjas de color por área y una fila por historia. */
-    .franja { padding: 46px 0 40px; }
-    .area-donaciones .franja { background: var(--azafran); }
-    .area-voluntariado .franja { background: var(--azafran); }
-    .franja-dentro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px; align-items: end; }
-    .franja h2 { margin: 0; font-size: clamp(42px, 6vw, 76px); line-height: .95; font-weight: 800; letter-spacing: -0.035em; color: var(--tinta); }
-    .franja p { margin: 0; font-size: 18px; max-width: 46ch; color: var(--tinta); }
+    /* Áreas: cabecera limpia con barra de color, y cada historia en su propio panel. */
+    .area { padding: 96px 0 24px; }
+    .area + .area { padding-top: 64px; }
+    .franja-dentro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; padding-bottom: 10px; }
+    .franja h2 { margin: 0; font-size: clamp(40px, 5.4vw, 68px); line-height: 1; font-weight: 800; letter-spacing: -0.035em; color: var(--tinta); }
+    .franja h2::before { content: ""; display: block; width: 64px; height: 8px; border-radius: 8px; margin-bottom: 22px;
+                         background: linear-gradient(90deg, var(--azafran), var(--azafran-2)); }
+    .franja p { margin: 0; font-size: 18px; max-width: 46ch; color: var(--suave); }
 
-    .historia { display: grid; grid-template-columns: 120px minmax(0, 1.3fr) minmax(0, 1fr); grid-template-areas: "num texto texto" "num video pasos";
-                gap: 18px 36px; padding: 56px 0; border-bottom: 1px solid var(--linea); scroll-margin-top: 16px; align-items: start; }
-    .historia:last-child { border-bottom: 0; }
-    .historia-num { grid-area: num; font: 800 104px/.8 "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; letter-spacing: -0.06em;
-                    color: transparent; -webkit-text-stroke: 2px var(--tinta); }
-    .area-donaciones .historia-num { color: var(--azafran); -webkit-text-stroke: 0; }
-    .area-voluntariado .historia-num { color: var(--azafran); -webkit-text-stroke: 0; }
+    .historia { display: grid; grid-template-columns: 112px minmax(0, 1.3fr) minmax(0, 1fr); grid-template-areas: "num texto texto" "num video pasos";
+                gap: 22px 36px; margin-top: 28px; padding: 40px 40px 40px 32px; border-radius: 28px; background: var(--niebla);
+                border: 1px solid var(--linea); scroll-margin-top: 16px; align-items: start; }
+    .historia-num { grid-area: num; font: 800 92px/.85 "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; letter-spacing: -0.06em;
+                    background: linear-gradient(180deg, var(--azafran-2), var(--azafran) 70%); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .historia-texto { grid-area: texto; max-width: 70ch; }
-    .historia-hu { margin: 0; font-weight: 700; font-size: 15px; }
+    .historia-hu { margin: 0; font-weight: 700; font-size: 14.5px; color: var(--tinta); }
     .historia-hu span { font-weight: 400; color: var(--suave); }
-    .historia h3 { margin: 6px 0 12px; font-size: 27px; line-height: 1.15; font-weight: 700; letter-spacing: -0.015em; }
-    .historia-resumen { margin: 0 0 16px; }
-    .historia-meta { margin: 0; font-size: 15px; color: var(--suave); }
-    .historia-meta a { display: inline-block; margin-top: 6px; color: var(--tinta); font-weight: 600; }
-    .historia video { grid-area: video; width: 100%; display: block; border-radius: 16px; background: #08182b; aspect-ratio: 16 / 9;
-                      box-shadow: 0 18px 40px -22px rgba(12, 39, 69, .55); position: sticky; top: 24px; }
-    .pasos { grid-area: pasos; margin: 0; padding: 0; list-style: none; counter-reset: paso; font-size: 15px; line-height: 1.5; }
-    .pasos li { counter-increment: paso; position: relative; padding: 8px 0 8px 44px; border-top: 1px solid var(--linea); }
-    .pasos li::before { content: counter(paso); position: absolute; left: 0; top: 7px; width: 28px; height: 28px; border-radius: 50%;
-                        display: grid; place-items: center; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--niebla); }
-    .area-donaciones .pasos li::before { box-shadow: inset 0 0 0 2px var(--azafran); }
-    .area-voluntariado .pasos li::before { box-shadow: inset 0 0 0 2px var(--azafran); }
+    .historia h3 { margin: 6px 0 10px; font-size: 28px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; }
+    .historia-resumen { margin: 0 0 14px; color: #2a3d55; }
+    .historia-meta { margin: 0; font-size: 14.5px; color: var(--suave); }
+    .historia-meta a { display: inline-block; margin-top: 6px; color: var(--tinta); font-weight: 600; text-decoration-color: var(--azafran); }
+    .historia video { grid-area: video; width: 100%; display: block; border-radius: 18px; background: #071426; aspect-ratio: 16 / 9;
+                      box-shadow: 0 24px 48px -26px rgba(10, 29, 54, .55); position: sticky; top: 24px; }
+    .pasos { grid-area: pasos; margin: 0; padding: 6px 18px; list-style: none; counter-reset: paso; font-size: 15px; line-height: 1.5;
+             background: #fff; border: 1px solid var(--linea); border-radius: 18px; }
+    .pasos li { counter-increment: paso; position: relative; padding: 11px 0 11px 42px; }
+    .pasos li + li { border-top: 1px solid var(--linea); }
+    .pasos li::before { content: counter(paso); position: absolute; left: 0; top: 10px; width: 27px; height: 27px; border-radius: 8px;
+                        display: grid; place-items: center; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums;
+                        background: rgba(245,178,45,.16); color: #8a5a00; }
 
-    footer { background: var(--morado); color: var(--claro); padding: 34px 0 40px; font-size: 15px; }
+    footer { margin-top: 96px; background: var(--noche); color: var(--claro-2); padding: 34px 0 40px; font-size: 15px; }
     footer p { margin: 0; }
-    footer a { color: #fff; font-weight: 600; }
+    footer a { color: #fff; font-weight: 600; text-decoration-color: var(--azafran); }
 
     @media (max-width: 1040px) {
       .sala { grid-template-columns: 1fr; }
       .indice-dentro { position: static; }
-      .historia { grid-template-columns: 76px minmax(0, 1fr); grid-template-areas: "num texto" "video video" "pasos pasos"; gap: 22px 22px; }
-      .historia-num { font-size: 72px; }
+      .historia { grid-template-columns: 70px minmax(0, 1fr); grid-template-areas: "num texto" "video video" "pasos pasos"; gap: 22px; padding: 30px 26px; }
+      .historia-num { font-size: 64px; }
       .historia video { position: static; }
     }
     @media (max-width: 640px) {
       body { font-size: 16px; }
-      .ancho { padding-inline: 18px; }
-      .portada { padding: 42px 0 48px; }
-      .portada::before { width: 190px; height: 190px; right: -80px; top: -90px; }
-      .portada::after { width: 250px; height: 250px; right: -40px; top: -60px; }
-      .curso { max-width: 80%; }
+      .ancho { padding-inline: 16px; }
+      .portada { padding: 44px 0 52px; }
+      .curso { font-size: 13px; border-radius: 16px; align-items: flex-start; line-height: 1.45; }
+      .curso::before { margin-top: 6px; }
       .entradilla { font-size: 16px; }
-      .sala { border-radius: 16px; margin-top: 34px; }
+      .sala { border-radius: 18px; margin-top: 36px; }
+      .area { padding-top: 64px; }
       .franja-dentro { grid-template-columns: 1fr; gap: 12px; }
       .franja p { font-size: 16px; }
-      .historia { grid-template-columns: 1fr; grid-template-areas: "num" "texto" "video" "pasos"; padding: 40px 0; }
-      .historia-num { font-size: 60px; }
+      .historia { grid-template-columns: 1fr; grid-template-areas: "num" "texto" "video" "pasos"; padding: 26px 18px; border-radius: 22px; gap: 16px; }
+      .historia-num { font-size: 52px; }
       .historia h3 { font-size: 23px; }
+      .pasos { padding: 4px 14px; }
     }
-  </style>
+</style>
 </head>
 <body>
   <header class="portada">
