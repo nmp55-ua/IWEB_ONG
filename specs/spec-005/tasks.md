@@ -30,7 +30,7 @@ Back-end en `backend/src/`, front-end en `frontend/src/`. Módulo propio:
 tiene una FK a ella (plan-comun §7).
 
 - [X] T001 Crear `backend/src/db/migraciones/006_voluntariado.sql` con `voluntarios` e `inscripciones` como en [data-model.md](data-model.md): FKs `ON DELETE RESTRICT`, `CHECK` de texto no vacío, de `estado`, de `acepta_requisitos` y de las fechas de confirmación y cancelación, índice único parcial de inscripción activa e índice `(actividad_id, estado, fecha_inscripcion)`
-- [X] T002 Marcar `006_voluntariado.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md`, aplicar con `npm run migrar` y abrir un PR a `main` solo con T001–T002 (PR #2, revisa Nicole)
+- [X] T002 Marcar `006_voluntariado.sql` como «hecha» en `backend/src/db/migraciones/LEEME.md`, aplicar con `npm run migrar` y abrir un PR a `main` solo con T001–T002 (PR #2, revisa Nicole). *El PR #2 acabó llevando toda la spec (ver «Dependencies»).*
 
 ---
 
@@ -117,7 +117,7 @@ Responsable: Javi · Revisora: Nicole.
 
 ### Phase Dependencies
 
-- **Setup (T001–T002)** → hechas; el PR #2 tiene que estar en `main` antes del PR de toda la spec.
+- **Setup (T001–T002)** → hechas; el PR #2 tiene que estar en `main` antes del PR de toda la spec. *Al final no hubo un segundo PR: el PR #2 acabó llevando toda la spec, Nicole lo aprobó el 05/11/2026 y se fusionó el 06/11 (`f67d459`).*
 - **Foundational (T003–T008)** → bloquea US1 y US2. T004 → T006 (`promoverListaEspera` usa `bloquearActividad`).
 - **US1 (T009–T012)** → MVP; no depende de US2.
 - **US2 (T013–T019)** → depende de la fase 2; T018 y T019 usan `TarjetaActividad.jsx` (T011).
@@ -135,10 +135,10 @@ Pruebas (que fallan) → servicio → controlador → rutas → componentes → 
 
 ## Implementation Strategy
 
-1. Fase 2 y comprobar que las pruebas de spec-007 siguen pasando con las funciones reales.
+1. Fase 2 y comprobar que las pruebas de spec-007 siguen pasando (con su simulación de `inscripciones.js`); la integración real se prueba en `voluntariado/servicio.test.js` (T014).
 2. US1 y validar 1.1–1.3.
 3. US2 y validar 2.1–2.11 y bordes.
-4. Polish, y PR de `spec-005` a `main` revisado por Nicole cuando el PR #2 esté fusionado.
+4. Polish, y PR de `spec-005` a `main` revisado por Nicole cuando el PR #2 esté fusionado. *Al final fue el mismo PR #2 (ver «Phase Dependencies»).*
 
 ## Notes
 

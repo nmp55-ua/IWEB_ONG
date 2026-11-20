@@ -78,7 +78,7 @@ rutas, reconciliación, reintentos de correo o integración real de Stripe.
 
 ## Preparación final de revisión — T081 · 2026-11-07
 
-**Base comprobada:** rama spec-001, HEAD 9d86863; Se conservó la configuración local.
+**Base comprobada:** rama spec-001, HEAD 9d86863; se conservó la configuración local.
 Los apartados anteriores describen la preparación original de 004 y la ampliación
 operativa en sus fechas; no se sustituyen. Este apartado fija el estado de revisión actual.
 

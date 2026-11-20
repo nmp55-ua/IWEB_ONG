@@ -16,19 +16,21 @@ Datos de prueba ([research R7](research.md#r7-semillas-para-el-independent-test)
 `CONTRASENA_SEMILLAS`. Las fechas son relativas al día en que se ejecutan las semillas (entre
 paréntesis, si se ejecutan el 06/11/2026):
 
-| Actividad · Agua potable salvo Recogida de ropa | Cuándo | Inscripción de `voluntario@ong.test` |
+| Actividad · Agua potable salvo Recogida de ropa y Banco de alimentos | Cuándo | Inscripción de `voluntario@ong.test` |
 |---|---|---|
 | Charla sobre el agua en el instituto | dentro de 11 días (17/11), de 10:00 a 12:00 | confirmada |
 | Análisis de fuentes | dentro de 11 días (17/11), de 17:00 a 19:30 | confirmada |
 | Visita a la depuradora · 2 plazas, completa (`voluntario6` y `voluntario7`) | dentro de 12 días (18/11), de 11:00 a 13:00 | en lista de espera, posición 1 |
 | Jornadas de reforestación | de dentro de 15 días (21/11) a las 09:00 a dentro de 17 (23/11) a las 14:00 | confirmada |
 | Recogida de ropa (de spec-007) | hace 3 días, de 10:00 a 13:30 | confirmada (ya celebrada) |
+| Banco de alimentos (de spec-008) · Comedor social | hace 10 días, de 17:00 a 19:00 | confirmada (ya celebrada), con 2 h de asistencia |
 
 `voluntario2@ong.test` solo tiene la de Recogida de ropa, así que no tiene nada por delante.
 `donante@ong.test` no es voluntario.
 
 Pruebas automáticas: `TEST_DATABASE_URL=<url de ong_test> npm test` en `backend/`
-(`voluntariado/calendario.test.js`; nunca contra la base de desarrollo).
+(`voluntariado/calendario.test.js`; nunca contra la base de desarrollo) y `npm test` en `frontend/`
+(`components/voluntariado/vuelta.test.js`, con el ejecutor de pruebas de Node).
 
 ## Historia 1 — Ver mis próximas actividades
 
@@ -36,7 +38,7 @@ Pruebas automáticas: `TEST_DATABASE_URL=<url de ong_test> npm test` en `backend
 |---|---|---|
 | 1.1 | Como `voluntario@ong.test`, *Mi calendario* en el menú (`/mi-calendario`) | Se abre la lista con cuatro actividades por fecha: Charla (17/11/2026, de 10:00 a 12:00, «Confirmada», marcada «Siguiente»), Análisis de fuentes (de 17:00 a 19:30), Visita a la depuradora y Jornadas de reforestación («del 21/11/2026 a las 09:00 al 23/11/2026 a las 14:00»), cada una con su lugar |
 | 1.1 | Pulsar *Mes* y, si hace falta, «›» hasta el mes de esas fechas | Charla y Análisis el día 17, Visita el 18 y Jornadas el 21, 22 y 23; las horas son las mismas que en la lista |
-| 1.2 | En la lista y en el mes actual | No sale Recogida de ropa (ya celebrada) |
+| 1.2 | En la lista y en el mes actual | No salen Recogida de ropa ni Banco de alimentos (ya celebradas) |
 | 1.3 | Mirar Visita a la depuradora | En la lista, «En lista de espera · posición 1»; en el mes (desde 640 px de ancho), con borde discontinuo y «en lista de espera»; la leyenda explica los dos estilos |
 | 1.4 | Como `voluntario2@ong.test`, abrir *Mi calendario* | «Todavía no tienes actividades por delante.» y el enlace *Ver actividades disponibles*, que lleva a `/actividades` |
 | 1.5 | Como `voluntario@`, con la cookie de sesión: `GET /api/yo/calendario?voluntarioId=2&usuarioId=4` (cualquier número: se ignoran); después `PATCH /api/yo/inscripciones/<id de voluntario2 en Recogida de ropa, que imprimen las semillas>` con `{ "accion": "cancelar" }` | La consulta devuelve las cuatro de `voluntario@`; el `PATCH` da 404. No hay ninguna página ni ruta que enseñe el calendario de otro |

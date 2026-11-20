@@ -1,7 +1,8 @@
 # Clarify de spec-006 (HU-06), 06/11/2026
 
 Decisiones tomadas en `/speckit-clarify` sobre la versión de `spec.md` del 28/10 (commit `a6eadf5`).
-Las cuatro preguntas se hicieron juntas y en las cuatro se eligió la opción recomendada.
+Las cuatro preguntas se hicieron juntas. Cada respuesta se decidió por la razón que figura en la columna
+«Por qué» de la tabla.
 
 | ID | Pregunta | Respuesta | Por qué | Afecta a |
 |---|---|---|---|---|

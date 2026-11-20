@@ -1,6 +1,6 @@
 # Convenciones del equipo — SI-13 Donaciones y Voluntariado
 
-Este documento fija cómo trabajamos los cuatro para que las ocho historias formen **una sola aplicación coherente**. Es de obligado cumplimiento (principio 11 de la constitución). Si alguien necesita cambiar algo de aquí, se propone al grupo y se cambia para todos.
+Este documento fija cómo trabajamos los cuatro para que las ocho historias formen **una sola aplicación coherente**. Es de obligado cumplimiento (principio IX de la constitución). Si alguien necesita cambiar algo de aquí, se propone al grupo y se cambia para todos.
 
 ## 1. Reparto
 
@@ -73,7 +73,7 @@ Reglas para la base de datos:
 - Clave primaria `id`; claves foráneas `<entidad>_id`: `proyecto_id`.
 - Todas las tablas tienen `creado_en` y `actualizado_en`.
 - Importes en `NUMERIC(10,2)`, nunca en coma flotante.
-- No se borra ningún registro: se usa una columna `estado` (principio 9).
+- No se borra ningún registro: se usa una columna `estado` (principio VI).
 - Las migraciones se numeran `001_…sql`, `002_…sql` y nunca se edita una ya subida.
 
 ## 4. Roles y acceso

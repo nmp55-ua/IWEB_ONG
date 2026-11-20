@@ -12,21 +12,21 @@ const soloCoordinador = requiereRol('coordinador');
 
 rutasActividades.get('/actividades', soloCoordinador, asincrono(controlador.listar));
 rutasActividades.post('/actividades', soloCoordinador, asincrono(controlador.crear));
-rutasActividades.get('/actividades/:id(\\d+)', soloCoordinador, asincrono(controlador.obtener));
-rutasActividades.patch('/actividades/:id(\\d+)', soloCoordinador, asincrono(controlador.modificar));
+rutasActividades.get('/actividades/:id(\\d{1,15})', soloCoordinador, asincrono(controlador.obtener));
+rutasActividades.patch('/actividades/:id(\\d{1,15})', soloCoordinador, asincrono(controlador.modificar));
 rutasActividades.get(
-  '/actividades/:id(\\d+)/inscripciones',
+  '/actividades/:id(\\d{1,15})/inscripciones',
   soloCoordinador,
   asincrono(controlador.inscripciones),
 );
 // HU-08: cualquier coordinador, en cualquier actividad (FR-008).
 rutasActividades.get(
-  '/actividades/:id(\\d+)/asistencias',
+  '/actividades/:id(\\d{1,15})/asistencias',
   soloCoordinador,
   asincrono(controlador.obtenerAsistencias),
 );
 rutasActividades.put(
-  '/actividades/:id(\\d+)/asistencias',
+  '/actividades/:id(\\d{1,15})/asistencias',
   soloCoordinador,
   asincrono(controlador.guardarAsistencias),
 );

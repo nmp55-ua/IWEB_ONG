@@ -6,8 +6,8 @@
 **Responsable**: Nada · **Revisor**: Rubén  
 **Estado**: Implementación, validación y preparación de revisión documentadas; correcciones
 T082–T083 verificadas. T006 prepara el paquete y T007 acredita la elección local de 009.
-Revisión/aprobación y conflictos de integración permanecen como controles externos de la PR.
-Cierre técnico acreditado en [converge-3](refinamiento/converge-3.md); no acredita incorporación compartida.
+Rubén aprobó la PR #4 el 18/11 y HU-01 está incorporada a main.
+Cierre técnico acreditado en [converge-3](refinamiento/converge-3.md).
 
 **Especificación vigente**: [spec.md](spec.md) · **Investigación**: [research.md](research.md)
 
@@ -46,9 +46,9 @@ como parte de esta historia. No hay edición de datos fiscales, cuota o baja des
 | I–II: simplicidad y alcance            | SQL directo, servicios existentes, sin edición de perfil, pagos propios, reembolsos ni funcionalidades de HU-02.                                     | Compatible con el alcance.                                                                                          |
 | III–IV: verificabilidad y presentación | Matriz P01–P21/S01–S13 y SC-001–SC-004 en [matriz de validación](refinamiento/matriz-validacion-01.md); euros exactos y `Europe/Madrid`.             | Balance T080 documentado; evidencia real y simulada diferenciadas, sin declarar converge.                           |
 | V–VI: seguridad e historial            | Checkout alojado, vínculo acreditado, autorización por operación, registros conservados y confirmación de cobro no reversible por un evento antiguo. | Persistencia implementada y comprobaciones de seguridad T074 documentadas; observaciones para revisión conservadas. |
-| VII–IX: pila y reutilización           | Se mantienen módulos, capas, errores y entidades comunes. Stripe solo se usa desde su envoltura; correo compatible por opciones propias de HU-01.    | Implementado en esta rama; revisión e incorporación compartida pendientes.                                          |
-| X–XI: autoría y revisión               | Nada responsable y Rubén revisor; rama `spec-001`.                                                                                                   | Revisión de Rubén no realizada.                                                                                     |
-| XII: cambios compartidos               | P-01–P-03 alineados documentalmente y P-04 fijado en esta rama. P-05 es preparación de entorno.                                                      | Revisión de Rubén e incorporación compartida pendientes; no se acredita acuerdo colectivo.                          |
+| VII–IX: pila y reutilización           | Se mantienen módulos, capas, errores y entidades comunes. Stripe solo se usa desde su envoltura; correo compatible por opciones propias de HU-01.    | Implementado, revisado por Rubén e incorporado a main con la PR #4.                                                 |
+| X–XI: autoría y revisión               | Nada responsable y Rubén revisor; rama `spec-001`.                                                                                                   | Rubén revisó y aprobó la PR #4 el 18/11.                                                                            |
+| XII: cambios compartidos               | P-01–P-03 alineados documentalmente y P-04 fijado en esta rama. P-05 es preparación de entorno.                                                      | Revisados por Rubén e incorporados a main con la PR #4; no se acredita acuerdo colectivo.                           |
 
 ## Documentación de la fase
 
@@ -138,7 +138,7 @@ transiciones en el modelo común de esta rama. No se resuelve creando una segund
 El primer cobro confirmado activa el alta solo si no existe una cancelación definitiva de
 pasarela. Una factura antigua pagada después de una cancelación se registra como aportación,
 pero no reactiva una suscripción cancelada. Las cuotas posteriores fallidas no suman ni
-cancelan por sí solas; Se procesa una cancelación válida posterior. No se llama a operaciones
+cancelan por sí solas; se procesa una cancelación válida posterior. No se llama a operaciones
 de pago, reintento de cargo o cancelación desde la aplicación.
 
 ### Consultar, vincular y reintentar correo
@@ -199,9 +199,10 @@ el texto de respuesta. Las ejecuciones y límites constan en la
 No se suman suites de fechas diferentes como una nueva ejecución conjunta.
 La [medición 2](refinamiento/medicion-puntual-02.md) registra 61 s medidos con cronómetro y
 7/7 confirmaciones recibidas del conjunto 30–36, según el registro previo. Se conserva la medición 1
-fallida de 480,836 s. T079–T080 están documentadas; la revisión de Rubén no se ha realizado.
+fallida de 480,836 s. T079–T080 están documentadas; Rubén revisó HU-01 y la aprobó en la PR #4
+el 18/11.
 
-## Estado del diseño y revisión pendiente
+## Estado del diseño y revisión
 
 P-01 centraliza datos y transiciones en el modelo común. P-02 fija funciones compatibles de
 pasarela; P-03 añade opciones de correo solo para HU-01, conservando las llamadas ajenas.
@@ -227,7 +228,7 @@ SC-002 no se cumple. Ninguno se presenta como resultado satisfactorio de pruebas
 Se utilizó la estructura de `.specify/templates/plan-template.md` y la definición local de
 `speckit-plan`. Se comprobó la resolución de `specs/spec-001` mediante
 `check-prerequisites.ps1 -Json -PathsOnly`, sin persistir selección fuera de la historia.
-`setup-plan.ps1` no se ejecutó porque también escribe el estado de selección; Se reprodujo
+`setup-plan.ps1` no se ejecutó porque también escribe el estado de selección; se reprodujo
 la lectura de plantilla y preparación documental dentro del alcance de esta fase.
 Se preservaron los informes históricos. Los hooks opcionales de commit no se ejecutaron.
 La comprobación final de enlaces y alcance es documental, no una ejecución de la aplicación.

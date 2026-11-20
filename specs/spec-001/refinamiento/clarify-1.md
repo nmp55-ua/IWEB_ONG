@@ -41,7 +41,7 @@ spec-001. No se ha ejecutado plan, implement ni ninguna operación de escritura 
   HU-01, centrados en donaciones y altas.
 - **Historia afectada**: HU-01; escenario de alta como socio y requisitos FR-008 y FR-009.
 - **Integración**: Se registra la respuesta en `spec.md`, sección `Clarifications`, sesión
-  2026-11-04; Se explicita la exclusión en FR-008 y se retira PA1.1 de las preguntas abiertas.
+  2026-11-04; se explicita la exclusión en FR-008 y se retira PA1.1 de las preguntas abiertas.
   FR-009 y los escenarios existentes de alta y cobros periódicos se conservan.
 - **Antes**: PA1.1 contenía una propuesta de exclusión pendiente de confirmar.
 - **Después**: La exclusión está confirmada y forma parte del alcance de HU-01.

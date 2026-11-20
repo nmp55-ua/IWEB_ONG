@@ -24,7 +24,7 @@ Se ejecuta únicamente la resolución de solo lectura:
 .\.specify\scripts\powershell\check-prerequisites.ps1 -Json -PathsOnly
 ```
 
-Resuelve `specs/spec-001`; Se comprueba explícitamente la existencia de spec.md, plan.md
+Resuelve `specs/spec-001`; se comprueba explícitamente la existencia de spec.md, plan.md
 y tasks.md, porque PathsOnly no valida los requisitos. No se ejecuta la variante que
 puede persistir selección. No hay hooks before_converge/after_converge en la configuración
 consultada y no se ejecutan hooks de Git.

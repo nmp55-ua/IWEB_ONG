@@ -3,8 +3,8 @@
 **Estado actual:** HU-01 revisada por el revisor asignado e incorporada a main mediante la PR #4; `009_operativa_donaciones.sql` es la numeración definitiva.
 
 **Responsable**: Nada · **Revisor**: Rubén · **Fecha**: 2026-11-06  
-**Estado**: Modelo implementado y validado localmente en `spec-001`; revisión de Rubén
-e incorporación a main pendientes.
+**Estado**: Modelo implementado y validado localmente en `spec-001`; revisado por Rubén
+(PR #4, aprobada el 18/11) e incorporado a main. `009_operativa_donaciones.sql` es definitiva.
 
 ## Definición única
 

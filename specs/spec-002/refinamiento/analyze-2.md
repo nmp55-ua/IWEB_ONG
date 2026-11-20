@@ -4,9 +4,11 @@
 
 **Responsable**: Nada · **Revisor**: Javi
 
+> **Nota posterior**: la revisión de Javi ya estaba hecha cuando se ejecutó este análisis: aprobó la PR #6 el 11/11 y HU-02 entró en main ese día. Este análisis final se incorporó con la PR #9. El campo `Status` de `spec.md` pasó después a «Implementada».
+
 ## Resultado
 
-No se identifican inconsistencias accionables, duplicaciones conflictivas, ambigüedades bloqueantes, requisitos sin cobertura ni conflictos con la constitución. La especificación, el plan y las tareas mantienen cobertura documental completa. Este análisis no sustituye la revisión de Javi ni vuelve a ejecutar las pruebas o mediciones citadas.
+No se identifican inconsistencias accionables, duplicaciones conflictivas, ambigüedades bloqueantes, requisitos sin cobertura ni conflictos con la constitución. La especificación, el plan y las tareas mantienen cobertura documental completa. Este análisis no sustituye la revisión de Javi (hecha en la PR #6, 11/11) ni vuelve a ejecutar las pruebas o mediciones citadas.
 
 ## Alcance y método
 
@@ -42,7 +44,7 @@ La revisión es documental y de solo lectura respecto de los artefactos analizad
 
 - **Constitución**: no se detectan conflictos. El diseño mantiene la privacidad y autorización en servidor, reutiliza la aplicación existente y conserva exactitud monetaria, fechas y alcance.
 - **Duplicaciones y ambigüedades**: no se detectan casos accionables. SC-002 especifica el caso de 60 cuotas, el umbral estricto de menos de dos segundos y los límites de medición; las 60 cuotas no se convierten en límite funcional.
-- **Estados**: `spec.md` conserva `Status: Draft`, igual que las demás especificaciones del repositorio. El estado técnico se describe por separado en el plan y converge-2; la revisión de Javi permanece pendiente. No se recomienda cambiar este campo.
+- **Estados**: `spec.md` conserva `Status: Draft`, igual que las demás especificaciones del repositorio. El estado técnico se describe por separado en el plan y converge-2; la revisión de Javi se hizo en la PR #6 (11/11). No se recomienda cambiar este campo (véase la nota posterior).
 - **Convergencia**: converge-2 registra CONV-001 y CONV-002 como resueltos y no identifica brechas técnicas nuevas en el alcance examinado.
 
 ## Evidencia y límites
@@ -69,6 +71,6 @@ Este análisis no vuelve a ejecutar la suite ni acredita una nueva revisión ext
 
 ## Próximos pasos
 
-No se requieren cambios adicionales en spec, plan o tasks por este análisis. Continuar con la revisión de Javi y el flujo de PR; mantener diferenciadas las evidencias históricas de cualquier ejecución nueva.
+No se requieren cambios adicionales en spec, plan o tasks por este análisis. La revisión de Javi y la PR #6 ya están cerradas; mantener diferenciadas las evidencias históricas de cualquier ejecución nueva.
 
 No se proponen ediciones de remediación porque no hay hallazgos accionables.

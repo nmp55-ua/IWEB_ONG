@@ -23,7 +23,7 @@ Los hooks opcionales de commit se omiten. No se cambia de rama ni se altera el �
 | Checklist requirements.md | 16 elementos, 16 marcados, 0 pendientes; no se modifica. |
 | Documentación ya preparada en Git | Se conserva; no se crea commit ni se vuelve a añadir al índice. |
 | .env / 004 antes del bloque | No existían. |
-| Ficha / informe de esta entrega | No existían; Se crean sin sobrescribir evidencias. |
+| Ficha / informe de esta entrega | No existían; se crean sin sobrescribir evidencias. |
 | Contenedores / volúmenes al consultar Docker | Ninguno; la preparación crea los servicios y el volumen del proyecto, sin eliminar recursos. |
 
 Fuentes: [modelo común](../../modelo-datos.md), [plan común](../../plan-comun.md),

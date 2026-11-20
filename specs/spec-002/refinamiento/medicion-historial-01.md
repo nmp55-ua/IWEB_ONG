@@ -51,7 +51,7 @@ Para continuar: preparar el mismo banco aislado con el build identificado, volve
 
 ## Seguimiento de T030: intento 03 · 2026-11-10
 
-Se conserva íntegro el balance anterior como estado de los intentos 01–02. Se ejecuta una única nueva navegación principal sobre un origen nuevo, con cuenta identificada y vinculada, build idéntico y sin precarga del historial. La exportación de traza se integra en el banco, eliminando el proxy adicional; Se registran presión de memoria y cambio de viewport. El observador original no cambia y no se descuenta tiempo alguno.
+Se conserva íntegro el balance anterior como estado de los intentos 01–02. Se ejecuta una única nueva navegación principal sobre un origen nuevo, con cuenta identificada y vinculada, build idéntico y sin precarga del historial. La exportación de traza se integra en el banco, eliminando el proxy adicional; se registran presión de memoria y cambio de viewport. El observador original no cambia y no se descuenta tiempo alguno.
 
 Resultado: **4.258,90 ms**, 60 cuotas y cinco grupos correctos, fuera del umbral. [Traza](evidencias-medicion-01/intento-03-traza.json), [captura visible](evidencias-medicion-01/intento-03-visible.png) y [diagnóstico completo](diagnostico-rendimiento-01.md). El intento de captura completa falló y se conserva esa limitación; no se repite la navegación. **T030 continúa pendiente**, sin cambiar los resultados anteriores ni avanzar a T031. La propuesta de corrección queda para revisión antes de modificar el producto.
 

@@ -48,9 +48,9 @@ reales).
 
 ## Constitution Check
 
-*Comprobación documental de la base común. El diseño de HU-01 queda definido en spec-001;
-la revisión de Rubén y la incorporación compartida siguen pendientes. No acredita pruebas
-ni conformidad del código todavía inexistente de donaciones.*
+*Comprobación documental de la base común. El diseño de HU-01 está definido en spec-001;
+Rubén lo revisó (PR #4, aprobada el 18/11) y está incorporado a main, igual que el código de
+donaciones. Las pruebas de cada historia constan en su propia carpeta de specs.*
 
 | Principio | Cómo lo cumple este plan |
 |---|---|
@@ -101,7 +101,7 @@ Vite, de modo que la cookie de sesión es del mismo origen y no hace falta CORS.
         ├── config.js                ← lee .env y valida que no falte nada
         ├── db/
         │   ├── pool.js              ← pool de pg + ayuda transaccion(fn)
-        │   ├── migraciones/001…008  ← reservadas (ver modelo-datos.md)
+        │   ├── migraciones/001…009  ← reservadas (ver modelo-datos.md)
         │   └── semillas/            ← datos de prueba comunes
         ├── middleware/
         │   ├── autenticacion.js     ← carga req.usuario desde la sesión
@@ -241,7 +241,8 @@ Cada plan individual detalla los cuerpos de petición y respuesta de sus rutas e
 ### 5.1 Contrato de la envoltura de Stripe
 
 Único importador: `backend/src/servicios-comunes/pasarela.js`. Referencia del lockfile:
-SDK 17.7.0; API explícita 2025-02-24.acacia. La instalación y la cuenta aún no se han verificado.
+SDK 17.7.0; API explícita 2025-02-24.acacia. Instalación y cuenta verificadas con una cuenta de
+pruebas de Stripe en el recorrido R4 y en la demo.
 La configuración prevista del cliente usa timeout de 3000 ms y maxNetworkRetries 0. Los
 fallos transitorios devuelven ErrorApi 503; no se registran respuestas completas con datos
 personales. El módulo solo recibe proyecciones de los recursos, sin detalles de tarjeta.
@@ -367,13 +368,13 @@ claves de pago/factura, previsión de suscripción e índice financiero del mode
 Se revisa con Rubén antes de su incorporación para desbloquear HU-02, HU-03 y HU-04 con un
 contrato estable. No incluye interfaz ni tablas técnicas de operación.
 
-La segunda entrega incorpora las cuatro tablas técnicas de HU-01 en una migración nueva.
-Se asignará el siguiente número libre a partir de 009 al coordinar su incorporación; **009
-no está reservado**. La dependencia es 004, no una migración futura de otro módulo. No se
-reescribe 004 publicada ni se depende de que 006–008 estén implementadas. El migrador
-aplica ficheros pendientes por nombre registrado: admite incorporar 004 a una base que ya
-contiene 005. Se comprobarán ambas secuencias en una base exclusiva de pruebas. Esta rama
-solo documenta la estrategia; todavía no hay SQL nuevo.
+La segunda entrega incorpora las cuatro tablas técnicas de HU-01 en
+`009_operativa_donaciones.sql`, numeración definitiva (entró en main con la PR #4). La
+dependencia es 004, no una migración futura de otro módulo. No se reescribe 004 publicada ni
+se depende de que 006–008 estén implementadas. El migrador aplica ficheros pendientes por
+nombre registrado: admite incorporar 004 a una base que ya contiene 005. Ambas secuencias se
+comprobaron en una base exclusiva de pruebas
+([validacion-004-01.md](spec-001/refinamiento/validacion-004-01.md)).
 
 ## 8. Pruebas y datos de prueba comunes
 
@@ -385,13 +386,18 @@ ausente. P-05 se prepara solo antes de las pruebas reales de Stripe.
 
 ### Datos de prueba (`backend/src/db/semillas/`, `npm run semillas`)
 
-- **Usuarios** (contraseña común de desarrollo en `.env.example`, nunca una real):
+- **Usuarios** (contraseña común de desarrollo en `CONTRASENA_SEMILLAS` del `.env`; en
+  `.env.example` está vacía a propósito, nunca una real):
   `donante@ong.test`, `donante2@ong.test`, `voluntario@ong.test`, `voluntario2@ong.test`,
   `coordinador@ong.test`, `admin@ong.test`.
 - **Proyectos**: «Agua potable», «Comedor social» y uno inactivo, «Campaña 2024».
-- **Aportaciones** de `donante@ong.test`: 50 € el 15/03/2025 y 30 € el 10/11/2025 (Agua potable),
-  20 € el 01/01/2026 (fondo general), una rechazada y una pendiente; socio con 10 €/mes. Sirven
-  para HU-02 (bloques 2025 = 80,00 € y 2026), HU-03 (certificado 2025 = 80,00 €) y HU-04.
+- **Aportaciones** (`semillas/donaciones.js`): sintéticas, sin identificadores de Stripe y con
+  fechas relativas a hoy. Tres Donantes: el de `donante@ong.test` sin vincular (para probar
+  `/donar/vincular`), el de `donante2@ong.test` vinculado y una invitada sin cuenta. Hay
+  puntuales confirmadas, una rechazada, una pendiente y una con el correo fallido, y cuatro
+  suscripciones de socio de `donante2@ong.test` (activa, activa con una cuota rechazada, alta
+  pendiente y cancelada). Las usan los quickstarts de HU-01, HU-03 y HU-04; HU-02 crea sus
+  propios datos sintéticos en las pruebas.
 - **Actividades**: una de 10 plazas con 9 inscritos, una completa de 2 plazas con 1 en espera,
   una en borrador, una cancelada y una ya celebrada de 10:00 a 13:30 con 2 inscritos confirmados.
   Para HU-06, cuatro más de «Agua potable» a partir de dentro de 11 días (charla en el instituto,
@@ -433,15 +439,20 @@ ausente. P-05 se prepara solo antes de las pruebas reales de Stripe.
 
 ## Preguntas abiertas que afectan al plan
 
-PA1.1–PA1.8 están resueltas funcionalmente en `specs/spec-001/spec.md` y reflejadas en los
-ajustes de HU-01 preparados para revisión. Sus mecanismos técnicos están definidos en el
-plan de esa historia y alineados en esta rama con el modelo común. Las preguntas de las demás specs se conservan a continuación.
+No queda ninguna abierta: todas se resolvieron en el `/speckit-clarify` de su spec (principio II:
+el plan no las resuelve por su cuenta).
 
-PA3.1 y PA3.2 están resueltas en `specs/spec-003/spec.md` (clarify de 2026-11-04 y 2026-11-08).
-PA4.1 está resuelta en `specs/spec-004/spec.md` (clarify de 2026-11-09: solo cifras agregadas).
-
-El plan no las resuelve (principio II); se deciden en `/speckit-clarify` de cada spec y, si
-cambian el modelo, se hace con una migración nueva acordada:
-PA2.1 (correcciones de aportaciones), PA5.1 (edad),
-PA5.2 (solapes), PA6.1 (.ics), PA7.1 (coordinador por proyecto), PA7.2 (plazo de aceptación),
-PA8.1 (plazo de registro) y PA8.2 (asistencias parciales).
+- PA1.1–PA1.8: `specs/spec-001/spec.md` (clarify de 2026-11-04 y su ronda 2). Sus mecanismos
+  técnicos están en el plan de esa historia y en el modelo común.
+- PA2.1 (correcciones de aportaciones), PA2.2 y PA2.3: `specs/spec-002/spec.md` (clarify de
+  2026-11-10). PA2.1 se cerró como alineación de alcance: las aportaciones confirmadas no se
+  corrigen ni se reasignan.
+- PA3.1 y PA3.2: `specs/spec-003/spec.md` (clarify de 2026-11-04 y 2026-11-08).
+- PA4.1: `specs/spec-004/spec.md` (clarify de 2026-11-09: solo cifras agregadas).
+- PA5.1 (edad) y PA5.2 (solapes): `specs/spec-005/spec.md` (clarify de 2026-11-04: basta la
+  declaración y no se comprueban solapes).
+- PA6.1 (.ics): `specs/spec-006/spec.md` (clarify de 2026-11-06: fuera de la v1).
+- PA7.1 (coordinador por proyecto) y PA7.2 (plazo de aceptación): `specs/spec-007/spec.md`
+  (clarify de 2026-10-28: cualquier coordinador; confirmación directa sin plazo).
+- PA8.1 (plazo de registro) y PA8.2 (asistencias parciales): `specs/spec-008/spec.md` (clarify
+  de 2026-11-04: sin plazo; sin asistencias parciales en la v1).

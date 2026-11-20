@@ -8,7 +8,7 @@
 
 **Estado**: G1–G3 comprobadas localmente, con API, PostgreSQL aislado e interfaz.
 T079 y T080 completadas tras contrastar la segunda medición, los 34 escenarios y
-SC-001–SC-004. Se comunica 61 s; Se acredita 7/7 correos en el conjunto 30–36.
+SC-001–SC-004. Se comunica 61 s; se acredita 7/7 correos en el conjunto 30–36.
 La medición 1 de 480,836 s conserva su resultado fallido. El primer converge detectó
 CONV-001/CONV-002, corregidos y verificados en T082–T083; CONV-003 se cerró con T084. [converge-3.md](converge-3.md) acredita el cierre técnico. Revisión/aprobación e integración siguen separadas de ese cierre.
 Se conservan los cambios documentales previos, .env, los históricos.
@@ -30,7 +30,7 @@ del correo ni una factura de Stripe. Los estados Cubierto indican el alcance de 
 descrito, no que todo el escenario se haya ejecutado con Stripe o en navegador.
 
 Se revisaron el contenido y las aserciones relevantes de las pruebas, además de los
-informes de ejecución. La última regresión de donaciones registrada es 367/367; Se comunicó su repetición. G1–G3 añade después una ejecución dirigida de 17/17,
+informes de ejecución. La última regresión de donaciones registrada es 367/367; se comunicó su repetición. G1–G3 añade después una ejecución dirigida de 17/17,
 sin repetir esa suite completa; no se toma el número de pruebas como
 demostración suficiente de cada escenario. Los pendientes antiguos de T053 se contrastan
 con las evidencias posteriores; por ejemplo, P02 y P21 ya tienen evidencia real.
@@ -221,7 +221,7 @@ no ejecuta otro pago.
    payment_intent.payment_failed, payment_intent.canceled, invoice.paid,
    invoice.payment_failed, invoice.updated, customer.subscription.updated y
    customer.subscription.deleted. Todos los comandos usan internamente --api-key desde
-   STRIPE_SECRET_KEY; Se excluye STRIPE_API_KEY heredada y se compara el secreto con el
+   STRIPE_SECRET_KEY; se excluye STRIPE_API_KEY heredada y se compara el secreto con el
    configurado sin mostrarlo, conforme al protocolo ya revisado. Si hay desajuste, no se
    crea la operación ni se modifica .env. No se inicia ni cambia el listener en esta preparación.
 2. Fijar **20,00 €, EUR y fondo general**, datos sintéticos válidos y perfil de navegador

@@ -6,7 +6,7 @@
 **Responsable**: Nada · **Revisor**: Rubén  
 **Alcance**: T017–T018. Compatibilidad y opciones de tiempos de enviarCorreo.  
 **Resultado**: 16 pruebas dirigidas aprobadas con Nodemailer simulado.
-La ampliación queda preparada en esta rama para revisión; Se incorpora mediante PR #4
+La ampliación queda preparada en esta rama para revisión; se incorpora mediante PR #4
 ni incorporación compartida. T006 sigue pendiente de la revisión real de Rubén.
 
 ## Estado inicial y procedimiento

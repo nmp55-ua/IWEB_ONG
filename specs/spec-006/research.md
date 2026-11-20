@@ -161,7 +161,8 @@ HU-06.
   `semillas/actividades.js` no se exporta y suma las horas a la medianoche, así que el día del cambio de
   hora daría una hora de más o de menos; se le avisa a Nicole).
 
-  `voluntario@` ya tiene la celebrada Recogida de ropa (escenario 1.2). `voluntario2` solo tiene esa,
+  `voluntario@` ya tiene la celebrada Recogida de ropa (escenario 1.2) y, desde `2546ae2` (HU-08), otra
+  celebrada, Banco de alimentos (hace 10 días, con 2 h de asistencia), que tampoco sale. `voluntario2` solo tiene Recogida de ropa,
   así que su calendario está vacío (escenario 1.4). Dos actividades el mismo día y una de varios días
   cubren los casos límite.
 - **Rationale**: «Agua potable» y más allá de 10 días para que el paso 1.3 del quickstart de HU-05

@@ -9,7 +9,7 @@
 ## Estado inicial y conservación
 
 Al comenzar existen los cambios de tasks.md del primer converge y converge-1.md sin
-seguimiento; Se conservan, junto con `.env`, los históricos.
+seguimiento; se conservan, junto con `.env`, los históricos.
 El [primer diagnóstico](converge-1.md) no se modifica. Este informe registra regresiones
 nuevas antes de corregir, no una repetición de T079–T081 ni un segundo converge.
 
@@ -88,7 +88,7 @@ Desglose: confirmaciones 7, rutas 12, cuotas 38 y textoCorreo 26. Inicio mostrad
 al caso de SMTP simulado fallido ya existente, no a un envío real ni fallo de la suite.
 
 Se amplía únicamente a eventos puntuales porque el webhook de confirmación también
-reutiliza crearConfirmaciones; Se comprueban idempotencia, reentregas, dinero confirmado,
+reutiliza crearConfirmaciones; se comprueban idempotencia, reentregas, dinero confirmado,
 fallo SMTP y recuperación del correo en ese flujo:
 
 ```powershell

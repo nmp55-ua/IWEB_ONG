@@ -16,7 +16,8 @@ const campos = {
   proyectoId: z
     .number({ required_error: 'Elige un proyecto.', invalid_type_error: 'Elige un proyecto.' })
     .int('Elige un proyecto.')
-    .positive('Elige un proyecto.'),
+    .positive('Elige un proyecto.')
+    .max(Number.MAX_SAFE_INTEGER, 'Elige un proyecto.'),
   inicio: fechaHora('Indica la fecha y hora de inicio.'),
   fin: fechaHora('Indica la fecha y hora de fin.'),
   lugar: texto('Indica el lugar.'),
@@ -40,7 +41,7 @@ const esquemaAccion = z
 
 const esquemaFiltros = z.object({
   estado: z.enum(['borrador', 'publicada', 'cancelada'], { message: 'Estado no válido.' }).optional(),
-  proyectoId: z.coerce.number().int().positive().optional(),
+  proyectoId: z.coerce.number().int().positive().max(Number.MAX_SAFE_INTEGER).optional(),
 });
 
 const esquemaAsistencias = z

@@ -13,7 +13,15 @@ export async function registrar({ correo, contrasena, nombre, roles }) {
     });
   }
   const hashContrasena = await bcrypt.hash(contrasena, COSTE_BCRYPT);
-  return repositorio.crear({ correo: correoNormalizado, hashContrasena, nombre: nombre.trim(), roles });
+  try {
+    return await repositorio.crear({ correo: correoNormalizado, hashContrasena, nombre: nombre.trim(), roles });
+  } catch (error) {
+    // Otro registro con el mismo correo ganó la carrera: el índice único lo impide.
+    if (error?.code === '23505') {
+      throw new ErrorApi(409, 'CORREO_EN_USO', 'Ya existe una cuenta con ese correo.', { correo: 'Ya existe una cuenta con ese correo.' });
+    }
+    throw error;
+  }
 }
 
 export async function comprobarCredenciales({ correo, contrasena }) {

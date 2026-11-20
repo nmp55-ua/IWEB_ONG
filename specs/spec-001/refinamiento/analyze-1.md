@@ -172,7 +172,7 @@ necesario, requeriría su propuesta explícita y la revisión común correspondi
 | FR-011 | Prevista completa en control de acceso | T023, T035–T036, T043, T059 | T022, T029, T031, T054 | Ambas modalidades sin cuenta; correo coincidente no vincula. El recorrido web de solicitud se contabiliza en FR-013. |
 | FR-012 | Prevista completa | T026, T041, T047, T070 | T024, T031, T057, T079 | Reintento autorizado del mismo mensaje, lease e intento; sin pagos, altas o aportaciones nuevas. |
 | FR-013 | Parcial en recorrido web | T042–T044, T049 | T022, T031, T074 | Emisión/consumo y controles de servidor definidos; falta concretar el estado UI que solicita el enlace: COV-001. |
-| FR-014 | Prevista completa | T032–T033, T059 | T028, T054 | Correo con otro NIF se rechaza antes de Stripe sin mostrar ni mezclar datos; Se contempla concurrencia. |
+| FR-014 | Prevista completa | T032–T033, T059 | T028, T054 | Correo con otro NIF se rechaza antes de Stripe sin mostrar ni mezclar datos; se contempla concurrencia. |
 | FR-015 | Prevista completa | T021, T032–T033, T059 | T020, T028, T054 | Datos reales distintos se rechazan aun con cuenta vinculada; formato equivalente reutiliza sin sobrescribir. |
 | FR-016 | Prevista completa | T023, T040–T041, T068 | T022, T031, T057 | Permiso por operación, ocho horas, 404 genérico y denegación de otras operaciones/cuotas; cuenta vinculada como vía separada. |
 | FR-017 | Prevista completa | T037–T039, T061–T062 | T030, T055, T077 | Webhook firmado sin cookie, rollback/reentrega y procesamiento sin retorno de navegador. |

@@ -37,6 +37,10 @@ Aquí solo las propias de HU-05.
 - **Acuerdo**: `bloquearActividad` se propone a Nicole el 04/11. Se escribe en la rama `spec-005` y
   solo entra en `main` con su revisión del PR (principio XI); si prefiere añadirla ella en spec-007, se
   quita de aquí.
+- **Resultado**: acordada (principio XII). Nicole aprobó el PR #2 el 05/11/2026 sobre `4ee51bc`, que ya
+  incluía `bloquearActividad` (añadida en `55ba4c6`), y se fusionó en `main` el 06/11 (`f67d459`). El
+  grupo dio el visto bueno el 17/11 (T021, `baa1d37`); la función está en plan-comun §7 y, desde el
+  20/11 (`4af4d04`), también en el contrato de spec-007.
 - **Alternatives considered**: leer `actividades` desde el repositorio de voluntariado (rompe la
   propiedad de la tabla); un `listarDisponibles` nuevo en `actividades` (más código en el módulo
   de Nicole para algo que ya da `listar`).

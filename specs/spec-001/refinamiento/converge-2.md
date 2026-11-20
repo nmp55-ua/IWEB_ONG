@@ -24,7 +24,7 @@ técnica completada; los controles de incorporación son controles externos ante
 anterior de esas tareas en el primer informe no se interpreta como un bloqueo vigente
 para desarrollar, verificar o preparar/abrir una PR.
 
-La salvaguarda inicial confirma spec-001 y HEAD 140718b; Se conserva la configuración local.
+La salvaguarda inicial confirma spec-001 y HEAD 140718b; se conserva la configuración local.
  sin seguimiento. Los commits locales comprobados son:
 
 | Commit  | Evidencia conservada                                     |
@@ -40,7 +40,7 @@ publicados. No se repiten sus acciones. La resolución de selección, desde la r
 .\.specify\scripts\powershell\check-prerequisites.ps1 -Json -PathsOnly
 ```
 
-Resuelve specs/spec-001; Se verifica además la existencia de spec.md, plan.md y tasks.md.
+Resuelve specs/spec-001; se verifica además la existencia de spec.md, plan.md y tasks.md.
 Se usa PathsOnly para evitar persistir la selección; no sustituye esa comprobación de
 existencia. Se lee `.specify/extensions.yml`: no registra before_converge/after_converge.
 No se ejecutan hooks de Git. La escritura adicional del informe está autorizada por el

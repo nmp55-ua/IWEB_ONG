@@ -36,6 +36,7 @@ const esquemaFiltros = z
         .number({ invalid_type_error: 'Proyecto no válido.' })
         .int('Proyecto no válido.')
         .positive('Proyecto no válido.')
+        .max(Number.MAX_SAFE_INTEGER, 'Proyecto no válido.')
         .optional(),
     ),
     desde: dia,

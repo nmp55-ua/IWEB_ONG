@@ -48,7 +48,7 @@ usuarios 1──0..1 voluntarios 1──* inscripciones *──1 actividades *�
 | `donantes` | Donante | spec-001 (Nada) | `004` | 002, 003, 004 |
 | `suscripciones_socio` | SuscripcionSocio | spec-001 (Nada) | `004` | 002, 004 |
 | `aportaciones` | Aportación | spec-001 (Nada) | `004` | 002, 003, 004 |
-| `operaciones_pago`, `eventos_pasarela`, `verificaciones_donante`, `correos_aportacion` | Soporte técnico de HU-01 | spec-001 (Nada) | Ampliación posterior a `004`; número aún no asignado | 001 |
+| `operaciones_pago`, `eventos_pasarela`, `verificaciones_donante`, `correos_aportacion` | Soporte técnico de HU-01 | spec-001 (Nada) | `009` (ampliación posterior a `004`) | 001 |
 | `actividades` | Actividad | spec-007 (Nicole) | `005` | 004, 005, 006, 008 |
 | `voluntarios` | Voluntario | spec-005 (Javi) | `006` | 006, 007, 008 |
 | `inscripciones` | Inscripción | spec-005 (Javi) | `006` | 006, 007, 008 |
@@ -56,7 +56,7 @@ usuarios 1──0..1 voluntarios 1──* inscripciones *──1 actividades *�
 | `certificados_fiscales` | CertificadoFiscal | spec-003 (Rubén) | `008` | — |
 
 Los números de migración quedan **reservados** para evitar choques entre ramas. Los cambios
-posteriores usan `009` en adelante, pidiendo el número al grupo.
+posteriores usan `010` en adelante, pidiendo el número al grupo.
 
 ---
 
@@ -367,7 +367,8 @@ Valores derivados (no se guardan):
 | `correo` | TEXT | obligatorio |
 | `telefono` | TEXT | obligatorio |
 
-Si PA5.1 decide comprobar la edad, se añadirá `fecha_nacimiento` con una migración nueva.
+PA5.1 se resolvió en el clarify de spec-005: basta la declaración del voluntario, no se comprueba
+la edad y no se guarda `fecha_nacimiento`.
 
 ## inscripciones (spec-005)
 
@@ -386,7 +387,8 @@ Si PA5.1 decide comprobar la edad, se añadirá `fecha_nacimiento` con una migra
 que no haya dos inscripciones activas en la misma actividad (sí puede volver a apuntarse tras
 cancelar).
 
-Transiciones: alta como `confirmada` (hay plaza) o `en_espera` (completa) ·
+Transiciones: alta como `confirmada` (hay plaza) o `en_espera` (completa, solo si el voluntario
+pide apuntarse a la lista de espera) ·
 `en_espera → confirmada` (plaza liberada, la primera por `fecha_inscripcion`; spec-007) ·
 `confirmada | en_espera → cancelada` (el voluntario antes del inicio, o al cancelar la
 actividad).
