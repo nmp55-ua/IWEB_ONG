@@ -15,7 +15,7 @@
 | spec-002 | HU-02 Historial de aportaciones | Nada | Javi | #6 | aprobado | 11 | 11 | 11 |
 | spec-003 | HU-03 Certificado fiscal anual | Rubén | Nada | #5 | aprobado | 14 | 13 (FR-010 eliminado) | 13 (FR-010 eliminado) |
 | spec-004 | HU-04 Informes para la junta | Rubén | Nicole | #8 | aprobado | 12 | 12 | 12 |
-| spec-005 | HU-05 Consulta e inscripción en actividades | Javi | Nicole | #2 | aprobado | 13 | 13 | 12 |
+| spec-005 | HU-05 Consulta e inscripción en actividades | Javi | Nicole | #2 | aprobado | 13 | 13 | 13 |
 | spec-006 | HU-06 Calendario del voluntario | Javi | Nada | #3 | aprobado | 8 | 8 | 8 |
 | spec-007 | HU-07 Gestión de actividades y lista de espera | Nicole | Javi | #1 | aprobado | 14 | 14 | 14 |
 | spec-008 | HU-08 Asistencia y horas de voluntariado | Nicole | Rubén | #7 | aprobado | 11 | 11 | 11 |
