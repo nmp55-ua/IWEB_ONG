@@ -173,7 +173,7 @@
       </table>
     </div>
     <p>El detalle de cada paso, los datos y los resultados está en
-      <a href="../matriz-trazabilidad.md">matriz-trazabilidad.md</a>.</p>
+      <a href="https://github.com/nmp55-ua/IWEB_ONG/blob/main/docs/entrega/matriz-trazabilidad.md">matriz-trazabilidad.md</a>.</p>
 
     <h2>Cómo arrancarla para la demostración en directo</h2>
     <pre>docker compose up -d
@@ -191,9 +191,9 @@ cd frontend &amp;&amp; npm run dev        # http://localhost:4321</pre>
   </footer>
   <script>
     const v = document.getElementById('completo');
-    document.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', e => {{
-      e.preventDefault(); v.currentTime = +b.dataset.t; v.scrollIntoView({{behavior: 'smooth'}}); v.play();
-    }}));
+    document.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', e => {
+      e.preventDefault(); v.currentTime = +b.dataset.t; v.scrollIntoView({behavior: 'smooth'}); v.play();
+    }));
   </script>
 </body>
 </html>
