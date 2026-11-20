@@ -21,19 +21,19 @@
 | Spec | Decisiones de clarify | Informes de analyze | Hallazgos por pasada | Informes de converge | Tareas añadidas por converge | Tareas cerradas | Requisitos con prueba | Revisión de la matriz | PR |
 |---|---|---|---|---|---|---|---|---|---|
 | spec-001 | 8 | 2 | ver informes | 3 | 3 | 84/84 | 23/23 | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
-| spec-002 | 2 | 1 | ver informes | 2 | 2 | 37/37 | 11/11 | ✅ Nada y Javi | #6 ✅ aprobado |
-| spec-003 | 8 | 2 | ver informes | 2 | 1 | 26/26 | 14/14 | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
+| spec-002 | 2 | 2 | ver informes | 2 | 2 | 37/37 | 11/11 | ✅ Nada y Javi | #6 ✅ aprobado |
+| spec-003 | 8 | 2 | ver informes | 2 | 1 | 26/26 | 14/14 | ✅ Rubén y Nada | #5 ✅ aprobado |
 | spec-004 | 5 | 2 | ver informes | 2 | 0 | 21/21 | 12/12 | ✅ Rubén y Nicole | #8 ✅ aprobado |
 | spec-005 | 4 | 2 | ver informes | 2 | 6 | 28/28 | 13/13 | ✅ Javi y Nicole | #2 ✅ aprobado |
 | spec-006 | 4 | 2 | ver informes | 2 | 10 | 26/26 | 8/8 | ✅ Javi y Nada | #3 ✅ aprobado |
 | spec-007 | 5 | 3 | 10 → 3 → 0 | 2 | 3 | 29/29 | 14/14 | ✅ Nicole y Javi | #1 ✅ aprobado |
 | spec-008 | 5 | 4 | 15 → 7 → 2 → 0 | 3 | 3 | 25/25 | 11/11 | ✅ Nicole y Rubén | #7 ✅ aprobado |
-| **Total** | **41** | **18** | — | **18** | **28** | **276/276** | **106/106** | 6/8 completas | 8/8 aprobados |
+| **Total** | **41** | **19** | — | **18** | **28** | **276/276** | **106/106** | 7/8 completas | 8/8 aprobados |
 
 **Lectura del balance:**
 
 - **Ambigüedades resueltas**: 41 decisiones de clarify, todas incorporadas a su `spec.md`; no queda ninguna pregunta abierta en las especificaciones.
-- **Hallazgos documentales**: 18 informes de analyze (incluidos los registros de decisiones de algunas specs). En todas las specs, la última pasada no deja hallazgos críticos ni altos abiertos.
+- **Hallazgos documentales**: 19 informes de analyze (incluidos los registros de decisiones de algunas specs). En todas las specs, la última pasada no deja hallazgos críticos ni altos abiertos.
 - **Brechas de implementación**: 18 informes de converge, que añadieron 28 tareas de corrección; todas están cerradas y la última pasada de cada spec no deja brechas accionables del código.
 - **Criterios verificados**: 106 de 106 requisitos y criterios de éxito tienen una prueba automática o manual enlazada en la matriz. FR-010 de spec-003 se cuenta como «no aplica» porque se eliminó en clarify.
 - **Tareas**: 276 de 276 cerradas.
@@ -58,7 +58,7 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
 |---|---|---|---|---|
 | spec-001 | Nada | Rubén | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
 | spec-002 | Nada | Javi | ✅ Nada y Javi | #6 ✅ aprobado |
-| spec-003 | Rubén | Nada | ⏳ falta el revisor (Nada) | #5 ✅ aprobado |
+| spec-003 | Rubén | Nada | ✅ Rubén y Nada | #5 ✅ aprobado |
 | spec-004 | Rubén | Nicole | ✅ Rubén y Nicole | #8 ✅ aprobado |
 | spec-005 | Javi | Nicole | ✅ Javi y Nicole | #2 ✅ aprobado |
 | spec-006 | Javi | Nada | ✅ Javi y Nada | #3 ✅ aprobado |
@@ -85,7 +85,7 @@ spec-007 por Javi (filas de la matriz) y spec-004 por Nicole (pruebas, comprobac
 
 - **Decisiones de clarify**: 2, en la sección *Clarifications* de [`spec.md`](../../specs/spec-002/spec.md) y [`clarify-1.md`](../../specs/spec-002/refinamiento/clarify-1.md).
 - **Documentos**: [`spec.md`](../../specs/spec-002/spec.md) · [`plan.md`](../../specs/spec-002/plan.md) · [`tasks.md`](../../specs/spec-002/tasks.md) · [`quickstart.md`](../../specs/spec-002/quickstart.md)
-- **Evidencias de refinamiento** (18): [`analyze-1.md`](../../specs/spec-002/refinamiento/analyze-1.md), [`cierre-t030-01.md`](../../specs/spec-002/refinamiento/cierre-t030-01.md), [`clarify-1.md`](../../specs/spec-002/refinamiento/clarify-1.md), [`converge-1.md`](../../specs/spec-002/refinamiento/converge-1.md), [`converge-2.md`](../../specs/spec-002/refinamiento/converge-2.md), [`diagnostico-rendimiento-01.md`](../../specs/spec-002/refinamiento/diagnostico-rendimiento-01.md), [`diagnostico-rendimiento-02.md`](../../specs/spec-002/refinamiento/diagnostico-rendimiento-02.md), [`evidencias-converge-01`](../../specs/spec-002/refinamiento/evidencias-converge-01), [`evidencias-finales-01`](../../specs/spec-002/refinamiento/evidencias-finales-01), [`evidencias-interfaz-01`](../../specs/spec-002/refinamiento/evidencias-interfaz-01), [`evidencias-medicion-01`](../../specs/spec-002/refinamiento/evidencias-medicion-01), [`matriz-validacion-01.md`](../../specs/spec-002/refinamiento/matriz-validacion-01.md), [`medicion-historial-01.md`](../../specs/spec-002/refinamiento/medicion-historial-01.md), [`revision-tecnica-01.md`](../../specs/spec-002/refinamiento/revision-tecnica-01.md), [`validacion-converge-01.md`](../../specs/spec-002/refinamiento/validacion-converge-01.md), [`validacion-fiscal-01.md`](../../specs/spec-002/refinamiento/validacion-fiscal-01.md), [`validacion-interfaz-01.md`](../../specs/spec-002/refinamiento/validacion-interfaz-01.md), [`validacion-local-01.md`](../../specs/spec-002/refinamiento/validacion-local-01.md)
+- **Evidencias de refinamiento** (19): [`analyze-1.md`](../../specs/spec-002/refinamiento/analyze-1.md), [`analyze-2.md`](../../specs/spec-002/refinamiento/analyze-2.md), [`cierre-t030-01.md`](../../specs/spec-002/refinamiento/cierre-t030-01.md), [`clarify-1.md`](../../specs/spec-002/refinamiento/clarify-1.md), [`converge-1.md`](../../specs/spec-002/refinamiento/converge-1.md), [`converge-2.md`](../../specs/spec-002/refinamiento/converge-2.md), [`diagnostico-rendimiento-01.md`](../../specs/spec-002/refinamiento/diagnostico-rendimiento-01.md), [`diagnostico-rendimiento-02.md`](../../specs/spec-002/refinamiento/diagnostico-rendimiento-02.md), [`evidencias-converge-01`](../../specs/spec-002/refinamiento/evidencias-converge-01), [`evidencias-finales-01`](../../specs/spec-002/refinamiento/evidencias-finales-01), [`evidencias-interfaz-01`](../../specs/spec-002/refinamiento/evidencias-interfaz-01), [`evidencias-medicion-01`](../../specs/spec-002/refinamiento/evidencias-medicion-01), [`matriz-validacion-01.md`](../../specs/spec-002/refinamiento/matriz-validacion-01.md), [`medicion-historial-01.md`](../../specs/spec-002/refinamiento/medicion-historial-01.md), [`revision-tecnica-01.md`](../../specs/spec-002/refinamiento/revision-tecnica-01.md), [`validacion-converge-01.md`](../../specs/spec-002/refinamiento/validacion-converge-01.md), [`validacion-fiscal-01.md`](../../specs/spec-002/refinamiento/validacion-fiscal-01.md), [`validacion-interfaz-01.md`](../../specs/spec-002/refinamiento/validacion-interfaz-01.md), [`validacion-local-01.md`](../../specs/spec-002/refinamiento/validacion-local-01.md)
 
 ### spec-003 · HU-03 Certificado fiscal anual
 
