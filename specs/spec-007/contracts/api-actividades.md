@@ -81,3 +81,9 @@ Efectos secundarios (tras el `COMMIT`, sin deshacer si falla el correo):
 En sentido contrario, spec-007 expone `avisarPlazaConfirmada(inscripcion, actividad)` en
 `modulos/actividades/servicio.js`: spec-005 la llama tras el `COMMIT` de una cancelación para
 cada inscripción devuelta por `promoverListaEspera` (**acordado con Javi**).
+
+También expone `bloquearActividad(id, cliente)` en `modulos/actividades/servicio.js`: bloquea la fila de
+la actividad (`SELECT … FOR UPDATE`) dentro de la transacción de quien la llama y devuelve la actividad
+con sus plazas libres, o `null` si no existe. spec-005 la usa al inscribir y al cancelar, siempre antes
+de tocar las inscripciones, para que las dos historias bloqueen en el mismo orden (T021 de spec-005;
+plan-comun §7).

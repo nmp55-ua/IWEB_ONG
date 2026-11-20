@@ -20,8 +20,8 @@ const pagoNoDisponible = () => new ErrorApi(503, 'PAGO_NO_DISPONIBLE', 'El pago 
 const PERIODICIDADES = ['mensual', 'trimestral', 'anual'];
 const TIPOS_FACTURA = ['invoice.paid', 'invoice.payment_failed', 'invoice.updated'];
 const TIPOS_SUSCRIPCION = ['customer.subscription.updated', 'customer.subscription.deleted'];
-// Solo avisos snapshot de estas dos versiones; los recursos de negocio se consultan en acacia.
-const VERSIONES_EVENTO = new Set(['2025-02-24.acacia', '2026-10-28.endive']);
+// Solo avisos snapshot de estas versiones; los recursos de negocio se consultan en acacia.
+const VERSIONES_EVENTO = new Set(['2025-02-24.acacia', '2026-10-28.endive', '2026-11-18.endive']);
 const filtroHistorial = z
   .object({
     anio: z

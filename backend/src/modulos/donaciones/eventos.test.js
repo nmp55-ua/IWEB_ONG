@@ -12,7 +12,7 @@ const evento = (tipo = 'payment_intent.succeeded', cambios = {}) => ({
   data: { object: { id: pago.id } },
   ...cambios,
 });
-it.each(['2025-02-24.acacia', '2026-10-28.endive'])(
+it.each(['2025-02-24.acacia', '2026-10-28.endive', '2026-11-18.endive'])(
   'admite aviso puntual %s sin usar el estado del snapshot',
   async (api_version) => {
     const e = evento(undefined, { api_version });

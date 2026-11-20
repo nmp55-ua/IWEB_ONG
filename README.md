@@ -89,8 +89,8 @@ vacían tablas y la regresión común requiere su base separada, según esa guí
 - `/donar/vincular`: solicitud autenticada y confirmación de un enlace de un solo uso.
   Coincidir en correo no vincula automáticamente. No cambia el registro ni el inicio de sesión.
 - `POST /api/pasarela/webhook`: firma sobre cuerpo crudo, antes de JSON y sin sesión.
-  Cliente Stripe 17.7.0/API 2025-02-24.acacia; compatibilidad limitada de avisos acacia y
-  2026-10-28.endive, sin aceptar otras versiones implícitamente.
+  Cliente Stripe 17.7.0/API 2025-02-24.acacia; compatibilidad limitada de avisos acacia,
+  2026-10-28.endive y 2026-11-18.endive, sin aceptar otras versiones implícitamente.
 
 Para Stripe de pruebas se necesitan `STRIPE_SECRET_KEY` y `STRIPE_WEBHOOK_SECRET`; para
 Mailpit, `SMTP_HOST`, `SMTP_PORT` y `SMTP_FROM`. El procedimiento de listener, filtro completo,
@@ -105,7 +105,8 @@ prueba y guarda sus claves únicamente en `.env`, nunca en el repositorio ni en 
 Tarjeta de prueba: `4242 4242 4242 4242`, con fecha futura y CVC de prueba.
 
 El cliente fija la API `2025-02-24.acacia`. En el entorno de pruebas validado, los avisos
-usan `2026-10-28.endive`; ambas versiones están contempladas en el
+usan `2026-10-28.endive`, y las cuentas de Stripe creadas después del 18/11/2026 envían
+`2026-11-18.endive`; las tres versiones están contempladas en el
 [contrato de Stripe](specs/spec-001/contracts/pasarela-stripe.md). Comprueba la versión
 que utiliza tu cuenta al configurar el listener.
 
@@ -121,6 +122,43 @@ La página distingue la falta de vínculo, el historial vacío y un año sin res
 No requiere configuración, dependencias ni migraciones adicionales. Las pruebas aisladas
 y sus comandos están en el [quickstart de HU-02](specs/spec-002/quickstart.md).
 
+## HU-03 — Certificado fiscal anual
+
+En «Certificados», cada donante con vínculo verificado ve y descarga en PDF el certificado de cada
+ejercicio cerrado, con su código de verificación. La tarea horaria del back-end (`node-cron`, hora de
+Madrid) emite los certificados a partir del 1 de enero y los regenera si se confirma tarde un cobro;
+`npm run certificados` lo lanza a mano. Cualquiera puede comprobar un código en `/verificar-certificado`.
+
+## HU-04 — Informes para la junta
+
+En `/informes` (solo administración): dinero recaudado y voluntariado por proyecto y periodo, sin
+agrupar o por mes, trimestre o año, con subtotales y total, y exportación a CSV (separador «;») y PDF.
+
+## HU-05 — Actividades e inscripción
+
+`/actividades` es público: actividades futuras publicadas con plazas libres y requisitos, y filtros por
+proyecto y fechas. Un voluntario se inscribe declarando que cumple los requisitos; si está completa, entra
+en la lista de espera. Al cancelar una plaza confirmada, pasa a la primera persona en espera, que recibe
+el correo «Plaza confirmada».
+
+## HU-06 — Calendario del voluntario
+
+`/mi-calendario`: próximas actividades en vista de lista o mensual, con las que están en lista de
+espera diferenciadas, el detalle de cada una y la opción de cancelar o salir de la lista.
+
+## HU-07 — Gestión de actividades
+
+`/coordinacion/actividades` (coordinadores): crear en borrador, publicar, editar y cancelar
+actividades, y consultar inscritos y lista de espera. Cancelar o cambiar fecha, hora o lugar avisa por
+correo.
+
+## HU-08 — Asistencia y horas
+
+En una actividad celebrada, el coordinador pasa lista («Registrar asistencia») y puede corregirla sin
+plazo. Cada voluntario ve en `/mis-horas` su total y el desglose por actividad.
+
+La demostración grabada de las ocho historias está en `docs/entrega/demo/index.html` y publicada en https://demo-ong-g10.vercel.app.
+
 ## Documentos
 
 - Constitución: `.specify/memory/constitution.md`
@@ -128,6 +166,7 @@ y sus comandos están en el [quickstart de HU-02](specs/spec-002/quickstart.md).
 - Plan y modelo de datos comunes: `specs/plan-comun.md`, `specs/modelo-datos.md`
 - Especificaciones: `specs/spec-00N/spec.md`
 - Narrativa e historias de partida: `docs/`
+- Memoria y reparto: `docs/memoria.md`, `docs/agrupamiento.md`; documentos de entrega en `docs/entrega/`
 
 ## Flujo de trabajo
 

@@ -190,7 +190,7 @@ revisión documental. T078 y siguientes y las demás revisiones pendientes no ca
 
 ## Preparación documental de la prueba adicional P21 — 2026-11-07
 
-Tras revisión del procedimiento, se aclara [quickstart.md](../quickstart.md#procedimiento-adicional-p21--preparación-revisada-sin-ejecutar):
+Tras revisión del procedimiento, se aclara [quickstart.md](../quickstart.md#procedimiento-adicional-p21--procedimiento-y-evidencia-de-ejecución):
 el escenario puntual 21 de spec.md exige una aportación aún sin confirmar localmente al
 cerrar el navegador y la llegada posterior de la notificación. La expresión previa de la
 guía «antes del pago» se sustituye por el orden verificable: pago correcto en Stripe,

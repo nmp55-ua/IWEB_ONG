@@ -44,12 +44,3 @@ No hay problemas críticos ni altos, y los 15 hallazgos del primer análisis est
 ### Siguientes pasos
 
 Ya puedes ejecutar `/speckit-implement`, porque nada de esto lo bloquea. Antes recomiendo resolver U7 e I10, que son ediciones pequeñas en `tasks.md`, `plan.md`, `research.md` y `quickstart.md`. Los hallazgos bajos también se pueden resolver durante la implementación.
-
-## Extension Hooks
-
-**Optional Hook**: git
-Command: `/speckit-git-commit`
-Description: Auto-commit after analysis
-
-Prompt: Commit analysis results?
-To execute: `/speckit-git-commit`

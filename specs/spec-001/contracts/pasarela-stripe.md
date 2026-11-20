@@ -11,8 +11,8 @@ entorno de pruebas documentadas en T076–T078. Alcance y límites por escenario
 ## Versión y perímetro
 
 Referencia: SDK fijado en lockfile e instalación comprobada **17.7.0**, cliente con API
-**2025-02-24.acacia**. Los avisos snapshot admiten únicamente esa versión y
-**2026-10-28.endive**, con el perímetro descrito a continuación. Se conserva `backend/src/servicios-comunes/pasarela.js` como único
+**2025-02-24.acacia**. Los avisos snapshot admiten únicamente esa versión,
+**2026-10-28.endive** y **2026-11-18.endive** (ampliación del 20/11/2026, abajo), con el perímetro descrito a continuación. Se conserva `backend/src/servicios-comunes/pasarela.js` como único
 importador de Stripe. El módulo de donaciones no accede directamente al SDK.
 
 Fuentes de campos: [Checkout Session](https://docs.stripe.com/api/checkout/sessions/object?api-version=2025-02-24.acacia),
@@ -22,6 +22,14 @@ Fuentes de campos: [Checkout Session](https://docs.stripe.com/api/checkout/sessi
 y [tipos Invoice del SDK fijado](https://raw.githubusercontent.com/stripe/stripe-node/v17.7.0/types/Invoices.d.ts).
 La forma de Acacia usa `Invoice.subscription`, `Invoice.payment_intent` y
 `Subscription.current_period_end`; estas proyecciones son de las consultas acacia, no del snapshot recibido.
+
+### Ampliación — 2026-11-20
+
+Las cuentas de Stripe en modo de prueba creadas a partir del 18/11/2026 tienen como versión por
+defecto **2026-11-18.endive**, y `stripe listen` firma los avisos con la versión de la cuenta. Se añade
+esa versión a `VERSIONES_EVENTO`. No cambia nada más: del aviso solo se usa el sobre (identificador,
+tipo, objeto, fecha y modo) y los recursos se siguen consultando con la API acacia. Las pruebas de
+`eventos.test.js`, `cuotas.test.js` y `pasarela.test.js` cubren también la versión nueva.
 
 ### Compatibilidad limitada de webhooks — 2026-11-07
 

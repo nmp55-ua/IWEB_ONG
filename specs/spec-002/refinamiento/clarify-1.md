@@ -10,8 +10,8 @@ bloqueantes identificadas; no se avanza a plan ni se atribuye revisión de Javi 
 
 ## Comprobación inicial y procedimiento
 
-Se comprueban rama spec-002, commit 258680e e índice vacío. Solo
- está sin seguimiento. HU-02 contiene únicamente spec.md y
+Se comprueban rama spec-002, commit 258680e e índice vacío, sin ficheros de la historia pendientes de
+seguimiento. HU-02 contiene únicamente spec.md y
 checklists/requirements.md; no hay plan, tareas o informes anteriores que sobrescribir.
 Se conservan `.env`, configuración local y todos los históricos de las otras historias.
 

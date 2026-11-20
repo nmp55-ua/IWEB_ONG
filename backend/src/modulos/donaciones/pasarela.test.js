@@ -183,7 +183,7 @@ it('aísla la recurrencia entre cuerpos de sesiones periódicas', () => {
 });
 
 describe('HU-01 · firma real con secreto y cuerpo sintéticos, sin red', () => {
-  it.each(['2025-02-24.acacia', '2026-10-28.endive'])(
+  it.each(['2025-02-24.acacia', '2026-10-28.endive', '2026-11-18.endive'])(
     'verifica la firma %s y conserva el evento íntegro',
     async (api_version) => {
       const { default: StripeReal } = await vi.importActual('stripe');

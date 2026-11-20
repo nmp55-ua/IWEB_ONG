@@ -1,4 +1,4 @@
-He contrastado la implementación de spec-008 con la spec, el plan y las tareas, y quedan 2 cosas por hacer. Las he añadido a [tasks.md](specs/spec-008/tasks.md) como Phase 6: Convergence, sin tocar código ni hacer commit.
+He contrastado la implementación de spec-008 con la spec, el plan y las tareas, y quedan 2 cosas por hacer. Las he añadido a [tasks.md](../tasks.md) como Phase 6: Convergence, sin tocar código ni hacer commit.
 
 | ID | Tipo | Severidad | Origen | Problema | Tarea |
 |----|------|-----------|--------|----------|-------|
@@ -17,13 +17,4 @@ He contrastado la implementación de spec-008 con la spec, el plan y las tareas,
 - **Plan:** sus decisiones de diseño (horas en SQL, pares para sumar, `PUT` con las filas marcadas, `rutasYo.js`, semillas).
 - **Constitución:** 9 principios.
 
-T022 sigue abierta solo por el cronometrado de SC-002, que haces tú, así que no la he duplicado.
-
-## Extension Hooks
-
-**Optional Hook**: git
-Command: `/speckit-git-commit`
-Description: Auto-commit after converge
-
-Prompt: Commit convergence changes?
-To execute: `/speckit-git-commit`
+T022 sigue abierta solo por el cronometrado manual de SC-002, que hace la responsable, así que no se duplica.

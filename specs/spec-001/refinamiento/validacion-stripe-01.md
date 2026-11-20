@@ -229,7 +229,7 @@ No se repiten suites, pagos, reenvíos, cambios de configuración ni acciones de
 
 Se contrasta de nuevo el escenario puntual 21 y se conserva spec.md intacto. La indicación
 «cerrar antes del pago» citada en el contraste anterior correspondía al texto de quickstart
-en aquella revisión. El [procedimiento vigente](../quickstart.md#procedimiento-adicional-p21--preparación-revisada-sin-ejecutar)
+en aquella revisión. El [procedimiento vigente](../quickstart.md#procedimiento-adicional-p21--procedimiento-y-evidencia-de-ejecución)
 aclara ahora que Se completará el pago en Stripe con la entrega retenida; deberá constar
 todavía pendiente en la aplicación al cerrar el navegador, antes de su primera notificación
 válida. La aclaración resuelve el orden de ejecución sin modificar el criterio funcional.
@@ -247,7 +247,7 @@ T077 continúa parcial y sin marcar y las demás tareas no se completan por exte
 ## Cierre final de T077: primera confirmación de la prueba adicional P21 — 2026-11-07
 
 Este apartado registra la ejecución posterior del procedimiento aclarado en
-[quickstart.md](../quickstart.md#procedimiento-adicional-p21--preparación-revisada-sin-ejecutar).
+[quickstart.md](../quickstart.md#procedimiento-adicional-p21--procedimiento-y-evidencia-de-ejecución).
 La preparación descrita allí no era evidencia de ejecución; los resultados reales son los
 comunicados por las observaciones de prueba que se recogen a continuación. No se modifica spec.md ni la
 operación anterior de 15,75 € y se conservan sus fallos, recuperación y reentregas históricas.

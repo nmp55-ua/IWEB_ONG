@@ -12,7 +12,7 @@ SC-002 sigue pendiente: los intentos válidos de 2.745,30 y 4.258,90 ms no cumpl
 
 La primera lectura de Node/os devuelve 265.158.656 bytes libres de 8.441.491.456 bytes totales. Una segunda lectura, conservada con fecha en [comprobacion-entorno-02.json](evidencias-medicion-01/comprobacion-entorno-02.json), devuelve 515.174.400 bytes libres: aproximadamente 491 MiB, un 6,1 % del total. La memoria disponible varía; no se presenta una cifra puntual como reserva garantizada para el navegador.
 
-La consulta de procesos de solo lectura fuera del entorno restringido observa unos 1.598 MB de memoria comprimida, ChatGPT con 1.042 MB, Firefox con 651 MB y Code con 547 MB de working set. No se suman esos valores como memoria física exclusiva ni se atribuye la presión a una aplicación concreta. No se cierran procesos o páginas del usuario. La consulta de puertos no devuelve listeners en 44322–44326; no se arranca otro banco para esta comprobación.
+La consulta de procesos de solo lectura del equipo completo observa unos 1.598 MB de memoria comprimida, y varias aplicaciones de escritorio abiertas (la mayor, con unos 1.042 MB de working set). No se suman esos valores como memoria física exclusiva ni se atribuye la presión a una aplicación concreta. No se cierran procesos o páginas del usuario. La consulta de puertos no devuelve listeners en 44322–44326; no se arranca otro banco para esta comprobación.
 
 El inventario del navegador mantiene las tres referencias antiguas de los bancos 44324, 44322 y 44325 ya descritas en el diagnóstico anterior; no se presume que representen vistas operativas ni que aporten memoria recuperable. No se repiten los intentos de asociación que habían terminado por timeout.
 
