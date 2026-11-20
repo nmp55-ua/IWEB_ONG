@@ -20,7 +20,7 @@
 
 | Spec | Decisiones de clarify | Informes de analyze | Hallazgos por pasada | Informes de converge | Tareas añadidas por converge | Tareas cerradas | Requisitos con prueba | Revisión de la matriz | PR |
 |---|---|---|---|---|---|---|---|---|---|
-| spec-001 | 8 | 2 | ver informes | 3 | 3 | 84/84 | 23/23 | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
+| spec-001 | 8 | 2 | ver informes | 3 | 3 | 84/84 | 23/23 | ✅ Nada y Rubén (PR #4) | #4 ✅ aprobado |
 | spec-002 | 2 | 2 | ver informes | 2 | 2 | 37/37 | 11/11 | ✅ Nada y Javi | #6 ✅ aprobado |
 | spec-003 | 8 | 2 | ver informes | 2 | 1 | 26/26 | 14/14 | ✅ Rubén y Nada | #5 ✅ aprobado |
 | spec-004 | 5 | 2 | ver informes | 2 | 0 | 21/21 | 12/12 | ✅ Rubén y Nicole | #8 ✅ aprobado |
@@ -28,7 +28,7 @@
 | spec-006 | 4 | 2 | ver informes | 2 | 10 | 26/26 | 8/8 | ✅ Javi y Nada | #3 ✅ aprobado |
 | spec-007 | 5 | 3 | 10 → 3 → 0 | 2 | 3 | 29/29 | 14/14 | ✅ Nicole y Javi | #1 ✅ aprobado |
 | spec-008 | 5 | 4 | 15 → 7 → 2 → 0 | 3 | 3 | 25/25 | 11/11 | ✅ Nicole y Rubén | #7 ✅ aprobado |
-| **Total** | **41** | **19** | — | **18** | **28** | **276/276** | **106/106** | 7/8 completas | 8/8 aprobados |
+| **Total** | **41** | **19** | — | **18** | **28** | **276/276** | **106/106** | 8/8 completas | 8/8 aprobados |
 
 **Lectura del balance:**
 
@@ -56,7 +56,7 @@ Estos indicadores describen la mejora conseguida; no se buscó encontrar más de
 
 | Spec | Responsable | Revisor | Revisión en la matriz | PR |
 |---|---|---|---|---|
-| spec-001 | Nada | Rubén | ⏳ falta el revisor (Rubén) | #4 ✅ aprobado |
+| spec-001 | Nada | Rubén | ✅ Nada y Rubén (PR #4) | #4 ✅ aprobado |
 | spec-002 | Nada | Javi | ✅ Nada y Javi | #6 ✅ aprobado |
 | spec-003 | Rubén | Nada | ✅ Rubén y Nada | #5 ✅ aprobado |
 | spec-004 | Rubén | Nicole | ✅ Rubén y Nicole | #8 ✅ aprobado |
@@ -91,17 +91,17 @@ spec-007 por Javi (filas de la matriz) y spec-004 por Nicole (pruebas, comprobac
 
 **Responsable**: Rubén · **Revisor**: Nada · **PR**: #5
 
-- **Decisiones de clarify**: 8, en la sección *Clarifications* de [`spec.md`](../../specs/spec-003/spec.md).
+- **Decisiones de clarify**: 8, en la sección *Clarifications* de [`spec.md`](../../specs/spec-003/spec.md) y, con su justificación, en [`registro-decisiones-y-hallazgos.md`](../../specs/spec-003/refinamiento/registro-decisiones-y-hallazgos.md).
 - **Documentos**: [`spec.md`](../../specs/spec-003/spec.md) · [`plan.md`](../../specs/spec-003/plan.md) · [`tasks.md`](../../specs/spec-003/tasks.md) · [`quickstart.md`](../../specs/spec-003/quickstart.md)
-- **Evidencias de refinamiento** (5): [`analyze-1.md`](../../specs/spec-003/refinamiento/analyze-1.md), [`analyze-2.md`](../../specs/spec-003/refinamiento/analyze-2.md), [`converge-1.md`](../../specs/spec-003/refinamiento/converge-1.md), [`converge-2.md`](../../specs/spec-003/refinamiento/converge-2.md), [`validacion-01.md`](../../specs/spec-003/refinamiento/validacion-01.md)
+- **Evidencias de refinamiento** (6): [`analyze-1.md`](../../specs/spec-003/refinamiento/analyze-1.md), [`registro-decisiones-y-hallazgos.md`](../../specs/spec-003/refinamiento/registro-decisiones-y-hallazgos.md), [`analyze-2.md`](../../specs/spec-003/refinamiento/analyze-2.md), [`converge-1.md`](../../specs/spec-003/refinamiento/converge-1.md), [`converge-2.md`](../../specs/spec-003/refinamiento/converge-2.md), [`validacion-01.md`](../../specs/spec-003/refinamiento/validacion-01.md)
 
 ### spec-004 · HU-04 Informes para la junta
 
 **Responsable**: Rubén · **Revisor**: Nicole · **PR**: #8
 
-- **Decisiones de clarify**: 5, en la sección *Clarifications* de [`spec.md`](../../specs/spec-004/spec.md).
+- **Decisiones de clarify**: 5, en la sección *Clarifications* de [`spec.md`](../../specs/spec-004/spec.md) y, con su justificación, en [`registro-decisiones-y-hallazgos.md`](../../specs/spec-004/refinamiento/registro-decisiones-y-hallazgos.md).
 - **Documentos**: [`spec.md`](../../specs/spec-004/spec.md) · [`plan.md`](../../specs/spec-004/plan.md) · [`tasks.md`](../../specs/spec-004/tasks.md) · [`quickstart.md`](../../specs/spec-004/quickstart.md)
-- **Evidencias de refinamiento** (6): [`analyze-1.md`](../../specs/spec-004/refinamiento/analyze-1.md), [`analyze-2.md`](../../specs/spec-004/refinamiento/analyze-2.md), [`converge-1.md`](../../specs/spec-004/refinamiento/converge-1.md), [`converge-2.md`](../../specs/spec-004/refinamiento/converge-2.md), [`validacion-01.md`](../../specs/spec-004/refinamiento/validacion-01.md), [`validacion-02.md`](../../specs/spec-004/refinamiento/validacion-02.md)
+- **Evidencias de refinamiento** (7): [`analyze-1.md`](../../specs/spec-004/refinamiento/analyze-1.md), [`registro-decisiones-y-hallazgos.md`](../../specs/spec-004/refinamiento/registro-decisiones-y-hallazgos.md), [`analyze-2.md`](../../specs/spec-004/refinamiento/analyze-2.md), [`converge-1.md`](../../specs/spec-004/refinamiento/converge-1.md), [`converge-2.md`](../../specs/spec-004/refinamiento/converge-2.md), [`validacion-01.md`](../../specs/spec-004/refinamiento/validacion-01.md), [`validacion-02.md`](../../specs/spec-004/refinamiento/validacion-02.md)
 
 ### spec-005 · HU-05 Consulta e inscripción en actividades
 
