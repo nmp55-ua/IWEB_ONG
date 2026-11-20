@@ -89,8 +89,8 @@ vacían tablas y la regresión común requiere su base separada, según esa guí
 - `/donar/vincular`: solicitud autenticada y confirmación de un enlace de un solo uso.
   Coincidir en correo no vincula automáticamente. No cambia el registro ni el inicio de sesión.
 - `POST /api/pasarela/webhook`: firma sobre cuerpo crudo, antes de JSON y sin sesión.
-  Cliente Stripe 17.7.0/API 2025-02-24.acacia; compatibilidad limitada de avisos acacia y
-  2026-10-28.endive, sin aceptar otras versiones implícitamente.
+  Cliente Stripe 17.7.0/API 2025-02-24.acacia; compatibilidad limitada de avisos acacia,
+  2026-10-28.endive y 2026-11-18.endive, sin aceptar otras versiones implícitamente.
 
 Para Stripe de pruebas se necesitan `STRIPE_SECRET_KEY` y `STRIPE_WEBHOOK_SECRET`; para
 Mailpit, `SMTP_HOST`, `SMTP_PORT` y `SMTP_FROM`. El procedimiento de listener, filtro completo,
@@ -105,7 +105,8 @@ prueba y guarda sus claves únicamente en `.env`, nunca en el repositorio ni en 
 Tarjeta de prueba: `4242 4242 4242 4242`, con fecha futura y CVC de prueba.
 
 El cliente fija la API `2025-02-24.acacia`. En el entorno de pruebas validado, los avisos
-usan `2026-10-28.endive`; ambas versiones están contempladas en el
+usan `2026-10-28.endive`, y las cuentas de Stripe creadas después del 18/11/2026 envían
+`2026-11-18.endive`; las tres versiones están contempladas en el
 [contrato de Stripe](specs/spec-001/contracts/pasarela-stripe.md). Comprueba la versión
 que utiliza tu cuenta al configurar el listener.
 

@@ -194,7 +194,7 @@ const eventoFactura = (tipo, f) => evento(tipo, { id: f.id, subscription: f.subs
 const eventoSuscripcion = (tipo, c) => evento(tipo, { id: c.subId });
 const procesar = (e) => servicio.procesarEvento(e);
 
-it.each(['2025-02-24.acacia', '2026-10-28.endive'])(
+it.each(['2025-02-24.acacia', '2026-10-28.endive', '2026-11-18.endive'])(
   'resuelve la factura %s por consulta acacia, sin confiar en la suscripción del evento',
   async (api_version) => {
     const c = await alta(),
