@@ -239,16 +239,17 @@ un pago real en Stripe de prueba) y uno de permisos.
 | HU-04 SC-002 | Informe anual exportado en menos de 1 minuto | quickstart y revisión | — | T021 | Página: 0,14 s el informe y 0,10 s el PDF (19/11/2026) | Rubén | Nicole | Cerrado |
 
 
-## Observaciones del revisor (Javi, 17/11/2026) sobre HU-02 y HU-07
+## Observaciones del revisor (Javi, 17/11/2026) sobre HU-02 y HU-07, y su estado al 20/11/2026
 
 - **HU-07**: en `actividades/servicio.test.js` siguen tres `it.skip` «requiere spec-005» (SC-002, US2
   escenario 4 y SC-003). Lo cubren las pruebas con inscripciones reales de `voluntariado/servicio.test.js`,
-  así que en la matriz se citan esas. Se pueden borrar o dejar con un comentario que lo diga.
+  así que en la matriz se citan esas. **Resuelta el 20/11:** los tres `it.skip` se sustituyen por un
+  comentario que remite a esas pruebas.
 - **HU-07**: las pruebas de `actividades/servicio.test.js` simulan las inscripciones; por eso en cada
   fila se indica el módulo. Probados solo en parte: FR-003 (validar al editar), FR-010 (otro
   coordinador) y FR-011 (aviso por cambio de fecha u hora). El código lo hace, pero no hay prueba.
 - **HU-07**: `prueba-manual-T026.md`, punto 4, anota un 400 para `PLAZAS_MENOR_QUE_INSCRITOS`; el
-  código y las pruebas dan 409.
+  código y las pruebas dan 409. **Resuelta el 20/11:** corregido en la prueba manual.
 - **HU-02**: FR-008 se prueba en la API; los textos de la pantalla y el enlace a /donar/vincular solo a
   mano (T026). `validacion-interfaz-01.md` aún dice que SC-002 está pendiente; lo supera
-  `cierre-t030-01.md`.
+  `cierre-t030-01.md`. **Resuelta el 20/11:** la validación remite ya al cierre.

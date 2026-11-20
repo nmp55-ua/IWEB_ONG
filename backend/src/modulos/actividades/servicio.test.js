@@ -344,16 +344,9 @@ describe.skipIf(!URL_PRUEBAS)('HU-07 · actividades', () => {
       expect(texto).toContain('Calle Mayor 3');
     });
 
-    // Necesitan la tabla inscripciones y el servicio real de spec-005 (Javi): se activan al integrarlo.
-    it.skip(
-      'cancelar un voluntario confirmado promueve a la primera en espera, le avisa y las plazas libres no cambian (SC-002) — requiere spec-005',
-    );
-    it.skip(
-      'con 3 en espera, si cancela la primera, las otras pasan a las posiciones 1 y 2 (US2 escenario 4) — requiere spec-005',
-    );
-    it.skip(
-      'peticiones simultáneas de bajar plazas e inscribirse nunca dejan más confirmados que plazas (SC-003) — requiere spec-005',
-    );
+    // La promoción al cancelar un voluntario (SC-002), el avance de la lista de espera y la concurrencia
+    // entre bajar plazas e inscribirse (SC-003) se prueban con el servicio real de spec-005 en
+    // voluntariado/servicio.test.js (escenarios 6 y 7 de cancelar y «integración con spec-007»).
   });
 
   describe('consultar (FR-009)', () => {

@@ -56,7 +56,7 @@ Express y PostgreSQL. Las **276 tareas** de las ocho specs están cerradas y los
 criterios de éxito vigentes** (de 106; uno se eliminó en `clarify`) tienen una prueba automática o manual
 enlazada en la matriz de trazabilidad. En la
 regresión final del 20/11/2026 pasan **704 pruebas automáticas** (232 del back-end común, 432 del
-módulo de donaciones y 40 del front-end; 3 omitidas a propósito) y los cuatro recorridos completos
+módulo de donaciones y 40 del front-end) y los cuatro recorridos completos
 entre historias (R1–R4), uno de ellos con un pago real en Stripe de prueba.
 
 El proyecto se ha desarrollado con **GitHub Spec Kit** (desarrollo guiado por especificaciones): cada
@@ -390,7 +390,7 @@ Regresión final del 20/11/2026 ([`entrega/regresion/`](entrega/regresion/)):
 
 | Conjunto | Ficheros | Pruebas |
 |---|---|---|
-| Back-end común (`ong_test`) | 12 | 232 pasan, 3 omitidas |
+| Back-end común (`ong_test`) | 12 | 232 pasan |
 | Donaciones (`ong_test_hu01`) | 15 | 432 pasan |
 | Front-end | 4 | 40 pasan |
 | **Total** | **31** | **704 pasan, 0 fallan** |
